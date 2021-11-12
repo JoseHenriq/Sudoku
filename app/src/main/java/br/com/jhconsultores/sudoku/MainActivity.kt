@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     private var numDispLinhas = arrayOf<Array<Int>>()
     private var numDispCols   = arrayOf<Array<Int>>()
 
+    private var arrayPref   = arrayOf<Int>()
     private var quadMenores = arrayOf<Array<Int>>()
     private var idxDiagonal = 0
 
@@ -28,8 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //--- Instancializações e inicializações
-        var arrayPref = arrayOf<Int>()
-        var array     = arrayOf<Int>()
+        var array = arrayOf<Int>()
 
         for (idxDiagonal in 0..1) {
             when (idxDiagonal) {
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
                 else -> {
                     arrayPref = arrayOf(2, 4, 6)
-                    array = arrayOf<Int>()
+                    array     = arrayOf<Int>()
                 }
             }
 
@@ -67,20 +67,21 @@ class MainActivity : AppCompatActivity() {
         //--------------------------
         listaQuadMaior()
         //--------------------------
-        inicializaNumDisponiveis()
+        // inicializaNumDisponiveis()
         //--------------------------
-        listaNumDisponiveis()
+        // listaNumDisponiveis()
         //----------------------
 
         // 1- Gera os quadrados menores independentes (diagonais: Q0, Q4, Q8) ou (Q2, Q4, Q6);
         // 2- gera os demais quadrados menores
 
-        //--- Para quadrados menores na diagonal principal
-        Log.d(cTAG, "-> Diagonal $idxDiagonal")
-        for (quad in quadMenores[idxDiagonal]) {
+        //--- Quadrados menores da diagonal principal
+        arrayPref = arrayOf<Int>()
+        for (quadPref in 0..2) { arrayPref += quadMenores[idxDiagonal][quadPref] }
 
         //--- Para todos os quadrados menores
-        // for (quad in 0..8) {
+        Log.d(cTAG, "-> Diagonal $idxDiagonal")
+        for (quad in quadMenores[idxDiagonal]) {
 
             Log.d(cTAG, "   -Q$quad:")
 
@@ -103,15 +104,16 @@ class MainActivity : AppCompatActivity() {
                     //--- Gera um número aleatório até gerar um número INEXISTENTE nessa linha e
                     //    nessa coluna.
                     var flagExisteQ : Boolean
+                    var numero : Int
                     do {
 
-                        //------------------------------
-                        val numero = (1..9).random() // generated random from 1 to 9 included
-                        //------------------------------
+                        //-------------------------
+                        numero = (1..9).random()           // generated random from 1 to 9 included
+                        //-------------------------
 
                         //--- Verifica se o número gerado ainda NÃO existe no seu quadrado
                         flagExisteQ = false
-                        for (linhaQ in linhasQuad) {
+                        for (linhaQ in linhasQuad)  {
 
                             for (colQ in colsQuad) {
 
@@ -129,7 +131,7 @@ class MainActivity : AppCompatActivity() {
 
                             //--- Se NÃO existe, pesquisa nos seus vizinhos, para os quadrados
                             //    menores das diagonais secundárias.
-                            else if (!quadMenores[idxDiagonal].contains(quad)) {
+                            else if (!arrayPref.contains(quad)) {
 
                                 //--- O número não pode existir na mesma linha
                                 for (colQM in 0..8) {
@@ -154,24 +156,24 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
 
-                        //--- Se o número está disponível na linha armazena-o no quadrado maior
-                        //    (externo); senão gera novo número
-                        if (!flagExisteQ) {
-
-                            //--- Armazena-o
-                            quadMaior[linha][coluna] = numero
-                            strLog = "quadMaior[$linha][$coluna]= $numero "
-                            Log.d(cTAG, strLog)
-
-                            //--- Torna-o indisponível nessa linha
-                            //numDispLinhas[linha][numero - 1] = 0
-
-                            //--- Torna-o indisponível nessa coluna
-                            //numDispCols[numero - 1][coluna] = 0
-
-                        }
-
                     } while (flagExisteQ)
+
+                    //--- Se o número está disponível na linha armazena-o no quadrado maior
+                    //    (externo); senão gera novo número
+                    if (!flagExisteQ) {
+
+                        //--- Armazena-o
+                        quadMaior[linha][coluna] = numero
+                        strLog = "quadMaior[$linha][$coluna]= $numero "
+                        Log.d(cTAG, strLog)
+
+                        //--- Torna-o indisponível nessa linha
+                        //numDispLinhas[linha][numero - 1] = 0
+
+                        //--- Torna-o indisponível nessa coluna
+                        //numDispCols[numero - 1][coluna] = 0
+
+                    }
 
                 }
             }
@@ -180,7 +182,7 @@ class MainActivity : AppCompatActivity() {
         //---------------------------
         listaQuadMaior()
         //---------------------------
-        listaNumDisponiveis()
+        // listaNumDisponiveis()
         //----------------------
 
     }
