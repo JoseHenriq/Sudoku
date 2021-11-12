@@ -16,8 +16,8 @@ class MainActivity : AppCompatActivity() {
     private var numDispLinhas = arrayOf<Array<Int>>()
     private var numDispCols   = arrayOf<Array<Int>>()
 
-    private var quadDiagonal = arrayOf<Array<Int>>()
-    private var idxDiagonal  = 0
+    private var quadMenores = arrayOf<Array<Int>>()
+    private var idxDiagonal = 0
 
     //----------------------------------------------------------------------------------------------
     // Eventos
@@ -28,12 +28,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //--- Instancializações e inicializações
+        var arrayPref = arrayOf<Int>()
+        var array     = arrayOf<Int>()
 
-        var array = arrayOf(0, 4, 8)
-        quadDiagonal += array
+        for (idxDiagonal in 0..1) {
+            when (idxDiagonal) {
+                0 -> arrayPref = arrayOf(0, 4, 8)
 
-        array = arrayOf(2, 4, 6)
-        quadDiagonal += array
+                else -> {
+                    arrayPref = arrayOf(2, 4, 6)
+                    array = arrayOf<Int>()
+                }
+            }
+
+            for (quadMenor in arrayPref) { array += quadMenor }
+            for (quadMenor in 0..8) {
+                if (!arrayPref.contains(quadMenor)) { array += quadMenor }
+            }
+            quadMenores += array
+        }
+        idxDiagonal = 0
 
         //-----------
         geraJogo()
@@ -58,29 +72,39 @@ class MainActivity : AppCompatActivity() {
         listaNumDisponiveis()
         //----------------------
 
-        // 1- Gera os quadrados menores independentes (diagonais: Q0, Q4, Q8) ou (Q2, Q4, Q6):
-        Log.d(cTAG, "-> Diagonal $idxDiagonal")
+        // 1- Gera os quadrados menores independentes (diagonais: Q0, Q4, Q8) ou (Q2, Q4, Q6);
+        // 2- gera os demais quadrados menores
 
-        //for (quad in quadDiagonal[idxDiagonal]) {
-        for (quad in 0..8) {
+        //--- Para quadrados menores na diagonal principal
+        Log.d(cTAG, "-> Diagonal $idxDiagonal")
+        for (quad in quadMenores[idxDiagonal]) {
+
+        //--- Para todos os quadrados menores
+        // for (quad in 0..8) {
 
             Log.d(cTAG, "   -Q$quad:")
 
+            //--- Calcula as linhas desse quadrado
             // INT(EXT.TEXTO(F17;2;1)/3)*3
             val linhaInic  = (quad / 3) * 3
             val linhasQuad = arrayOf(linhaInic, linhaInic + 1, linhaInic + 2)
 
+            //--- Calcula as colunas desse quadrado
+            // EXT.TEXTO(F17;2;1)*3-INT(EXT.TEXTO(F17;2;1)/3)*9
+            val colInic  = quad * 3 - (quad / 3) * 9
+            val colsQuad = arrayOf(colInic, colInic + 1, colInic + 2)
+
+            //--- Para todas as linhas desse quadrado
             for (linha in linhasQuad) {
 
-                // EXT.TEXTO(F17;2;1)*3-INT(EXT.TEXTO(F17;2;1)/3)*9
-                val colInic  = quad * 3 - (quad / 3) * 9
-                val colsQuad = arrayOf(colInic, colInic + 1, colInic + 2)
-                for (coluna in colInic..colInic + 2) {
+                //--- Para todas as colunas desse quadrado
+                for (coluna in colsQuad) {
 
+                    //--- Gera um número aleatório até gerar um número INEXISTENTE nessa linha e
+                    //    nessa coluna.
                     var flagExisteQ : Boolean
                     do {
 
-                        //--- Gera um número aleatório
                         //------------------------------
                         val numero = (1..9).random() // generated random from 1 to 9 included
                         //------------------------------
@@ -104,12 +128,13 @@ class MainActivity : AppCompatActivity() {
                             if (flagExisteQ) break
 
                             //--- Se NÃO existe, pesquisa nos seus vizinhos, para os quadrados
-                            //    das diagonais secundárias
-                            else if (!quadDiagonal[idxDiagonal].contains(quad)) {
+                            //    menores das diagonais secundárias.
+                            else if (!quadMenores[idxDiagonal].contains(quad)) {
 
                                 //--- O número não pode existir na mesma linha
                                 for (colQM in 0..8) {
-                                    if (!colsQuad.contains(colQM) && quadMaior[linha][colQM] == numero) {
+                                    // if (!colsQuad.contains(colQM) && quadMaior[linha][colQM] == numero) {
+                                    if ((colQM != coluna) && (quadMaior[linha][colQM] == numero)) {
                                         flagExisteQ = true
                                         break
                                     }
@@ -120,7 +145,7 @@ class MainActivity : AppCompatActivity() {
 
                                     for (linhaQM in 0..8) {
 
-                                        if (!linhasQuad.contains(linha) && quadMaior[linhaQM][coluna] == numero) {
+                                        if ((linhaQM != linha) && (quadMaior[linhaQM][coluna] == numero)) {
                                             flagExisteQ = true
                                             break
                                         }
@@ -130,7 +155,7 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         //--- Se o número está disponível na linha armazena-o no quadrado maior
-                        //    (externo) e torna-o indisponível; senão gera novo número
+                        //    (externo); senão gera novo número
                         if (!flagExisteQ) {
 
                             //--- Armazena-o
@@ -139,13 +164,12 @@ class MainActivity : AppCompatActivity() {
                             Log.d(cTAG, strLog)
 
                             //--- Torna-o indisponível nessa linha
-                            numDispLinhas[linha][numero - 1] = 0
+                            //numDispLinhas[linha][numero - 1] = 0
 
                             //--- Torna-o indisponível nessa coluna
-                            numDispCols[numero - 1][coluna] = 0
+                            //numDispCols[numero - 1][coluna] = 0
 
                         }
-
 
                     } while (flagExisteQ)
 
