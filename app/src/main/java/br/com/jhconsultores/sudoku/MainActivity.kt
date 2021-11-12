@@ -16,9 +16,9 @@ class MainActivity : AppCompatActivity() {
     //private var numDispLinhas = arrayOf<Array<Int>>()
     //private var numDispCols   = arrayOf<Array<Int>>()
 
-    private var arrayPref   = arrayOf<Int>()
-    private var quadMenores = arrayOf<Array<Int>>()
-    private var idxDiagonal = 0
+    //private var arrayPref   = arrayOf<Int>()
+    //private var quadMenores = arrayOf<Array<Int>>()
+    //private var idxDiagonal = 0
 
     //----------------------------------------------------------------------------------------------
     // Eventos
@@ -29,8 +29,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //--- Instancializações e inicializações
-        var array = arrayOf<Int>()
 
+        /** Algoritmo 1
+        var array = arrayOf<Int>()
         for (idxDiagonal in 0..1) {
             when (idxDiagonal) {
                 0 -> arrayPref = arrayOf(0, 4, 8)
@@ -47,7 +48,9 @@ class MainActivity : AppCompatActivity() {
             }
             quadMenores += array
         }
+
         idxDiagonal = 0
+         */
 
         //-----------
         geraJogo()
@@ -61,148 +64,148 @@ class MainActivity : AppCompatActivity() {
     private fun geraJogo() {
 
         //--- Instancializações e inicializações
+        var flagErroGer : Boolean
+        var numTentativas = 0
 
-        //---------------------
-        inicializaQuadMaior()
-        //--------------------------
-        listaQuadMaior()
-        //--------------------------
-        // inicializaNumDisponiveis()
-        //--------------------------
-        // listaNumDisponiveis()
-        //----------------------
+        do {
 
-        // 1- Gera os quadrados menores independentes (diagonais: Q0, Q4, Q8) ou (Q2, Q4, Q6);
-        // 2- gera os demais quadrados menores
+            Log.d(cTAG, "-> Tentativa: ${numTentativas + 1}")
 
-        //--- Quadrados menores da diagonal principal
-        arrayPref = arrayOf()
-        for (quadPref in 0..2) { arrayPref += quadMenores[idxDiagonal][quadPref] }
+            //----------------------
+            inicializaQuadMaior()
+            //----------------------
+            listaQuadMaior()
+            //-----------------
 
-        //--- Para todos os quadrados menores
-        Log.d(cTAG, "-> Diagonal $idxDiagonal")
-        for (quad in quadMenores[idxDiagonal]) {
+            flagErroGer = false
 
-            Log.d(cTAG, "   -Q$quad:")
+            for (quad in 0..8) {
 
-            //--- Calcula as linhas desse quadrado
-            // INT(EXT.TEXTO(F17;2;1)/3)*3
-            val linhaInic  = (quad / 3) * 3
-            val linhasQuad = arrayOf(linhaInic, linhaInic + 1, linhaInic + 2)
+               Log.d(cTAG, "-> Q$quad:")
 
-            //--- Calcula as colunas desse quadrado
-            // EXT.TEXTO(F17;2;1)*3-INT(EXT.TEXTO(F17;2;1)/3)*9
-            val colInic  = quad * 3 - (quad / 3) * 9
-            val colsQuad = arrayOf(colInic, colInic + 1, colInic + 2)
+               //--- Calcula as linhas desse quadrado
+               // INT(EXT.TEXTO(F17;2;1)/3)*3
+               val linhaInic = (quad / 3) * 3
+               val linhasQuad = arrayOf(linhaInic, linhaInic + 1, linhaInic + 2)
 
-            //--- Para todas as linhas desse quadrado
-            for (linha in linhasQuad) {
+               //--- Calcula as colunas desse quadrado
+               // EXT.TEXTO(F17;2;1)*3-INT(EXT.TEXTO(F17;2;1)/3)*9
+               val colInic  = quad * 3 - (quad / 3) * 9
+               val colsQuad = arrayOf(colInic, colInic + 1, colInic + 2)
 
-                //--- Para todas as colunas desse quadrado
-                for (coluna in colsQuad) {
+               //--- Para todas as linhas desse quadrado
+               for (linha in linhasQuad) {
 
-                    //--- Gera um número aleatório até gerar um número INEXISTENTE nessa linha e
-                    //    nessa coluna.
-                    var flagExisteQ = false
-                    var numero : Int
-                    val numDisp = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
+                   //--- Para todas as colunas desse quadrado
+                   for (coluna in colsQuad) {
 
-                    do {
+                       //--- Gera um número aleatório até gerar um número INEXISTENTE nessa linha e
+                       //    nessa coluna.
+                       var flagExisteQ = false
+                       var numero: Int
+                       val numDisp = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-                        //-------------------------
-                        numero = (1..9).random()           // generated random from 1 to 9 included
-                        //-------------------------
-                        if (numDisp[numero - 1] == 0) {
+                       do {
 
-                            numDisp[numero - 1] = numero
-                            Log.d(cTAG, "- numGerado = $numero")
+                           //-------------------------
+                           numero = (1..9).random()        // generated random from 1 to 9 included
+                           //-------------------------
+                           if (numDisp[numero - 1] == 0) {
 
-                            //--- Verifica se o número gerado ainda NÃO existe no seu quadrado
-                            flagExisteQ = false
-                            for (linhaQ in linhasQuad) {
+                               numDisp[numero - 1] = numero
+                               Log.d(cTAG, "- numGerado = $numero")
 
-                                for (colQ in colsQuad) {
+                               //--- Verifica se o número gerado ainda NÃO existe no seu quadrado
+                               flagExisteQ = false
+                               for (linhaQ in linhasQuad) {
 
-                                    if (quadMaior[linhaQ][colQ] == numero) {
+                                   for (colQ in colsQuad) {
 
-                                        flagExisteQ = true
-                                        break
+                                       if (quadMaior[linhaQ][colQ] == numero) {
 
-                                    }
+                                           flagExisteQ = true
+                                           break
 
-                                }
+                                       }
 
-                                //--- Se existe sai da pesquisa para gerar novo número RND
-                                if (flagExisteQ) break
+                                   }
 
-                                //--- Se NÃO existe, pesquisa nos seus vizinhos, para os quadrados
-                                //    menores das diagonais secundárias.
-                                else if (!arrayPref.contains(quad)) {
+                                   //--- Se existe sai da pesquisa para gerar novo número RND
+                                   if (flagExisteQ) break
 
-                                    //--- O número não pode existir na mesma linha
-                                    for (colQM in 0..8) {
-                                        // if (!colsQuad.contains(colQM) && quadMaior[linha][colQM] == numero) {
-                                        if ((colQM != coluna) && (quadMaior[linha][colQM] == numero)) {
-                                            flagExisteQ = true
-                                            break
-                                        }
-                                    }
+                                   //--- Se NÃO existe, pesquisa nos seus vizinhos, para os quadrados
+                                   //    menores das diagonais secundárias.
+                                   else {    // if (!arrayPref.contains(quad)) {
 
-                                    //--- O número não pode existir na mesma coluna
-                                    if (!flagExisteQ) {
+                                       //--- O número não pode existir na mesma linha
+                                       for (colQM in 0..8) {
+                                           // if (!colsQuad.contains(colQM) && quadMaior[linha][colQM] == numero) {
+                                           if ((colQM != coluna) && (quadMaior[linha][colQM] == numero)) {
+                                               flagExisteQ = true
+                                               break
+                                           }
+                                       }
 
-                                        for (linhaQM in 0..8) {
+                                       //--- O número não pode existir na mesma coluna
+                                       if (!flagExisteQ) {
 
-                                            if ((linhaQM != linha) && (quadMaior[linhaQM][coluna] == numero)) {
-                                                flagExisteQ = true
-                                                break
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                                           for (linhaQM in 0..8) {
 
-                    } while (flagExisteQ && numDisp.contains(0))
+                                               if ((linhaQM != linha) && (quadMaior[linhaQM][coluna] == numero)) {
+                                                   flagExisteQ = true
+                                                   break
+                                               }
+                                           }
+                                       }
+                                   }
+                               }
+                           }
 
-                    //--- Se o número está disponível na linha armazena-o no quadrado maior
-                    //    (externo); senão gera novo número
-                    if (!flagExisteQ) {
+                       } while (flagExisteQ && numDisp.contains(0))
 
-                        //--- Armazena-o
-                        quadMaior[linha][coluna] = numero
-                        strLog = "quadMaior[$linha][$coluna]= $numero "
-                        Log.d(cTAG, strLog)
+                       //--- Se o número está disponível na linha armazena-o no quadrado maior
+                       //    (externo); senão gera novo número
+                       if (!flagExisteQ) {
 
-                        //--- Torna-o indisponível nessa linha
-                        //numDispLinhas[linha][numero - 1] = 0
+                           //--- Armazena-o
+                           quadMaior[linha][coluna] = numero
+                           strLog = "quadMaior[$linha][$coluna]= $numero "
+                           Log.d(cTAG, strLog)
 
-                        //--- Torna-o indisponível nessa coluna
-                        //numDispCols[numero - 1][coluna] = 0
+                       }
 
-                    }
+                       //--- Já tentou todos os números e não conseguiu achar um que não existia: sai!
+                       else {
 
-                    //--- Já tentou todos os números e não conseguiu achar um que não existia: sai!
-                    else {
+                           Log.d(cTAG, "NÃO conseguiu achar um número válido para:")
+                           Log.d(cTAG, "quad = $quad linha = $linha coluna = $coluna")
 
-                        Log.d(cTAG, "NÃO conseguiu achar um número válido para:")
-                        Log.d(cTAG, "quad = $quad linha = $linha coluna = $coluna")
+                           flagErroGer = true
+                           numTentativas++
 
-                    }
-                }
-            }
-        }
+                       }
+                       if (flagErroGer) break
 
-        //---------------------------
-        listaQuadMaior()
-        //---------------------------
-        // listaNumDisponiveis()
-        //----------------------
+                   }
+                   if (flagErroGer) break
+
+               }
+               if (flagErroGer) break
+
+               //---------------------------
+               listaQuadMaior()
+               //---------------------------
+               // listaNumDisponiveis()
+               //----------------------
+           }
+
+        } while (flagErroGer && numTentativas < 10)
 
     }
 
     //--- inicializaQuaMaior
     private fun inicializaQuadMaior() {
+        quadMaior = arrayOf()
         for (linha in 0..8) {
             var array = arrayOf<Int>()
             for (coluna in 1..9) { array += 0 }
