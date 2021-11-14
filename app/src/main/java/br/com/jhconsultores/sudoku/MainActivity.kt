@@ -30,16 +30,18 @@ class MainActivity : AppCompatActivity() {
 
         //--- Instancializações e inicializações
 
-        //------------
-        geraJogo1()
-        //------------
+        //--- Gera jogo
+        //-----------
+        geraJogo()
+        //-----------
 
     }
 
     //----------------------------------------------------------------------------------------------
     // Funções
     //----------------------------------------------------------------------------------------------
-    private fun geraJogo() {
+    /*
+    private fun geraJogoOLD() {
 
         //--- Instancializações e inicializações
         var flagErroGer : Boolean
@@ -191,16 +193,14 @@ class MainActivity : AppCompatActivity() {
         } while (flagErroGer && numTentaQM < 10)
 
     }
+    */
 
-    private fun geraJogo1() {
+    //--- GeraJogo
+    private fun geraJogo() {
+
+        Log.d(cTAG, "-> Gera o jogo.")
 
         //--- Instancializações e inicializações
-
-        //----------------------
-        inicializaQuadMaior()
-        //----------------------
-        listaQuadMaior()
-        //-----------------
 
         //--- Tenta gerar o quadrado Maior Sodoku até 10x
         var flagGerouQM = false
@@ -209,11 +209,19 @@ class MainActivity : AppCompatActivity() {
 
             Log.d(cTAG, "-> Tentativa geração do QM: ${numTentaQM + 1}")
 
-            //--- Tenta gerar cada quadrado válido até 10x
-            var quad = 0
+            //----------------------
+            inicializaQuadMaior()
+            //----------------------
+            listaQuadMaior()
+            //-----------------
+
+            //--- Tenta gerar cada quadrado menor válido até 10x
+            var quad        = 0
             var flagGerouQm = false
-            var numTentaQm = 0         // Tentativas de geração do quadrado menor
+            var numTentaQm  = 0         // Tentativas de geração do quadrado menor
             while (!flagGerouQm && numTentaQm < 10) {
+
+                Log.d(cTAG, "-> Tentativa geração do Q$quad: ${numTentaQm + 1}")
 
                 //---------------------------
                 flagGerouQm = geraQm(quad)
@@ -222,14 +230,14 @@ class MainActivity : AppCompatActivity() {
                 //--- Gerou Qm válido
                 if (flagGerouQm) {
 
-                    //--- Gerou quadrados menores com menos do que 10 tentativas: sai do loop.
+                    //--- Gerou quadrado menor; passa ao px quadrado menor. Se gerou os 9, QM OK!
                     if (++quad >= 9) {
 
                         flagGerouQM = true
 
                     }
 
-                    //--- Não gerou todos os quadrados menores válidos: passa ao próximo.
+                    //--- Não gerou TODOS os Qm ainda; passa ao próximo Qm.
                     else {
 
                         flagGerouQm = false
@@ -240,15 +248,71 @@ class MainActivity : AppCompatActivity() {
                 //--- Não gerou Qm válido: se já tentou mais do que 10x, tenta novo QM
                 else if (++numTentaQm >= 10) {  numTentaQM++ }
 
-            } // Enqto não gerar Qm válido em até 10 tentativas
+            } // fim de Enqto não gerar Qm válido em até 10 tentativas
 
             //-----------------
             listaQuadMaior()
             //-----------------
 
-        } // Enqto não gerar QM válido em até 10 tentativas
+        } // fim de Enqto não gerar QM válido em até 10 tentativas
 
         Log.d(cTAG, if (numTentaQM >= 10) "-> NÃO gerou o jogo!" else "-> Gerou o jogo!")
+
+        //--- Verifica a validade do jogo
+        var qtiCols = 0
+        var qtiLin  = 0
+        for (indxLin in 0..8) {
+
+            strLog = "-> Linha: $indxLin faltam os numeros: "
+            var numDisp = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
+            for (indxCol in 0..8) {
+
+                val valCel = quadMaior[indxLin][indxCol]
+                numDisp[valCel - 1] = valCel
+
+            }
+
+
+            for (indxCol in 0..8) {
+
+                if (numDisp[indxCol] == 0) {
+
+                    strLog += "${indxCol + 1} "
+                    qtiCols++
+
+                }
+
+            }
+            if (qtiCols > 0) Log.d(cTAG, strLog)
+
+        }
+
+        for (indxCol in 0..8) {
+
+            strLog = "-> Coluna: $indxCol faltam os numeros: "
+            var numDisp = arrayOf ( 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+            for (indxLin in 0..8) {
+
+                val valCel          = quadMaior[indxLin][indxCol]
+                numDisp[valCel - 1] = valCel
+
+            }
+
+            for (indxLin in 0..8) {
+
+                if (numDisp[indxLin] == 0) {
+
+                    strLog += "${indxLin + 1} "
+                    qtiLin ++
+
+                }
+
+            }
+            if (qtiLin > 0) Log.d(cTAG, strLog)
+
+        }
+
+        Log.d(cTAG, if (qtiLin != 0 || qtiCols != 0) "-> Jogo NÃO válido!" else "-> Jogo Válido!")
 
     }
 
@@ -291,10 +355,11 @@ class MainActivity : AppCompatActivity() {
                 //--- Gera um número aleatório até gerar um número INEXISTENTE nessa linha e
                 //    nessa coluna. Se não conseguir gerar um, reinicia a geração para esse quad.
                 numDispQm = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
-                var numTentaGerarNum = 0
-                var flagNumeroExiste = true
+                var numTentaGerarNum       = 0
 
-                while (flagNumeroExiste && numTentaGerarNum < 10) {
+                var flagNumeroExiste       = true
+                val limTentativaGeracaoRND = 50
+                while (flagNumeroExiste && numTentaGerarNum < limTentativaGeracaoRND) {
 
                     //------------------------------------------------------------------------------
                     // Gera número aleatório
@@ -304,14 +369,15 @@ class MainActivity : AppCompatActivity() {
                     //----------------------------------
 
                     //------------------------------------------------------------------------------
-                    // Verifica se o número gerado é válido
+                    // Verifica se esse número ainda não foi gerado para essa célula
                     //------------------------------------------------------------------------------
-                    //--- Se esse numero já foi gerado para essa linha e coluna tenta gerar outro (1,2,3 ... 9).
+                    //--- Se numero já foi gerado para essa célula, tenta gerar outro (1,2,3 ... 9).
                     if (numDispQm[numero - 1] != 0) {
+
                         flagNumeroExiste = true
                         numTentaGerarNum++
-                    }
 
+                    }
                     //--- Senão, verifica se ele existe nesse quadrado ou, nessa linha ou nessa coluna.
                     else {
 
@@ -326,14 +392,22 @@ class MainActivity : AppCompatActivity() {
                         //--------------------------------------------------------------------------
                         var idxLinQ = 0
                         while (!flagNumeroExiste && idxLinQ < 3) {
+
                             val linhaQ1 = linhasQuad[idxLinQ]
 
                             var idxColunQ = 0
                             while (!flagNumeroExiste && idxColunQ < 3) {
 
                                 val colQ1 = colsQuad[idxColunQ]
+
                                 if (quadMaior[linhaQ1][colQ1] == numero) {
+
+                                    strLog  = "-> Número existente no Qm: $quadMenor lin =  "
+                                    strLog += "$linhaQ1 col = $colQ1"
+                                    Log.d(cTAG, strLog)
+
                                     flagNumeroExiste = true
+
                                 }
                                 else idxColunQ++
 
@@ -352,14 +426,18 @@ class MainActivity : AppCompatActivity() {
 
                         //--- O número não pode existir na mesma linha
                         var idxColQM = 0
-                        while (!flagNumeroExiste && idxColQM < 8) {
+                        while (!flagNumeroExiste && idxColQM <= 8) {
 
-                            if ((idxColQ != idxColQ) && (quadMaior[linQ][idxColQM] == numero)) {
+                            if ((idxColQM != colQ) && (quadMaior[linQ][idxColQM] == numero)) {
+
+                                strLog  = "-> Número existente na mesma linha do QM: "
+                                strLog += "$quadMenor lin = $linQ col = $idxColQM"
+                                Log.d(cTAG, strLog)
 
                                 flagNumeroExiste = true
 
                             }
-                            else idxColQM ++
+                            idxColQM ++
 
                         }
 
@@ -367,14 +445,18 @@ class MainActivity : AppCompatActivity() {
                         if (!flagNumeroExiste) {
 
                             var idxLinQM = 0
-                            while (!flagNumeroExiste && idxLinQM < 8) {
+                            while (!flagNumeroExiste && idxLinQM <= 8) {
 
                                 if ((idxLinQM != linQ) && (quadMaior[idxLinQM][colQ] == numero)) {
+
+                                    strLog  = "-> Número existente na mesma coluna do QM: "
+                                    strLog += "$quadMenor lin = $idxLinQM col = $colQ"
+                                    Log.d(cTAG, strLog)
 
                                     flagNumeroExiste = true
 
                                 }
-                                else idxLinQM ++
+                                idxLinQM ++
 
                             }
                         }
@@ -397,13 +479,9 @@ class MainActivity : AppCompatActivity() {
                         //--- Se JÁ tentou todos os números, sai por erro
                         if (!numDispQm.contains(0)) return (false)
 
-                        //--- Se ainda pode tentar, volta ao gerador de num RND
-                        else {
+                        //--- Se ainda pode tentar, volta ao gerador de num RND; senão retorna false
+                        else { if ((++numTentaGerarNum) >= limTentativaGeracaoRND) return (false) }
 
-
-                            if (++numTentaGerarNum >= 10 ) return (false)
-
-                        }
                     }
 
                 } // fim se número ainda não gerado
