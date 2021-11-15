@@ -224,15 +224,17 @@ class MainActivity : AppCompatActivity() {
 
                 // <<< já definidos: [linQm, colQm] e [linQM, colQM]
 
+                numDispCel = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
+
                 //--- Gera um número aleatório até gerar um número INEXISTENTE nessa linha e
                 //    nessa coluna. Se não conseguir gerar um, reinicia a geração para esse quad.
 
                 //--- Se numDispCel[0] = 0 -> o número 1 AINDA não foi gerado e assim sucessivamente
-                numDispCel = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
                 var numTentaGerarNum       = 0
 
                 var flagNumeroExiste       = true
                 val limTentativaGeracaoRND = 50
+
                 while (flagNumeroExiste && numTentaGerarNum < limTentativaGeracaoRND) {
 
                     //------------------------------------------------------------------------------
@@ -275,8 +277,8 @@ class MainActivity : AppCompatActivity() {
                                 val colQM1 = colsQuadQM[idxColunQm]
                                 if (quadMaior[linhaQM1][colQM1] == numero) {
 
-                                    strLog  = "-> Número existente: lin = $linhaQM1 col = $colQM1"
-                                    Log.d(cTAG, strLog)
+                                    //strLog  = "-> Número existente: lin = $linhaQM1 col = $colQM1"
+                                    //Log.d(cTAG, strLog)
 
                                     flagNumeroExiste = true
 
@@ -344,9 +346,6 @@ class MainActivity : AppCompatActivity() {
                             //--- Armazena-o
                             quadMaior[linQM][colQM] = numero
 
-                            //--- Sinaliza que aproveitará o numero
-                            numDispCel[numero - 1]  = numero
-
                             strLog = "quadMaior[$linQM][$colQM]= $numero "
                             Log.d(cTAG, strLog)
 
@@ -354,10 +353,33 @@ class MainActivity : AppCompatActivity() {
 
                         //--- Se número existente
                         else {
-                            //--- Se gerou todos os números, entre o 1 e 9 limTentativaGeracaoRND vezes, sai por erro
-                            if (!numDispCel.contains(0) &&
-                                                   (++numTentaGerarNum) >= limTentativaGeracaoRND) {
-                                return (false)
+
+                            //--- Se gerou todos os números, entre o 1 e 9
+                            if (!numDispCel.contains(0)) {
+
+                                numTentaGerarNum ++
+
+                                //--- Se já tentou o limite, retorna com erro
+                                if (numTentaGerarNum >= limTentativaGeracaoRND) { return (false) }
+
+                                //--- Tenta outra geração
+                                /*
+                                else {
+
+                                    linQm = 0
+                                    colQm = 0
+
+                                    //----------------------------
+                                    colQM = colsQuadQM[colQm++]
+                                    //----------------------------
+                                    linQM = linhasQuadQM[linQm++]
+                                    //------------------------------
+
+                                    numDispCel = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+                                }
+                                */
+
                             }
                         }
 
