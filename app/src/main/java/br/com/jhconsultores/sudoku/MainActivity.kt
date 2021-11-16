@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     private var quadMaior   = arrayOf<Array<Int>>()
 
     private val quadMenoresP1 = arrayOf (0, 4, 8)
-    private val quadMenoresP2 = arrayOf (1, 2, 3, 5, 6, 7)
+    private val quadMenoresP2 = arrayOf (1, 3, 2, 6, 5, 7)
 
     //----------------------------------------------------------------------------------------------
     // Eventos
@@ -81,19 +81,21 @@ class MainActivity : AppCompatActivity() {
 
             flagQuadMenorOk     = false
             var numTentaGeracao = 0
-            while (!flagQuadMenorOk && numTentaGeracao < 10) {
+            while (!flagQuadMenorOk && numTentaGeracao < 50) {
 
-                Log.d(cTAG, "   - tenta gerar Qm$quad: ${numTentaGeracao + 1}")
+                Log.d(cTAG, "   - tenta gerar Qm$quad: ${ numTentaGeracao + 1 }")
 
                 //----------------------------
                 array = geraQuadMenor(quad)
                 //----------------------------
+
+                //----------------------------
                 listaQuadMenor(quad, array)
                 //----------------------------
 
-                if (!array.contains(0)) flagQuadMenorOk = true
+                if (!array.contains(0) && !array.contains(-1)) flagQuadMenorOk = true
 
-                else numTentaGeracao++
+                else { numTentaGeracao++ }
 
             }
 
@@ -105,13 +107,24 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        if (flagQuadMenorOk) Log.d(cTAG, "-> Jogo válido")
+        //--- Verifica se jogo válido
+        var flagJogoVal = true
+        for (idxLinhaQM in 0..8) {
+
+            for (idxColQM in 0..8) {
+
+                val valCel = quadMaior[idxLinhaQM][idxColQM]
+                if (valCel <= 0 || valCel > 9) flagJogoVal = false
+
+                if (!flagJogoVal) break
+            }
+
+            if (!flagJogoVal) break
+        }
+
+        if (flagJogoVal) Log.d(cTAG, "-> Jogo válido")
         else Log.d(cTAG, "-> Jogo inválido")
 
-        //--- Apresenta o jogo gerado
-        //-----------------
-        //listaQuadMaior()
-        //-----------------
     }
 
     //--- geraQuadMenor[quad]
@@ -119,28 +132,40 @@ class MainActivity : AppCompatActivity() {
 
         //--- Instancializações e inicializações
         val arQuadMenor = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
-        val numDispCel  = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
+        var numDispCel  = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-        //--- Para todos as linhas de Qm
+        /*
+        val fimTenta          = 50
+        var contaTentaGerarQm = 0
+        var flagNumOk         = false
+        var numero            = 0
+        while (!flagNumOk && contaTentaGerarQm < fimTenta ) {
+         */
+
+        //--- Para todas as linhas do Qm
         for (linQm in 0..2) {
+            //var linQm = 0
+            //do {
 
             //--- Para todas as colunas de Qm
             for (colQm in 0..2) {
+                //var colQm = 0
+                //do {
 
-                val contaTentaGerarQm = 0
-                val limiteConta = 50
-                var flagNumOk   = false
-                while (!flagNumOk && contaTentaGerarQm < limiteConta) {
+                val fimTenta          = 50
+                var contaTentaGerarQm = 0
+                var flagNumOk         = false
+                var numero            = 0
+                while (!flagNumOk && contaTentaGerarQm < fimTenta ) {
 
                     //--- Gera número aleatório sem repetição
-                    //-----------------------------------
-                    val numero: Int = (1..9).random()
-                    //-----------------------------------
+                    //-------------------------
+                    numero = (1..9).random()
+                    //-------------------------
 
                     // Critério1: sem repetição no próprio Qm
                     if (numDispCel[numero - 1] == 0) {
 
-                        numDispCel[numero - 1]         = numero
                         arQuadMenor[linQm * 3 + colQm] = numero
                         flagNumOk = true
 
@@ -157,13 +182,32 @@ class MainActivity : AppCompatActivity() {
 
                         }
                     }
+                    if (!flagNumOk) {
+
+                        //--- Se o número gerado NÃO está ok (está presente na mesma linha ou coluna de
+                        //    outro bloco) armazena -1 para sinalizar erro.
+                        if (++contaTentaGerarQm >= fimTenta) {
+
+                            arQuadMenor[linQm * 3 + colQm] = -1
+                            //colQm = 3
+                            //linQm = 3
+
+                        }
+
+                    }
+
+                    //--- Se o número gerado ESTÁ ok armazena no array desse bloco
+                    else {
+
+                        arQuadMenor[linQm * 3 + colQm] = numero
+                        numDispCel[numero - 1] = numero
+
+                    }
+
+                //} while (++colQm < 3 && contaTentaGerarQm < fimTenta)
                 }
 
-                if (contaTentaGerarQm >= limiteConta) {
-
-                    arQuadMenor[linQm * 3 + colQm] = -1
-
-                }
+            //} while (++linQm < 3 && contaTentaGerarQm < fimTenta)
             }
         }
 
@@ -202,100 +246,52 @@ class MainActivity : AppCompatActivity() {
     //--- verifValidade de um número do Qm para inserção no QM
     private fun verifValidade1(quadMenor : Int, linhaQm : Int, colunaQm : Int,
                                                                           numero : Int) : Boolean {
-        var flagNumeroExiste = false
-        var arQmVizinhos : Array<Int>
-
-        var arArQmVizinhos = arrayOf <Array<Int>> ()
-        // Qm0
-        var arTmp       = arrayOf(-1, -1, -1, -1) //
-        arArQmVizinhos += arTmp
-        // Qm1
-        arTmp           = arrayOf(0, 4, -1, -1)   //
-        arArQmVizinhos += arTmp
-        // Qm2
-        arTmp           = arrayOf(0, 1,  8, -1)   //
-        arArQmVizinhos += arTmp
-        // Qm3
-        arTmp           = arrayOf(0, 4, -1, -1)   //
-        arArQmVizinhos += arTmp
-        // Qm4
-        arTmp           = arrayOf(-1, -1, -1, -1) //
-        arArQmVizinhos += arTmp
-        // Qm5
-        arTmp           = arrayOf(3, 4, 2, 8)     //
-        arArQmVizinhos += arTmp
-        // Qm6
-        arTmp           = arrayOf(0, 3,  8, -1)   //
-        arArQmVizinhos += arTmp
-        // Qm7
-        arTmp           = arrayOf(1, 4,  6, 8)    //
-        arArQmVizinhos += arTmp
-        // Qm8
-        arTmp           = arrayOf(-1, -1, -1, -1) //
-        arArQmVizinhos += arTmp
+        var flagNumeroOk = true
 
         //--- Calcula as linhas desse quadrado menor no QM
-        //-------------------------------------------
-        var linhasQuadQM = calcLinsQM (quadMenor)
-        //-------------------------------------------
-        //--- Converte a linha do Qm para a do QM
-        var linQM = linhasQuadQM[linhaQm]
-
+        //--------------------------------------
+        var linhasQM = calcLinsQM (quadMenor)
+        //--------------------------------------
         //--- Calcula as colunas desse quadrado menor no QM
-        //-----------------------------------------
-        var colsQuadQM = calcColsQM (quadMenor)
-        //-----------------------------------------
-        //--- Converte a coluna do Qm para a do QM
-        var colQM = colsQuadQM[colunaQm]
+        //------------------------------------
+        var colsQM = calcColsQM (quadMenor)
+        //------------------------------------
 
-        //--- Prepara array com vizinhos
-        arQmVizinhos = arArQmVizinhos [quadMenor]
-        for (quadViz in arQmVizinhos) {
+        //--- Converte a linha do numero gerado para o Qm para o do QM
+        var linQM = linhasQM[linhaQm]
+        //--- Converte a coluna do numero gerado para o Qm para a do QM
+        var colQM = colsQM[colunaQm]
 
-            //--- Se terminador, sai das verificações para esse quadrado viz
-            if (quadViz == -1) break
+        //--- Verifica se número existe na LINHA do QM
+        var numeroQM = 0
+        for (idxColQM in 0..8) {
 
-            Log.d(cTAG, "-> Verifica vizinho Qm$quadViz")
+            if (!colsQM.contains(idxColQM)) {
 
-            //--- Converte as linhas do QmViz para as do QM
-            //------------------------------------------
-            var linhasQuadMViz = calcLinsQM (quadViz)
-            //------------------------------------------
-            //--- Converte as colunas do QmViz para as do QM
-            //-----------------------------------------
-            var colsQuadMViz = calcColsQM (quadViz)
-            //-----------------------------------------
+                numeroQM = quadMaior[linQM][idxColQM]
+                if (numero == numeroQM) {
 
-            //--- Verifica se número existe na LINHA do QmViz = LINHA do Qm
-            var colQMViz  = 0
-            var linQMViz  = linQM
-
-            for (idxColViz in 0..2) {
-
-                colQMViz = colsQuadMViz[idxColViz]
-
-                val numeroQMViz = quadMaior[linQMViz][colQMViz]
-                if (numero == numeroQMViz) {
-
-                    flagNumeroExiste = true
+                    flagNumeroOk = false
                     break
 
                 }
             }
+        }
 
-            //--- Verifica se número existe nas COLUNAS do QmViz
-            if (!flagNumeroExiste) {
+        //--- Se existe, retorna para gerar um novo numero
+        if (!flagNumeroOk) return false
 
-                colQMViz = colQM
+        //--- Se não existe na linha, verifica se número existe na COLUNA do QM
+        else {
 
-                for (idxLinViz in 0..2) {
+            for (idxLinQM in 0..8) {
 
-                    linQMViz = linhasQuadMViz[idxLinViz]
+                if (!linhasQM.contains(idxLinQM)) {
 
-                    val numeroQMViz = quadMaior[linQMViz][colQMViz]
-                    if (numero == numeroQMViz) {
+                    numeroQM = quadMaior[idxLinQM][colQM]
+                    if (numero == numeroQM) {
 
-                        flagNumeroExiste = true
+                        flagNumeroOk = false
                         break
 
                     }
@@ -303,11 +299,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        return !flagNumeroExiste
+        return flagNumeroOk
 
     }
 
     //--- verifValidade do QM
+    /*
     private fun verifValidade(quadMenor : Int, array : Array <Int>) : Boolean {
 
         var flagNumeroExiste = false
@@ -380,6 +377,7 @@ class MainActivity : AppCompatActivity() {
         return !flagNumeroExiste
 
     }
+    */
 
     //--- Calcula as linhas do QM para um Qm
     private fun calcLinsQM (quadMenor : Int) : Array <Int> {
