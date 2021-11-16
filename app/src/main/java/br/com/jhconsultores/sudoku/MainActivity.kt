@@ -206,22 +206,33 @@ class MainActivity : AppCompatActivity() {
         var arQmVizinhos : Array<Int>
 
         var arArQmVizinhos = arrayOf <Array<Int>> ()
-
-        var arTmp       = arrayOf(-1, -1, -1, -1)
+        // Qm0
+        var arTmp       = arrayOf(-1, -1, -1, -1) //
         arArQmVizinhos += arTmp
-
-        arTmp           = arrayOf(0, 4, -1, -1)
+        // Qm1
+        arTmp           = arrayOf(0, 4, -1, -1)   //
         arArQmVizinhos += arTmp
-
-        arTmp           = arrayOf(0, 1,  8, -1)
+        // Qm2
+        arTmp           = arrayOf(0, 1,  8, -1)   //
         arArQmVizinhos += arTmp
-
-        else if (quadMenor == 3) { arQmVizinhos = arrayOf(0, 4, -1, -1) }
-        else if (quadMenor == 5) { arQmVizinhos = arrayOf(2, 3, -1, -1) }
-        else if (quadMenor == 6) { arQmVizinhos = arrayOf(0, 3,  8, -1) }
-        // quadMenor == 7
-        else { arQmVizinhos = arrayOf(1, 4, 6, 8) }
-
+        // Qm3
+        arTmp           = arrayOf(0, 4, -1, -1)   //
+        arArQmVizinhos += arTmp
+        // Qm4
+        arTmp           = arrayOf(-1, -1, -1, -1) //
+        arArQmVizinhos += arTmp
+        // Qm5
+        arTmp           = arrayOf(3, 4, 2, 8)     //
+        arArQmVizinhos += arTmp
+        // Qm6
+        arTmp           = arrayOf(0, 3,  8, -1)   //
+        arArQmVizinhos += arTmp
+        // Qm7
+        arTmp           = arrayOf(1, 4,  6, 8)    //
+        arArQmVizinhos += arTmp
+        // Qm8
+        arTmp           = arrayOf(-1, -1, -1, -1) //
+        arArQmVizinhos += arTmp
 
         //--- Calcula as linhas desse quadrado menor no QM
         //-------------------------------------------
@@ -239,22 +250,32 @@ class MainActivity : AppCompatActivity() {
 
         //--- Prepara array com vizinhos
         arQmVizinhos = arArQmVizinhos [quadMenor]
-        for ( quadViz in arQmVizinhos) {
+        for (quadViz in arQmVizinhos) {
+
+            //--- Se terminador, sai das verificações para esse quadrado viz
+            if (quadViz == -1) break
+
+            Log.d(cTAG, "-> Verifica vizinho Qm$quadViz")
 
             //--- Converte as linhas do QmViz para as do QM
-            //--------------------------------------------
-            var linhasQuadMViz = calcLinsQM (quadMenor)
-            //--------------------------------------------
+            //------------------------------------------
+            var linhasQuadMViz = calcLinsQM (quadViz)
+            //------------------------------------------
             //--- Converte as colunas do QmViz para as do QM
-            //-------------------------------------------
-            var colsQuadQMViz = calcColsQM (quadMenor)
-            //-------------------------------------------
+            //-----------------------------------------
+            var colsQuadMViz = calcColsQM (quadViz)
+            //-----------------------------------------
 
-            //--- Verifica se número existe nas LINHAS do QmViz
-            for (idxLinViz in 0..2) {
+            //--- Verifica se número existe na LINHA do QmViz = LINHA do Qm
+            var colQMViz  = 0
+            var linQMViz  = linQM
 
-                val numeroQM = quadMaior[linhasQuadMViz[idxLinViz]][colQM]
-                if (numero == numeroQM) {
+            for (idxColViz in 0..2) {
+
+                colQMViz = colsQuadMViz[idxColViz]
+
+                val numeroQMViz = quadMaior[linQMViz][colQMViz]
+                if (numero == numeroQMViz) {
 
                     flagNumeroExiste = true
                     break
@@ -265,10 +286,14 @@ class MainActivity : AppCompatActivity() {
             //--- Verifica se número existe nas COLUNAS do QmViz
             if (!flagNumeroExiste) {
 
-                for (idxColViz in 0..2) {
+                colQMViz = colQM
 
-                    val numeroQM = quadMaior[linhaQm][colsQuadQMViz[idxColViz]]
-                    if (numero == numeroQM) {
+                for (idxLinViz in 0..2) {
+
+                    linQMViz = linhasQuadMViz[idxLinViz]
+
+                    val numeroQMViz = quadMaior[linQMViz][colQMViz]
+                    if (numero == numeroQMViz) {
 
                         flagNumeroExiste = true
                         break
