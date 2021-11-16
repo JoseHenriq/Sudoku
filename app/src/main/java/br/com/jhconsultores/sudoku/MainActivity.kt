@@ -3,6 +3,8 @@ package br.com.jhconsultores.sudoku
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,6 +19,8 @@ class MainActivity : AppCompatActivity() {
     private val quadMenoresP1 = arrayOf (0, 4, 8)
     private val quadMenoresP2 = arrayOf (1, 3, 2, 6, 5, 7)
 
+    var btnGeraJogo : Button? = null
+
     //----------------------------------------------------------------------------------------------
     // Eventos
     //----------------------------------------------------------------------------------------------
@@ -26,6 +30,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //--- Instancializações e inicializações
+        btnGeraJogo = findViewById(R.id.btn_GeraJogo)
+
+    }
+
+    //--- Evento tapping no botão
+    fun btnGeraJogoClick(view: View?) {
+
+        Log.d(cTAG, "-> Tap no btnJogaJogo")
 
         //--- Gera jogo
         //-----------
@@ -36,8 +48,6 @@ class MainActivity : AppCompatActivity() {
 
     //--- GeraJogo1
     private fun geraJogo1() {
-
-        Log.d(cTAG, "-> Gera o jogo")
 
         //--- Instancializações e inicializações
         //----------------------
@@ -50,6 +60,8 @@ class MainActivity : AppCompatActivity() {
 
         // Para quadrados menores da diagonal principal do QM NÃO precisa verificar repetições
         var strLog = "-> Quadrado maior para "
+
+        /*
         for (quad in quadMenoresP1) {
 
             strLog += "Q$quad"
@@ -76,54 +88,80 @@ class MainActivity : AppCompatActivity() {
         //--- Outros quadrados precisarão ser checados quanto às repetições
         var flagQuadMenorOk = false
         for (quad in quadMenoresP2) {
+        */
 
-            var array = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
+        var flagJogoOk      = false
+        var contaTentaJogo  = 0
+        var flagQuadMenorOk = false
 
-            flagQuadMenorOk     = false
-            var numTentaGeracao = 0
-            while (!flagQuadMenorOk && numTentaGeracao < 50) {
+        while (!flagJogoOk && contaTentaJogo < 20) {
 
-                Log.d(cTAG, "   - tenta gerar Qm$quad: ${ numTentaGeracao + 1 }")
+            Log.d(cTAG, "-> Gera o jogo ${contaTentaJogo + 1}")
 
-                //----------------------------
-                array = geraQuadMenor(quad)
-                //----------------------------
+            for (quad in 0..8) {
+            //for (quad in 0..7) {
 
-                //----------------------------
-                listaQuadMenor(quad, array)
-                //----------------------------
+                var array = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-                if (!array.contains(0) && !array.contains(-1)) flagQuadMenorOk = true
+                flagQuadMenorOk = false
+                var numTentaGeracao = 0
+                while (!flagQuadMenorOk && numTentaGeracao < 50) {
 
-                else { numTentaGeracao++ }
+                    Log.d(cTAG, "   - tenta gerar Qm$quad: ${numTentaGeracao + 1}")
+
+                    //----------------------------
+                    array = geraQuadMenor(quad)
+                    //----------------------------
+
+                    //----------------------------
+                    listaQuadMenor(quad, array)
+                    //----------------------------
+
+                    if (!array.contains(0) && !array.contains(-1)) flagQuadMenorOk = true
+                    else {
+                        numTentaGeracao++
+                    }
+
+                }
+
+                //---------------------------
+                insereQmEmQM(quad, array)
+                //---------------------------
+                listaQuadMaior()
+                //-----------------
 
             }
 
-            //---------------------------
-            insereQmEmQM (quad, array)
-            //---------------------------
-            listaQuadMaior()
-            //-----------------
+            //--- Verifica se jogo válido
+            var flagJogoVal = true
+            for (idxLinhaQM in 0..8) {
 
-        }
+                for (idxColQM in 0..8) {
 
-        //--- Verifica se jogo válido
-        var flagJogoVal = true
-        for (idxLinhaQM in 0..8) {
+                    val valCel = quadMaior[idxLinhaQM][idxColQM]
+                    if (valCel <= 0 || valCel > 9) flagJogoVal = false
 
-            for (idxColQM in 0..8) {
-
-                val valCel = quadMaior[idxLinhaQM][idxColQM]
-                if (valCel <= 0 || valCel > 9) flagJogoVal = false
+                    if (!flagJogoVal) break
+                }
 
                 if (!flagJogoVal) break
             }
 
-            if (!flagJogoVal) break
-        }
+            if (flagJogoVal) {
 
-        if (flagJogoVal) Log.d(cTAG, "-> Jogo válido")
-        else Log.d(cTAG, "-> Jogo inválido")
+                Log.d(cTAG, "-> Jogo ${contaTentaJogo + 1}: válido!")
+                flagJogoOk = true
+
+            }
+
+            else {
+
+                Log.d(cTAG, "-> Jogo ${contaTentaJogo + 1}: inválido.")
+                contaTentaJogo ++
+
+            }
+
+        }
 
     }
 
@@ -134,23 +172,11 @@ class MainActivity : AppCompatActivity() {
         val arQuadMenor = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
         var numDispCel  = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-        /*
-        val fimTenta          = 50
-        var contaTentaGerarQm = 0
-        var flagNumOk         = false
-        var numero            = 0
-        while (!flagNumOk && contaTentaGerarQm < fimTenta ) {
-         */
-
         //--- Para todas as linhas do Qm
         for (linQm in 0..2) {
-            //var linQm = 0
-            //do {
 
             //--- Para todas as colunas de Qm
             for (colQm in 0..2) {
-                //var colQm = 0
-                //do {
 
                 val fimTenta          = 50
                 var contaTentaGerarQm = 0
@@ -174,13 +200,15 @@ class MainActivity : AppCompatActivity() {
                     if (flagNumOk) {
 
                         // Critérios2: NÃO necessário para os Qm da diagonal principal do QM (0, 4, 8)
-                        if (quadMenor != 0 && quadMenor != 4 && quadMenor != 8) {
+                        //if (quadMenor != 0 && quadMenor != 4 && quadMenor != 8) {
 
+                        // Critérios2: usado para todos os Qm
                             //------------------------------------------------------------
                             flagNumOk = verifValidade1(quadMenor, linQm, colQm, numero)
                             //------------------------------------------------------------
 
-                        }
+                        //}
+
                     }
                     if (!flagNumOk) {
 
@@ -189,8 +217,6 @@ class MainActivity : AppCompatActivity() {
                         if (++contaTentaGerarQm >= fimTenta) {
 
                             arQuadMenor[linQm * 3 + colQm] = -1
-                            //colQm = 3
-                            //linQm = 3
 
                         }
 
@@ -204,10 +230,8 @@ class MainActivity : AppCompatActivity() {
 
                     }
 
-                //} while (++colQm < 3 && contaTentaGerarQm < fimTenta)
                 }
 
-            //} while (++linQm < 3 && contaTentaGerarQm < fimTenta)
             }
         }
 
