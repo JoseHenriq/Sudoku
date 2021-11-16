@@ -14,8 +14,8 @@ class MainActivity : AppCompatActivity() {
 
     private var quadMaior   = arrayOf<Array<Int>>()
 
-    private val quadMoresP1 = arrayOf (0, 4, 8)
-    private val quadMoresP2 = arrayOf (1, 2, 3, 5, 6, 7)
+    private val quadMenoresP1 = arrayOf (0, 4, 8)
+    private val quadMenoresP2 = arrayOf (1, 2, 3, 5, 6, 7)
 
     //----------------------------------------------------------------------------------------------
     // Eventos
@@ -50,24 +50,20 @@ class MainActivity : AppCompatActivity() {
 
         // Para quadrados menores da diagonal principal do QM NÃO precisa verificar repetições
         var strLog = "-> Quadrado maior para "
-        for (quad in quadMoresP1) {
+        for (quad in quadMenoresP1) {
 
             strLog += "Q$quad"
-            if (quadMoresP1.indexOf(quad) < quadMoresP1.lastIndex) strLog += ", "
+            if (quadMenoresP1.indexOf(quad) < quadMenoresP1.lastIndex) strLog += ", "
 
             var array = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-            //------------------------
-            array = geraQuadMenor()
-            //------------------------
-
+            //----------------------------
+            array = geraQuadMenor(quad)
             //----------------------------
             listaQuadMenor(quad, array)
             //----------------------------
-
-            //---------------------------
             insereQmEmQM(quad, array)
-            //---------------------------
+            //----------------------------
 
         }
 
@@ -77,54 +73,49 @@ class MainActivity : AppCompatActivity() {
         listaQuadMaior()
         //-----------------
 
-        //--- Outros quadrados precisarão ser checados quanto à repetições
-        for (quad in quadMoresP2) {
+        //--- Outros quadrados precisarão ser checados quanto às repetições
+        var flagQuadMenorOk = false
+        for (quad in quadMenoresP2) {
 
             var array = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-            var flagQuadMenorOk = false
+            flagQuadMenorOk     = false
             var numTentaGeracao = 0
             while (!flagQuadMenorOk && numTentaGeracao < 10) {
 
-                //------------------------
-                array = geraQuadMenor()
-                //------------------------
+                Log.d(cTAG, "   - tenta gerar Qm$quad: ${numTentaGeracao + 1}")
 
+                //----------------------------
+                array = geraQuadMenor(quad)
                 //----------------------------
                 listaQuadMenor(quad, array)
                 //----------------------------
 
-                //---------------------------
-                insereQmEmQM (quad, array)
-                //---------------------------
+                if (!array.contains(0)) flagQuadMenorOk = true
 
-                //---------------------------------------------
-                flagQuadMenorOk = verifValidade(quad, array)
-                //---------------------------------------------
-
-                if (!flagQuadMenorOk) {
-
-                    numTentaGeracao ++
-                    array = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
-
-                    //---------------------------
-                    insereQmEmQM (quad, array)
-                    //---------------------------
-
-                }
+                else numTentaGeracao++
 
             }
 
+            //---------------------------
+            insereQmEmQM (quad, array)
+            //---------------------------
+            listaQuadMaior()
+            //-----------------
+
         }
+
+        if (flagQuadMenorOk) Log.d(cTAG, "-> Jogo válido")
+        else Log.d(cTAG, "-> Jogo inválido")
 
         //--- Apresenta o jogo gerado
         //-----------------
-        listaQuadMaior()
+        //listaQuadMaior()
         //-----------------
     }
 
     //--- geraQuadMenor[quad]
-    private fun geraQuadMenor () : Array <Int> {
+    private fun geraQuadMenor (quadMenor: Int) : Array <Int> {
 
         //--- Instancializações e inicializações
         val arQuadMenor = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -136,21 +127,42 @@ class MainActivity : AppCompatActivity() {
             //--- Para todas as colunas de Qm
             for (colQm in 0..2) {
 
-                var flagNumOk = false
-                while (!flagNumOk) {
+                val contaTentaGerarQm = 0
+                val limiteConta = 50
+                var flagNumOk   = false
+                while (!flagNumOk && contaTentaGerarQm < limiteConta) {
 
                     //--- Gera número aleatório sem repetição
                     //-----------------------------------
                     val numero: Int = (1..9).random()
                     //-----------------------------------
 
+                    // Critério1: sem repetição no próprio Qm
                     if (numDispCel[numero - 1] == 0) {
 
-                        numDispCel[numero - 1] = numero
+                        numDispCel[numero - 1]         = numero
                         arQuadMenor[linQm * 3 + colQm] = numero
                         flagNumOk = true
 
                     }
+
+                    if (flagNumOk) {
+
+                        // Critérios2: NÃO necessário para os Qm da diagonal principal do QM (0, 4, 8)
+                        if (quadMenor != 0 && quadMenor != 4 && quadMenor != 8) {
+
+                            //------------------------------------------------------------
+                            flagNumOk = verifValidade1(quadMenor, linQm, colQm, numero)
+                            //------------------------------------------------------------
+
+                        }
+                    }
+                }
+
+                if (contaTentaGerarQm >= limiteConta) {
+
+                    arQuadMenor[linQm * 3 + colQm] = -1
+
                 }
             }
         }
@@ -160,20 +172,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- insere Qm no QM
-    private fun insereQmEmQM (idxQuadMenor : Int, array : Array <Int>) {
+    private fun insereQmEmQM (quadMenor : Int, array : Array <Int>) {
 
         // Converte os quadrados menores no quadMaior
         var valCel : Int
 
         //--- Calcula as linhas desse quadrado
-        // INT(EXT.TEXTO(F17;2;1)/3)*3
-        val linhaInicQM  = (idxQuadMenor / 3) * 3
-        val linhasQuadQM = arrayOf(linhaInicQM, linhaInicQM + 1, linhaInicQM + 2)
+        //------------------------------------------
+        var linhasQuadQM = calcLinsQM (quadMenor)
+        //------------------------------------------
 
         //--- Calcula as colunas desse quadrado
-        // EXT.TEXTO(F17;2;1)*3-INT(EXT.TEXTO(F17;2;1)/3)*9
-        val colInicQM  = idxQuadMenor * 3 - (idxQuadMenor / 3) * 9
-        val colsQuadQM = arrayOf(colInicQM, colInicQM + 1, colInicQM + 2)
+        //----------------------------------------
+        var colsQuadQM = calcColsQM (quadMenor)
+        //----------------------------------------
 
         for (linMenor in 0..2) {
 
@@ -187,6 +199,89 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //--- verifValidade de um número do Qm para inserção no QM
+    private fun verifValidade1(quadMenor : Int, linhaQm : Int, colunaQm : Int,
+                                                                          numero : Int) : Boolean {
+        var flagNumeroExiste = false
+        var arQmVizinhos : Array<Int>
+
+        var arArQmVizinhos = arrayOf <Array<Int>> ()
+
+        var arTmp       = arrayOf(-1, -1, -1, -1)
+        arArQmVizinhos += arTmp
+
+        arTmp           = arrayOf(0, 4, -1, -1)
+        arArQmVizinhos += arTmp
+
+        arTmp           = arrayOf(0, 1,  8, -1)
+        arArQmVizinhos += arTmp
+
+        else if (quadMenor == 3) { arQmVizinhos = arrayOf(0, 4, -1, -1) }
+        else if (quadMenor == 5) { arQmVizinhos = arrayOf(2, 3, -1, -1) }
+        else if (quadMenor == 6) { arQmVizinhos = arrayOf(0, 3,  8, -1) }
+        // quadMenor == 7
+        else { arQmVizinhos = arrayOf(1, 4, 6, 8) }
+
+
+        //--- Calcula as linhas desse quadrado menor no QM
+        //-------------------------------------------
+        var linhasQuadQM = calcLinsQM (quadMenor)
+        //-------------------------------------------
+        //--- Converte a linha do Qm para a do QM
+        var linQM = linhasQuadQM[linhaQm]
+
+        //--- Calcula as colunas desse quadrado menor no QM
+        //-----------------------------------------
+        var colsQuadQM = calcColsQM (quadMenor)
+        //-----------------------------------------
+        //--- Converte a coluna do Qm para a do QM
+        var colQM = colsQuadQM[colunaQm]
+
+        //--- Prepara array com vizinhos
+        arQmVizinhos = arArQmVizinhos [quadMenor]
+        for ( quadViz in arQmVizinhos) {
+
+            //--- Converte as linhas do QmViz para as do QM
+            //--------------------------------------------
+            var linhasQuadMViz = calcLinsQM (quadMenor)
+            //--------------------------------------------
+            //--- Converte as colunas do QmViz para as do QM
+            //-------------------------------------------
+            var colsQuadQMViz = calcColsQM (quadMenor)
+            //-------------------------------------------
+
+            //--- Verifica se número existe nas LINHAS do QmViz
+            for (idxLinViz in 0..2) {
+
+                val numeroQM = quadMaior[linhasQuadMViz[idxLinViz]][colQM]
+                if (numero == numeroQM) {
+
+                    flagNumeroExiste = true
+                    break
+
+                }
+            }
+
+            //--- Verifica se número existe nas COLUNAS do QmViz
+            if (!flagNumeroExiste) {
+
+                for (idxColViz in 0..2) {
+
+                    val numeroQM = quadMaior[linhaQm][colsQuadQMViz[idxColViz]]
+                    if (numero == numeroQM) {
+
+                        flagNumeroExiste = true
+                        break
+
+                    }
+                }
+            }
+        }
+
+        return !flagNumeroExiste
+
+    }
+
     //--- verifValidade do QM
     private fun verifValidade(quadMenor : Int, array : Array <Int>) : Boolean {
 
@@ -196,14 +291,14 @@ class MainActivity : AppCompatActivity() {
         var numero : Int
 
         //--- Calcula as linhas desse quadrado
-        // INT(EXT.TEXTO(F17;2;1)/3)*3
-        val linhaInicQM  = (quadMenor / 3) * 3
-        val linhasQuadQM = arrayOf(linhaInicQM, linhaInicQM + 1, linhaInicQM + 2)
+        //-------------------------------------------
+        var linhasQuadQM = calcLinsQM (quadMenor)
+        //-------------------------------------------
 
         //--- Calcula as colunas desse quadrado
-        // EXT.TEXTO(F17;2;1)*3-INT(EXT.TEXTO(F17;2;1)/3)*9
-        val colInicQM  = quadMenor * 3 - (quadMenor / 3) * 9
-        val colsQuadQM = arrayOf(colInicQM, colInicQM + 1, colInicQM + 2)
+        //-----------------------------------------
+        var colsQuadQM = calcColsQM (quadMenor)
+        //-----------------------------------------
 
         var linQM = 0
         var colQM = 0
@@ -258,6 +353,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         return !flagNumeroExiste
+
+    }
+
+    //--- Calcula as linhas do QM para um Qm
+    private fun calcLinsQM (quadMenor : Int) : Array <Int> {
+
+        // INT(EXT.TEXTO(F17;2;1)/3)*3
+        val linInicQM = (quadMenor / 3) * 3
+        val arLinsQM  = arrayOf(linInicQM, linInicQM + 1, linInicQM + 2)
+
+        return arLinsQM
+
+    }
+
+    //--- Calcula as colunas do QM para um Qm
+    private fun calcColsQM (quadMenor : Int) : Array <Int> {
+
+        // EXT.TEXTO(F17;2;1)*3-INT(EXT.TEXTO(F17;2;1)/3)*9
+        val colInicQM = quadMenor * 3 - (quadMenor / 3) * 9
+        val arColsQM  = arrayOf(colInicQM, colInicQM + 1, colInicQM + 2)
+
+        return arColsQM
 
     }
 
@@ -625,11 +742,15 @@ class MainActivity : AppCompatActivity() {
 
     //--- inicializaQuadMaior
     private fun inicializaQuadMaior() {
+
         quadMaior = arrayOf()
+
         for (linha in 0..8) {
+
             var array = arrayOf<Int>()
-            for (coluna in 1..9) { array += 0 }
+            for (coluna in 0..8) { array += 0 }
             quadMaior += array
+
         }
     }
 
