@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 
+import android.os.CountDownTimer
+
 // import java.security.SecureRandom
 
 class MainActivity : AppCompatActivity() {
@@ -19,6 +21,10 @@ class MainActivity : AppCompatActivity() {
     private var quadMaior = arrayOf<Array<Int>>()
 
     private var btnGeraJogo : Button? = null
+
+    private var ctimer: CountDownTimer? = null
+    private var flagTimeOut    = false
+    private val timeOutGeracao = 5000     // mseg
 
 //    private var secureTrnd = SecureRandom()
 
@@ -35,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //--- Evento tapping no botão
+    //--- Evento tapping no botão de geração de jogo
     fun btnGeraJogoClick(view : View?) {
 
         Log.d(cTAG, "-> Tap no btnJogaJogo")
@@ -47,6 +53,19 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //--- Evento onDestroy: destrói o timer
+    override fun onDestroy() {
+
+        //--- ctimer object
+        if (ctimer != null) ctimer!!.cancel()
+
+        super.onDestroy()
+
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // Funções
+    //----------------------------------------------------------------------------------------------
     //--- GeraJogo
     private fun geraJogo() {
 
@@ -62,7 +81,11 @@ class MainActivity : AppCompatActivity() {
         var contaTentaJogo  = 0
         var flagQuadMenorOk : Boolean
 
-        while (!flagJogoOk && contaTentaJogo < 50) {  // 20) {   // 10) {
+        flagTimeOut = false
+        //---------------------------------------------------------
+        startTimer(timeOutGeracao, timeOutGeracao/2)
+        //---------------------------------------------------------
+        while (!flagJogoOk && !flagTimeOut) {          //contaTentaJogo < 50) {  // 20) {   // 10) {
 
             Log.d(cTAG, "-> Gera o jogo ${contaTentaJogo + 1}")
 
@@ -70,7 +93,7 @@ class MainActivity : AppCompatActivity() {
 
                 var array = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-                flagQuadMenorOk = false
+                flagQuadMenorOk     = false
                 var numTentaGeracao = 0
                 while (!flagQuadMenorOk && numTentaGeracao < 50) {
 
@@ -128,6 +151,9 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+
+        //--- Destrói o timer do timeOut da geração
+        ctimer?.cancel()
 
     }
 
@@ -354,4 +380,35 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
 
     }
+
+    //-------------------------------------------------------------------------
+    // Parte o CountDownTimer e declara seus eventos associados
+    //-------------------------------------------------------------------------
+    fun startTimer(intTimeOutMs: Int, intTimeTicksMs: Int) {
+
+        ctimer = object : CountDownTimer(intTimeOutMs.toLong(), intTimeTicksMs.toLong()) {
+
+            //--- Ticks
+            override fun onTick(millisUntilFinished: Long) {
+                // TODO()
+            }
+
+            //--- Finish
+            override fun onFinish() {
+
+                cancelTimer()
+
+                Log.d(cTAG, "-> Sai por timeout $timeOutGeracao (mseg). Não conseguiu gerar o jogo!")
+
+                flagTimeOut = true    // Just in case ...
+
+            }
+        }
+        (ctimer as CountDownTimer).start()
+
+    }
+
+    //cancel timer
+    fun cancelTimer() { if (ctimer != null) ctimer!!.cancel() }
+
 }
