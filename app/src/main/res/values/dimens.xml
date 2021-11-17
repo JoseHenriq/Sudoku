@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <dimen name ="MargemAcima"   >  1dp </dimen>
+    <dimen name ="MargemDireita" >  5dp </dimen>
+    <dimen name ="MargemEsquerda">  5dp </dimen>
+
+    <dimen name ="GuideEnd"      > 10dp </dimen>
+    <dimen name ="GuideStart"    > 10dp </dimen>
+
+    <dimen name ="HeightBotao"   > 60dp </dimen>
+    <dimen name ="WidthBotao"    >  0dp </dimen>
+
+    <dimen name ="HeightBotao_"  > 40dp </dimen>
+    <dimen name ="MargemAcima_"  >  0dp </dimen>
+
+</resources>

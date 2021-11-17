@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Sudoku</string>
 
-    <string name="gera_novo_jogo">Gera Novo Jogo</string>
+    <string name="gera_novo_jogo">Gera</string>
+    <string name="adapta_jogo"   >Adapta</string>
 
 </resources>

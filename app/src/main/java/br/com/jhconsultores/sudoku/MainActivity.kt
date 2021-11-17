@@ -20,7 +20,8 @@ class MainActivity : AppCompatActivity() {
 
     private var quadMaior = arrayOf<Array<Int>>()
 
-    private var btnGeraJogo : Button? = null
+    private var btnGeraJogo   : Button? = null
+    private var btnAdaptaJogo : Button? = null
 
     private var ctimer: CountDownTimer? = null
     private var flagTimeOut    = false
@@ -37,19 +38,40 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //--- Instancializações e inicializações
-        btnGeraJogo = findViewById(R.id.btn_GeraJogo)
+        btnGeraJogo   = findViewById(R.id.btn_GeraJogo)
+        btnAdaptaJogo = findViewById(R.id.btn_AdaptaJogo)
 
     }
 
     //--- Evento tapping no botão de geração de jogo
     fun btnGeraJogoClick(view : View?) {
 
-        Log.d(cTAG, "-> Tap no btnJogaJogo")
+        Log.d(cTAG, "-> Tap no btnGeraJogo")
 
-        //--- Gera jogo
+        //----------------------
+        inicQuadMaiorGeracao()
+        //----------------------
+
+        //--- Gera um novo jogo
         //-----------
         geraJogo()
         //-----------
+
+    }
+
+    //--- Evento tapping no botão de adaptação de jogo
+    fun btnAdaptaJogoClick(view : View?) {
+
+        Log.d(cTAG, "-> Tap no btnAdaptaJogo")
+
+        //-------------------------
+        inicQuadMaiorAdaptacao()
+        //-------------------------
+
+        //--- Adapta jogo
+        //-------------
+        adaptaJogo()
+        //-------------
 
     }
 
@@ -70,17 +92,11 @@ class MainActivity : AppCompatActivity() {
     private fun geraJogo() {
 
         //--- Instancializações e inicializações
-        //----------------------
-        inicializaQuadMaior()
-        //----------------------
-        //listaQuadMaior()
-        //-----------------
-
-        //--- Tenta gerar os 9 quadrados menores
         var flagJogoOk      = false
         var contaTentaJogo  = 0
         var flagQuadMenorOk : Boolean
 
+        //--- Tenta gerar os 9 quadrados menores
         flagTimeOut = false
         //---------------------------------------------------------
         startTimer(timeOutGeracao, timeOutGeracao/2)
@@ -102,6 +118,99 @@ class MainActivity : AppCompatActivity() {
                     //----------------------------
                     array = geraQuadMenor(quad)
                     //----------------------------
+
+                    //----------------------------
+                    //listaQuadMenor(quad, array)
+                    //----------------------------
+
+                    if (!array.contains(0) && !array.contains(-1)) flagQuadMenorOk = true
+
+                    else { numTentaGeracao++ }
+
+                }
+
+                //--------------------------
+                insereQmEmQM(quad, array)
+                //--------------------------
+                //listaQuadMaior()
+                //-----------------
+
+            }
+
+            //--- Verifica se jogo válido
+            var flagJogoVal = true
+            for (idxLinhaQM in 0..8) {
+
+                for (idxColQM in 0..8) {
+
+                    val valCel = quadMaior[idxLinhaQM][idxColQM]
+                    if (valCel <= 0 || valCel > 9) flagJogoVal = false
+
+                    if (!flagJogoVal) break
+                }
+
+                if (!flagJogoVal) break
+            }
+
+            if (flagJogoVal) {
+
+                //-----------------
+                listaQuadMaior()
+                //-----------------
+
+                Log.d(cTAG, "-> Jogo ${contaTentaJogo + 1}: válido!")
+                flagJogoOk = true
+
+            }
+
+            else {
+
+                //-----------------
+                //listaQuadMaior()
+                //-----------------
+
+                // Log.d(cTAG, "-> Jogo ${contaTentaJogo + 1}: inválido.")
+                contaTentaJogo ++
+
+            }
+
+        }
+
+        //--- Destrói o timer do timeOut da geração
+        ctimer?.cancel()
+
+    }
+
+    //--- GeraJogo
+    private fun adaptaJogo() {
+
+        //--- Instancializações e inicializações
+        var flagJogoOk      = false
+        var contaTentaJogo  = 0
+        var flagQuadMenorOk : Boolean
+
+        //--- Tenta gerar os 9 quadrados menores
+        flagTimeOut = false
+        //---------------------------------------------------------
+        startTimer(timeOutGeracao, timeOutGeracao/2)
+        //---------------------------------------------------------
+        while (!flagJogoOk && !flagTimeOut) {          //contaTentaJogo < 50) {  // 20) {   // 10) {
+
+            //Log.d(cTAG, "-> Gera o jogo ${contaTentaJogo + 1}")
+
+            for (quad in 0..8) {
+
+                var array = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+                flagQuadMenorOk     = false
+                var numTentaGeracao = 0
+                while (!flagQuadMenorOk && numTentaGeracao < 50) {
+
+                    //Log.d(cTAG, "   - tenta gerar Qm$quad: ${numTentaGeracao + 1}")
+
+                    //------------------------------
+                    array = adaptaQuadMenor(quad)
+                    //------------------------------
 
                     //----------------------------
                     //listaQuadMenor(quad, array)
@@ -236,6 +345,98 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //--- adaptaQuadMenor[quad]
+    private fun adaptaQuadMenor (quadMenor: Int) : Array <Int> {
+
+        //--- Instancializações e inicializações
+        val arQuadMenor = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
+        val numDispCel  = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+        //--- Calcula as linhas desse quadrado
+        //------------------------------------------
+        val linhasQuadQM = calcLinsQM (quadMenor)
+        //------------------------------------------
+        //--- Calcula as colunas desse quadrado
+        //----------------------------------------
+        val colsQuadQM = calcColsQM (quadMenor)
+        //----------------------------------------
+
+        //--- Prepara o Qm com os números fornecidos
+        for (linhaQm in 0..2) {
+
+            val linhaQM = linhasQuadQM[linhaQm]
+
+            //--- Para todas as colunas de Qm
+            for (colunaQm in 0..2) {
+
+                val colunaQM = colsQuadQM[colunaQm]
+
+                //--- Calcula o índice do arQuadMenor
+                val idxQuadMenor = linhaQm * 3 + colunaQm
+
+                val numeroQM = quadMaior[linhaQM][colunaQM]
+                if (numeroQM > 0) {
+                    arQuadMenor[idxQuadMenor] = numeroQM
+                    numDispCel [numeroQM - 1] = numeroQM
+                }
+
+            }
+
+        }
+
+        //--- Para todas as linhas do Qm
+        for (linQm in 0..2) {
+
+            //--- Para todas as colunas de Qm
+            for (colQm in 0..2) {
+
+                val fimTenta          = 20   // 50  // 10
+                var contaTentaGerarQm = 0
+                var flagNumOk         = false
+                var numero : Int
+                while (!flagNumOk && contaTentaGerarQm < fimTenta ) {
+
+                    //--- Gera número aleatório sem repetição
+                    //-------------------------
+                    numero = (1..9).random()
+                    //-------------------------
+
+                    //secureTrnd.setSeed(secureTrnd.generateSeed(16))  // 32  64 128 NÃO OK
+                    //numero = secureTrnd.nextInt(9) + 1
+
+                    // Critério1: sem repetição no próprio Qm
+                    if (numDispCel[numero - 1] == 0) {
+
+                        //arQuadMenor[linQm * 3 + colQm] = numero
+
+                        // Critérios2: verifica se número gerado pode ser inserido no jogo
+                        //-----------------------------------------------------------
+                        flagNumOk = verifValidade(quadMenor, linQm, colQm, numero)
+                        //-----------------------------------------------------------
+                        if (!flagNumOk) {
+
+                            //--- Se o número gerado NÃO está ok (está presente na mesma linha ou
+                            //    coluna de outro bloco) armazena -1 para sinalizar erro.
+                            if (++contaTentaGerarQm >= fimTenta) { arQuadMenor[linQm * 3
+                                                                                     + colQm] = -1 }
+                        }
+
+                        //--- Se o número gerado ESTÁ ok armazena no array desse bloco
+                        else {
+
+                            arQuadMenor[linQm * 3 + colQm] = numero
+                            numDispCel[numero - 1] = numero
+
+                        }
+                    }
+                }
+            }
+        }
+
+        return arQuadMenor
+
+    }
+
     //--- insere Qm no QM
     private fun insereQmEmQM (quadMenor : Int, array : Array <Int>) {
 
@@ -342,8 +543,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //--- inicializaQuadMaior
-    private fun inicializaQuadMaior() {
+    //--- inicQuadMaiorGeracao
+    private fun inicQuadMaiorGeracao() {
 
         quadMaior = arrayOf()
 
@@ -354,6 +555,52 @@ class MainActivity : AppCompatActivity() {
             quadMaior += array
 
         }
+        //-----------------
+        listaQuadMaior()
+        //-----------------
+
+    }
+
+    //--- inicQuadMaiorAdaptacao
+    private fun inicQuadMaiorAdaptacao() {
+
+        var quadMaiorAdapta = arrayOf<Array<Int>>()
+        var array = arrayOf<Int>()
+
+        //--- Simula os dados da propostos
+        for (linha in 0..8) {
+
+            array = arrayOf<Int>()
+            array = when (linha) {
+
+                0 -> arrayOf(0, 0, 4, 6, 0, 5, 8, 0, 0)
+                1 -> arrayOf(6, 5, 0, 0, 8, 0, 0, 0, 0)
+                2 -> arrayOf(0, 0, 8, 0, 4, 7, 6, 0, 5)
+                3 -> arrayOf(2, 8, 0, 3, 5, 6, 0, 0, 0)
+                4 -> arrayOf(7, 4, 0, 0, 0, 8, 2, 5, 6)
+                5 -> arrayOf(5, 6, 0, 4, 7, 2, 9, 0, 8)
+                6 -> arrayOf(8, 2, 5, 7, 0, 4, 3, 6, 0)
+                7 -> arrayOf(4, 3, 6, 5, 2, 0, 0, 8, 0)
+                else -> arrayOf(0, 0, 0, 8, 6, 3, 5, 4, 2)
+
+            }
+            quadMaiorAdapta += array
+
+        }
+
+        //--- Prepara o QM com os números propostos
+        for (linha in 0..8) {
+
+            array = arrayOf<Int>()
+            for (coluna in 0..8) { array += quadMaiorAdapta[linha][coluna] }
+
+            quadMaior += array
+
+        }
+        //-----------------
+        listaQuadMaior()
+        //-----------------
+
     }
 
     //--- listaQuadMaior
