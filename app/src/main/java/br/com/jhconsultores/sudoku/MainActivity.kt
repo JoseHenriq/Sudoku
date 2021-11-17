@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         //----------------------
         inicializaQuadMaior()
         //----------------------
-        listaQuadMaior()
+        //listaQuadMaior()
         //-----------------
 
         //--- Tenta gerar os 9 quadrados menores
@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         //---------------------------------------------------------
         while (!flagJogoOk && !flagTimeOut) {          //contaTentaJogo < 50) {  // 20) {   // 10) {
 
-            Log.d(cTAG, "-> Gera o jogo ${contaTentaJogo + 1}")
+            //Log.d(cTAG, "-> Gera o jogo ${contaTentaJogo + 1}")
 
             for (quad in 0..8) {
 
@@ -97,14 +97,14 @@ class MainActivity : AppCompatActivity() {
                 var numTentaGeracao = 0
                 while (!flagQuadMenorOk && numTentaGeracao < 50) {
 
-                    Log.d(cTAG, "   - tenta gerar Qm$quad: ${numTentaGeracao + 1}")
+                    //Log.d(cTAG, "   - tenta gerar Qm$quad: ${numTentaGeracao + 1}")
 
                     //----------------------------
                     array = geraQuadMenor(quad)
                     //----------------------------
 
                     //----------------------------
-                    listaQuadMenor(quad, array)
+                    //listaQuadMenor(quad, array)
                     //----------------------------
 
                     if (!array.contains(0) && !array.contains(-1)) flagQuadMenorOk = true
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
                 //--------------------------
                 insereQmEmQM(quad, array)
                 //--------------------------
-                listaQuadMaior()
+                //listaQuadMaior()
                 //-----------------
 
             }
@@ -138,6 +138,10 @@ class MainActivity : AppCompatActivity() {
 
             if (flagJogoVal) {
 
+                //-----------------
+                listaQuadMaior()
+                //-----------------
+
                 Log.d(cTAG, "-> Jogo ${contaTentaJogo + 1}: válido!")
                 flagJogoOk = true
 
@@ -145,7 +149,11 @@ class MainActivity : AppCompatActivity() {
 
             else {
 
-                Log.d(cTAG, "-> Jogo ${contaTentaJogo + 1}: inválido.")
+                //-----------------
+                //listaQuadMaior()
+                //-----------------
+
+                // Log.d(cTAG, "-> Jogo ${contaTentaJogo + 1}: inválido.")
                 contaTentaJogo ++
 
             }
