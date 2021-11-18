@@ -1,0 +1,2122 @@
+====================================================================================================
+----------------------------------------------------------------------------------------------------
+
+====================================================================================================
+Implementação da função de adaptação ao jogo (cont)
+====================================================================================================
+
+====================================================================================================
+2021-11-18 12:55:16.402 D: -> Tap no btnAdaptaJogo
+----------------------------------------------------------------------------------------------------
+2021-11-18 12:55:16.408 D: linha 0 : 0, 0, 4, 6, 0, 5, 8, 0, 0
+2021-11-18 12:55:16.408 D: linha 1 : 6, 5, 0, 0, 8, 0, 0, 0, 0
+2021-11-18 12:55:16.408 D: linha 2 : 0, 0, 8, 0, 4, 7, 6, 0, 5
+2021-11-18 12:55:16.408 D: linha 3 : 2, 8, 0, 3, 5, 6, 0, 0, 0
+2021-11-18 12:55:16.409 D: linha 4 : 7, 4, 0, 0, 0, 8, 2, 5, 6
+2021-11-18 12:55:16.409 D: linha 5 : 5, 6, 0, 4, 7, 2, 9, 0, 8
+2021-11-18 12:55:16.409 D: linha 6 : 8, 2, 5, 7, 0, 4, 3, 6, 0
+2021-11-18 12:55:16.409 D: linha 7 : 4, 3, 6, 5, 2, 0, 0, 8, 0
+2021-11-18 12:55:16.410 D: linha 8 : 0, 0, 0, 8, 6, 3, 5, 4, 2
+----------------------------------------------------------------------------------------------------
+2021-11-18 12:55:16.410 D: -> Gera o jogo 1
+2021-11-18 12:55:16.421 D: -> NÃO foi possível gerar um número para o Qm0!
+2021-11-18 12:55:16.444 D: -> NÃO foi possível gerar um número para o Qm0!
+2021-11-18 12:55:16.448 D: -> NÃO foi possível gerar um número para o Qm0!
+2021-11-18 12:55:16.451 D: -> NÃO foi possível gerar um número para o Qm0!
+2021-11-18 12:55:16.454 D: -> NÃO foi possível gerar um número para o Qm0!
+----------------------------------------------------------------------------------------------------
+2021-11-18 12:55:16.457 D: -> NÃO foi possível gerar um número para o Qm1!
+----------------------------------------------------------------------------------------------------
+2021-11-18 12:55:16.462 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.477 D: -> NÃO foi possível gerar um número para o Qm4!
+----------------------------------------------------------------------------------------------------
+2021-11-18 12:55:16.477 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.489 D: -> NÃO foi possível gerar um número para o Qm5!
+----------------------------------------------------------------------------------------------------
+2021-11-18 12:55:16.490 D: -> NÃO foi possível gerar um número para o Qm6!
+----------------------------------------------------------------------------------------------------
+2021-11-18 12:55:16.490 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.500 D: -> NÃO foi possível gerar um número para o Qm8!
+----------------------------------------------------------------------------------------------------
+2021-11-18 12:55:16.500 D: -> Gera o jogo 2
+2021-11-18 12:55:16.500 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.508 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.508 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.516 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.517 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.524 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.525 D: -> Gera o jogo 3
+2021-11-18 12:55:16.525 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.532 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.532 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.540 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.540 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.548 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.548 D: -> Gera o jogo 4
+2021-11-18 12:55:16.548 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.556 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.556 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.564 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.564 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.572 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.572 D: -> Gera o jogo 5
+2021-11-18 12:55:16.572 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.577 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.577 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.580 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.580 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.588 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.588 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.596 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.596 D: -> Gera o jogo 6
+2021-11-18 12:55:16.597 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.602 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.603 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.605 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.605 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.607 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.608 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.609 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.609 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.614 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.614 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.623 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.624 D: -> Gera o jogo 7
+2021-11-18 12:55:16.624 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.630 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.630 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.632 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.632 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.639 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.639 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.639 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.640 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.641 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.641 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.641 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.641 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.641 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.642 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.642 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.643 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.643 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.643 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.644 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.644 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.644 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.645 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.645 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.645 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.645 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.646 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.646 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.647 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.647 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.647 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.648 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.648 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.648 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.648 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.649 D: -> Gera o jogo 8
+2021-11-18 12:55:16.649 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.649 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.649 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.650 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.650 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.651 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.651 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.651 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.651 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.656 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.656 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.660 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.660 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.660 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.664 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.664 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.670 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.670 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.672 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.673 D: -> Gera o jogo 9
+2021-11-18 12:55:16.673 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.680 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.680 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.689 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.689 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.697 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.697 D: -> Gera o jogo 10
+2021-11-18 12:55:16.697 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.707 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.707 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.715 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.715 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.723 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.723 D: -> Gera o jogo 11
+2021-11-18 12:55:16.723 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.731 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.731 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.738 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.738 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.747 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.747 D: -> Gera o jogo 12
+2021-11-18 12:55:16.747 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.754 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.755 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.758 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.758 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.762 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.762 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.772 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.772 D: -> Gera o jogo 13
+2021-11-18 12:55:16.773 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.780 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.781 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.788 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.788 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.796 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.796 D: -> Gera o jogo 14
+2021-11-18 12:55:16.796 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.804 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.804 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.812 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.812 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.819 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.819 D: -> Gera o jogo 15
+2021-11-18 12:55:16.820 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.827 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.827 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.835 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.835 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.843 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.843 D: -> Gera o jogo 16
+2021-11-18 12:55:16.843 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.850 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.851 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.858 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.858 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.866 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.866 D: -> Gera o jogo 17
+2021-11-18 12:55:16.866 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.874 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.874 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.882 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.882 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.890 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.890 D: -> Gera o jogo 18
+2021-11-18 12:55:16.890 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.897 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.897 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.904 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.904 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.913 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.913 D: -> Gera o jogo 19
+2021-11-18 12:55:16.913 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.920 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.921 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.928 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.928 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.936 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.936 D: -> Gera o jogo 20
+2021-11-18 12:55:16.936 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.944 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.944 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.952 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.952 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.961 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.961 D: -> Gera o jogo 21
+2021-11-18 12:55:16.961 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.969 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.969 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.977 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:16.977 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.985 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:16.985 D: -> Gera o jogo 22
+2021-11-18 12:55:16.985 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.993 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:16.993 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.001 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.001 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.010 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.010 D: -> Gera o jogo 23
+2021-11-18 12:55:17.010 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.018 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.018 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.026 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.026 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.034 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.034 D: -> Gera o jogo 24
+2021-11-18 12:55:17.035 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.042 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.042 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.050 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.050 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.057 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.057 D: -> Gera o jogo 25
+2021-11-18 12:55:17.058 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.065 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.065 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.073 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.073 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.080 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.081 D: -> Gera o jogo 26
+2021-11-18 12:55:17.081 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.090 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.090 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.097 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.098 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.105 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.105 D: -> Gera o jogo 27
+2021-11-18 12:55:17.105 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.112 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.112 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.120 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.120 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.129 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.129 D: -> Gera o jogo 28
+2021-11-18 12:55:17.130 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.138 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.138 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.147 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.147 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.155 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.155 D: -> Gera o jogo 29
+2021-11-18 12:55:17.156 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.162 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.163 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.170 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.170 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.178 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.178 D: -> Gera o jogo 30
+2021-11-18 12:55:17.178 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.185 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.186 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.193 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.193 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.201 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.201 D: -> Gera o jogo 31
+2021-11-18 12:55:17.201 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.209 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.209 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.217 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.217 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.225 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.225 D: -> Gera o jogo 32
+2021-11-18 12:55:17.225 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.232 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.232 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.239 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.240 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.248 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.248 D: -> Gera o jogo 33
+2021-11-18 12:55:17.248 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.255 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.256 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.263 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.263 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.271 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.271 D: -> Gera o jogo 34
+2021-11-18 12:55:17.271 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.278 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.279 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.286 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.286 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.293 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.294 D: -> Gera o jogo 35
+2021-11-18 12:55:17.294 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.301 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.301 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.309 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.309 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.317 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.317 D: -> Gera o jogo 36
+2021-11-18 12:55:17.318 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.325 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.325 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.333 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.333 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.340 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.340 D: -> Gera o jogo 37
+2021-11-18 12:55:17.340 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.348 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.348 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.356 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.356 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.363 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.363 D: -> Gera o jogo 38
+2021-11-18 12:55:17.363 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.371 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.371 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.378 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.378 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.385 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.385 D: -> Gera o jogo 39
+2021-11-18 12:55:17.385 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.393 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.393 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.400 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.400 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.408 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.408 D: -> Gera o jogo 40
+2021-11-18 12:55:17.408 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.416 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.416 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.424 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.424 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.433 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.433 D: -> Gera o jogo 41
+2021-11-18 12:55:17.433 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.440 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.440 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.448 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.448 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.455 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.455 D: -> Gera o jogo 42
+2021-11-18 12:55:17.455 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.462 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.462 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.470 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.470 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.477 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.477 D: -> Gera o jogo 43
+2021-11-18 12:55:17.477 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.485 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.485 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.492 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.492 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.500 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.500 D: -> Gera o jogo 44
+2021-11-18 12:55:17.500 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.507 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.507 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.515 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.515 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.522 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.523 D: -> Gera o jogo 45
+2021-11-18 12:55:17.523 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.530 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.530 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.538 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.538 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.545 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.545 D: -> Gera o jogo 46
+2021-11-18 12:55:17.545 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.552 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.552 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.560 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.560 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.567 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.567 D: -> Gera o jogo 47
+2021-11-18 12:55:17.568 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.575 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.575 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.582 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.582 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.590 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.590 D: -> Gera o jogo 48
+2021-11-18 12:55:17.590 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.597 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.597 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.604 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.604 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.612 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.612 D: -> Gera o jogo 49
+2021-11-18 12:55:17.612 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.620 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.620 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.628 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.628 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.631 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.632 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.635 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.635 D: -> Gera o jogo 50
+2021-11-18 12:55:17.635 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.643 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.643 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.650 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.650 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.658 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.658 D: -> Gera o jogo 51
+2021-11-18 12:55:17.659 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.666 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.666 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.673 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.673 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.680 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.681 D: -> Gera o jogo 52
+2021-11-18 12:55:17.681 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.688 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.688 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.696 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.696 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.704 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.704 D: -> Gera o jogo 53
+2021-11-18 12:55:17.704 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.711 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.711 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.718 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.719 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.726 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.726 D: -> Gera o jogo 54
+2021-11-18 12:55:17.726 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.733 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.734 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.741 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.741 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.748 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.748 D: -> Gera o jogo 55
+2021-11-18 12:55:17.749 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.756 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.756 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.764 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.764 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.772 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.772 D: -> Gera o jogo 56
+2021-11-18 12:55:17.772 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.779 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.779 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.787 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.787 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.795 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.795 D: -> Gera o jogo 57
+2021-11-18 12:55:17.795 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.803 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.803 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.810 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.810 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.817 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.818 D: -> Gera o jogo 58
+2021-11-18 12:55:17.818 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.827 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.827 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.835 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.835 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.845 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.845 D: -> Gera o jogo 59
+2021-11-18 12:55:17.845 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.853 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.853 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.861 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.861 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.870 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.870 D: -> Gera o jogo 60
+2021-11-18 12:55:17.870 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.878 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.878 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.888 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.888 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.896 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.896 D: -> Gera o jogo 61
+2021-11-18 12:55:17.897 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.905 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.905 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.913 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.913 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.922 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.922 D: -> Gera o jogo 62
+2021-11-18 12:55:17.922 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.931 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.931 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.941 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.941 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.950 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.951 D: -> Gera o jogo 63
+2021-11-18 12:55:17.951 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.959 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.960 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.960 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.960 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.972 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.972 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.981 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:17.981 D: -> Gera o jogo 64
+2021-11-18 12:55:17.981 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.990 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:17.990 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.999 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:17.999 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.007 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.007 D: -> Gera o jogo 65
+2021-11-18 12:55:18.007 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.015 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.015 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.022 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.023 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.030 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.030 D: -> Gera o jogo 66
+2021-11-18 12:55:18.031 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.040 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.040 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.047 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.047 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.055 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.055 D: -> Gera o jogo 67
+2021-11-18 12:55:18.055 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.062 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.062 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.070 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.071 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.078 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.078 D: -> Gera o jogo 68
+2021-11-18 12:55:18.078 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.086 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.086 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.093 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.094 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.101 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.101 D: -> Gera o jogo 69
+2021-11-18 12:55:18.101 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.116 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.117 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.124 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.125 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.132 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.132 D: -> Gera o jogo 70
+2021-11-18 12:55:18.132 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.140 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.140 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.147 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.147 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.155 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.155 D: -> Gera o jogo 71
+2021-11-18 12:55:18.155 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.162 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.162 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.170 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.170 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.178 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.178 D: -> Gera o jogo 72
+2021-11-18 12:55:18.178 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.186 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.186 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.193 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.194 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.201 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.201 D: -> Gera o jogo 73
+2021-11-18 12:55:18.201 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.209 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.209 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.216 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.216 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.223 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.223 D: -> Gera o jogo 74
+2021-11-18 12:55:18.224 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.231 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.232 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.239 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.239 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.247 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.247 D: -> Gera o jogo 75
+2021-11-18 12:55:18.247 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.254 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.254 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.261 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.261 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.269 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.269 D: -> Gera o jogo 76
+2021-11-18 12:55:18.269 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.276 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.276 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.283 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.284 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.292 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.292 D: -> Gera o jogo 77
+2021-11-18 12:55:18.292 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.299 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.299 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.306 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.306 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.314 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.314 D: -> Gera o jogo 78
+2021-11-18 12:55:18.314 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.322 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.322 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.330 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.330 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.338 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.338 D: -> Gera o jogo 79
+2021-11-18 12:55:18.338 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.346 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.346 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.354 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.354 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.361 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.361 D: -> Gera o jogo 80
+2021-11-18 12:55:18.361 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.369 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.369 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.376 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.376 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.383 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.384 D: -> Gera o jogo 81
+2021-11-18 12:55:18.384 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.391 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.391 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.398 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.398 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.406 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.406 D: -> Gera o jogo 82
+2021-11-18 12:55:18.406 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.413 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.413 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.421 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.421 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.429 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.429 D: -> Gera o jogo 83
+2021-11-18 12:55:18.429 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.436 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.436 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.443 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.443 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.450 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.450 D: -> Gera o jogo 84
+2021-11-18 12:55:18.451 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.457 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.458 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.465 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.465 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.473 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.473 D: -> Gera o jogo 85
+2021-11-18 12:55:18.474 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.481 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.481 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.488 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.488 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.496 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.496 D: -> Gera o jogo 86
+2021-11-18 12:55:18.496 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.504 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.504 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.511 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.511 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.519 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.519 D: -> Gera o jogo 87
+2021-11-18 12:55:18.519 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.527 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.527 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.534 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.534 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.542 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.542 D: -> Gera o jogo 88
+2021-11-18 12:55:18.542 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.550 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.550 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.559 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.559 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.568 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.569 D: -> Gera o jogo 89
+2021-11-18 12:55:18.569 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.576 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.577 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.584 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.584 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.592 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.592 D: -> Gera o jogo 90
+2021-11-18 12:55:18.593 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.599 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.599 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.607 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.607 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.615 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.615 D: -> Gera o jogo 91
+2021-11-18 12:55:18.615 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.623 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.623 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.631 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.631 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.633 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.633 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.639 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.640 D: -> Gera o jogo 92
+2021-11-18 12:55:18.640 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.647 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.648 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.655 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.655 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.663 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.663 D: -> Gera o jogo 93
+2021-11-18 12:55:18.663 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.670 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.671 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.679 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.679 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.686 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.687 D: -> Gera o jogo 94
+2021-11-18 12:55:18.687 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.694 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.694 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.701 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.701 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.709 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.709 D: -> Gera o jogo 95
+2021-11-18 12:55:18.709 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.716 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.717 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.724 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.724 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.732 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.732 D: -> Gera o jogo 96
+2021-11-18 12:55:18.732 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.739 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.739 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.746 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.746 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.755 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.755 D: -> Gera o jogo 97
+2021-11-18 12:55:18.755 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.762 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.762 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.770 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.770 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.777 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.777 D: -> Gera o jogo 98
+2021-11-18 12:55:18.778 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.785 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.785 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.792 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.792 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.800 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.800 D: -> Gera o jogo 99
+2021-11-18 12:55:18.800 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.808 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.808 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.815 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.815 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.822 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.822 D: -> Gera o jogo 100
+2021-11-18 12:55:18.823 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.830 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.830 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.837 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.838 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.845 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.845 D: -> Gera o jogo 101
+2021-11-18 12:55:18.846 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.853 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.853 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.860 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.860 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.868 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.868 D: -> Gera o jogo 102
+2021-11-18 12:55:18.868 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.875 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.875 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.883 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.883 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.890 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.890 D: -> Gera o jogo 103
+2021-11-18 12:55:18.891 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.898 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.898 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.905 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.905 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.912 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.912 D: -> Gera o jogo 104
+2021-11-18 12:55:18.913 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.920 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.920 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.927 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.927 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.934 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.934 D: -> Gera o jogo 105
+2021-11-18 12:55:18.935 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.942 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.942 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.950 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.950 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.958 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.958 D: -> Gera o jogo 106
+2021-11-18 12:55:18.958 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.960 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.960 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.965 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.965 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.973 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.973 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.981 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:18.981 D: -> Gera o jogo 107
+2021-11-18 12:55:18.981 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.983 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.984 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.988 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:18.988 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.995 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:18.995 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.003 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.003 D: -> Gera o jogo 108
+2021-11-18 12:55:19.003 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.011 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.011 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.019 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.019 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.027 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.027 D: -> Gera o jogo 109
+2021-11-18 12:55:19.027 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.034 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.034 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.042 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.042 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.050 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.050 D: -> Gera o jogo 110
+2021-11-18 12:55:19.050 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.058 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.058 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.066 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.066 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.073 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.074 D: -> Gera o jogo 111
+2021-11-18 12:55:19.074 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.081 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.082 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.089 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.089 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.097 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.097 D: -> Gera o jogo 112
+2021-11-18 12:55:19.097 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.104 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.105 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.112 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.112 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.120 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.120 D: -> Gera o jogo 113
+2021-11-18 12:55:19.120 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.127 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.127 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.134 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.134 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.142 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.142 D: -> Gera o jogo 114
+2021-11-18 12:55:19.142 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.150 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.150 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.158 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.158 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.165 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.166 D: -> Gera o jogo 115
+2021-11-18 12:55:19.166 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.173 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.173 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.181 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.181 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.188 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.188 D: -> Gera o jogo 116
+2021-11-18 12:55:19.188 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.195 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.195 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.202 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.203 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.210 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.210 D: -> Gera o jogo 117
+2021-11-18 12:55:19.210 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.218 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.218 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.225 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.225 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.233 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.233 D: -> Gera o jogo 118
+2021-11-18 12:55:19.234 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.241 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.241 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.250 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.251 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.260 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.260 D: -> Gera o jogo 119
+2021-11-18 12:55:19.260 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.267 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.268 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.275 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.276 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.283 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.283 D: -> Gera o jogo 120
+2021-11-18 12:55:19.283 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.291 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.291 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.299 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.299 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.307 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.307 D: -> Gera o jogo 121
+2021-11-18 12:55:19.308 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.315 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.315 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.322 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.322 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.330 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.330 D: -> Gera o jogo 122
+2021-11-18 12:55:19.330 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.337 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.337 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.344 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.344 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.352 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.352 D: -> Gera o jogo 123
+2021-11-18 12:55:19.352 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.360 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.360 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.367 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.367 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.375 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.375 D: -> Gera o jogo 124
+2021-11-18 12:55:19.376 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.383 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.383 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.390 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.390 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.398 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.398 D: -> Gera o jogo 125
+2021-11-18 12:55:19.398 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.405 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.405 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.413 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.413 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.420 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.420 D: -> Gera o jogo 126
+2021-11-18 12:55:19.421 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.428 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.428 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.435 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.436 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.443 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.443 D: -> Gera o jogo 127
+2021-11-18 12:55:19.443 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.450 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.450 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.458 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.458 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.466 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.466 D: -> Gera o jogo 128
+2021-11-18 12:55:19.466 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.473 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.473 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.481 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.481 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.489 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.489 D: -> Gera o jogo 129
+2021-11-18 12:55:19.489 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.497 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.497 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.505 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.505 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.512 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.512 D: -> Gera o jogo 130
+2021-11-18 12:55:19.513 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.520 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.520 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.527 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.527 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.535 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.535 D: -> Gera o jogo 131
+2021-11-18 12:55:19.535 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.542 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.543 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.550 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.550 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.558 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.558 D: -> Gera o jogo 132
+2021-11-18 12:55:19.558 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.566 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.566 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.574 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.574 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.578 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.578 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.578 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.578 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.579 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.579 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.579 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.581 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.581 D: -> Gera o jogo 133
+2021-11-18 12:55:19.582 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.589 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.589 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.597 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.597 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.604 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.604 D: -> Gera o jogo 134
+2021-11-18 12:55:19.604 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.611 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.611 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.619 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.619 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.627 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.627 D: -> Gera o jogo 135
+2021-11-18 12:55:19.627 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.634 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.635 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.635 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.635 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.642 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.642 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.650 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.650 D: -> Gera o jogo 136
+2021-11-18 12:55:19.650 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.657 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.658 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.665 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.665 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.673 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.673 D: -> Gera o jogo 137
+2021-11-18 12:55:19.673 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.680 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.680 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.688 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.688 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.696 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.696 D: -> Gera o jogo 138
+2021-11-18 12:55:19.696 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.703 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.703 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.711 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.711 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.719 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.719 D: -> Gera o jogo 139
+2021-11-18 12:55:19.719 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.727 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.727 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.734 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.734 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.742 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.742 D: -> Gera o jogo 140
+2021-11-18 12:55:19.742 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.749 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.749 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.757 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.757 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.764 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.764 D: -> Gera o jogo 141
+2021-11-18 12:55:19.764 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.772 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.772 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.779 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.779 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.786 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.786 D: -> Gera o jogo 142
+2021-11-18 12:55:19.787 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.793 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.793 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.801 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.801 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.808 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.808 D: -> Gera o jogo 143
+2021-11-18 12:55:19.808 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.816 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.816 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.823 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.823 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.831 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.831 D: -> Gera o jogo 144
+2021-11-18 12:55:19.832 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.839 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.839 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.846 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.846 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.854 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.854 D: -> Gera o jogo 145
+2021-11-18 12:55:19.854 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.862 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.862 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.870 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.870 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.877 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.877 D: -> Gera o jogo 146
+2021-11-18 12:55:19.878 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.885 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.886 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.893 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.893 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.901 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.901 D: -> Gera o jogo 147
+2021-11-18 12:55:19.901 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.908 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.908 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.915 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.915 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.923 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.923 D: -> Gera o jogo 148
+2021-11-18 12:55:19.924 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.931 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.931 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.940 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.940 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.948 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.948 D: -> Gera o jogo 149
+2021-11-18 12:55:19.948 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.956 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.956 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.961 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.961 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.964 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.964 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.974 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.974 D: -> Gera o jogo 150
+2021-11-18 12:55:19.974 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.982 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:55:19.982 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.990 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:55:19.990 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.998 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:55:19.998 D: -> Tentou 150 jogos. Fim.
+====================================================================================================
+
+====================================================================================================
+2021-11-18 12:51:23.757 D: -> Tap no btnGeraJogo
+----------------------------------------------------------------------------------------------------
+2021-11-18 12:51:25.535 D: -> Jogo 46: válido!
+2021-11-18 12:51:25.535 D: linha 0 : 1, 7, 8, 9, 4, 6, 2, 5, 3
+2021-11-18 12:51:25.536 D: linha 1 : 3, 4, 5, 8, 7, 2, 6, 1, 9
+2021-11-18 12:51:25.536 D: linha 2 : 9, 6, 2, 1, 3, 5, 8, 4, 7
+2021-11-18 12:51:25.536 D: linha 3 : 8, 9, 1, 5, 6, 3, 7, 2, 4
+2021-11-18 12:51:25.537 D: linha 4 : 7, 2, 6, 4, 1, 9, 3, 8, 5
+2021-11-18 12:51:25.537 D: linha 5 : 5, 3, 4, 2, 8, 7, 9, 6, 1
+2021-11-18 12:51:25.537 D: linha 6 : 4, 1, 3, 6, 9, 8, 5, 7, 2
+2021-11-18 12:51:25.537 D: linha 7 : 2, 8, 9, 7, 5, 1, 4, 3, 6
+2021-11-18 12:51:25.538 D: linha 8 : 6, 5, 7, 3, 2, 4, 1, 9, 8
+2021-11-18 12:51:29.527 D: -> Tap no btnGeraJogo
+2021-11-18 12:51:29.956 D: -> Jogo 12: válido!
+2021-11-18 12:51:29.956 D: linha 0 : 3, 2, 5, 1, 9, 8, 4, 7, 6
+2021-11-18 12:51:29.957 D: linha 1 : 6, 4, 8, 5, 7, 3, 9, 2, 1
+2021-11-18 12:51:29.957 D: linha 2 : 9, 1, 7, 6, 2, 4, 3, 8, 5
+2021-11-18 12:51:29.957 D: linha 3 : 5, 7, 3, 8, 4, 9, 6, 1, 2
+2021-11-18 12:51:29.957 D: linha 4 : 2, 9, 6, 7, 5, 1, 8, 3, 4
+2021-11-18 12:51:29.957 D: linha 5 : 1, 8, 4, 3, 6, 2, 5, 9, 7
+2021-11-18 12:51:29.957 D: linha 6 : 7, 6, 9, 2, 3, 5, 1, 4, 8
+2021-11-18 12:51:29.957 D: linha 7 : 4, 5, 1, 9, 8, 7, 2, 6, 3
+2021-11-18 12:51:29.958 D: linha 8 : 8, 3, 2, 4, 1, 6, 7, 5, 9
+2021-11-18 12:51:36.927 D: -> Tap no btnGeraJogo
+2021-11-18 12:51:38.328 D: -> Jogo 33: válido!
+2021-11-18 12:51:38.328 D: linha 0 : 2, 8, 4, 5, 9, 1, 7, 3, 6
+2021-11-18 12:51:38.328 D: linha 1 : 1, 6, 7, 3, 8, 4, 9, 2, 5
+2021-11-18 12:51:38.328 D: linha 2 : 5, 9, 3, 7, 6, 2, 8, 1, 4
+2021-11-18 12:51:38.328 D: linha 3 : 6, 2, 1, 4, 7, 8, 5, 9, 3
+2021-11-18 12:51:38.329 D: linha 4 : 3, 7, 5, 9, 1, 6, 2, 4, 8
+2021-11-18 12:51:38.329 D: linha 5 : 9, 4, 8, 2, 3, 5, 6, 7, 1
+2021-11-18 12:51:38.329 D: linha 6 : 7, 5, 2, 6, 4, 3, 1, 8, 9
+2021-11-18 12:51:38.329 D: linha 7 : 8, 3, 9, 1, 5, 7, 4, 6, 2
+2021-11-18 12:51:38.329 D: linha 8 : 4, 1, 6, 8, 2, 9, 3, 5, 7
+2021-11-18 12:51:41.552 D: -> Tap no btnGeraJogo
+2021-11-18 12:51:41.776 D: -> Jogo 5: válido!
+2021-11-18 12:51:41.777 D: linha 0 : 8, 5, 6, 3, 2, 4, 9, 7, 1
+2021-11-18 12:51:41.777 D: linha 1 : 9, 1, 4, 7, 5, 6, 2, 3, 8
+2021-11-18 12:51:41.777 D: linha 2 : 2, 7, 3, 9, 8, 1, 4, 6, 5
+2021-11-18 12:51:41.777 D: linha 3 : 1, 6, 8, 4, 9, 3, 5, 2, 7
+2021-11-18 12:51:41.777 D: linha 4 : 7, 9, 5, 8, 6, 2, 3, 1, 4
+2021-11-18 12:51:41.777 D: linha 5 : 4, 3, 2, 5, 1, 7, 6, 8, 9
+2021-11-18 12:51:41.777 D: linha 6 : 6, 4, 1, 2, 7, 5, 8, 9, 3
+2021-11-18 12:51:41.777 D: linha 7 : 5, 2, 9, 1, 3, 8, 7, 4, 6
+2021-11-18 12:51:41.777 D: linha 8 : 3, 8, 7, 6, 4, 9, 1, 5, 2
+2021-11-18 12:51:47.232 D: -> Tap no btnGeraJogo
+2021-11-18 12:51:47.332 D: -> Jogo 3: válido!
+2021-11-18 12:51:47.332 D: linha 0 : 7, 1, 8, 5, 6, 4, 2, 9, 3
+2021-11-18 12:51:47.332 D: linha 1 : 4, 2, 3, 8, 7, 9, 1, 5, 6
+2021-11-18 12:51:47.332 D: linha 2 : 6, 5, 9, 3, 1, 2, 7, 4, 8
+2021-11-18 12:51:47.332 D: linha 3 : 2, 9, 5, 6, 4, 7, 8, 3, 1
+2021-11-18 12:51:47.332 D: linha 4 : 8, 3, 4, 2, 5, 1, 9, 6, 7
+2021-11-18 12:51:47.332 D: linha 5 : 1, 7, 6, 9, 3, 8, 5, 2, 4
+2021-11-18 12:51:47.332 D: linha 6 : 5, 6, 7, 1, 9, 3, 4, 8, 2
+2021-11-18 12:51:47.332 D: linha 7 : 9, 4, 2, 7, 8, 6, 3, 1, 5
+2021-11-18 12:51:47.332 D: linha 8 : 3, 8, 1, 4, 2, 5, 6, 7, 9
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+2021-11-18 12:51:51.223 D: -> Tap no btnAdaptaJogo
+----------------------------------------------------------------------------------------------------
+2021-11-18 12:51:51.224 D: linha 0 : 0, 0, 4, 6, 0, 5, 8, 0, 0
+2021-11-18 12:51:51.224 D: linha 1 : 6, 5, 0, 0, 8, 0, 0, 0, 0
+2021-11-18 12:51:51.224 D: linha 2 : 0, 0, 8, 0, 4, 7, 6, 0, 5
+2021-11-18 12:51:51.224 D: linha 3 : 2, 8, 0, 3, 5, 6, 0, 0, 0
+2021-11-18 12:51:51.224 D: linha 4 : 7, 4, 0, 0, 0, 8, 2, 5, 6
+2021-11-18 12:51:51.224 D: linha 5 : 5, 6, 0, 4, 7, 2, 9, 0, 8
+2021-11-18 12:51:51.224 D: linha 6 : 8, 2, 5, 7, 0, 4, 3, 6, 0
+2021-11-18 12:51:51.224 D: linha 7 : 4, 3, 6, 5, 2, 0, 0, 8, 0
+2021-11-18 12:51:51.224 D: linha 8 : 0, 0, 0, 8, 6, 3, 5, 4, 2
+2021-11-18 12:51:51.225 D: -> NÃO foi possível gerar um número para o Qm0!
+2021-11-18 12:51:51.227 D: -> NÃO foi possível gerar um número para o Qm0!
+2021-11-18 12:51:51.227 D: -> NÃO foi possível gerar um número para o Qm1!
+2021-11-18 12:51:51.228 D: -> NÃO foi possível gerar um número para o Qm1!
+2021-11-18 12:51:51.229 D: -> NÃO foi possível gerar um número para o Qm2!
+2021-11-18 12:51:51.229 D: -> NÃO foi possível gerar um número para o Qm2!
+2021-11-18 12:51:51.231 D: -> NÃO foi possível gerar um número para o Qm3!
+2021-11-18 12:51:51.232 D: -> NÃO foi possível gerar um número para o Qm4!
+2021-11-18 12:51:51.232 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.245 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.245 D: -> NÃO foi possível gerar um número para o Qm6!
+2021-11-18 12:51:51.245 D: -> NÃO foi possível gerar um número para o Qm7!
+2021-11-18 12:51:51.246 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.256 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.256 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.264 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.264 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.272 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.272 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.280 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.280 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.288 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.289 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.296 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.296 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.304 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.305 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.313 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.313 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.321 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.322 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.329 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.330 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.338 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.338 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.346 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.346 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.354 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.354 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.361 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.362 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.369 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.370 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.379 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.379 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.387 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.387 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.395 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.395 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.403 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.404 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.412 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.412 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.420 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.420 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.428 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.428 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.438 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.438 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.446 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.447 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.457 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.457 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.466 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.467 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.474 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.475 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.483 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.483 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.491 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.491 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.498 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.498 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.506 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.507 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.514 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.514 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.522 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.522 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.530 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.530 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.539 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.539 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.544 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.544 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.547 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.547 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.555 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.563 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.564 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.564 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.564 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.564 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.571 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.571 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.578 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.578 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.586 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.586 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.593 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.594 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.602 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.602 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.609 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.609 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.617 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.617 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.624 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.624 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.633 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.633 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.641 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.641 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.648 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.649 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.656 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.656 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.664 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.664 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.671 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.671 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.678 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.679 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.686 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.686 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.694 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.694 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.703 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.703 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.711 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.711 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.719 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.719 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.727 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.727 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.734 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.734 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.742 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.742 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.750 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.750 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.757 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.758 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.765 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.765 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.773 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.773 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.781 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.781 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.789 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.789 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.797 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.797 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.805 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.805 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.814 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.814 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.822 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.822 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.829 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.829 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.837 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.838 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.846 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.846 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.855 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.855 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.863 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.863 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.871 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.871 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.878 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.878 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.886 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.886 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.893 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.893 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.901 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.902 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.910 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.910 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.919 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.919 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.926 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.926 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.934 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.934 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.941 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.942 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.949 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.950 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.957 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.957 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.965 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.965 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.973 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.973 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.981 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.981 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.989 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:51.989 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.997 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:51.997 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.005 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.005 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.013 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.013 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.021 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.021 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.029 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.029 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.037 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.037 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.046 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.046 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.053 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.054 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.061 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.061 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.069 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.069 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.077 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.077 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.085 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.085 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.092 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.093 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.101 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.101 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.109 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.109 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.116 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.117 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.124 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.125 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.132 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.132 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.139 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.139 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.147 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.147 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.155 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.155 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.162 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.162 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.172 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.172 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.181 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.181 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.188 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.188 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.196 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.196 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.204 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.204 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.211 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.211 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.219 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.219 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.226 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.227 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.234 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.234 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.242 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.242 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.250 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.250 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.258 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.258 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.266 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.266 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.274 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.274 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.281 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.281 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.289 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.289 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.296 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.297 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.304 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.304 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.312 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.312 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.319 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.320 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.327 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.327 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.335 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.335 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.343 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.343 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.350 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.350 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.358 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.358 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.365 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.366 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.373 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.373 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.381 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.381 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.389 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.389 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.396 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.396 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.405 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.405 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.413 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.413 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.420 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.421 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.428 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.428 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.436 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.437 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.444 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.445 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.452 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.453 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.460 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.460 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.468 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.468 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.476 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.476 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.484 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.484 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.491 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.492 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.500 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.500 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.508 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.508 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.516 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.516 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.524 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.524 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.531 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.531 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.538 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.539 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.547 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.547 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.554 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.554 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.561 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.561 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.569 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.569 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.577 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.578 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.585 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.585 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.592 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.592 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.599 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.600 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.607 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.607 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.615 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.615 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.623 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.624 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.624 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.624 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.628 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.628 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.629 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.629 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.631 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.631 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.639 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.639 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.647 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.647 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.654 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.655 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.662 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.662 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.669 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.669 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.677 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.677 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.685 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.685 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.692 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.693 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.700 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.700 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.708 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.708 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.716 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.716 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.723 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.723 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.731 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.731 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.738 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.738 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.746 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.746 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.753 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.753 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.762 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.762 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.770 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.770 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.777 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.777 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.785 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.785 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.793 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.793 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.800 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.800 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.808 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.808 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.816 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.816 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.823 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.824 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.831 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.831 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.839 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.839 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.846 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.846 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.855 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.855 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.863 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.863 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.871 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.871 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.881 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.881 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.890 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.890 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.898 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.898 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.905 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.906 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.913 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.913 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.921 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.921 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.929 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.929 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.937 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.937 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.944 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.944 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.952 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.953 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.961 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.961 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.969 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.969 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.976 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.976 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.984 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:52.984 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.993 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:52.993 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.001 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.001 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.008 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.009 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.017 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.017 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.024 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.024 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.032 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.032 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.040 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.040 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.048 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.048 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.056 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.056 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.064 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.064 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.072 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.072 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.080 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.080 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.088 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.088 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.096 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.096 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.104 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.104 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.112 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.112 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.120 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.120 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.128 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.128 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.136 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.136 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.143 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.144 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.151 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.151 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.159 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.159 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.167 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.167 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.175 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.175 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.183 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.183 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.184 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.184 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.191 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.191 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.199 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.199 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.207 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.207 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.215 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.215 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.223 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.223 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.230 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.230 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.239 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.239 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.246 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.247 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.255 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.255 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.262 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.262 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.270 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.270 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.278 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.278 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.285 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.285 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.293 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.293 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.301 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.301 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.309 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.309 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.317 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.317 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.325 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.325 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.333 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.333 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.341 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.341 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.350 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.350 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.357 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.358 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.365 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.365 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.372 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.373 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.380 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.380 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.388 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.388 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.396 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.396 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.404 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.404 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.411 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.411 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.419 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.419 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.427 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.427 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.434 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.434 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.442 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.442 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.450 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.450 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.457 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.457 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.466 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.466 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.474 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.474 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.481 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.482 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.482 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.482 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.491 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.491 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.499 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.499 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.506 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.506 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.514 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.514 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.522 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.522 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.530 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.530 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.537 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.537 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.545 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.545 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.553 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.553 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.561 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.561 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.570 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.570 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.578 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.578 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.587 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.587 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.595 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.596 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.605 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.605 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.613 D: -> NÃO foi possível gerar um número para o Qm5!
+2021-11-18 12:51:53.613 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.621 D: -> NÃO foi possível gerar um número para o Qm8!
+2021-11-18 12:51:53.621 D: -> Tentou 150 jogos. Fim.
+====================================================================================================
+
+2021-11-18 10:43:48.283 D: -> Tap no btnAdaptaJogo
+2021-11-18 10:43:48.293 D: linha 0 : 0, 0, 4, 6, 0, 5, 8, 0, 0
+2021-11-18 10:43:48.294 D: linha 1 : 6, 5, 0, 0, 8, 0, 0, 0, 0
+2021-11-18 10:43:48.294 D: linha 2 : 0, 0, 8, 0, 4, 7, 6, 0, 5
+2021-11-18 10:43:48.295 D: linha 3 : 2, 8, 0, 3, 5, 6, 0, 0, 0
+2021-11-18 10:43:48.295 D: linha 4 : 7, 4, 0, 0, 0, 8, 2, 5, 6
+2021-11-18 10:43:48.295 D: linha 5 : 5, 6, 0, 4, 7, 2, 9, 0, 8
+2021-11-18 10:43:48.296 D: linha 6 : 8, 2, 5, 7, 0, 4, 3, 6, 0
+2021-11-18 10:43:48.296 D: linha 7 : 4, 3, 6, 5, 2, 0, 0, 8, 0
+2021-11-18 10:43:48.297 D: linha 8 : 0, 0, 0, 8, 6, 3, 5, 4, 2
+----------------------------------------------------------------------------------------------------
+
+
+
+====================================================================================================
+2021-11-18 09:02:50.547 D: -> Tap no btnGeraJogo
+2021-11-18 09:02:51.127 D: -> Jogo 12: válido!
+----------------------------------------------------------------------------------------------------
+2021-11-18 09:02:51.127 D: linha 0 : 6, 8, 5, 1, 2, 9, 3, 7, 4
+2021-11-18 09:02:51.128 D: linha 1 : 2, 3, 1, 7, 8, 4, 9, 6, 5
+2021-11-18 09:02:51.128 D: linha 2 : 4, 7, 9, 5, 3, 6, 2, 8, 1
+2021-11-18 09:02:51.128 D: linha 3 : 3, 9, 7, 4, 1, 8, 5, 2, 6
+2021-11-18 09:02:51.129 D: linha 4 : 5, 6, 8, 3, 7, 2, 1, 4, 9
+2021-11-18 09:02:51.129 D: linha 5 : 1, 2, 4, 6, 9, 5, 7, 3, 8
+2021-11-18 09:02:51.129 D: linha 6 : 9, 4, 2, 8, 5, 3, 6, 1, 7
+2021-11-18 09:02:51.129 D: linha 7 : 7, 5, 6, 2, 4, 1, 8, 9, 3
+2021-11-18 09:02:51.130 D: linha 8 : 8, 1, 3, 9, 6, 7, 4, 5, 2
+----------------------------------------------------------------------------------------------------
+2021-11-18 09:02:56.242 D: -> Tap no btnGeraJogo
+2021-11-18 09:02:57.063 D: -> Jogo 17: válido!
+----------------------------------------------------------------------------------------------------
+2021-11-18 09:02:57.063 D: linha 0 : 6, 8, 3, 5, 1, 7, 4, 2, 9
+2021-11-18 09:02:57.063 D: linha 1 : 5, 9, 4, 3, 8, 2, 7, 6, 1
+2021-11-18 09:02:57.064 D: linha 2 : 1, 2, 7, 4, 6, 9, 5, 3, 8
+2021-11-18 09:02:57.064 D: linha 3 : 7, 6, 5, 2, 4, 1, 9, 8, 3
+2021-11-18 09:02:57.064 D: linha 4 : 2, 3, 9, 7, 5, 8, 6, 1, 4
+2021-11-18 09:02:57.064 D: linha 5 : 8, 4, 1, 6, 9, 3, 2, 5, 7
+2021-11-18 09:02:57.064 D: linha 6 : 4, 7, 6, 1, 3, 5, 8, 9, 2
+2021-11-18 09:02:57.064 D: linha 7 : 9, 1, 2, 8, 7, 6, 3, 4, 5
+2021-11-18 09:02:57.064 D: linha 8 : 3, 5, 8, 9, 2, 4, 1, 7, 6
+----------------------------------------------------------------------------------------------------
+2021-11-18 09:03:12.179 D: -> Tap no btnGeraJogo
+2021-11-18 09:03:12.268 D: -> Jogo 3: válido!
+----------------------------------------------------------------------------------------------------
+2021-11-18 09:03:12.268 D: linha 0 : 7, 2, 3, 6, 1, 5, 8, 9, 4
+2021-11-18 09:03:12.268 D: linha 1 : 8, 9, 6, 2, 4, 7, 3, 1, 5
+2021-11-18 09:03:12.268 D: linha 2 : 5, 1, 4, 3, 8, 9, 6, 2, 7
+2021-11-18 09:03:12.268 D: linha 3 : 3, 7, 2, 9, 5, 4, 1, 8, 6
+2021-11-18 09:03:12.268 D: linha 4 : 1, 6, 9, 7, 2, 8, 5, 4, 3
+2021-11-18 09:03:12.268 D: linha 5 : 4, 5, 8, 1, 6, 3, 2, 7, 9
+2021-11-18 09:03:12.268 D: linha 6 : 2, 3, 7, 5, 9, 1, 4, 6, 8
+2021-11-18 09:03:12.269 D: linha 7 : 9, 8, 1, 4, 3, 6, 7, 5, 2
+2021-11-18 09:03:12.269 D: linha 8 : 6, 4, 5, 8, 7, 2, 9, 3, 1
+----------------------------------------------------------------------------------------------------
+2021-11-18 09:03:15.050 D: -> Tap no btnGeraJogo
+2021-11-18 09:03:15.810 D: -> Jogo 19: válido!
+----------------------------------------------------------------------------------------------------
+2021-11-18 09:03:15.811 D: linha 0 : 8, 9, 6, 3, 4, 7, 2, 5, 1
+2021-11-18 09:03:15.811 D: linha 1 : 1, 5, 3, 8, 2, 9, 7, 4, 6
+2021-11-18 09:03:15.811 D: linha 2 : 4, 2, 7, 1, 5, 6, 9, 3, 8
+2021-11-18 09:03:15.811 D: linha 3 : 2, 8, 1, 5, 7, 3, 6, 9, 4
+2021-11-18 09:03:15.811 D: linha 4 : 5, 6, 4, 9, 1, 8, 3, 2, 7
+2021-11-18 09:03:15.811 D: linha 5 : 3, 7, 9, 2, 6, 4, 8, 1, 5
+2021-11-18 09:03:15.811 D: linha 6 : 6, 1, 8, 4, 3, 2, 5, 7, 9
+2021-11-18 09:03:15.811 D: linha 7 : 9, 3, 5, 7, 8, 1, 4, 6, 2
+2021-11-18 09:03:15.811 D: linha 8 : 7, 4, 2, 6, 9, 5, 1, 8, 3
+----------------------------------------------------------------------------------------------------
+2021-11-18 09:03:20.412 D: -> Tap no btnGeraJogo
+2021-11-18 09:03:20.545 D: -> Jogo 4: válido!
+----------------------------------------------------------------------------------------------------
+2021-11-18 09:03:20.545 D: linha 0 : 2, 6, 9, 3, 5, 4, 1, 7, 8
+2021-11-18 09:03:20.545 D: linha 1 : 8, 4, 7, 1, 6, 9, 2, 3, 5
+2021-11-18 09:03:20.545 D: linha 2 : 5, 1, 3, 7, 2, 8, 4, 9, 6
+2021-11-18 09:03:20.545 D: linha 3 : 6, 3, 2, 8, 1, 7, 5, 4, 9
+2021-11-18 09:03:20.545 D: linha 4 : 7, 5, 8, 4, 9, 6, 3, 1, 2
+2021-11-18 09:03:20.546 D: linha 5 : 1, 9, 4, 5, 3, 2, 8, 6, 7
+2021-11-18 09:03:20.546 D: linha 6 : 3, 2, 5, 9, 7, 1, 6, 8, 4
+2021-11-18 09:03:20.546 D: linha 7 : 9, 8, 6, 2, 4, 3, 7, 5, 1
+2021-11-18 09:03:20.546 D: linha 8 : 4, 7, 1, 6, 8, 5, 9, 2, 3
+----------------------------------------------------------------------------------------------------
+2021-11-18 09:03:25.857 D: -> Tap no btnGeraJogo
+2021-11-18 09:03:28.463 D: -> Jogo 59: válido!
+----------------------------------------------------------------------------------------------------
+2021-11-18 09:03:28.463 D: linha 0 : 9, 5, 7, 2, 1, 6, 3, 4, 8
+2021-11-18 09:03:28.463 D: linha 1 : 8, 2, 4, 3, 9, 5, 6, 1, 7
+2021-11-18 09:03:28.463 D: linha 2 : 6, 3, 1, 8, 7, 4, 9, 5, 2
+2021-11-18 09:03:28.463 D: linha 3 : 7, 8, 9, 6, 5, 3, 4, 2, 1
+2021-11-18 09:03:28.463 D: linha 4 : 2, 6, 3, 4, 8, 1, 5, 7, 9
+2021-11-18 09:03:28.464 D: linha 5 : 1, 4, 5, 7, 2, 9, 8, 3, 6
+2021-11-18 09:03:28.464 D: linha 6 : 3, 7, 6, 1, 4, 8, 2, 9, 5
+2021-11-18 09:03:28.464 D: linha 7 : 5, 1, 8, 9, 3, 2, 7, 6, 4
+2021-11-18 09:03:28.464 D: linha 8 : 4, 9, 2, 5, 6, 7, 1, 8, 3
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:02.834 D: -> Tap no btnGeraJogo
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:02.859 D: linha 0 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:02.859 D: linha 1 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:02.859 D: linha 2 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:02.860 D: linha 3 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:02.860 D: linha 4 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:02.861 D: linha 5 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:02.861 D: linha 6 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:02.861 D: linha 7 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:02.862 D: linha 8 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:03.007 D: -> Jogo 2: válido!
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:03.007 D: linha 0 : 4, 7, 5, 8, 3, 6, 2, 1, 9
+2021-11-18 08:56:03.007 D: linha 1 : 2, 8, 9, 1, 7, 4, 3, 6, 5
+2021-11-18 08:56:03.007 D: linha 2 : 3, 6, 1, 9, 2, 5, 8, 7, 4
+2021-11-18 08:56:03.007 D: linha 3 : 6, 5, 4, 2, 1, 9, 7, 3, 8
+2021-11-18 08:56:03.008 D: linha 4 : 8, 1, 7, 5, 4, 3, 9, 2, 6
+2021-11-18 08:56:03.008 D: linha 5 : 9, 3, 2, 6, 8, 7, 4, 5, 1
+2021-11-18 08:56:03.008 D: linha 6 : 7, 4, 6, 3, 9, 1, 5, 8, 2
+2021-11-18 08:56:03.008 D: linha 7 : 5, 9, 8, 7, 6, 2, 1, 4, 3
+2021-11-18 08:56:03.008 D: linha 8 : 1, 2, 3, 4, 5, 8, 6, 9, 7
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:14.065 D: -> Tap no btnGeraJogo
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:14.067 D: linha 0 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:14.067 D: linha 1 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:14.067 D: linha 2 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:14.067 D: linha 3 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:14.067 D: linha 4 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:14.067 D: linha 5 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:14.067 D: linha 6 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:14.067 D: linha 7 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:14.067 D: linha 8 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:14.581 D: -> Jogo 13: válido!
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:14.581 D: linha 0 : 7, 9, 3, 1, 2, 6, 5, 8, 4
+2021-11-18 08:56:14.581 D: linha 1 : 5, 8, 4, 7, 9, 3, 1, 6, 2
+2021-11-18 08:56:14.581 D: linha 2 : 1, 2, 6, 5, 4, 8, 3, 9, 7
+2021-11-18 08:56:14.581 D: linha 3 : 8, 3, 2, 6, 5, 7, 4, 1, 9
+2021-11-18 08:56:14.581 D: linha 4 : 6, 5, 9, 3, 1, 4, 2, 7, 8
+2021-11-18 08:56:14.581 D: linha 5 : 4, 7, 1, 2, 8, 9, 6, 5, 3
+2021-11-18 08:56:14.582 D: linha 6 : 9, 6, 8, 4, 3, 1, 7, 2, 5
+2021-11-18 08:56:14.582 D: linha 7 : 2, 4, 7, 9, 6, 5, 8, 3, 1
+2021-11-18 08:56:14.582 D: linha 8 : 3, 1, 5, 8, 7, 2, 9, 4, 6
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:25.052 D: -> Tap no btnGeraJogo
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:25.053 D: linha 0 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:25.054 D: linha 1 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:25.054 D: linha 2 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:25.054 D: linha 3 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:25.054 D: linha 4 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:25.054 D: linha 5 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:25.054 D: linha 6 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:25.054 D: linha 7 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:25.054 D: linha 8 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:25.151 D: -> Jogo 3: válido!
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:25.151 D: linha 0 : 2, 1, 3, 7, 8, 4, 5, 9, 6
+2021-11-18 08:56:25.151 D: linha 1 : 9, 8, 6, 1, 5, 3, 2, 7, 4
+2021-11-18 08:56:25.151 D: linha 2 : 7, 5, 4, 6, 9, 2, 3, 8, 1
+2021-11-18 08:56:25.151 D: linha 3 : 5, 9, 2, 8, 4, 7, 6, 1, 3
+2021-11-18 08:56:25.151 D: linha 4 : 3, 6, 8, 5, 2, 1, 7, 4, 9
+2021-11-18 08:56:25.151 D: linha 5 : 1, 4, 7, 9, 3, 6, 8, 2, 5
+2021-11-18 08:56:25.152 D: linha 6 : 8, 3, 1, 2, 6, 9, 4, 5, 7
+2021-11-18 08:56:25.152 D: linha 7 : 4, 7, 5, 3, 1, 8, 9, 6, 2
+2021-11-18 08:56:25.152 D: linha 8 : 6, 2, 9, 4, 7, 5, 1, 3, 8
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:28.343 D: -> Tap no btnGeraJogo
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:28.344 D: linha 0 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:28.344 D: linha 1 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:28.344 D: linha 2 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:28.344 D: linha 3 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:28.344 D: linha 4 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:28.344 D: linha 5 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:28.344 D: linha 6 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:28.344 D: linha 7 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:28.344 D: linha 8 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:28.350 D: -> Jogo 1: válido!
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:28.350 D: linha 0 : 7, 8, 1, 5, 3, 4, 2, 9, 6
+2021-11-18 08:56:28.350 D: linha 1 : 2, 6, 3, 8, 1, 9, 4, 7, 5
+2021-11-18 08:56:28.350 D: linha 2 : 9, 5, 4, 7, 2, 6, 3, 1, 8
+2021-11-18 08:56:28.351 D: linha 3 : 6, 9, 5, 3, 7, 1, 8, 4, 2
+2021-11-18 08:56:28.351 D: linha 4 : 4, 7, 2, 9, 6, 8, 5, 3, 1
+2021-11-18 08:56:28.351 D: linha 5 : 1, 3, 8, 4, 5, 2, 9, 6, 7
+2021-11-18 08:56:28.351 D: linha 6 : 5, 4, 9, 6, 8, 7, 1, 2, 3
+2021-11-18 08:56:28.351 D: linha 7 : 3, 1, 7, 2, 4, 5, 6, 8, 9
+2021-11-18 08:56:28.351 D: linha 8 : 8, 2, 6, 1, 9, 3, 7, 5, 4
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:58.874 D: -> Tap no btnGeraJogo
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:58.874 D: linha 0 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:58.874 D: linha 1 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:58.874 D: linha 2 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:58.874 D: linha 3 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:58.874 D: linha 4 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:58.874 D: linha 5 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:58.874 D: linha 6 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:58.874 D: linha 7 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:56:58.874 D: linha 8 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:59.923 D: -> Jogo 28: válido!
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:56:59.923 D: linha 0 : 4, 9, 2, 7, 6, 3, 8, 5, 1
+2021-11-18 08:56:59.923 D: linha 1 : 5, 8, 7, 1, 9, 4, 6, 3, 2
+2021-11-18 08:56:59.923 D: linha 2 : 1, 3, 6, 2, 8, 5, 7, 4, 9
+2021-11-18 08:56:59.923 D: linha 3 : 9, 2, 1, 5, 3, 7, 4, 6, 8
+2021-11-18 08:56:59.923 D: linha 4 : 8, 6, 3, 9, 4, 2, 1, 7, 5
+2021-11-18 08:56:59.924 D: linha 5 : 7, 5, 4, 8, 1, 6, 9, 2, 3
+2021-11-18 08:56:59.924 D: linha 6 : 3, 4, 9, 6, 5, 8, 2, 1, 7
+2021-11-18 08:56:59.924 D: linha 7 : 2, 1, 5, 4, 7, 9, 3, 8, 6
+2021-11-18 08:56:59.924 D: linha 8 : 6, 7, 8, 3, 2, 1, 5, 9, 4
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:57:08.043 D: -> Tap no btnGeraJogo
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:57:08.044 D: linha 0 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:08.044 D: linha 1 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:08.044 D: linha 2 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:08.044 D: linha 3 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:08.044 D: linha 4 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:08.044 D: linha 5 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:08.044 D: linha 6 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:08.044 D: linha 7 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:08.044 D: linha 8 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:57:10.223 D: -> Jogo 55: válido!
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:57:10.223 D: linha 0 : 1, 3, 9, 5, 8, 7, 2, 4, 6
+2021-11-18 08:57:10.223 D: linha 1 : 6, 4, 8, 1, 9, 2, 5, 3, 7
+2021-11-18 08:57:10.223 D: linha 2 : 2, 5, 7, 3, 6, 4, 8, 9, 1
+2021-11-18 08:57:10.223 D: linha 3 : 7, 8, 6, 2, 1, 3, 9, 5, 4
+2021-11-18 08:57:10.223 D: linha 4 : 4, 9, 5, 6, 7, 8, 1, 2, 3
+2021-11-18 08:57:10.223 D: linha 5 : 3, 1, 2, 9, 4, 5, 7, 6, 8
+2021-11-18 08:57:10.223 D: linha 6 : 9, 6, 3, 7, 2, 1, 4, 8, 5
+2021-11-18 08:57:10.223 D: linha 7 : 5, 7, 4, 8, 3, 9, 6, 1, 2
+2021-11-18 08:57:10.223 D: linha 8 : 8, 2, 1, 4, 5, 6, 3, 7, 9
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:57:17.145 D: -> Tap no btnGeraJogo
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:57:17.145 D: linha 0 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:17.146 D: linha 1 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:17.146 D: linha 2 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:17.146 D: linha 3 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:17.146 D: linha 4 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:17.146 D: linha 5 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:17.146 D: linha 6 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:17.146 D: linha 7 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+2021-11-18 08:57:17.146 D: linha 8 : 0, 0, 0, 0, 0, 0, 0, 0, 0
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:57:19.218 D: -> Jogo 42: válido!
+----------------------------------------------------------------------------------------------------
+2021-11-18 08:57:19.218 D: linha 0 : 3, 2, 8, 6, 9, 1, 5, 4, 7
+2021-11-18 08:57:19.218 D: linha 1 : 7, 6, 5, 4, 8, 3, 1, 9, 2
+2021-11-18 08:57:19.218 D: linha 2 : 4, 1, 9, 7, 2, 5, 8, 3, 6
+2021-11-18 08:57:19.218 D: linha 3 : 6, 8, 2, 1, 4, 9, 7, 5, 3
+2021-11-18 08:57:19.218 D: linha 4 : 9, 4, 7, 3, 5, 2, 6, 8, 1
+2021-11-18 08:57:19.218 D: linha 5 : 5, 3, 1, 8, 6, 7, 4, 2, 9
+2021-11-18 08:57:19.218 D: linha 6 : 1, 9, 4, 5, 3, 6, 2, 7, 8
+2021-11-18 08:57:19.218 D: linha 7 : 2, 5, 6, 9, 7, 8, 3, 1, 4
+2021-11-18 08:57:19.218 D: linha 8 : 8, 7, 3, 2, 1, 4, 9, 6, 5
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
