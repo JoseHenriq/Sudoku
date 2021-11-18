@@ -349,8 +349,9 @@ class MainActivity : AppCompatActivity() {
     private fun adaptaQuadMenor (quadMenor: Int) : Array <Int> {
 
         //--- Instancializações e inicializações
-        val arQuadMenor = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
-        val numDispCel  = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
+        val arQuadMenor   = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
+        val numDispCel    = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
+        var numPrndGerado = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
 
         //--- Calcula as linhas desse quadrado
         //------------------------------------------
@@ -390,11 +391,12 @@ class MainActivity : AppCompatActivity() {
             //--- Para todas as colunas de Qm
             for (colQm in 0..2) {
 
-                val fimTenta          = 20   // 50  // 10
-                var contaTentaGerarQm = 0
-                var flagNumOk         = false
                 var numero : Int
-                while (!flagNumOk && contaTentaGerarQm < fimTenta ) {
+                numPrndGerado           = arrayOf (0, 0, 0, 0, 0, 0, 0, 0, 0)
+                var flagNumOk           = false
+                val fimTenta            = 20   // 50  // 10
+                var contaTentaAdaptarQm = 0
+                while (!flagNumOk && contaTentaAdaptarQm < fimTenta ) {
 
                     //--- Gera número aleatório sem repetição
                     //-------------------------
@@ -404,29 +406,37 @@ class MainActivity : AppCompatActivity() {
                     //secureTrnd.setSeed(secureTrnd.generateSeed(16))  // 32  64 128 NÃO OK
                     //numero = secureTrnd.nextInt(9) + 1
 
-                    // Critério1: sem repetição no próprio Qm
-                    if (numDispCel[numero - 1] == 0) {
+                    if (!numPrndGerado.contains(numero)) {
 
-                        //arQuadMenor[linQm * 3 + colQm] = numero
+                        numPrndGerado[numero - 1] = numero
 
-                        // Critérios2: verifica se número gerado pode ser inserido no jogo
-                        //-----------------------------------------------------------
-                        flagNumOk = verifValidade(quadMenor, linQm, colQm, numero)
-                        //-----------------------------------------------------------
-                        if (!flagNumOk) {
+                        // Critério1: sem repetição no próprio Qm
+                        if (numDispCel[numero - 1] == 0) {
 
-                            //--- Se o número gerado NÃO está ok (está presente na mesma linha ou
-                            //    coluna de outro bloco) armazena -1 para sinalizar erro.
-                            if (++contaTentaGerarQm >= fimTenta) { arQuadMenor[linQm * 3
-                                                                                     + colQm] = -1 }
-                        }
+                            //arQuadMenor[linQm * 3 + colQm] = numero
 
-                        //--- Se o número gerado ESTÁ ok armazena no array desse bloco
-                        else {
+                            // Critérios2: verifica se número gerado pode ser inserido no jogo
+                            //-----------------------------------------------------------
+                            flagNumOk = verifValidade(quadMenor, linQm, colQm, numero)
+                            //-----------------------------------------------------------
+                            if (!flagNumOk) {
 
-                            arQuadMenor[linQm * 3 + colQm] = numero
-                            numDispCel[numero - 1] = numero
+                                //--- Se o número gerado NÃO está ok (está presente na mesma linha ou
+                                //    coluna de outro bloco) armazena -1 para sinalizar erro.
+                                if (++contaTentaAdaptarQm >= fimTenta) {
 
+                                    arQuadMenor[linQm * 3 + colQm] = -1
+
+                                }
+                            }
+
+                            //--- Se o número gerado ESTÁ ok armazena no array desse bloco
+                            else {
+
+                                arQuadMenor[linQm * 3 + colQm] = numero
+                                numDispCel[numero - 1] = numero
+
+                            }
                         }
                     }
                 }
@@ -589,6 +599,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         //--- Prepara o QM com os números propostos
+        quadMaior = arrayOf<Array<Int>>()
         for (linha in 0..8) {
 
             array = arrayOf<Int>()
