@@ -23,9 +23,10 @@ class MainActivity : AppCompatActivity() {
 
     private var btnGeraJogo   : Button? = null
     private var btnAdaptaJogo : Button? = null
+    private var intJogoAdaptar = 1
 
 //    private lateinit var ctimer: CountDownTimer
-    private  var flagTimeOut    = false
+//    private  var flagTimeOut    = false
 //    private  val timeOutGeracao = 5000L     // mseg
 
 //    private var secureTrnd = SecureRandom()
@@ -59,10 +60,14 @@ class MainActivity : AppCompatActivity() {
         //----------------------
         inicQuadMaiorGeracao()
         //----------------------
+
         //--- Gera um novo jogo
         //-----------
         geraJogo()
         //-----------
+        //----------------------
+        //geraJogoAlgoritmo2()
+        //----------------------
 
     }
 
@@ -72,9 +77,9 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(cTAG, "-> Tap no btnAdaptaJogo")
 
-        //-------------------------
-        inicQuadMaiorAdaptacao()
-        //-------------------------
+        //---------------------------------------
+        // inicQuadMaiorAdaptacao(intJogoAdaptar)
+        //---------------------------------------
 
         //--- Adapta jogo
         //-------------
@@ -84,6 +89,7 @@ class MainActivity : AppCompatActivity() {
         //-----------------------
         adaptaJogoAlgoritmo2()
         //-----------------------
+        if (++intJogoAdaptar > 4) intJogoAdaptar = 1
 
     }
 
@@ -112,11 +118,11 @@ class MainActivity : AppCompatActivity() {
         var flagQuadMenorOk : Boolean
 
         //--- Tenta gerar os 9 quadrados menores
-        flagTimeOut = false
+        //flagTimeOut = false
         //---------------------------------------------------------
         // startTimer(timeOutGeracao, timeOutGeracao/2)
         //---------------------------------------------------------
-        while (!flagJogoOk && contaTentaJogo < limTentaJogo && !flagTimeOut) {          //contaTentaJogo < 50) {  // 20) {   // 10) {
+        while (!flagJogoOk && contaTentaJogo < limTentaJogo) {  // && !flagTimeOut) {          //contaTentaJogo < 50) {  // 20) {   // 10) {
 
             //Log.d(cTAG, "-> Gera o jogo ${contaTentaJogo + 1}")
 
@@ -264,6 +270,38 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /*
+    //--- geraJogo algoritmo 2
+    private fun geraJogoAlgoritmo2 () {
+
+        val limGeraJogo   = 20
+        var contaGeraJogo = 0
+        while (++contaGeraJogo <= limGeraJogo) {
+
+            Log.d(cTAG, "-> Adapta o jogo $contaGeraJogo:")
+
+            //-------------------------
+            inicQuadMaiorGeracao()
+            //-------------------------
+            listaQuadMaior()
+            //-----------------
+
+            //----------------------------------------------------------
+            val flagJogoOk = solveSudoku(quadMaior, quadMaior.size)
+            //----------------------------------------------------------
+
+            Log.d(cTAG, "-> Jogo $contaGeraJogo gerado:")
+            if (flagJogoOk) {
+
+                //-----------------
+                listaQuadMaior()
+                //-----------------
+
+            }
+        }
+    }
+    */
+
     //--- inicQuadMaiorGeracao
     private fun inicQuadMaiorGeracao() {
 
@@ -288,15 +326,16 @@ class MainActivity : AppCompatActivity() {
     //--- AdaptaJogo algoritmo 2
     private fun adaptaJogoAlgoritmo2 () {
 
-        val limAdaptaJogo   = 20
+        val limAdaptaJogo   = 1    //20
         var contaAdaptaJogo = 0
         while (++contaAdaptaJogo <= limAdaptaJogo) {
 
             Log.d(cTAG, "-> Adapta o jogo $contaAdaptaJogo:")
 
-            //-------------------------
-            inicQuadMaiorAdaptacao()
-            //-------------------------
+            Log.d(cTAG, "   - preset $intJogoAdaptar")
+            //---------------------------------------
+            inicQuadMaiorAdaptacao(intJogoAdaptar)
+            //---------------------------------------
             listaQuadMaior()
             //-----------------
 
@@ -304,7 +343,7 @@ class MainActivity : AppCompatActivity() {
             val flagJogoOk = solveSudoku(quadMaior, quadMaior.size)
             //----------------------------------------------------------
 
-            Log.d(cTAG, "-> Jogo $contaAdaptaJogo adaptado:")
+            Log.d(cTAG, "-> Jogo $intJogoAdaptar adaptado:")
             if (flagJogoOk) {
 
                 //-----------------
@@ -316,29 +355,103 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- inicQuadMaiorAdaptacao
-    private fun inicQuadMaiorAdaptacao() {
+    private fun inicQuadMaiorAdaptacao(jogoAdaptar : Int) {
 
         var quadMaiorAdapta = arrayOf<Array<Int>>()
         var array : Array <Int>
 
         //--- Simula os dados iniciais propostos
-        for (linha in 0..8) {
+        when (jogoAdaptar) {
 
-            // array = arrayOf<Int>()
-            array = when (linha) {
+            1 -> run {
 
-                0 -> arrayOf(0, 0, 4, 6, 0, 5, 8, 0, 0)
-                1 -> arrayOf(6, 5, 0, 0, 8, 0, 0, 0, 0)
-                2 -> arrayOf(0, 0, 8, 0, 4, 7, 6, 0, 5)
-                3 -> arrayOf(2, 8, 0, 3, 5, 6, 0, 0, 0)
-                4 -> arrayOf(7, 4, 0, 0, 0, 8, 2, 5, 6)
-                5 -> arrayOf(5, 6, 0, 4, 7, 2, 9, 0, 8)
-                6 -> arrayOf(8, 2, 5, 7, 0, 4, 3, 6, 0)
-                7 -> arrayOf(4, 3, 6, 5, 2, 0, 0, 8, 0)
-                else -> arrayOf(0, 0, 0, 8, 6, 3, 5, 4, 2)
+                for (linha in 0..8) {
 
+                    // array = arrayOf<Int>()
+                    array = when (linha) {
+
+                        0 -> arrayOf(0, 0, 4, 6, 0, 5, 8, 0, 0)
+                        1 -> arrayOf(6, 5, 0, 0, 8, 0, 0, 0, 0)
+                        2 -> arrayOf(0, 0, 8, 0, 4, 7, 6, 0, 5)
+                        3 -> arrayOf(2, 8, 0, 3, 5, 6, 0, 0, 0)
+                        4 -> arrayOf(7, 4, 0, 0, 0, 8, 2, 5, 6)
+                        5 -> arrayOf(5, 6, 0, 4, 7, 2, 9, 0, 8)
+                        6 -> arrayOf(8, 2, 5, 7, 0, 4, 3, 6, 0)
+                        7 -> arrayOf(4, 3, 6, 5, 2, 0, 0, 8, 0)
+                        else -> arrayOf(0, 0, 0, 8, 6, 3, 5, 4, 2)
+
+                    }
+                    quadMaiorAdapta += array
+
+                }
             }
-            quadMaiorAdapta += array
+
+            2 -> run {
+
+                for (linha in 0..8) {
+
+                    // array = arrayOf<Int>()
+                    array = when (linha) {
+
+                        0 -> arrayOf(0, 6, 0, 7, 0, 8, 1, 9, 2)
+                        1 -> arrayOf(1, 0, 5, 2, 0, 0, 0, 0, 7)
+                        2 -> arrayOf(0, 2, 0, 0, 0, 6, 0, 0, 0)
+                        3 -> arrayOf(0, 5, 0, 9, 3, 0, 0, 4, 0)
+                        4 -> arrayOf(0, 0, 6, 5, 0, 2, 7, 8, 0)
+                        5 -> arrayOf(9, 7, 0, 0, 0, 0, 3, 2, 5)
+                        6 -> arrayOf(0, 0, 7, 4, 0, 0, 8, 0, 6)
+                        7 -> arrayOf(8, 9, 4, 0, 7, 0, 0, 0, 0)
+                        else -> arrayOf(0, 1, 0, 3, 0, 0, 0, 7, 4)
+
+                    }
+                    quadMaiorAdapta += array
+                }
+            }
+
+            3 -> run {
+
+                for (linha in 0..8) {
+
+                    // array = arrayOf<Int>()
+                    array = when (linha) {
+
+                        0 -> arrayOf(0, 0, 3, 5, 0, 0, 4, 9, 0)
+                        1 -> arrayOf(7, 6, 0, 0, 0, 0, 5, 0, 1)
+                        2 -> arrayOf(0, 5, 4, 0, 7, 3, 6, 0, 8)
+                        3 -> arrayOf(0, 1, 0, 0, 0, 0, 3, 0, 0)
+                        4 -> arrayOf(0, 0, 7, 2, 6, 1, 0, 0, 0)
+                        5 -> arrayOf(2, 0, 6, 0, 9, 0, 0, 1, 4)
+                        6 -> arrayOf(6, 3, 2, 8, 5, 0, 0, 0, 0)
+                        7 -> arrayOf(4, 0, 0, 0, 0, 2, 8, 0, 6)
+                        else -> arrayOf(8, 0, 5, 0, 0, 7, 2, 0, 0)
+
+                    }
+                    quadMaiorAdapta += array
+                }
+            }
+
+            // 4
+            else -> run {
+
+                for (linha in 0..8) {
+
+                    // array = arrayOf<Int>()
+                    array = when (linha) {
+
+                        0 -> arrayOf(9, 0, 0, 8, 4, 1, 3, 0, 0)
+                        1 -> arrayOf(0, 0, 1, 9, 0, 0, 4, 2, 0)
+                        2 -> arrayOf(0, 0, 0, 2, 0, 0, 0, 1, 0)
+                        3 -> arrayOf(8, 7, 0, 1, 0, 0, 5, 4, 0)
+                        4 -> arrayOf(1, 5, 0, 3, 6, 0, 0, 0, 2)
+                        5 -> arrayOf(2, 0, 0, 0, 0, 0, 7, 6, 0)
+                        6 -> arrayOf(7, 2, 0, 0, 0, 5, 1, 9, 0)
+                        7 -> arrayOf(6, 3, 0, 0, 0, 0, 2, 0, 7)
+                        else -> arrayOf(0, 1, 5, 7, 0, 2, 0, 0, 8)
+
+                    }
+                    quadMaiorAdapta += array
+                }
+            }
 
         }
 
