@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ScrollView
+import android.widget.TextView
 
 import br.com.jhconsultores.sudoku.SudokuBackTracking.solveSudoku
 
@@ -16,22 +18,18 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     // Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
-    private val cTAG   = "Sudoku"
-    private var strLog = ""
+    private val cTAG     = "Sudoku"
+    private var strLog   = ""
+    private var strDados = ""
 
     private var quadMaior = arrayOf<Array<Int>>()
 
-    private var btnGeraJogo   : Button? = null
-    private var btnAdaptaJogo : Button? = null
+    private var btnGeraJogo   : Button?     = null
+    private var btnAdaptaJogo : Button?     = null
+    private var myScrollView  : ScrollView? = null
+    private var txtDadosJogo  : TextView?   = null
+
     private var intJogoAdaptar = 1
-
-//    private lateinit var ctimer: CountDownTimer
-//    private  var flagTimeOut    = false
-//    private  val timeOutGeracao = 5000L     // mseg
-
-//    private var secureTrnd = SecureRandom()
-
-
 
     //----------------------------------------------------------------------------------------------
     // Eventos da MainActivity
@@ -45,6 +43,11 @@ class MainActivity : AppCompatActivity() {
         btnGeraJogo   = findViewById(R.id.btn_GeraJogo)
         btnAdaptaJogo = findViewById(R.id.btn_AdaptaJogo)
 
+        myScrollView  = findViewById(R.id.srcTextScrollView)
+
+        txtDadosJogo  = findViewById(R.id.txtJogos)
+        txtDadosJogo?.text = ""
+
         //--- Para teste do CountDownTimer
         //---------------------------------------------------------
         // startTimer(timeOutGeracao, timeOutGeracao/2)
@@ -57,7 +60,12 @@ class MainActivity : AppCompatActivity() {
     fun btnGeraJogoClick(view : View?) {
 
         Log.d(cTAG, "-> Tap no btnGeraJogo")
-        //----------------------
+
+        strDados = txtDadosJogo!!.text.toString()
+        if (strDados.isNotEmpty()) strDados += "\n"
+        txtDadosJogo?.text = "${getString(R.string.tapBtnGeraJogo)} + $strDados"
+
+                //----------------------
         inicQuadMaiorGeracao()
         //----------------------
 
@@ -65,9 +73,6 @@ class MainActivity : AppCompatActivity() {
         //-----------
         geraJogo()
         //-----------
-        //----------------------
-        //geraJogoAlgoritmo2()
-        //----------------------
 
     }
 
@@ -77,33 +82,18 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(cTAG, "-> Tap no btnAdaptaJogo")
 
-        //---------------------------------------
-        // inicQuadMaiorAdaptacao(intJogoAdaptar)
-        //---------------------------------------
+        strDados = txtDadosJogo!!.text.toString()
+        if (strDados.isNotEmpty()) strDados += "\n"
+        txtDadosJogo?.text = "{getString(R.string.tapBtnGeraJogo)} + strDados"
 
         //--- Adapta jogo
-        //-------------
-        // adaptaJogo()
-        //-------------
-
         //-----------------------
         adaptaJogoAlgoritmo2()
         //-----------------------
+
         if (++intJogoAdaptar > 4) intJogoAdaptar = 1
 
     }
-
-    /*
-    //--- Evento onDestroy: destrói o timer
-    override fun onDestroy() {
-
-        //--- ctimer object
-        if (ctimer != null) ctimer!!.cancel()
-
-        super.onDestroy()
-
-    }
-     */
 
     //----------------------------------------------------------------------------------------------
     // Funções para a geração de jogos
@@ -173,29 +163,22 @@ class MainActivity : AppCompatActivity() {
 
             if (flagJogoVal) {
 
-                Log.d(cTAG, "-> Jogo ${contaTentaJogo + 1}: válido!")
-                //-----------------
+                val strTmp = "-> Jogo ${contaTentaJogo + 1}: válido!"
+                Log.d(cTAG, strTmp)
+
+                strDados = txtDadosJogo?.text.toString()
+                txtDadosJogo?.text = "\n$strTmp$strDados"
+
+                        //-----------------
                 listaQuadMaior()
                 //-----------------
                 flagJogoOk = true
 
             }
-            else {
-
-                //-----------------
-                //listaQuadMaior()
-                //-----------------
-
-                // Log.d(cTAG, "-> Jogo ${contaTentaJogo + 1}: inválido.")
-                contaTentaJogo ++
-
-            }
+            else { contaTentaJogo ++ }
 
         }
         if (contaTentaJogo >=limTentaJogo) {Log.d(cTAG, "-> Tentou $limTentaJogo jogos. Fim.")}
-
-        //--- Destrói o timer do timeOut da geração
-//        if (ctimer != null) { ctimer.cancel() }
 
     }
 
@@ -270,38 +253,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    /*
-    //--- geraJogo algoritmo 2
-    private fun geraJogoAlgoritmo2 () {
-
-        val limGeraJogo   = 20
-        var contaGeraJogo = 0
-        while (++contaGeraJogo <= limGeraJogo) {
-
-            Log.d(cTAG, "-> Adapta o jogo $contaGeraJogo:")
-
-            //-------------------------
-            inicQuadMaiorGeracao()
-            //-------------------------
-            listaQuadMaior()
-            //-----------------
-
-            //----------------------------------------------------------
-            val flagJogoOk = solveSudoku(quadMaior, quadMaior.size)
-            //----------------------------------------------------------
-
-            Log.d(cTAG, "-> Jogo $contaGeraJogo gerado:")
-            if (flagJogoOk) {
-
-                //-----------------
-                listaQuadMaior()
-                //-----------------
-
-            }
-        }
-    }
-    */
-
     //--- inicQuadMaiorGeracao
     private fun inicQuadMaiorGeracao() {
 
@@ -331,8 +282,12 @@ class MainActivity : AppCompatActivity() {
         while (++contaAdaptaJogo <= limAdaptaJogo) {
 
             Log.d(cTAG, "-> Adapta o jogo $contaAdaptaJogo:")
-
             Log.d(cTAG, "   - preset $intJogoAdaptar")
+
+            strDados  = txtDadosJogo?.text.toString()
+            strDados += "\n-> Adapta jogo com preset $intJogoAdaptar"
+            txtDadosJogo?.text = "$strDados"
+
             //---------------------------------------
             inicQuadMaiorAdaptacao(intJogoAdaptar)
             //---------------------------------------
@@ -343,7 +298,12 @@ class MainActivity : AppCompatActivity() {
             val flagJogoOk = solveSudoku(quadMaior, quadMaior.size)
             //----------------------------------------------------------
 
-            Log.d(cTAG, "-> Jogo $intJogoAdaptar adaptado:")
+            Log.d(cTAG, "-> Jogo com preset $intJogoAdaptar adaptado:")
+
+            strDados  = txtDadosJogo?.text.toString()
+            strDados += "\n" + "-> Jogo com preset $intJogoAdaptar adaptado:"
+            txtDadosJogo?.text = strDados
+
             if (flagJogoOk) {
 
                 //-----------------
@@ -583,76 +543,25 @@ class MainActivity : AppCompatActivity() {
     //--- listaQuadMaior
     private fun listaQuadMaior() {
 
+        var strDados = "\n"
         for (linha in 0..8) {
 
-            strLog = "linha $linha : "
+            strLog   = "linha $linha : "
+            strDados = ""
             for (coluna in 0..8) {
 
-                strLog += "${quadMaior[linha][coluna]}" + if (coluna < 8) ", " else ""
+                val strTmp = "${quadMaior[linha][coluna]}" + if (coluna < 8) ", " else ""
+                strDados += strTmp
+                strLog   += strTmp
 
             }
             Log.d(cTAG, strLog)
+
+            var strDadosTmp = txtDadosJogo?.text.toString()
+            strDadosTmp    += "\n" + strDados
+            txtDadosJogo?.text = strDadosTmp
+
         }
     }
-
-    /*
-    //--- listaQuadMenor
-    private fun listaQuadMenor(quadMenor: Int, array : Array <Int>) {
-
-        var strLog = "Q$quadMenor: "
-        for (idxLin in 0..2) {
-
-            for (idxCol in 0..2) {
-
-                strLog += "${array[idxLin * 3 + idxCol]}"
-                if (idxLin != 2 || idxCol != 2 ) strLog += ", "
-
-            }
-        }
-
-        Log.d(cTAG, strLog)
-
-    }
-    */
-
-    //-------------------------------------------------------------------------
-    // Ferramentas
-    //-------------------------------------------------------------------------
-    /*
-    //--- startTimer
-    private fun startTimer(lngTimeOutMs: Long, lngTimeTicksMs: Long) {
-
-        ctimer = object : CountDownTimer(lngTimeOutMs, lngTimeTicksMs) {
-
-            //--- Ticks
-            override fun onTick(millisUntilFinished: Long) {
-
-                Log.d(cTAG, "-> onTick faltam: $millisUntilFinished (mseg) to timeout")
-
-            }
-
-            //--- Finish
-            override fun onFinish() {
-
-                cancelTimer()
-
-                Log.d(cTAG, "-> onFinish TimeOut")
-
-                flagTimeOut = true    // Just in case ...
-
-            }
-        }
-        ctimer.start()
-        Log.d(cTAG, "-> partiu ctimer ($lngTimeOutMs, $lngTimeTicksMs)")
-
-    }
-     */
-
-    /*
-    //--- cancel timer
-    fun cancelTimer() {
-        if (ctimer != null) ctimer!!.cancel()
-    }
-     */
 
 }

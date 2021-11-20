@@ -17,6 +17,34 @@
         android:orientation  ="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
+    <ScrollView android:id="@+id/srcTextScrollView"
+
+        android:layout_width ="match_parent"
+        android:layout_height="match_parent"
+
+        android:layout_marginBottom="70dp"
+        android:fillViewport       ="true"
+
+        android:scrollbars         ="vertical"
+        >
+
+        <TextView android:id="@+id/txtJogos"
+
+            android:textSize     ="20sp"
+
+            android:layout_width ="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd  ="20dp"
+
+            app:layout_constraintTop_toTopOf    ="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf    ="parent"
+            app:layout_constraintBottom_toTopOf ="@id/btn_GeraJogo"/>
+
+   </ScrollView>
+
     <Button android:id="@+id/btn_GeraJogo"
 
         android:layout_width ="@dimen/WidthBotao"
@@ -26,8 +54,8 @@
         app:layout_constraintEnd_toEndOf      ="@id/guide_center"
         app:layout_constraintBottom_toBottomOf="parent"
 
-        android:layout_marginRight="@dimen/MargemDireita"
-        android:layout_marginLeft ="@dimen/MargemEsquerda"
+        android:layout_marginEnd  ="@dimen/MargemDireita"
+        android:layout_marginStart="@dimen/MargemEsquerda"
 
         android:textColor ="@android:color/white"
 
@@ -43,8 +71,8 @@
         android:layout_width ="@dimen/WidthBotao"
         android:layout_height="@dimen/HeightBotao"
 
-        android:layout_marginRight="@dimen/MargemDireita"
-        android:layout_marginLeft ="@dimen/MargemEsquerda"
+        android:layout_marginEnd  ="@dimen/MargemDireita"
+        android:layout_marginStart="@dimen/MargemEsquerda"
 
         app:layout_constraintStart_toEndOf    ="@id/guide_center"
         app:layout_constraintEnd_toEndOf      ="parent"

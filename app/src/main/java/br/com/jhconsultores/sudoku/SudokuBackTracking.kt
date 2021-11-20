@@ -2,16 +2,13 @@ package br.com.jhconsultores.sudoku
 
 import kotlin.math.sqrt
 
-//import br.com.jhconsultores.sudoku.SudokuBackTracking
-
 /*** Publicado em: https://www.geeksforgeeks.org/sudoku-backtracking-7/
- *   A Backtracking program in Java to solve Sudoku problem
+ *   A Backtracking program in Java (convertido para o Kotlin pelo AS - JH) to solve Sudoku problem
  *   This code is contributed by MohanDas  */
 object SudokuBackTracking {
 
     //--- Função principal
     fun solveSudoku(board: Array<Array<Int>>, n: Int): Boolean {
-    // fun solveSudoku(board: Array<Array<Int>>, n: Int): Array<Array<Int>> {
 
         var row = -1
         var col = -1
@@ -98,6 +95,7 @@ object SudokuBackTracking {
         return true
     }
 
+    /*
     //--- Apresenta o jogo resultante
     fun print(board: Array<Array<Int>>, N: Int) {
 
@@ -113,6 +111,7 @@ object SudokuBackTracking {
             }
         }
     }
+    */
 
     /* Utilização da classe acima
     // Driver Code
