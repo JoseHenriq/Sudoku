@@ -5,13 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.ScrollView
+
+//import android.widget.ScrollView
 import android.widget.TextView
 
 import br.com.jhconsultores.sudoku.SudokuBackTracking.solveSudoku
-
-// import android.os.CountDownTimer
-// import java.security.SecureRandom
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,16 +18,20 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     private val cTAG     = "Sudoku"
     private var strLog   = ""
-    private var strDados = ""
+    //private var strDados = ""
 
     private var quadMaior = arrayOf<Array<Int>>()
 
     private var btnGeraJogo   : Button?     = null
     private var btnAdaptaJogo : Button?     = null
-    private var myScrollView  : ScrollView? = null
-    private var txtDadosJogo  : TextView?   = null
 
     private var intJogoAdaptar = 1
+
+    /*
+    private var myScrollView  : ScrollView? = null
+    private var strTodosDados = ""
+    */
+    private var txtDadosJogo  : TextView?   = null
 
     //----------------------------------------------------------------------------------------------
     // Eventos da MainActivity
@@ -43,10 +45,10 @@ class MainActivity : AppCompatActivity() {
         btnGeraJogo   = findViewById(R.id.btn_GeraJogo)
         btnAdaptaJogo = findViewById(R.id.btn_AdaptaJogo)
 
-        myScrollView  = findViewById(R.id.srcTextScrollView)
+        //myScrollView  = findViewById(R.id.srcTextScrollView)
+        //txtDadosJogo?.text = ""
 
         txtDadosJogo  = findViewById(R.id.txtJogos)
-        txtDadosJogo?.text = ""
 
         //--- Para teste do CountDownTimer
         //---------------------------------------------------------
@@ -59,13 +61,12 @@ class MainActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun btnGeraJogoClick(view : View?) {
 
-        Log.d(cTAG, "-> Tap no btnGeraJogo")
+        strLog = "-> Tap no btnGeraJogo"
+        Log.d(cTAG, strLog)
 
-        strDados = txtDadosJogo!!.text.toString()
-        if (strDados.isNotEmpty()) strDados += "\n"
-        txtDadosJogo?.text = "${getString(R.string.tapBtnGeraJogo)} + $strDados"
+        txtDadosJogo?.text = strLog
 
-                //----------------------
+        //----------------------
         inicQuadMaiorGeracao()
         //----------------------
 
@@ -80,11 +81,10 @@ class MainActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun btnAdaptaJogoClick(view : View?) {
 
-        Log.d(cTAG, "-> Tap no btnAdaptaJogo")
+        strLog = "-> Tap no btnAdaptaJogo"
+        Log.d(cTAG, strLog)
 
-        strDados = txtDadosJogo!!.text.toString()
-        if (strDados.isNotEmpty()) strDados += "\n"
-        txtDadosJogo?.text = "{getString(R.string.tapBtnGeraJogo)} + strDados"
+        txtDadosJogo?.text = strLog
 
         //--- Adapta jogo
         //-----------------------
@@ -166,10 +166,9 @@ class MainActivity : AppCompatActivity() {
                 val strTmp = "-> Jogo ${contaTentaJogo + 1}: válido!"
                 Log.d(cTAG, strTmp)
 
-                strDados = txtDadosJogo?.text.toString()
-                txtDadosJogo?.text = "\n$strTmp$strDados"
+                txtDadosJogo?.text = "${txtDadosJogo?.text}\n$strTmp"
 
-                        //-----------------
+                //-----------------
                 listaQuadMaior()
                 //-----------------
                 flagJogoOk = true
@@ -265,10 +264,6 @@ class MainActivity : AppCompatActivity() {
             quadMaior += array
 
         }
-        //-----------------
-        // listaQuadMaior()
-        //-----------------
-
     }
 
     //----------------------------------------------------------------------------------------------
@@ -284,9 +279,9 @@ class MainActivity : AppCompatActivity() {
             Log.d(cTAG, "-> Adapta o jogo $contaAdaptaJogo:")
             Log.d(cTAG, "   - preset $intJogoAdaptar")
 
-            strDados  = txtDadosJogo?.text.toString()
-            strDados += "\n-> Adapta jogo com preset $intJogoAdaptar"
-            txtDadosJogo?.text = "$strDados"
+            val strTmp = "\n-> Adapta jogo com preset $intJogoAdaptar"
+
+            txtDadosJogo?.text = "${txtDadosJogo?.text}$strTmp"
 
             //---------------------------------------
             inicQuadMaiorAdaptacao(intJogoAdaptar)
@@ -298,19 +293,15 @@ class MainActivity : AppCompatActivity() {
             val flagJogoOk = solveSudoku(quadMaior, quadMaior.size)
             //----------------------------------------------------------
 
-            Log.d(cTAG, "-> Jogo com preset $intJogoAdaptar adaptado:")
+            strLog = "-> Jogo com preset $intJogoAdaptar adaptado:"
+            Log.d(cTAG, strLog)
 
-            strDados  = txtDadosJogo?.text.toString()
-            strDados += "\n" + "-> Jogo com preset $intJogoAdaptar adaptado:"
-            txtDadosJogo?.text = strDados
+            txtDadosJogo?.text = "${txtDadosJogo?.text}\n$strLog"
 
-            if (flagJogoOk) {
+            //-------------------------------------
+            if (flagJogoOk) { listaQuadMaior() }
+            //-------------------------------------
 
-                //-----------------
-                listaQuadMaior()
-                //-----------------
-
-            }
         }
     }
 
@@ -543,7 +534,7 @@ class MainActivity : AppCompatActivity() {
     //--- listaQuadMaior
     private fun listaQuadMaior() {
 
-        var strDados = "\n"
+        var strDados: String
         for (linha in 0..8) {
 
             strLog   = "linha $linha : "
@@ -557,11 +548,9 @@ class MainActivity : AppCompatActivity() {
             }
             Log.d(cTAG, strLog)
 
-            var strDadosTmp = txtDadosJogo?.text.toString()
-            strDadosTmp    += "\n" + strDados
-            txtDadosJogo?.text = strDadosTmp
+            val strDadosTmp = "\n" + strDados
+            txtDadosJogo?.text = "${txtDadosJogo?.text}$strDadosTmp"
 
         }
     }
-
 }
