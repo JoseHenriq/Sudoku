@@ -42,17 +42,64 @@
         android:orientation  ="horizontal"
         app:layout_constraintGuide_percent="0.5" />
 
-    <!-- 2- Presets -->
-    <LinearLayout android:id= "@+id/area_presets"
-        android:layout_width ="match_parent"
+    <!-- Preset -->
+    <TableLayout android:id="@+id/tablePreset"
+        android:layout_width ="0dp"
         android:layout_height="0dp"
 
         app:layout_constraintTop_toTopOf    ="parent"
-        app:layout_constraintBottom_toTopOf ="@id/guide_center_horiz"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf    ="parent"
+        app:layout_constraintBottom_toTopOf ="@id/guide_center_horiz">
 
-        android:orientation="horizontal">
+        <TableRow android:id="@+id/row1"
+            android:background="#F0F7F7"
+            android:padding="0dp">
 
-    </LinearLayout>
+            <EditText android:id="@+id/et_col1"
+
+                android:layout_width ="0dp"
+                android:layout_height="@dimen/TV_Altura"
+                android:layout_weight="1"
+
+                android:inputType="numberDecimal|textFilter"
+                android:maxLines ="1"
+                android:maxLength="18"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf    ="parent"
+                app:layout_constraintTop_toTopOf    ="parent"
+                app:layout_constraintBottom_toTopOf="@id/guide_center_horiz"
+
+                android:textSize="@dimen/TV_TamanhoTexto"
+                android:text    ="@string/linhaZerada" />
+        </TableRow>
+
+        <TableRow android:id="@+id/row2"
+            android:background="#F0F7F7"
+            android:padding   ="0dp">
+
+        <EditText android:id="@+id/et_col2"
+
+                    android:layout_width ="0dp"
+                    android:layout_height="@dimen/TV_Altura"
+                    android:layout_weight="1"
+
+                    android:inputType="numberDecimal|textFilter"
+                    android:maxLines ="1"
+                    android:maxLength="18"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf    ="parent"
+                    app:layout_constraintTop_toTopOf    ="parent"
+                    app:layout_constraintBottom_toTopOf="@id/guide_center_horiz"
+
+                    android:textSize="@dimen/TV_TamanhoTexto"
+                    android:text    ="@string/linhaZerada" />
+
+        </TableRow>
+
+    </TableLayout>
 
     <!-- Separador entre preset e resultados -->
     <View
@@ -66,8 +113,6 @@
         app:layout_constraintTop_toBottomOf="@id/guide_center_horiz" />
 
     <!-- 3- Textview com scrolling -->
-
-    <!-- Separador entre resultados e botões -->
     <ScrollView
         android:id="@+id/srcTextScrollView"
 
@@ -79,27 +124,28 @@
 
         app:layout_constraintBottom_toTopOf="@id/btn_AdaptarJogo"
         app:layout_constraintTop_toBottomOf="@id/guide_center_horiz"
-        app:layout_constraintVertical_bias="1.0"
-        tools:layout_editor_absoluteX="-1dp">
+        app:layout_constraintVertical_bias ="1.0"
+        tools:layout_editor_absoluteX      ="-1dp">
 
         <TextView
             android:id="@+id/txtJogos"
 
-            android:layout_width="match_parent"
+            android:layout_width      ="match_parent"
 
-            android:layout_height="wrap_content"
+            android:layout_height     ="wrap_content"
             android:layout_marginStart="10dp"
 
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd   ="10dp"
             android:layout_marginBottom="0dp"
 
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf    ="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guide_center_horiz" />
+            app:layout_constraintTop_toBottomOf ="@id/guide_center_horiz" />
 
     </ScrollView>
 
+    <!-- Separador entre resultados e botões -->
     <View
         android:id           ="@+id/separador_resultados_botões"
         android:layout_width ="match_parent"

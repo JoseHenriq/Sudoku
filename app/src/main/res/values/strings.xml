@@ -9,4 +9,8 @@
     <string name="tapBtnAdaptarJogo"><![CDATA[-> Tap no btnAdaptarJogo]]></string>
     <string name="tapBtnJogarJogo"  ><![CDATA[-> Tap no btnJogarJogo]]></string>
 
+    <string name="linhaZerada">0 0 0 0 0 0 0 0 0 </string>
+
+    <string name="caractPerm">0123456789 </string>
+
 </resources>

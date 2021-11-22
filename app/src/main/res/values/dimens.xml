@@ -2,9 +2,18 @@
 
 <resources>
 
-    <dimen name ="MargemAcima"   >  1dp </dimen>
-    <dimen name ="MargemDireita" >  2dp </dimen>
-    <dimen name ="MargemEsquerda">  2dp </dimen>
+    <dimen name ="MargemAcima"      >  1dp </dimen>
+    <dimen name ="MargemDireita"    >  2dp </dimen>
+    <dimen name ="MargemEsquerda"   >  2dp </dimen>
+
+    <dimen name ="RB_MargemEsquerda"> 20dp </dimen>
+    <dimen name ="RB_MargemTop"     >  5dp </dimen>
+    <dimen name ="RB_Altura"        > 30dp </dimen>
+
+    <dimen name ="TV_MargemTop"     > 6dp </dimen>
+    <dimen name ="TV_MargemTop2"    > 3dp </dimen>
+    <dimen name ="TV_TamanhoTexto"  > 20sp </dimen>
+    <dimen name ="TV_Altura"        > 45dp </dimen>
 
     <dimen name ="GuideEnd"      > 10dp </dimen>
     <dimen name ="GuideStart"    > 10dp </dimen>
