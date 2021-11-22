@@ -23,8 +23,9 @@ class MainActivity : AppCompatActivity() {
 
     private var quadMaior = arrayOf<Array<Int>>()
 
-    private var btnGeraJogo   : Button?     = null
-    private var btnAdaptaJogo : Button?     = null
+    private var btnGeraJogo   : Button? = null
+    private var btnAdaptaJogo : Button? = null
+    private var btnJogaJogo   : Button? = null
 
     private var intJogoAdaptar = 1
 
@@ -43,8 +44,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //--- Instancializações e inicializações
-        btnGeraJogo   = findViewById(R.id.btn_GeraJogo)
-        btnAdaptaJogo = findViewById(R.id.btn_AdaptaJogo)
+        btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
+        btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
+        btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
 
         //myScrollView  = findViewById(R.id.srcTextScrollView)
         //txtDadosJogo?.text = ""
@@ -64,7 +66,6 @@ class MainActivity : AppCompatActivity() {
 
         strLog = "-> Tap no btnGeraJogo"
         Log.d(cTAG, strLog)
-
         txtDadosJogo?.text = strLog
 
         //----------------------
@@ -84,7 +85,6 @@ class MainActivity : AppCompatActivity() {
 
         strLog = "-> Tap no btnAdaptaJogo"
         Log.d(cTAG, strLog)
-
         txtDadosJogo?.text = strLog
 
         //--- Adapta jogo
@@ -93,6 +93,20 @@ class MainActivity : AppCompatActivity() {
         //-----------------------
 
         if (++intJogoAdaptar > 4) intJogoAdaptar = 1
+
+    }
+
+    //--- Evento tapping no botão de adaptação de jogo
+    @Suppress("UNUSED_PARAMETER")
+    fun btnJogaJogoClick(view : View?) {
+
+        strLog = "-> Tap no btnJogaJogo"
+        Log.d(cTAG, strLog)
+        txtDadosJogo?.text = strLog
+
+        //------------
+        jogaJogo ()
+        //------------
 
     }
 
@@ -422,6 +436,17 @@ class MainActivity : AppCompatActivity() {
         //-----------------
         //listaQuadMaior()
         //-----------------
+
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // Funções para jogar o jogo
+    //----------------------------------------------------------------------------------------------
+    private fun jogaJogo () {
+
+        strLog = "\n-> Jogar Sodoku"
+        Log.d(cTAG, strLog)
+        txtDadosJogo?.text = "${txtDadosJogo?.text}$strLog"
 
     }
 

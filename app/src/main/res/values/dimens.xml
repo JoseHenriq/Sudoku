@@ -3,14 +3,15 @@
 <resources>
 
     <dimen name ="MargemAcima"   >  1dp </dimen>
-    <dimen name ="MargemDireita" >  5dp </dimen>
-    <dimen name ="MargemEsquerda">  5dp </dimen>
+    <dimen name ="MargemDireita" >  2dp </dimen>
+    <dimen name ="MargemEsquerda">  2dp </dimen>
 
     <dimen name ="GuideEnd"      > 10dp </dimen>
     <dimen name ="GuideStart"    > 10dp </dimen>
 
     <dimen name ="HeightBotao"   > 60dp </dimen>
     <dimen name ="WidthBotao"    >  0dp </dimen>
+    <dimen name ="TamanhoTxt"    > 15sp </dimen>
 
     <dimen name ="HeightBotao_"  > 40dp </dimen>
     <dimen name ="MargemAcima_"  >  0dp </dimen>

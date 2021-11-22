@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">Sudoku</string>
 
-    <string name="gera_novo_jogo">Gera</string>
-    <string name="adapta_jogo"   >Adapta</string>
-    <string name="tapBtnGeraJogo"><![CDATA[-> Tap no btnGeraJogo]]></string>
-    <string name="tapBtnAdaptaJogo"><![CDATA[-> Tap no btnAdaptaJogo]]></string>
+    <string name="gera_novo_jogo">Gerar</string>
+    <string name="adaptar_jogo"  >Adaptar</string>
+    <string name="jogar_jogo"    >Jogar</string>
+
+    <string name="tapBtnGerarJogo"  ><![CDATA[-> Tap no btnGerarJogo]]></string>
+    <string name="tapBtnAdaptarJogo"><![CDATA[-> Tap no btnAdaptarJogo]]></string>
+    <string name="tapBtnJogarJogo"  ><![CDATA[-> Tap no btnJogarJogo]]></string>
 
 </resources>
