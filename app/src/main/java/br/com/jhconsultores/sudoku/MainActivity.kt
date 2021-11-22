@@ -1,5 +1,6 @@
 package br.com.jhconsultores.sudoku
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -99,6 +100,7 @@ class MainActivity : AppCompatActivity() {
     // Funções para a geração de jogos
     //----------------------------------------------------------------------------------------------
     //--- GeraJogo
+    @SuppressLint("SetTextI18n")
     private fun geraJogo() {
 
         //--- Instancializações e inicializações
@@ -270,6 +272,7 @@ class MainActivity : AppCompatActivity() {
     // Funções para a adaptação de jogos
     //----------------------------------------------------------------------------------------------
     //--- AdaptaJogo algoritmo 2
+    @SuppressLint("SetTextI18n")
     private fun adaptaJogoAlgoritmo2 () {
 
         val limAdaptaJogo   = 1    //20
@@ -532,6 +535,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- listaQuadMaior
+    @SuppressLint("SetTextI18n")
     private fun listaQuadMaior() {
 
         var strDados: String
