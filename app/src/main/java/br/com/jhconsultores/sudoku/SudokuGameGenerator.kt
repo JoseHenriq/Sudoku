@@ -2,18 +2,19 @@ package br.com.jhconsultores.sudoku
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.TextView
 
-class SudokuGameGenerator (private var txtDados : TextView?) {
+class SudokuGameGenerator {
 
     //----------------------------------------------------------------------------------------------
     //                         Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
     private val cTAG   = "Sudoku"
     private var strLog = ""
+    
+    var txtDados = ""
 
     private var quadMaiorRet  = arrayOf<Array<Int>>()
-    public var intJogoAdaptar = 1
+    var intJogoAdaptar = 1
 
     //----------------------------------------------------------------------------------------------
     // Funções para a geração de jogos; preset int[9][9] = { 0, 0, ..., 0 }
@@ -83,7 +84,7 @@ class SudokuGameGenerator (private var txtDados : TextView?) {
                 val strTmp = "-> Jogo ${contaTentaJogo + 1}: válido!"
                 Log.d(cTAG, strTmp)
 
-                txtDados?.text = "${txtDados?.text}\n$strTmp"
+                txtDados = "${txtDados}\n$strTmp"
 
                 //--------------------
                 listaQuadMaiorRet()
@@ -205,7 +206,7 @@ class SudokuGameGenerator (private var txtDados : TextView?) {
 
             val strTmp = "\n-> Adapta jogo com preset $intJogoAdaptar"
 
-            txtDados?.text = "${txtDados?.text}$strTmp"
+            txtDados = "${txtDados}$strTmp"
 
             //---------------------------------------
             inicQuadMaiorAdaptacao(intJogoAdaptar)
@@ -220,7 +221,7 @@ class SudokuGameGenerator (private var txtDados : TextView?) {
             strLog = "-> Jogo com preset $intJogoAdaptar adaptado:"
             Log.d(cTAG, strLog)
 
-            txtDados?.text = "${txtDados?.text}\n$strLog"
+            txtDados = "${txtDados}\n$strLog"
 
             //----------------------------------------
             if (flagJogoOk) { listaQuadMaiorRet() }
@@ -355,7 +356,7 @@ class SudokuGameGenerator (private var txtDados : TextView?) {
 
         strLog = "\n-> Jogar Sudoku"
         Log.d(cTAG, strLog)
-        txtDados?.text = "${txtDados?.text}$strLog"
+        txtDados = "${txtDados}$strLog"
 
     }
 
@@ -428,7 +429,7 @@ class SudokuGameGenerator (private var txtDados : TextView?) {
             Log.d(cTAG, strLog)
 
             val strDadosTmp = "\n" + strDados
-            txtDados?.text = "${txtDados?.text}$strDadosTmp"
+            txtDados = "${txtDados}$strDadosTmp"
 
         }
     }
