@@ -1,7 +1,5 @@
 package br.com.jhconsultores.sudoku
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,10 +9,6 @@ import android.widget.Button
 
 //import android.widget.ScrollView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-
-import br.com.jhconsultores.sudoku.SudokuBackTracking.solveSudoku
-import br.com.jhconsultores.sudoku.SudokuGameGenerator
 
 class MainActivity : AppCompatActivity() {
 
@@ -75,6 +69,20 @@ class MainActivity : AppCompatActivity() {
         //---------------------------
         txtDadosJogo?.append(sgg.txtDados)
 
+        var arIntNumsJogo = ArrayList <Int> ()
+        for (idxLin in 0..8) {
+            for (idxCol in 0..8) {
+                arIntNumsJogo += quadMaior[idxLin][idxCol]
+            }
+        }
+
+        val intent = Intent(this, JogarActivity::class.java)
+        intent.setAction("JogoGerado")
+        intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsJogo)
+        //----------------------
+        startActivity(intent)
+        //----------------------
+
     }
 
     //--- Evento tapping no botão de adaptação de jogo
@@ -95,6 +103,21 @@ class MainActivity : AppCompatActivity() {
 
         if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
 
+        var arIntNumsJogo = ArrayList <Int> ()
+        for (idxLin in 0..8) {
+            for (idxCol in 0..8) {
+                arIntNumsJogo += quadMaior[idxLin][idxCol]
+            }
+        }
+
+        val intent = Intent(this, JogarActivity::class.java)
+        intent.putExtra ("intNumPreset", intJogoAdaptar)
+        intent.setAction("JogoAdaptado")
+        intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsJogo)
+        //----------------------
+        startActivity(intent)
+        //----------------------
+
     }
 
     //--- Evento tapping no botão de adaptação de jogo
@@ -111,28 +134,6 @@ class MainActivity : AppCompatActivity() {
         sgg.jogaJogo ()
         //----------------
         txtDadosJogo?.append(sgg.txtDados)
-
-        /*
-        https://stackoverflow.com/questions/45518139/kotlin-android-start-new-activity
-        val intent = Intent(this, NextActivity::class.java)
-        // To pass any data to next activity
-        intent.putExtra("keyIdentifier", value)
-        // start your next activity
-        startActivity(intent)
-         */
-
-        var arIntNumsJogo = ArrayList <Int> ()
-        for (idxLin in 0..8) {
-            for (idxCol in 0..8) {
-                arIntNumsJogo += quadMaior[idxLin][idxCol]
-            }
-        }
-
-        val intent = Intent(this, JogarActivity::class.java)
-        intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsJogo)
-        //----------------------
-        startActivity(intent)
-        //----------------------
 
     }
 
