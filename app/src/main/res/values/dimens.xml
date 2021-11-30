@@ -25,4 +25,8 @@
     <dimen name ="HeightBotao_"  > 40dp </dimen>
     <dimen name ="MargemAcima_"  >  0dp </dimen>
 
+    <dimen name ="MargemAcimaBoard"      > 5dp </dimen>
+    <dimen name ="MargemEsquerdaBoard"   > 0dp </dimen>
+    <dimen name ="MargemDireitaBoard"    > 0dp </dimen>
+
 </resources>

@@ -13,4 +13,24 @@
 
     <string name="caractPerm">0123456789 </string>
 
+    <string name="menu_settings">Settings</string>
+
+    <!-- Content Description para ImageView -->
+    <string name="testeCanva3" >Sudoku Board</string>
+    <string name="numDisp"     >Quadro números disponíveis</string>
+
+    <!-- Legendas radioButtons -->
+    <string name="center"      >Center</string>
+    <string name="centerCrop"  >CenterCrop</string>
+    <string name="centerInside">CenterInside</string>
+    <string name="fitCenter"   >FitCenter</string>
+    <string name="fitStart"    >FitStart</string>
+    <string name="fitEnd"      >FitEnd</string>
+    <string name="fitXY"       >FitXY</string>
+
+    <!-- Legendas Buttons -->
+    <string name="rotate"      >Rotate</string>
+    <string name="texto"       > Inicia </string>
+    <string name="bitmap"      >  Reset </string>
+
 </resources>
