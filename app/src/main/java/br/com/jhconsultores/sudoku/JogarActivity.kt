@@ -21,7 +21,7 @@ class JogarActivity : Activity() {
     //----------------------------------------------------------------------------------------------
     //                        Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
-    private var cTAG = "CANVAS3"
+    private var cTAG = "Sudoku"
     private var strLog = ""
 
     private var intImageResource = 0
@@ -72,8 +72,8 @@ class JogarActivity : Activity() {
     private var intLinJogar   = 0
     private var flagJoga      = false
     private var arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-
-    //--- Preset 1
+    private var arArIntGab    = arrayOf<Array<Int>>()
+        //--- Preset 1
     private var idxPreset = 0
     private var arArIntPreset1 = arrayOf(
         intArrayOf(0, 0, 4, 6, 0, 5, 8, 0, 0),
@@ -132,7 +132,9 @@ class JogarActivity : Activity() {
     ) // Linha 8
     private var arArIntCopia = Array(9) { IntArray(9) }
 
-    private var Action = "JogoGerado"
+    private var action = "JogoGerado"
+
+    val sudoGameGen = SudokuGameGenerator ()
 
     //----------------------------------------------------------------------------------------------
     //                                     Eventos
@@ -146,22 +148,13 @@ class JogarActivity : Activity() {
         setContentView(R.layout.activity_jogar)
 
         //--- Recupera os dados recebidos via intent
-        /*
-        intent.putExtra ("intNumPreset", intJogoAdaptar)
-        intent.setAction("JogoAdaptado")      ou intent.setAction("JogoGerado")
-        intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsJogo)
-         */
-
-        Action = intent.action.toString()
-        if (Action.equals("JogoAdaptado")) {
+        action = intent.action.toString()
+        if (action == "JogoAdaptado") {
             idxPreset = intent.getIntExtra("intNumPreset", 0)
         }
-
-        var arIntNumsGab = ArrayList <Int> ()
-        arIntNumsGab     = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
-
-        //--- Armazena o gabarito em um array<array<int>>
-        if (Action.equals("JogoGerado")) {
+        val arIntNumsGab = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
+        // Armazena o gabarito em um array<array<int>>
+        if (action == "JogoGerado") {
 
             if (arIntNumsGab.size != 81) {
 
@@ -179,16 +172,24 @@ class JogarActivity : Activity() {
                     }
                 }
             }
+
+            //--- Prepara o quadMaior para o jogo: deixa com zeros onde o usuário irá jogar;
+            //    a qti de zeros será tão maior quanto o grau de dificuldade.
+
+
+
+
         }
+
+        /*
         else if (Action.equals("JogoAdaptado")) {
-
-
 
         }
         else {
 
 
         }
+        */
 
         //------------------------------------------------------------------------------------------
         // Objetos gráficos
@@ -401,21 +402,41 @@ class JogarActivity : Activity() {
                 flagJoga = false
                 arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
 
-                if (Action.equals("JogoAdaptado")) {
+                if (action == "JogoAdaptado") {
 
                     if (++idxPreset > 4) idxPreset = 1
 
                     when (idxPreset) {
-                        //--------------------------------------------
+                        //------------------------------------------------
                         1 -> arArIntNums = copiaArArInt(arArIntPreset1)
-                        //--------------------------------------------
+                        //------------------------------------------------
                         2 -> arArIntNums = copiaArArInt(arArIntPreset2)
-                        //--------------------------------------------
+                        //------------------------------------------------
                         3 -> arArIntNums = copiaArArInt(arArIntPreset3)
-                        //--------------------------------------------
+                        //------------------------------------------------
                         4 -> arArIntNums = copiaArArInt(arArIntPreset4)
-                        //--------------------------------------------
+                        //------------------------------------------------
                     }
+
+                    if (arArIntNums.size == 81) {
+
+                        for (idxLin in 0..8) {
+
+                            for (idxCol in 0..8) {
+
+                                arIntNumsGab[idxLin * 9 + idxCol] = arArIntNums[idxLin][idxCol]
+                                arArIntGab [idxLin][idxCol]       = arArIntNums[idxLin][idxCol]
+
+                            }
+                        }
+                    }
+
+                    //--- Gera o gabarito para o jogo sugerido (preset)
+                    //------------------------------------------------------------------------------
+                    val flagJogoOk = SudokuBackTracking.solveSudoku(arArIntGab, arArIntGab.size)
+                    //------------------------------------------------------------------------------
+
+
                 }
 
                 for (intLinha in 0..8) {
@@ -446,9 +467,9 @@ class JogarActivity : Activity() {
                 try {
 
                     //bmpJogo = myImage;   //.copy(Bitmap.Config.ARGB_8888, false);
-                    //------------------------------------
+                    //-----------------------------------
                     copiaBmpByBuffer(myImage, bmpJogo)
-                    //------------------------------------
+                    //-----------------------------------
                 } catch (exc: Exception) {
                     Log.d(cTAG, "Erro: " + exc.message)
                 }

@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private var txtDadosJogo : TextView?   = null
 
-    var sgg = SudokuGameGenerator ()
+    private var sgg = SudokuGameGenerator ()
 
     //----------------------------------------------------------------------------------------------
     // Eventos da MainActivity
@@ -59,25 +59,27 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
         txtDadosJogo?.text = strLog
 
+        //--- Gera um novo jogo
         //---------------------------
         sgg.inicQuadMaiorGeracao()
-        //---------------------------
-
-        //--- Gera um novo jogo
         //---------------------------
         quadMaior = sgg.geraJogo()
         //---------------------------
         txtDadosJogo?.append(sgg.txtDados)
 
-        var arIntNumsJogo = ArrayList <Int> ()
+        //--- Envia o jogo gerado para ser usado como gabarito
+        val arIntNumsJogo = ArrayList <Int> ()
         for (idxLin in 0..8) {
             for (idxCol in 0..8) {
+                //-------------------------------------------
                 arIntNumsJogo += quadMaior[idxLin][idxCol]
+                //-------------------------------------------
             }
         }
 
+        //--- Passa à atividade de Jogar
         val intent = Intent(this, JogarActivity::class.java)
-        intent.setAction("JogoGerado")
+        intent.action = "JogoGerado"
         intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsJogo)
         //----------------------
         startActivity(intent)
@@ -100,19 +102,21 @@ class MainActivity : AppCompatActivity() {
         quadMaior = sgg.adaptaJogoAlgoritmo2()
         //---------------------------------------
         txtDadosJogo?.append(sgg.txtDados)
-
+        //--- Se prepara para numa nova chamada passar ao próximo preset
         if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
 
-        var arIntNumsJogo = ArrayList <Int> ()
+        //--- Transfere o jogo gerado para um vetor
+        val arIntNumsJogo = ArrayList <Int> ()
         for (idxLin in 0..8) {
             for (idxCol in 0..8) {
                 arIntNumsJogo += quadMaior[idxLin][idxCol]
             }
         }
 
+        //--- Chama a atividade Jogar passando o gabarito do jogo
         val intent = Intent(this, JogarActivity::class.java)
         intent.putExtra ("intNumPreset", intJogoAdaptar)
-        intent.setAction("JogoAdaptado")
+        intent.action = "JogoAdaptado"
         intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsJogo)
         //----------------------
         startActivity(intent)
