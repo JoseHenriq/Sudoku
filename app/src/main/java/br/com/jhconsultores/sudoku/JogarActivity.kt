@@ -73,68 +73,95 @@ class JogarActivity : Activity() {
     private var flagJoga      = false
     private var arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
     private var arArIntGab    = arrayOf<Array<Int>>()
-        //--- Preset 1
+
     private var idxPreset = 0
+    //--- Preset 1
     private var arArIntPreset1 = arrayOf(
-        intArrayOf(0, 0, 4, 6, 0, 5, 8, 0, 0),
-        intArrayOf(6, 5, 0, 0, 8, 0, 0, 0, 0),
-        intArrayOf(0, 0, 8, 0, 4, 7, 6, 0, 5),
-        intArrayOf(2, 8, 0, 3, 5, 6, 0, 0, 0),
-        intArrayOf(7, 4, 0, 0, 0, 8, 2, 5, 6),
-        intArrayOf(5, 6, 0, 4, 7, 2, 9, 0, 8),
-        intArrayOf(8, 2, 5, 7, 0, 4, 3, 6, 0),
-        intArrayOf(4, 3, 6, 5, 2, 0, 0, 8, 0),
-        intArrayOf(0, 0, 0, 8, 6, 3, 5, 4, 2)
-    ) // Linha 8
+        arrayOf (0, 0, 4, 6, 0, 5, 8, 0, 0),
+        arrayOf (6, 5, 0, 0, 8, 0, 0, 0, 0),
+        arrayOf (0, 0, 8, 0, 4, 7, 6, 0, 5),
+        arrayOf (2, 8, 0, 3, 5, 6, 0, 0, 0),
+        arrayOf (7, 4, 0, 0, 0, 8, 2, 5, 6),
+        arrayOf (5, 6, 0, 4, 7, 2, 9, 0, 8),
+        arrayOf (8, 2, 5, 7, 0, 4, 3, 6, 0),
+        arrayOf (4, 3, 6, 5, 2, 0, 0, 8, 0),
+        arrayOf (0, 0, 0, 8, 6, 3, 5, 4, 2))
+    //--- Preset 2
     private var arArIntPreset2 = arrayOf(
-        intArrayOf(0, 6, 0, 7, 0, 8, 1, 9, 2),
-        intArrayOf(1, 0, 5, 2, 0, 0, 0, 0, 7),
-        intArrayOf(0, 2, 0, 0, 0, 6, 0, 0, 0),
-        intArrayOf(0, 5, 0, 9, 3, 0, 0, 4, 0),
-        intArrayOf(0, 0, 6, 5, 0, 2, 7, 8, 0),
-        intArrayOf(9, 7, 0, 0, 0, 0, 3, 2, 5),
-        intArrayOf(0, 0, 7, 4, 0, 0, 8, 0, 6),
-        intArrayOf(8, 9, 4, 0, 7, 0, 0, 0, 0),
-        intArrayOf(0, 1, 0, 3, 0, 0, 0, 7, 4)
-    ) // Linha 8
+        arrayOf (0, 6, 0, 7, 0, 8, 1, 9, 2),
+        arrayOf (1, 0, 5, 2, 0, 0, 0, 0, 7),
+        arrayOf (0, 2, 0, 0, 0, 6, 0, 0, 0),
+        arrayOf (0, 5, 0, 9, 3, 0, 0, 4, 0),
+        arrayOf (0, 0, 6, 5, 0, 2, 7, 8, 0),
+        arrayOf (9, 7, 0, 0, 0, 0, 3, 2, 5),
+        arrayOf (0, 0, 7, 4, 0, 0, 8, 0, 6),
+        arrayOf (8, 9, 4, 0, 7, 0, 0, 0, 0),
+        arrayOf (0, 1, 0, 3, 0, 0, 0, 7, 4))
+    //--- Preset 3
     private var arArIntPreset3 = arrayOf(
-        intArrayOf(0, 0, 3, 5, 0, 0, 4, 9, 0),
-        intArrayOf(7, 6, 0, 0, 0, 0, 5, 0, 1),
-        intArrayOf(0, 5, 4, 0, 7, 3, 6, 0, 8),
-        intArrayOf(0, 1, 0, 0, 0, 0, 3, 0, 0),
-        intArrayOf(0, 0, 7, 2, 6, 1, 0, 0, 0),
-        intArrayOf(2, 0, 6, 0, 9, 0, 0, 1, 4),
-        intArrayOf(6, 3, 2, 8, 5, 0, 0, 0, 0),
-        intArrayOf(4, 0, 0, 0, 0, 2, 8, 0, 6),
-        intArrayOf(8, 0, 5, 0, 0, 7, 2, 0, 0)
-    ) // Linha 8
+        arrayOf (0, 0, 3, 5, 0, 0, 4, 9, 0),
+        arrayOf (7, 6, 0, 0, 0, 0, 5, 0, 1),
+        arrayOf (0, 5, 4, 0, 7, 3, 6, 0, 8),
+        arrayOf (0, 1, 0, 0, 0, 0, 3, 0, 0),
+        arrayOf (0, 0, 7, 2, 6, 1, 0, 0, 0),
+        arrayOf (2, 0, 6, 0, 9, 0, 0, 1, 4),
+        arrayOf (6, 3, 2, 8, 5, 0, 0, 0, 0),
+        arrayOf (4, 0, 0, 0, 0, 2, 8, 0, 6),
+        arrayOf (8, 0, 5, 0, 0, 7, 2, 0, 0))
+    //--- Preset 4
     private var arArIntPreset4 = arrayOf(
-        intArrayOf(9, 0, 0, 8, 4, 1, 3, 0, 0),
-        intArrayOf(0, 0, 1, 9, 0, 0, 4, 2, 0),
-        intArrayOf(0, 0, 0, 2, 0, 0, 0, 1, 0),
-        intArrayOf(8, 7, 0, 1, 0, 0, 5, 4, 0),
-        intArrayOf(1, 5, 0, 3, 6, 0, 0, 0, 2),
-        intArrayOf(2, 0, 0, 0, 0, 0, 7, 6, 0),
-        intArrayOf(7, 2, 0, 0, 0, 5, 1, 9, 0),
-        intArrayOf(6, 3, 0, 0, 0, 0, 2, 0, 7),
-        intArrayOf(0, 1, 5, 7, 0, 2, 0, 0, 8)
-    ) // Linha 8
+        arrayOf (9, 0, 0, 8, 4, 1, 3, 0, 0),
+        arrayOf (0, 0, 1, 9, 0, 0, 4, 2, 0),
+        arrayOf (0, 0, 0, 2, 0, 0, 0, 1, 0),
+        arrayOf (8, 7, 0, 1, 0, 0, 5, 4, 0),
+        arrayOf (1, 5, 0, 3, 6, 0, 0, 0, 2),
+        arrayOf (2, 0, 0, 0, 0, 0, 7, 6, 0),
+        arrayOf (7, 2, 0, 0, 0, 5, 1, 9, 0),
+        arrayOf (6, 3, 0, 0, 0, 0, 2, 0, 7),
+        arrayOf (0, 1, 5, 7, 0, 2, 0, 0, 8))
+
+    //--- Preset para teste1
     private var arArIntNums = arrayOf(
-        intArrayOf(0, 0, 4, 6, 0, 5, 8, 0, 0),
-        intArrayOf(6, 5, 0, 0, 8, 0, 0, 0, 0),
-        intArrayOf(0, 0, 8, 0, 4, 7, 6, 0, 5),
-        intArrayOf(2, 8, 0, 3, 5, 6, 0, 0, 0),
-        intArrayOf(7, 4, 0, 0, 0, 8, 2, 5, 6),
-        intArrayOf(5, 6, 0, 4, 7, 2, 9, 0, 8),
-        intArrayOf(8, 2, 5, 7, 0, 4, 3, 6, 0),
-        intArrayOf(4, 3, 6, 5, 2, 0, 0, 8, 0),
-        intArrayOf(0, 0, 0, 8, 6, 3, 5, 4, 2)
-    ) // Linha 8
-    private var arArIntCopia = Array(9) { IntArray(9) }
+        arrayOf (0, 0, 4, 6, 0, 5, 8, 0, 0),
+        arrayOf (6, 5, 0, 0, 8, 0, 0, 0, 0),
+        arrayOf (0, 0, 8, 0, 4, 7, 6, 0, 5),
+        arrayOf (2, 8, 0, 3, 5, 6, 0, 0, 0),
+        arrayOf (7, 4, 0, 0, 0, 8, 2, 5, 6),
+        arrayOf (5, 6, 0, 4, 7, 2, 9, 0, 8),
+        arrayOf (8, 2, 5, 7, 0, 4, 3, 6, 0),
+        arrayOf (4, 3, 6, 5, 2, 0, 0, 8, 0),
+        arrayOf (0, 0, 0, 8, 6, 3, 5, 4, 2))
+
+    //--- Preset para teste2
+    /*
+    val cinema = arrayOf(
+        arrayOf(0, 0, 0, 0, 1),
+        arrayOf(0, 0, 0, 1, 1),
+        arrayOf(0, 0, 1, 1, 1),
+        arrayOf(0, 0, 0, 1, 1),
+        arrayOf(0, 0, 0, 0, 1))
+     */
+
+    /*
+    private var arArIntTst = arrayOf (
+        arrayOf ( 1, 6, 7, 9, 4, 3, 2, 5, 8 ),
+        arrayOf ( 8, 9, 5, 2, 1, 6, 3, 7, 4 ),
+        arrayOf ( 2, 4, 3, 7, 8, 5, 1, 9, 6 ),
+        arrayOf ( 4, 1, 8, 6, 2, 9, 5, 3, 7 ),
+        arrayOf ( 5, 3, 9, 8, 7, 4, 6, 1, 2 ),
+        arrayOf ( 7, 2, 6, 5, 3, 1, 4, 8, 9 ),
+        arrayOf ( 9, 7, 1, 4, 5, 2, 8, 6, 3 ),
+        arrayOf ( 3, 8, 4, 1, 6, 7, 9, 2, 5 ),
+        arrayOf ( 6, 5, 2, 3, 9, 8, 7, 4, 1 ))
+    */
+
+    private var arArIntCopia = Array(9) { Array(9) {0} }
+
+    private var arIntNumsGab = ArrayList<Int>()
 
     private var action = "JogoGerado"
 
-    val sudoGameGen = SudokuGameGenerator ()
+    //val sudoGameGen = SudokuGameGenerator ()
 
     //----------------------------------------------------------------------------------------------
     //                                     Eventos
@@ -149,12 +176,16 @@ class JogarActivity : Activity() {
 
         //--- Recupera os dados recebidos via intent
         action = intent.action.toString()
+
+        //--- "JogoAdaptado"
         if (action == "JogoAdaptado") {
             idxPreset = intent.getIntExtra("intNumPreset", 0)
         }
-        val arIntNumsGab = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
-        // Armazena o gabarito em um array<array<int>>
-        if (action == "JogoGerado") {
+        //--- "JogoGerado"
+        else if (action == "JogoGerado") {
+
+            // Armazena o gabarito em um array<int>
+            arIntNumsGab = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
 
             if (arIntNumsGab.size != 81) {
 
@@ -163,6 +194,7 @@ class JogarActivity : Activity() {
             }
             else {
 
+                // Armazena o gabarito em um array<array<int>> para processamento local
                 for (intLinha in 0..8) {
 
                     for (intCol in 0..8) {
@@ -180,16 +212,6 @@ class JogarActivity : Activity() {
             //--------------
 
         }
-
-        /*
-        else if (Action.equals("JogoAdaptado")) {
-
-        }
-        else {
-
-
-        }
-        */
 
         //------------------------------------------------------------------------------------------
         // Objetos gráficos
@@ -403,6 +425,7 @@ class JogarActivity : Activity() {
                 flagJoga = false
                 arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
 
+                //--- Jogo Adaptado
                 if (action == "JogoAdaptado") {
 
                     if (++idxPreset > 4) idxPreset = 1
@@ -436,6 +459,7 @@ class JogarActivity : Activity() {
                     //-------------------------------------------------------------------
                     val flagJogoOk = SudokuBackTracking.solveSudoku(arArIntGab, 81)
                     //-------------------------------------------------------------------
+                    if (flagJogoOk) Log.d(cTAG, "-> Resolvido utilizando backTracking")
 
                 }
 
@@ -489,7 +513,9 @@ class JogarActivity : Activity() {
 
             }
 
-            //--- Reset
+            //--------------------------------------------------------------------------------------
+            // Legenda do botão: Reset
+            //--------------------------------------------------------------------------------------
             else {
 
                 /*
@@ -507,9 +533,9 @@ class JogarActivity : Activity() {
 						{0, 0, 0, 8, 6, 3, 5, 4, 2}};   // Linha 8
 				 */
 
-                //------------------------------------------
+                //-----------------------------------------
                 arArIntNums = copiaArArInt(arArIntCopia)
-                //------------------------------------------
+                //-----------------------------------------
 
                 // Inicializa o board com os quadrados Sudoku
                 copiaBmpByBuffer(bmpSudokuBoard, myImage)
@@ -729,9 +755,9 @@ class JogarActivity : Activity() {
         //----------------------------------------------------------
         val xCoord = intCellwidth / 3 + xCell * intCellwidth
         //----------------------------------------------------------
-        strLog = "-> Coordenadas (Col = " + xCell + ", Linha: " + yCell + ") : (" + xCoord +
-                ", " + yCoord + ") = " + strTxt
-        Log.d(cTAG, strLog)
+        //strLog = "-> Coordenadas (Col = " + xCell + ", Linha: " + yCell + ") : (" + xCoord +
+        //        ", " + yCoord + ") = " + strTxt
+        //Log.d(cTAG, strLog)
 
         //-------------------------------------------------
         canvas!!.drawText(strTxt, xCoord.toFloat(), yCoord.toFloat(), pincel!!)
@@ -741,6 +767,7 @@ class JogarActivity : Activity() {
         //-------------------------------------------
         iViewSudokuBoard!!.setImageBitmap(myImage)
         //-------------------------------------------
+
     }
 
     //--- atualiza numDisp
@@ -806,32 +833,36 @@ class JogarActivity : Activity() {
     //----------------------------------------------------------------------------------------------
     // Outras
     //----------------------------------------------------------------------------------------------
+    //--- Prepara o jogo conforme Regras
     private fun preparaJogo() {
+
+        //---------------------------------------
+        // arArIntNums = copiaArArInt(arArIntTst)
+        //---------------------------------------
+
+        Log.d(cTAG, "-> Jogo antes da preparação:")
+        //-----------------------
+        listarQM (arArIntNums)
+        //-----------------------
 
         //------------------------------------------------------------------------------------------
         // Regra1: todos os Qm devem conter pelo menos dois zeros
         //------------------------------------------------------------------------------------------
-        Log.d(cTAG, "-> Preparação do jogo: Regra1")
-
         for (quadMenor in 0..8) {
 
             val arLinsQM = calcLinsQM(quadMenor)
             val arColsQM = calcColsQM(quadMenor)
 
-            var arIntCelQM = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
-
+            val arIntCelQM = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
             for (idxLin in 0..2) {
                 for (idxCol in 0..2) {
 
                     arIntCelQM[idxLin * 3 + idxCol] =
-                        arArIntNums[arLinsQM[idxLin]][arColsQM[idxCol]]
-
+                                                    arArIntNums[arLinsQM[idxLin]][arColsQM[idxCol]]
                 }
             }
-
             var intQtiZeros = 0
-            var arIntNumRnd = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-
+            val arIntNumRnd = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
             var flagQmOk = false
             while (!flagQmOk) {
 
@@ -845,8 +876,7 @@ class JogarActivity : Activity() {
                     if (arIntNumRnd[numRnd - 1] > 0) {
 
                         arIntNumRnd[numRnd - 1] = 0
-
-                        arIntCelQM[numRnd - 1] = 0
+                        arIntCelQM [numRnd - 1] = 0
 
                         flagNumOk = true
                         if (++intQtiZeros > 1) flagQmOk = true
@@ -854,6 +884,7 @@ class JogarActivity : Activity() {
                     }
                 }
             }
+
             for (linMenor in 0..2) {
 
                 for (colMenor in 0..2) {
@@ -864,29 +895,175 @@ class JogarActivity : Activity() {
                 }
             }
         }
-
-        //----------------------------------
-        //sudoGameGen.listaQM (arArIntNums)
-        //----------------------------------
+        Log.d(cTAG, "-> Jogo após a preparação conforme a Regra1:")
+        //-----------------------
+        listarQM (arArIntNums)
+        //-----------------------
 
         //------------------------------------------------------------------------------------------
         // Regra2: todas as linhas devem conter pelo menos dois zeros
         //------------------------------------------------------------------------------------------
-        Log.d(cTAG, "-> Preparação do jogo: Regra2")
+        for (intLinha in 0..8) {
 
-        //----------------------------------
-        //sudoGameGen.listaQM (arArIntNums)
-        //----------------------------------
+            val arIntNumRnd = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+            //--- Lê a linha toda e armazena-a num vetor
+            val arIntCelLin = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
+            for (intCol in 0..8) {arIntCelLin[intCol] = arArIntNums[intLinha][intCol]}
+
+            //--- Conta qtos zeros essa linha já tem
+            var intQtiZeros = 0
+            for (intCol in 0..8) { if (arIntCelLin[intCol] == 0) intQtiZeros++ }
+
+            //--- Enqto NÃO tiver pelo menos 2 zeros na linha, gera um índice aleatório e se o vetor
+            //    que controla os numRND tiver nesse índice valor diferente de zero, zera-o.
+            while (intQtiZeros < 2) {
+
+                var flagNumOk = false
+                while (!flagNumOk) {
+
+                    //--- Gera número aleatório sem repetição
+                    //-----------------------------
+                    val numRnd = (1..9).random()
+                    //-----------------------------
+                    if (arIntNumRnd[numRnd - 1] > 0) {
+
+                        arIntNumRnd[numRnd - 1] = 0
+                        if (arIntCelLin [numRnd - 1] > 0) { arIntCelLin [numRnd - 1] = 0 }
+
+                        flagNumOk = true
+                        intQtiZeros ++
+
+                    }
+                }
+            }
+
+            //--- Retorna as células à linha
+            for (idxColQM in 0..8) { arArIntNums[intLinha][idxColQM] = arIntCelLin[idxColQM] }
+
+        }
+        Log.d(cTAG, "-> Jogo após a preparação conforme a Regra2:")
+        //-----------------------
+        listarQM (arArIntNums)
+        //-----------------------
 
         //------------------------------------------------------------------------------------------
         // Regra3: todas as colunas devem conter pelo menos dois zeros
         //------------------------------------------------------------------------------------------
-        Log.d(cTAG, "-> Preparação do jogo: Regra3")
+        for (intCol in 0..8) {
 
+            //--- Vetor para evitar o uso de idx repetidos
+            val arIntNumRnd = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
 
-        //----------------------------------
-        //sudoGameGen.listaQM (arArIntNums)
-        //----------------------------------
+            //--- Lê a coluna toda e armazena-a num vetor
+            val arIntCelCol = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
+            for (intLinha in 0..8) {arIntCelCol[intLinha] = arArIntNums[intLinha][intCol]}
+
+            //--- Conta qtos zeros essa linha já tem
+            var intQtiZeros = 0
+            for (intLinha in 0..8) { if (arIntCelCol[intLinha] == 0) intQtiZeros++ }
+
+            //--- Enqto NÃO tiver pelo menos 2 zeros na linha, gera um índice aleatório e se o vetor
+            //    que controla os numRND tiver nesse índice valor diferente de zero, zera-o.
+            while (intQtiZeros < 2) {
+
+                var flagNumOk = false
+                while (!flagNumOk) {
+
+                    //--- Gera número aleatório sem repetição
+                    //-----------------------------
+                    val numRnd = (1..9).random()
+                    //-----------------------------
+                    if (arIntNumRnd[numRnd - 1] > 0) {
+
+                        arIntNumRnd[numRnd - 1] = 0
+                        if (arIntCelCol [numRnd - 1] > 0) { arIntCelCol [numRnd - 1] = 0 }
+
+                        flagNumOk = true
+                        intQtiZeros ++
+
+                    }
+                }
+            }
+
+            //--- Retorna as células à coluna
+            for (idxLinhaQM in 0..8) { arArIntNums[idxLinhaQM][intCol] = arIntCelCol[idxLinhaQM] }
+
+        }
+        Log.d(cTAG, "-> Jogo após a preparação conforme a Regra3:")
+        //-----------------------
+        listarQM (arArIntNums)
+        //-----------------------
+
+        //------------------------------------------------------------------------------------------
+        // Regra4: completa as casas com zero conforme o nível do jogo
+        //------------------------------------------------------------------------------------------
+        //--- Para a Regra4, determina a qtidd de Zeros no jogo
+        var intQtiZeros = 0
+        for (idxLin in 0..8) {
+            for (idxCol in 0..8) { if (arArIntNums[idxLin][idxCol] == 0) intQtiZeros++ }
+        }
+        Log.d(cTAG, "-> Quantidade de Zeros após a Regra3: $intQtiZeros")
+
+        /* Regra1 zera pelo menos 2 células para cada Qm;
+           Regra2 zera pelo menos 2 células a cada linha e
+           Regra3 zera pelo menos 2 células a cada coluna
+           a qtidd de zeros totalizou 26. Ficou muito fácil a solução.
+
+           Nos 4 presets-exemplos, a qtidd de zeros está entre 32 e 43
+         */
+
+        val intQtiMaxZeros = 40
+
+        //--- Vetor para evitar repetição de números Rnd
+        var arIntNumRnd = Array(81) { 0 }
+
+        for (idxConta in 0..80) {
+            arIntNumRnd [idxConta] = idxConta + 1
+            //Log.d(cTAG, "   [$idxConta] = ${arIntNumRnd [idxConta]}")
+        }
+        while (intQtiZeros < intQtiMaxZeros) {
+
+            Log.d(cTAG, "-> intQtiZeros = $intQtiZeros intQtiMaxZeros = $intQtiMaxZeros")
+
+            var flagNumOk = false
+            while (!flagNumOk) {
+
+                //--- Gera número aleatório sem repetição
+                //------------------------------
+                val numRnd = (0..81).random()
+                //------------------------------
+
+                Log.d(cTAG, "-> numRnd = $numRnd arIntNumRnd[numRnd]=${arIntNumRnd[numRnd]}" )
+                if (arIntNumRnd[numRnd] > 0) {
+
+                    arIntNumRnd[numRnd] = 0
+
+                    val intLinha  = numRnd / 9
+                    val intColuna = numRnd % 9
+                    if (arArIntNums[intLinha][intColuna] > 0) {
+
+                        arArIntNums[intLinha][intColuna] = 0
+                        intQtiZeros ++
+
+                    }
+                    Log.d(cTAG, "-> linha = $intLinha coluna = $intColuna" )
+
+                    flagNumOk = true
+
+                }
+            }
+        }
+        Log.d(cTAG, "-> Jogo após a preparação conforme a Regra4:")
+        //-----------------------
+        listarQM (arArIntNums)
+        //-----------------------
+
+        intQtiZeros = 0
+        for (idxLin in 0..8) {
+            for (idxCol in 0..8) { if (arArIntNums[idxLin][idxCol] == 0) intQtiZeros++ }
+        }
+        Log.d(cTAG, "-> Quantidade de Zeros após a Regra4: $intQtiZeros")
 
     }
 
@@ -1024,15 +1201,26 @@ class JogarActivity : Activity() {
     }
 
     //--- copiaArArInt
-    private fun copiaArArInt(arArIntPreset: Array<IntArray>): Array<IntArray> {
-        val arArIntTmp = Array(9) { IntArray(9) }
+    private fun copiaArArInt(arArIntPreset: Array<Array<Int>>): Array<Array<Int>> {
+
+        /* https://stackoverflow.com/questions/45199704/kotlin-2d-array-initialization
+            // A 6x5 array of Int, all set to 0.
+            var m = Array(6) {Array(5) {0} }
+         */
+
+        //-------------------------------------------------------
+        val arArIntTmp = Array (9) {Array (9) { 0 } }
+        //-------------------------------------------------------
+
         for (intLin in 0..8) {
             for (intCol in 0..8) {
-                arArIntTmp[intLin][intCol] = arArIntPreset[intLin][intCol]
+                arArIntTmp  [intLin][intCol] = arArIntPreset[intLin][intCol]
                 arArIntCopia[intLin][intCol] = arArIntPreset[intLin][intCol]
             }
         }
+
         return arArIntTmp
+
     }
 
     //--- apresentaGrandezasGraficas
@@ -1054,11 +1242,12 @@ class JogarActivity : Activity() {
 			int int_dyWidth  = m_size.x;
 			int int_dyHeight = m_size.y; */
 
+            Log.d(cTAG, "-> Grandezas gráficas:")
             val displayMetrics = this.resources.displayMetrics
-            val intDyWidth    = displayMetrics.heightPixels
-            val intDyHeight   = displayMetrics.widthPixels
+            val intDyWidth     = displayMetrics.heightPixels
+            val intDyHeight    = displayMetrics.widthPixels
 
-            strLog = "-> Display: Largura: " + intDyWidth  + " pixels, Altura  : " +
+            strLog = "   -Display: Largura: " + intDyWidth  + " pixels, Altura  : " +
                                                                            intDyHeight + " pixels"
             Log.d(cTAG, strLog)
 
@@ -1067,21 +1256,21 @@ class JogarActivity : Activity() {
             intMargleftdp = resources.getDimension(R.dimen.MargemEsquerda).toInt()
             intMargtoppx  = toPixels2(this, intmargTopDp.toFloat())
             intMargleftpx = toPixels2(this, intMargleftdp.toFloat())
-            strLog = "-> Margens: Acima  :  " + intMargtoppx + " pixels, Esquerda:    " +
+            strLog = "   -Margens: Acima  :  " + intMargtoppx + " pixels, Esquerda:    " +
                     intMargleftpx + " pixels"
             Log.d(cTAG, strLog)
 
             //--- Imagem Sudoku board
             intImgwidth  = bmpSudokuBoard!!.width
             intImgheight = bmpSudokuBoard!!.height
-            strLog = "-> Image  : Largura: " + intImgwidth + " pixels, Altura  :  " +
+            strLog = "   -Image  : Largura: " + intImgwidth + " pixels, Altura  :  " +
                     intImgheight + " pixels"
             Log.d(cTAG, strLog)
 
             //--- Células
             intCellwidth = intImgwidth / 9
             intCellheight = intImgheight / 9
-            strLog = "-> Célula : Largura:  " + intCellwidth + " pixels, Altura  :   " +
+            strLog = "   -Célula : Largura:  " + intCellwidth + " pixels, Altura  :   " +
                     intCellheight + " pixels"
             Log.d(cTAG, strLog)
         } catch (exc: Exception) {
@@ -1090,12 +1279,32 @@ class JogarActivity : Activity() {
         }
     }
 
-    // Converte um valor de dp para pixels
+    //--- Converte um valor em dp para pixels
     // https://stackoverflow.com/questions/29664993/how-to-convert-dp-px-sp-among-each-other-especially-dp-and-sp/42108115#42108115
     private fun toPixels2(context: Context, dip: Float): Int {
         val r = context.resources
         val metrics = r.displayMetrics
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, metrics).toInt()
+    }
+
+    //--- listarQM
+    private fun listarQM (quadMaior: Array<Array<Int>>) {
+
+        var strDados: String
+        for (linha in 0..8) {
+
+            strLog   = "linha $linha : "
+            strDados = ""
+            for (coluna in 0..8) {
+
+                val strTmp = "${quadMaior[linha][coluna]}" + if (coluna < 8) ", " else ""
+                strDados += strTmp
+                strLog   += strTmp
+
+            }
+            Log.d(cTAG, strLog)
+
+        }
     }
 
 }
