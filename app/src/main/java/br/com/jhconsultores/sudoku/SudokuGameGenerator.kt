@@ -13,7 +13,7 @@ class SudokuGameGenerator {
     
     var txtDados = ""
 
-    private var quadMaiorRet  = arrayOf<Array<Int>>()
+    private var quadMaiorRet = arrayOf<Array<Int>>()
     var intJogoAdaptar = 1
 
     //----------------------------------------------------------------------------------------------
@@ -86,9 +86,9 @@ class SudokuGameGenerator {
 
                 txtDados = "${txtDados}\n$strTmp"
 
-                //--------------------
-                listaQuadMaiorRet()
-                //--------------------
+                //----------------------
+                listaQM(quadMaiorRet)
+                //----------------------
                 flagJogoOk = true
 
             }
@@ -211,8 +211,8 @@ class SudokuGameGenerator {
             //---------------------------------------
             inicQuadMaiorAdaptacao(intJogoAdaptar)
             //---------------------------------------
-            listaQuadMaiorRet()
-            //--------------------
+            listaQM(quadMaiorRet)
+            //----------------------
 
             //---------------------------------------------------------------------------------
             val flagJogoOk = SudokuBackTracking.solveSudoku(quadMaiorRet, quadMaiorRet.size)
@@ -223,9 +223,9 @@ class SudokuGameGenerator {
 
             txtDados = "${txtDados}\n$strLog"
 
-            //----------------------------------------
-            if (flagJogoOk) { listaQuadMaiorRet() }
-            //----------------------------------------
+            //------------------------------------------
+            if (flagJogoOk) { listaQM(quadMaiorRet) }
+            //------------------------------------------
 
         }
 
@@ -412,7 +412,7 @@ class SudokuGameGenerator {
 
     //--- listaquadMaiorRet
     @SuppressLint("SetTextI18n")
-    fun listaQuadMaiorRet() {
+    fun listaQM (quadMaior: Array<Array<Int>>) {
 
         var strDados: String
         for (linha in 0..8) {
@@ -421,7 +421,7 @@ class SudokuGameGenerator {
             strDados = ""
             for (coluna in 0..8) {
 
-                val strTmp = "${quadMaiorRet[linha][coluna]}" + if (coluna < 8) ", " else ""
+                val strTmp = "${quadMaior[linha][coluna]}" + if (coluna < 8) ", " else ""
                 strDados += strTmp
                 strLog   += strTmp
 

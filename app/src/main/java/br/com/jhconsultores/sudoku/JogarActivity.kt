@@ -174,10 +174,10 @@ class JogarActivity : Activity() {
             }
 
             //--- Prepara o quadMaior para o jogo: deixa com zeros onde o usuário irá jogar;
-            //    a qti de zeros será tão maior quanto o grau de dificuldade.
-
-
-
+            //    a qti de zeros será tão maior quanto o grau de dificuldade for maior.
+            //--------------
+            preparaJogo()
+            //--------------
 
         }
 
@@ -289,6 +289,7 @@ class JogarActivity : Activity() {
             }
             false
         }
+
         // Números Disponíveis para se colocar em jogo
         iViewNumsDisps!!.setOnTouchListener { _, event -> //--- Só transfere o número para o board se estiver jogando
             if (flagJoga) {
@@ -367,7 +368,7 @@ class JogarActivity : Activity() {
         //------------------------------------------------------------------------------------------
         //--- Instancia objetos locais para os objetos XML
         val btnRotate = findViewById<View>(R.id.buttonRotate) as Button
-        val btnDraw = findViewById<View>(R.id.buttonDraw) as Button
+        val btnDraw   = findViewById<View>(R.id.buttonDraw) as Button
 
         //--- Listeners para o evento onClick dos buttons
         // Rotate
@@ -432,10 +433,9 @@ class JogarActivity : Activity() {
                     }
 
                     //--- Gera o gabarito para o jogo sugerido (preset)
-                    //------------------------------------------------------------------------------
-                    val flagJogoOk = SudokuBackTracking.solveSudoku(arArIntGab, arArIntGab.size)
-                    //------------------------------------------------------------------------------
-
+                    //-------------------------------------------------------------------
+                    val flagJogoOk = SudokuBackTracking.solveSudoku(arArIntGab, 81)
+                    //-------------------------------------------------------------------
 
                 }
 
@@ -806,7 +806,91 @@ class JogarActivity : Activity() {
     //----------------------------------------------------------------------------------------------
     // Outras
     //----------------------------------------------------------------------------------------------
-    //--- Determina a qual quadrado menor as coordenadas da célula pertencem
+    private fun preparaJogo() {
+
+        //------------------------------------------------------------------------------------------
+        // Regra1: todos os Qm devem conter pelo menos dois zeros
+        //------------------------------------------------------------------------------------------
+        Log.d(cTAG, "-> Preparação do jogo: Regra1")
+
+        for (quadMenor in 0..8) {
+
+            val arLinsQM = calcLinsQM(quadMenor)
+            val arColsQM = calcColsQM(quadMenor)
+
+            var arIntCelQM = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+            for (idxLin in 0..2) {
+                for (idxCol in 0..2) {
+
+                    arIntCelQM[idxLin * 3 + idxCol] =
+                        arArIntNums[arLinsQM[idxLin]][arColsQM[idxCol]]
+
+                }
+            }
+
+            var intQtiZeros = 0
+            var arIntNumRnd = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+            var flagQmOk = false
+            while (!flagQmOk) {
+
+                var flagNumOk = false
+                while (!flagNumOk) {
+
+                    //--- Gera número aleatório sem repetição
+                    //-----------------------------
+                    val numRnd = (1..9).random()
+                    //-----------------------------
+                    if (arIntNumRnd[numRnd - 1] > 0) {
+
+                        arIntNumRnd[numRnd - 1] = 0
+
+                        arIntCelQM[numRnd - 1] = 0
+
+                        flagNumOk = true
+                        if (++intQtiZeros > 1) flagQmOk = true
+
+                    }
+                }
+            }
+            for (linMenor in 0..2) {
+
+                for (colMenor in 0..2) {
+
+                    val valCel = arIntCelQM[linMenor * 3 + colMenor]
+                    arArIntNums[arLinsQM[linMenor]][arColsQM[colMenor]] = valCel
+
+                }
+            }
+        }
+
+        //----------------------------------
+        //sudoGameGen.listaQM (arArIntNums)
+        //----------------------------------
+
+        //------------------------------------------------------------------------------------------
+        // Regra2: todas as linhas devem conter pelo menos dois zeros
+        //------------------------------------------------------------------------------------------
+        Log.d(cTAG, "-> Preparação do jogo: Regra2")
+
+        //----------------------------------
+        //sudoGameGen.listaQM (arArIntNums)
+        //----------------------------------
+
+        //------------------------------------------------------------------------------------------
+        // Regra3: todas as colunas devem conter pelo menos dois zeros
+        //------------------------------------------------------------------------------------------
+        Log.d(cTAG, "-> Preparação do jogo: Regra3")
+
+
+        //----------------------------------
+        //sudoGameGen.listaQM (arArIntNums)
+        //----------------------------------
+
+    }
+
+    //--- Determina a qual quadrado menor uma célula pertence
     private fun determinaQm(linQM: Int, colQM: Int): Int {
 
         // Qm = (linha-mod(linha;3))+INT(col/3)  -> Excel/Algoritmos1
@@ -1013,4 +1097,5 @@ class JogarActivity : Activity() {
         val metrics = r.displayMetrics
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, metrics).toInt()
     }
+
 }
