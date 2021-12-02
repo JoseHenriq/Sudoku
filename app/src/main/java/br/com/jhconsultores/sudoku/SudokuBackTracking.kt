@@ -7,6 +7,8 @@ import kotlin.math.sqrt
  *   This code is contributed by MohanDas  */
 object SudokuBackTracking {
 
+    var intNumBackTracking = 0
+
     //--- Função principal
     fun solveSudoku(board: Array<Array<Int>>, n: Int): Boolean {
 
@@ -37,10 +39,12 @@ object SudokuBackTracking {
         // Else for each-row backtrack
         for (num in 1..n) {
             if (isSafe(board, row, col, num)) {
+
                 board[row][col] = num
-                //---------------------------
+                intNumBackTracking ++
+                //-----------------------------------------------
                 if (solveSudoku(board, n))
-                //---------------------------
+                //-----------------------------------------------
                 {
                     // print(board, n);
                     return true

@@ -217,16 +217,23 @@ class SudokuGameGenerator {
             //---------------------------------------------------------------------------------
             val flagJogoOk = SudokuBackTracking.solveSudoku(quadMaiorRet, quadMaiorRet.size)
             //---------------------------------------------------------------------------------
+            val intNumBackTracking = SudokuBackTracking.intNumBackTracking
+            if (flagJogoOk) {
 
-            strLog = "-> Jogo com preset $intJogoAdaptar adaptado:"
-            Log.d(cTAG, strLog)
+                strLog  = "-> Jogo com preset $intJogoAdaptar adaptado"
+                strLog += " ( backTracking = $intNumBackTracking ):"
+                Log.d(cTAG, strLog)
 
-            txtDados = "${txtDados}\n$strLog"
+                txtDados = "${txtDados}\n$strLog"
 
-            //------------------------------------------
-            if (flagJogoOk) { listaQM(quadMaiorRet) }
-            //------------------------------------------
+                listaQM(quadMaiorRet)
+            }
+            else {
 
+                strLog = "-> Jogo com preset $intJogoAdaptar NÃO adaptado!"
+                Log.d(cTAG, strLog)
+
+            }
         }
 
         return quadMaiorRet

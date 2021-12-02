@@ -211,6 +211,18 @@ class JogarActivity : Activity() {
             preparaJogo()
             //--------------
 
+            //--- Atribui um nível ao jogo
+            //-----------------------------------------
+            arArIntCopia = copiaArArInt(arArIntNums)
+            //--------------------------------------------------------------------------------
+            val flagSolOk = SudokuBackTracking.solveSudoku(arArIntCopia, arArIntCopia.size)
+            //--------------------------------------------------------------------------------
+            if (flagSolOk) {
+
+                val intNumBackTracking = SudokuBackTracking.intNumBackTracking
+                Log.d(cTAG,String.format("%s %d", "-> Nível do jogo gerado: ", intNumBackTracking))
+
+            }
         }
 
         //------------------------------------------------------------------------------------------
@@ -1024,7 +1036,7 @@ class JogarActivity : Activity() {
         }
         while (intQtiZeros < intQtiMaxZeros) {
 
-            Log.d(cTAG, "-> intQtiZeros = $intQtiZeros intQtiMaxZeros = $intQtiMaxZeros")
+            //Log.d(cTAG, "-> intQtiZeros = $intQtiZeros intQtiMaxZeros = $intQtiMaxZeros")
 
             var flagNumOk = false
             while (!flagNumOk) {
@@ -1034,7 +1046,7 @@ class JogarActivity : Activity() {
                 val numRnd = (0..81).random()
                 //------------------------------
 
-                Log.d(cTAG, "-> numRnd = $numRnd arIntNumRnd[numRnd]=${arIntNumRnd[numRnd]}" )
+                //Log.d(cTAG, "-> numRnd = $numRnd arIntNumRnd[numRnd]=${arIntNumRnd[numRnd]}" )
                 if (arIntNumRnd[numRnd] > 0) {
 
                     arIntNumRnd[numRnd] = 0
@@ -1047,7 +1059,7 @@ class JogarActivity : Activity() {
                         intQtiZeros ++
 
                     }
-                    Log.d(cTAG, "-> linha = $intLinha coluna = $intColuna" )
+                    //Log.d(cTAG, "-> linha = $intLinha coluna = $intColuna" )
 
                     flagNumOk = true
 
@@ -1057,13 +1069,9 @@ class JogarActivity : Activity() {
         Log.d(cTAG, "-> Jogo após a preparação conforme a Regra4:")
         //-----------------------
         listarQM (arArIntNums)
-        //-----------------------
-
-        intQtiZeros = 0
-        for (idxLin in 0..8) {
-            for (idxCol in 0..8) { if (arArIntNums[idxLin][idxCol] == 0) intQtiZeros++ }
-        }
-        Log.d(cTAG, "-> Quantidade de Zeros após a Regra4: $intQtiZeros")
+        //------------------------
+        quantZeros(arArIntNums)
+        //------------------------
 
     }
 
@@ -1242,14 +1250,14 @@ class JogarActivity : Activity() {
 			int int_dyWidth  = m_size.x;
 			int int_dyHeight = m_size.y; */
 
-            Log.d(cTAG, "-> Grandezas gráficas:")
+            //Log.d(cTAG, "-> Grandezas gráficas:")
             val displayMetrics = this.resources.displayMetrics
             val intDyWidth     = displayMetrics.heightPixels
             val intDyHeight    = displayMetrics.widthPixels
 
-            strLog = "   -Display: Largura: " + intDyWidth  + " pixels, Altura  : " +
-                                                                           intDyHeight + " pixels"
-            Log.d(cTAG, strLog)
+            //strLog = "   -Display: Largura: " + intDyWidth  + " pixels, Altura  : " +
+            //                                                               intDyHeight + " pixels"
+            //Log.d(cTAG, strLog)
 
             //--- Margens do board
             intmargTopDp  = resources.getDimension(R.dimen.MargemAcima).toInt()
@@ -1307,4 +1315,16 @@ class JogarActivity : Activity() {
         }
     }
 
+    //--- quantZeros
+    private fun quantZeros(arArIntJogo : Array <Array <Int>>) {
+
+        var intQtiZeros = 0
+        for (idxLin in 0..8) {
+            for (idxCol in 0..8) {
+                if (arArIntJogo[idxLin][idxCol] == 0) intQtiZeros++
+            }
+        }
+        Log.d(cTAG, "-> Quantidade de Zeros: $intQtiZeros")
+
+    }
 }

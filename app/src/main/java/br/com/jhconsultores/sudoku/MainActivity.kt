@@ -15,8 +15,8 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     //                         Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
-    private val cTAG     = "Sudoku"
-    private var strLog   = ""
+    private val cTAG   = "Sudoku"
+    private var strLog = ""
 
     private var quadMaior = arrayOf<Array<Int>>()
 
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private var intJogoAdaptar = 1
 
-    private var txtDadosJogo : TextView?   = null
+    private var txtDadosJogo : TextView? = null
 
     private var sgg = SudokuGameGenerator ()
 
@@ -105,14 +105,13 @@ class MainActivity : AppCompatActivity() {
         //--- Se prepara para numa nova chamada passar ao próximo preset
         if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
 
-        //--- Transfere o jogo gerado para um vetor
+        //--- Transfere o jogo adaptado para um vetor
         val arIntNumsJogo = ArrayList <Int> ()
         for (idxLin in 0..8) {
             for (idxCol in 0..8) {
                 arIntNumsJogo += quadMaior[idxLin][idxCol]
             }
         }
-
         //--- Chama a atividade Jogar passando o gabarito do jogo
         val intent = Intent(this, JogarActivity::class.java)
         intent.putExtra ("intNumPreset", intJogoAdaptar)
