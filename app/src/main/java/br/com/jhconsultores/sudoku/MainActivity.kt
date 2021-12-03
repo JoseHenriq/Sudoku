@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     private var btnAdaptaJogo : Button? = null
     private var btnJogaJogo   : Button? = null
 
+    private var strOpcaoJogo = "JogoGerado"
+
     private var intJogoAdaptar = 1
 
     private var txtDadosJogo : TextView? = null
@@ -38,10 +40,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //--------------
+        testaGenRnd ()
+        //--------------
+
         //--- Instancializações e inicializações
         btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
         btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
         btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
+
         txtDadosJogo  = findViewById(R.id.txtJogos)
 
     }
@@ -53,19 +60,72 @@ class MainActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun btnGeraJogoClick(view : View?) {
 
+        strOpcaoJogo = "JogoGerado"
+
         sgg.txtDados = ""
 
         strLog = "-> Tap no btnGeraJogo"
         Log.d(cTAG, strLog)
-        txtDadosJogo?.text = strLog
+        //txtDadosJogo?.text = strLog
 
         //--- Gera um novo jogo
         //---------------------------
-        sgg.inicQuadMaiorGeracao()
-        //---------------------------
         quadMaior = sgg.geraJogo()
         //---------------------------
+
         txtDadosJogo?.append(sgg.txtDados)
+
+    }
+
+    //--- Evento tapping no botão de adaptação de jogo
+    @Suppress("UNUSED_PARAMETER")
+    fun btnAdaptaJogoClick(view : View?) {
+
+        strOpcaoJogo = "JogoAdaptado"
+
+        sgg.txtDados = ""
+
+        strLog = "-> Tap no btnAdaptaJogo"
+        Log.d(cTAG, strLog)
+        txtDadosJogo?.text = strLog
+
+        //--- Adapta jogo
+        //---------------------------------------
+        quadMaior = sgg.adaptaJogoAlgoritmo2()
+        //---------------------------------------
+        txtDadosJogo?.append(sgg.txtDados)
+
+        //--- Se prepara para numa nova chamada passar ao próximo preset
+        // if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
+
+        /*
+        //--- Transfere o jogo adaptado para um vetor
+        val arIntNumsJogo = ArrayList <Int> ()
+        for (idxLin in 0..8) {
+            for (idxCol in 0..8) {
+                arIntNumsJogo += quadMaior[idxLin][idxCol]
+            }
+        }
+
+        //--- Chama a atividade Jogar passando o gabarito do jogo
+        val intent = Intent(this, JogarActivity::class.java)
+        intent.putExtra ("intNumPreset", intJogoAdaptar)
+        intent.action = "JogoAdaptado"
+        intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsJogo)
+        //----------------------
+        startActivity(intent)
+        //----------------------
+         */
+
+    }
+
+    //--- Evento tapping no botão de adaptação de jogo
+    @Suppress("UNUSED_PARAMETER")
+    fun btnJogaJogoClick(view : View?) {
+
+        strLog = "-> Tap no btnJogaJogo"
+        Log.d(cTAG, strLog)
+        txtDadosJogo?.text = strLog
 
         //--- Envia o jogo gerado para ser usado como gabarito
         val arIntNumsJogo = ArrayList <Int> ()
@@ -79,7 +139,7 @@ class MainActivity : AppCompatActivity() {
 
         //--- Passa à atividade de Jogar
         val intent = Intent(this, JogarActivity::class.java)
-        intent.action = "JogoGerado"
+        intent.action = strOpcaoJogo
         intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsJogo)
         //----------------------
         startActivity(intent)
@@ -87,56 +147,33 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //--- Evento tapping no botão de adaptação de jogo
-    @Suppress("UNUSED_PARAMETER")
-    fun btnAdaptaJogoClick(view : View?) {
+    //--- testaGenRnd
+    private fun testaGenRnd () {
 
-        sgg.txtDados = ""
+        //--- Inicializa um vetor para evitar repetição de números Rnd
+        val arIntNumRnd = Array(81) { 0 }
 
-        strLog = "-> Tap no btnAdaptaJogo"
-        Log.d(cTAG, strLog)
-        txtDadosJogo?.text = strLog
+        Log.d(cTAG, "-> Inicio do teste do gerador RND ...")
 
-        //--- Adapta jogo
-        //---------------------------------------
-        quadMaior = sgg.adaptaJogoAlgoritmo2()
-        //---------------------------------------
-        txtDadosJogo?.append(sgg.txtDados)
-        //--- Se prepara para numa nova chamada passar ao próximo preset
-        if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
+        var intContaZero = 0
+        do {
 
-        //--- Transfere o jogo adaptado para um vetor
-        val arIntNumsJogo = ArrayList <Int> ()
-        for (idxLin in 0..8) {
-            for (idxCol in 0..8) {
-                arIntNumsJogo += quadMaior[idxLin][idxCol]
+            //--- Gera número aleatório sem repetição
+            //---------------------------------
+            val numRnd = (1..81).random()
+            //---------------------------------
+            if (arIntNumRnd[numRnd - 1] == 0) { arIntNumRnd[numRnd - 1] = numRnd }
+
+            intContaZero = 0
+            for (idxNumRnd in 0..80) {
+
+                if (arIntNumRnd[idxNumRnd] == 0) intContaZero++
+
             }
-        }
-        //--- Chama a atividade Jogar passando o gabarito do jogo
-        val intent = Intent(this, JogarActivity::class.java)
-        intent.putExtra ("intNumPreset", intJogoAdaptar)
-        intent.action = "JogoAdaptado"
-        intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsJogo)
-        //----------------------
-        startActivity(intent)
-        //----------------------
 
-    }
+        } while (intContaZero > 0)
 
-    //--- Evento tapping no botão de adaptação de jogo
-    @Suppress("UNUSED_PARAMETER")
-    fun btnJogaJogoClick(view : View?) {
-
-        sgg.txtDados = ""
-
-        strLog = "-> Tap no btnJogaJogo"
-        Log.d(cTAG, strLog)
-        txtDadosJogo?.text = strLog
-
-        //----------------
-        sgg.jogaJogo ()
-        //----------------
-        txtDadosJogo?.append(sgg.txtDados)
+        Log.d(cTAG, "-> Fim do teste do gerador RND!")
 
     }
 

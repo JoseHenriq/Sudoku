@@ -11,6 +11,7 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import java.lang.Exception
@@ -23,6 +24,8 @@ class JogarActivity : Activity() {
     //----------------------------------------------------------------------------------------------
     private var cTAG = "Sudoku"
     private var strLog = ""
+
+    private var sdkGameGen = SudokuGameGenerator ()
 
     private var intImageResource = 0
     private var bmpInic: Bitmap? = null // Board vazio Lido a partir do resource/drawable
@@ -38,6 +41,8 @@ class JogarActivity : Activity() {
 
     private var iViewSudokuBoard: ImageView? = null
     private var iViewNumsDisps  : ImageView? = null
+
+    private var tvNivel : TextView? = null
 
     private var intTamTxt = 25 // 50 // 200
     private var scale     = 0f
@@ -174,6 +179,10 @@ class JogarActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jogar)
 
+        //--- Inicializa uma variável local
+        tvNivel = findViewById<View>(R.id.tv_Nivel) as TextView
+        tvNivel!!.text = ""
+
         //--- Recupera os dados recebidos via intent
         action = intent.action.toString()
 
@@ -203,25 +212,6 @@ class JogarActivity : Activity() {
 
                     }
                 }
-            }
-
-            //--- Prepara o quadMaior para o jogo: deixa com zeros onde o usuário irá jogar;
-            //    a qti de zeros será tão maior quanto o grau de dificuldade for maior.
-            //--------------
-            preparaJogo()
-            //--------------
-
-            //--- Atribui um nível ao jogo
-            //-----------------------------------------
-            arArIntCopia = copiaArArInt(arArIntNums)
-            //--------------------------------------------------------------------------------
-            val flagSolOk = SudokuBackTracking.solveSudoku(arArIntCopia, arArIntCopia.size)
-            //--------------------------------------------------------------------------------
-            if (flagSolOk) {
-
-                val intNumBackTracking = SudokuBackTracking.intNumBackTracking
-                Log.d(cTAG,String.format("%s %d", "-> Nível do jogo gerado: ", intNumBackTracking))
-
             }
         }
 
@@ -268,9 +258,9 @@ class JogarActivity : Activity() {
         //------------------------------
 
         //--- Desenha o SudokuBoard
-        //------------------------------------------------------
+        //-------------------------------------------------------
         desenhaSudokuBoard(true, canvasSudokuBoard!!)
-        //------------------------------------------------------
+        //-------------------------------------------------------
         copiaBmpByBuffer(bmpSudokuBoard, myImage)
         iViewSudokuBoard!!.setImageBitmap(myImage)
 
@@ -279,20 +269,20 @@ class JogarActivity : Activity() {
         iViewSudokuBoard!!.setOnTouchListener { _, event -> //--- Coordenadas tocadas
             val x = event.x.toInt()
             val y = event.y.toInt()
-            Log.d(cTAG, "touched x: $x")
-            Log.d(cTAG, "touched y: $y")
+            //Log.d(cTAG, "touched x: $x")
+            //Log.d(cTAG, "touched y: $y")
 
             //--- OffSets das coordenadas na Janela (???)
             val viewCoords = IntArray(2)
             iViewSudokuBoard!!.getLocationOnScreen(viewCoords)
-            Log.d(cTAG, "viewCoord x: " + viewCoords[0])
-            Log.d(cTAG, "viewCoord y: " + viewCoords[1])
+            //Log.d(cTAG, "viewCoord x: " + viewCoords[0])
+            //Log.d(cTAG, "viewCoord y: " + viewCoords[1])
 
             //--- Coordenadas reais (???)
             val imageX = x - viewCoords[0] // viewCoords[0] is the X coordinate
             val imageY = y - viewCoords[1] // viewCoords[1] is the y coordinate
-            Log.d(cTAG, "Real x: $imageX")
-            Log.d(cTAG, "Real y: $imageY")
+            //Log.d(cTAG, "Real x: $imageX")
+            //Log.d(cTAG, "Real y: $imageY")
 
             //--- Coordenadas da célula tocada
             val intCol = x / intCellwidth
@@ -300,9 +290,9 @@ class JogarActivity : Activity() {
             //-------------------------------------------
             val intNum = arArIntNums[intLinha][intCol]
             //-------------------------------------------
-            strLog = "-> Celula tocada: linha = " + intLinha + ", coluna = " + intCol +
-                    ", numero = " + intNum
-            Log.d(cTAG, strLog)
+            //strLog = "-> Celula tocada: linha = " + intLinha + ", coluna = " + intCol +
+            //        ", numero = " + intNum
+            //Log.d(cTAG, strLog)
 
             //--- Se a célula tocada contiver um número, "pinta" todas as células que contiverem
             //    o mesmo número.
@@ -472,6 +462,7 @@ class JogarActivity : Activity() {
                     val flagJogoOk = SudokuBackTracking.solveSudoku(arArIntGab, 81)
                     //-------------------------------------------------------------------
                     if (flagJogoOk) Log.d(cTAG, "-> Resolvido utilizando backTracking")
+                    tvNivel!!.text =  "${SudokuBackTracking.intNumBackTracking}"
 
                 }
 
@@ -530,26 +521,39 @@ class JogarActivity : Activity() {
             //--------------------------------------------------------------------------------------
             else {
 
-                /*
-				arArIntNums = new int [][]{
+                tvNivel!!.text = ""
 
-						// C0 C1 C2 C3 C4 C5 C6 C7 C8 <- colunas
-						{0, 0, 4, 6, 0, 5, 8, 0, 0},    // Linha 0
-						{6, 5, 0, 0, 8, 0, 0, 0, 0},    // Linha 1
-						{0, 0, 8, 0, 4, 7, 6, 0, 5},    // Linha 2
-						{2, 8, 0, 3, 5, 6, 0, 0, 0},    // Linha 3
-						{7, 4, 0, 0, 0, 8, 2, 5, 6},    // Linha 4
-						{5, 6, 0, 4, 7, 2, 9, 0, 8},    // Linha 5
-						{8, 2, 5, 7, 0, 4, 3, 6, 0},    // Linha 6
-						{4, 3, 6, 5, 2, 0, 0, 8, 0},    // Linha 7
-						{0, 0, 0, 8, 6, 3, 5, 4, 2}};   // Linha 8
-				 */
+                strLog = "-> Tap no btn \"Reset\" "
+                Log.d(cTAG, strLog)
+                //txtDadosJogo?.text = strLog
 
+                //--- Gera um novo jogo
+                //-----------------------------------
+                arArIntGab = sdkGameGen.geraJogo()
+                //-----------------------------------
+                //txtDadosJogo?.append(sdkGameGen.txtDados)
+
+                //---------------------------------------
+                arArIntNums = copiaArArInt(arArIntGab)
+                //---------------------------------------
+                preparaJogo()
+                //--------------
+
+                //--- Atribui um nível ao jogo
                 //-----------------------------------------
-                arArIntNums = copiaArArInt(arArIntCopia)
-                //-----------------------------------------
+                arArIntCopia = copiaArArInt(arArIntNums)
+                //--------------------------------------------------------------------------------
+                val flagSolOk = SudokuBackTracking.solveSudoku(arArIntCopia, arArIntCopia.size)
+                //--------------------------------------------------------------------------------
+                if (flagSolOk) {
 
-                // Inicializa o board com os quadrados Sudoku
+                    val intNumBackTracking = SudokuBackTracking.intNumBackTracking
+                    Log.d(cTAG,String.format("%s %d", "-> Nível do jogo gerado: ", intNumBackTracking))
+                    tvNivel!!.text =  "$intNumBackTracking"
+
+                }
+
+                //--- Inicializa o board com os quadrados Sudoku
                 copiaBmpByBuffer(bmpSudokuBoard, myImage)
 
                 //--- Atualiza imageView do layout
@@ -557,11 +561,9 @@ class JogarActivity : Activity() {
                 iViewSudokuBoard!!.setImageBitmap(myImage)
                 //-------------------------------------------
 
-                //bmpInic = myImage; //.copy(Bitmap.Config.ARGB_8888, false);
                 //------------------------------------
                 copiaBmpByBuffer(myImage, bmpInic)
                 //------------------------------------
-                //bmpJogo = myImage; //.copy(Bitmap.Config.ARGB_8888, false);
                 //------------------------------------
                 copiaBmpByBuffer(myImage, bmpJogo)
                 //------------------------------------
@@ -576,6 +578,7 @@ class JogarActivity : Activity() {
 
                 //--- Prepara para voltar ao texto
                 btnDraw.text = strLegTexto
+
             }
         }
     }
@@ -1011,11 +1014,15 @@ class JogarActivity : Activity() {
         // Regra4: completa as casas com zero conforme o nível do jogo
         //------------------------------------------------------------------------------------------
         //--- Para a Regra4, determina a qtidd de Zeros no jogo
-        var intQtiZeros = 0
-        for (idxLin in 0..8) {
-            for (idxCol in 0..8) { if (arArIntNums[idxLin][idxCol] == 0) intQtiZeros++ }
-        }
-        Log.d(cTAG, "-> Quantidade de Zeros após a Regra3: $intQtiZeros")
+        //var intQtiZeros = 0
+        //for (idxLin in 0..8) {
+        //    for (idxCol in 0..8) { if (arArIntNums[idxLin][idxCol] == 0) intQtiZeros++ }
+        //}
+        //Log.d(cTAG, "-> Quantidade de Zeros após a Regra3: $intQtiZeros")
+
+        //------------------------------------------
+        var intQtiZeros = quantZeros(arArIntNums)
+        //------------------------------------------
 
         /* Regra1 zera pelo menos 2 células para cada Qm;
            Regra2 zera pelo menos 2 células a cada linha e
@@ -1264,23 +1271,24 @@ class JogarActivity : Activity() {
             intMargleftdp = resources.getDimension(R.dimen.MargemEsquerda).toInt()
             intMargtoppx  = toPixels2(this, intmargTopDp.toFloat())
             intMargleftpx = toPixels2(this, intMargleftdp.toFloat())
-            strLog = "   -Margens: Acima  :  " + intMargtoppx + " pixels, Esquerda:    " +
-                    intMargleftpx + " pixels"
-            Log.d(cTAG, strLog)
+            //strLog = "   -Margens: Acima  :  " + intMargtoppx + " pixels, Esquerda:    " +
+            //        intMargleftpx + " pixels"
+            //Log.d(cTAG, strLog)
 
             //--- Imagem Sudoku board
             intImgwidth  = bmpSudokuBoard!!.width
             intImgheight = bmpSudokuBoard!!.height
-            strLog = "   -Image  : Largura: " + intImgwidth + " pixels, Altura  :  " +
-                    intImgheight + " pixels"
-            Log.d(cTAG, strLog)
+            //strLog = "   -Image  : Largura: " + intImgwidth + " pixels, Altura  :  " +
+            //        intImgheight + " pixels"
+            //Log.d(cTAG, strLog)
 
             //--- Células
             intCellwidth = intImgwidth / 9
             intCellheight = intImgheight / 9
-            strLog = "   -Célula : Largura:  " + intCellwidth + " pixels, Altura  :   " +
-                    intCellheight + " pixels"
-            Log.d(cTAG, strLog)
+            //strLog = "   -Célula : Largura:  " + intCellwidth + " pixels, Altura  :   " +
+            //        intCellheight + " pixels"
+            //Log.d(cTAG, strLog)
+
         } catch (exc: Exception) {
             val strErro = "Erro: " + exc.message
             Log.d(cTAG, strErro)
@@ -1316,7 +1324,7 @@ class JogarActivity : Activity() {
     }
 
     //--- quantZeros
-    private fun quantZeros(arArIntJogo : Array <Array <Int>>) {
+    private fun quantZeros(arArIntJogo : Array <Array <Int>>) : Int{
 
         var intQtiZeros = 0
         for (idxLin in 0..8) {
@@ -1326,5 +1334,8 @@ class JogarActivity : Activity() {
         }
         Log.d(cTAG, "-> Quantidade de Zeros: $intQtiZeros")
 
+        return intQtiZeros
+
     }
+
 }

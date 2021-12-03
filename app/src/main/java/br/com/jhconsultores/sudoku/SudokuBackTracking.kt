@@ -8,10 +8,17 @@ import kotlin.math.sqrt
 object SudokuBackTracking {
 
     var intNumBackTracking = 0
+    var flagZeraNivel      = true
 
     //--- Função principal
     fun solveSudoku(board: Array<Array<Int>>, n: Int): Boolean {
 
+        if (flagZeraNivel) {
+
+            intNumBackTracking = 0
+            flagZeraNivel      = false
+
+        }
         var row = -1
         var col = -1
         var isEmpty = true
