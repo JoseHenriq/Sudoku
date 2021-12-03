@@ -35,13 +35,14 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     // Eventos da MainActivity
     //----------------------------------------------------------------------------------------------
+    //--- onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         //--------------
-        testaGenRnd ()
+        // testaGenRnd ()
         //--------------
 
         //--- Instancializações e inicializações
@@ -50,6 +51,15 @@ class MainActivity : AppCompatActivity() {
         btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
 
         txtDadosJogo  = findViewById(R.id.txtJogos)
+
+    }
+
+    //--- onResume
+    override fun onResume() {
+
+        super.onResume()
+
+        txtDadosJogo!!.text = ""
 
     }
 
@@ -95,28 +105,6 @@ class MainActivity : AppCompatActivity() {
         //---------------------------------------
         txtDadosJogo?.append(sgg.txtDados)
 
-        //--- Se prepara para numa nova chamada passar ao próximo preset
-        // if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
-
-        /*
-        //--- Transfere o jogo adaptado para um vetor
-        val arIntNumsJogo = ArrayList <Int> ()
-        for (idxLin in 0..8) {
-            for (idxCol in 0..8) {
-                arIntNumsJogo += quadMaior[idxLin][idxCol]
-            }
-        }
-
-        //--- Chama a atividade Jogar passando o gabarito do jogo
-        val intent = Intent(this, JogarActivity::class.java)
-        intent.putExtra ("intNumPreset", intJogoAdaptar)
-        intent.action = "JogoAdaptado"
-        intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsJogo)
-        //----------------------
-        startActivity(intent)
-        //----------------------
-         */
-
     }
 
     //--- Evento tapping no botão de adaptação de jogo
@@ -128,6 +116,16 @@ class MainActivity : AppCompatActivity() {
         txtDadosJogo?.text = strLog
 
         //--- Envia o jogo gerado para ser usado como gabarito
+        val arIntNumsGab = ArrayList <Int> ()
+        for (idxLin in 0..8) {
+            for (idxCol in 0..8) {
+                //--------------------------------------------------
+                arIntNumsGab += sgg.quadMaiorRet[idxLin][idxCol]
+                //--------------------------------------------------
+            }
+        }
+
+        //--- Envia o jogo preparado para ser jogado
         val arIntNumsJogo = ArrayList <Int> ()
         for (idxLin in 0..8) {
             for (idxCol in 0..8) {
@@ -137,17 +135,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        //--- Passa à atividade de Jogar
+        //--- Prepara a Intent para chamar JogarActivity
         val intent = Intent(this, JogarActivity::class.java)
         intent.action = strOpcaoJogo
-        intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsJogo)
+        intent.putExtra("NivelDoJogo", SudokuBackTracking.intNumBackTracking)
+        intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
+        intent.putIntegerArrayListExtra("JogoPreparado",  arIntNumsJogo)
         //----------------------
         startActivity(intent)
         //----------------------
 
     }
 
-    //--- testaGenRnd
+    //--- Verifica o Gerador de números aleatórios
     private fun testaGenRnd () {
 
         //--- Inicializa um vetor para evitar repetição de números Rnd
@@ -160,7 +160,7 @@ class MainActivity : AppCompatActivity() {
 
             //--- Gera número aleatório sem repetição
             //---------------------------------
-            val numRnd = (1..81).random()
+            val numRnd = (1..81).random()      // gera de 1 a 81 inclusives
             //---------------------------------
             if (arIntNumRnd[numRnd - 1] == 0) { arIntNumRnd[numRnd - 1] = numRnd }
 

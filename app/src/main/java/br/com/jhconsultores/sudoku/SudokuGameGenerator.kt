@@ -13,8 +13,8 @@ class SudokuGameGenerator {
     
     var txtDados = ""
 
-    private var quadMaiorRet   = arrayOf<Array<Int>>()
-    private var intJogoAdaptar = 1
+    var quadMaiorRet   = arrayOf<Array<Int>>()
+    var intJogoAdaptar = 1
 
     private var arArIntNums = Array(9) { Array(9) {0} }
 
@@ -109,22 +109,22 @@ class SudokuGameGenerator {
             Log.d(cTAG, "-> Tentou $limTentaJogo jogos. Fim.")
 
         }
-        //--- Conseguiu! Atribui um nível ao jogo
+        //--- Conseguiu!
         else {
             //-----------------------------------------
-            arArIntNums = copiaArArInt(quadMaiorRet)
+            arArIntNums = copiaArArInt(quadMaiorRet)   // quadMaiorRet: jogo gerado (gabarito)
             //-----------------------------------------
 
-            //--- Prepara o quadMaior para o jogo: deixa com zeros onde o usuário irá jogar;
+            //--- Prepara arArIntNums para o jogo: deixa com zeros onde o usuário irá jogar;
             //    a qti de zeros será tão maior quanto o grau de dificuldade for maior.
             //--------------
-            preparaJogo()
+            preparaJogo()      // arArIntNums: jogo preparado para ser jogado
             //--------------
 
+            //--- Atribui um nível ao jogo: resolve o jogo pelo algoritmo backTracking;
+            //    considerarei como o "nível" do jogo, quantas vezes foi necessária a recursão.
             //---------------------------------------------
             var arArIntCopia = copiaArArInt(arArIntNums)
-            //---------------------------------------------
-
             //--------------------------------------------------------------------------------
             val flagSolOk = SudokuBackTracking.solveSudoku(arArIntCopia, arArIntCopia.size)
             //--------------------------------------------------------------------------------
@@ -146,7 +146,7 @@ class SudokuGameGenerator {
 
         txtDados = "${txtDados}\n"
 
-        return arArIntNums
+        return arArIntNums   // Jogo preparado
         
     }
 
@@ -740,11 +740,12 @@ class SudokuGameGenerator {
             while (!flagNumOk) {
 
                 //--- Gera número aleatório sem repetição
-                //------------------------------
-                val numRnd = (0..80).random()
-                //------------------------------
+                //---------------------------------
+                val numRndGen = (1..81).random()     // Gera os números aleatórios de 1 a 81 inclus.
+                //---------------------------------
 
                 //Log.d(cTAG, "-> numRnd = $numRnd arIntNumRnd[numRnd]=${arIntNumRnd[numRnd]}" )
+                val numRnd = numRndGen - 1
                 if (arIntNumRnd[numRnd] > 0) {
 
                     arIntNumRnd[numRnd] = 0

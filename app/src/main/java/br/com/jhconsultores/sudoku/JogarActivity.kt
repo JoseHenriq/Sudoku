@@ -22,7 +22,7 @@ class JogarActivity : Activity() {
     //----------------------------------------------------------------------------------------------
     //                        Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
-    private var cTAG = "Sudoku"
+    private var cTAG   = "Sudoku"
     private var strLog = ""
 
     private var sdkGameGen = SudokuGameGenerator ()
@@ -44,7 +44,7 @@ class JogarActivity : Activity() {
 
     private var tvNivel : TextView? = null
 
-    private var intTamTxt = 25 // 50 // 200
+    private var intTamTxt = 25 // 50 // 200 //
     private var scale     = 0f
 
     private var pincelVerde   = Paint()
@@ -76,8 +76,9 @@ class JogarActivity : Activity() {
     private var intColJogar   = 0
     private var intLinJogar   = 0
     private var flagJoga      = false
+
     private var arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-    private var arArIntGab    = arrayOf<Array<Int>>()
+    private var arArIntGab    = Array(9) { Array(9) {0} }
 
     private var idxPreset = 0
     //--- Preset 1
@@ -162,7 +163,8 @@ class JogarActivity : Activity() {
 
     private var arArIntCopia = Array(9) { Array(9) {0} }
 
-    private var arIntNumsGab = ArrayList<Int>()
+    private var arIntNumsGab  = ArrayList<Int>()
+    private var arIntNumsJogo = ArrayList<Int>()
 
     private var action = "JogoGerado"
 
@@ -179,41 +181,11 @@ class JogarActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jogar)
 
-        //--- Inicializa uma variável local
-        tvNivel = findViewById<View>(R.id.tv_Nivel) as TextView
-        tvNivel!!.text = ""
+        //--- Instancia objetos locais para os objetos XML
+        tvNivel       = findViewById<View>(R.id.tv_Nivel) as TextView
 
-        //--- Recupera os dados recebidos via intent
-        action = intent.action.toString()
-
-        //--- "JogoAdaptado"
-        if (action == "JogoAdaptado") {
-            idxPreset = intent.getIntExtra("intNumPreset", 0)
-        }
-        //--- "JogoGerado"
-        else if (action == "JogoGerado") {
-
-            // Armazena o gabarito em um array<int>
-            arIntNumsGab = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
-
-            if (arIntNumsGab.size != 81) {
-
-                Log.d(cTAG, "-> Erro: array com menos numeros que o necessário (81)")
-
-            }
-            else {
-
-                // Armazena o gabarito em um array<array<int>> para processamento local
-                for (intLinha in 0..8) {
-
-                    for (intCol in 0..8) {
-
-                        arArIntNums[intLinha][intCol] = arIntNumsGab[intLinha * 9 + intCol]
-
-                    }
-                }
-            }
-        }
+        val btnRotate = findViewById<View>(R.id.buttonRotate) as Button
+        val btnDraw   = findViewById<View>(R.id.buttonDraw) as Button
 
         //------------------------------------------------------------------------------------------
         // Objetos gráficos
@@ -223,29 +195,37 @@ class JogarActivity : Activity() {
 
         // Pincéis
         // ContextCompat.getColor(context, R.color.your_color);
-        pincelVerde.color     = ContextCompat.getColor(this, R.color.verde)       // resources.getColor(R.color.verde)
-        pincelBranco.color    = ContextCompat.getColor(this, R.color.white)       // resources.getColor(R.color.white)
-        pincelPreto.color     = ContextCompat.getColor(this, R.color.black)       // resources.getColor(R.color.black)
-        pincelAzul.color      = ContextCompat.getColor(this, R.color.azul)        // resources.getColor(R.color.azul)
-        pincelLaranja.color   = ContextCompat.getColor(this, R.color.laranja)     // resources.getColor(R.color.laranja)
-        pincelPurple200.color = ContextCompat.getColor(this, R.color.purple_200)  // resources.getColor(R.color.purple_200)
+        pincelVerde.color =
+            ContextCompat.getColor(this, R.color.verde)       // resources.getColor(R.color.verde)
+        pincelBranco.color =
+            ContextCompat.getColor(this, R.color.white)       // resources.getColor(R.color.white)
+        pincelPreto.color =
+            ContextCompat.getColor(this, R.color.black)       // resources.getColor(R.color.black)
+        pincelAzul.color =
+            ContextCompat.getColor(this, R.color.azul)        // resources.getColor(R.color.azul)
+        pincelLaranja.color =
+            ContextCompat.getColor(this, R.color.laranja)     // resources.getColor(R.color.laranja)
+        pincelPurple200.color = ContextCompat.getColor(
+            this,
+            R.color.purple_200
+        )  // resources.getColor(R.color.purple_200)
 
         // Bit maps
         intImageResource = R.drawable.sudoku_board_w360h315
         myImage = BitmapFactory.decodeResource(resources, intImageResource)
-                                                      .copy(Bitmap.Config.ARGB_8888, true)
+            .copy(Bitmap.Config.ARGB_8888, true)
         bmpJogo = BitmapFactory.decodeResource(resources, intImageResource)
-                                                      .copy(Bitmap.Config.ARGB_8888, true)
+            .copy(Bitmap.Config.ARGB_8888, true)
         bmpInic = BitmapFactory.decodeResource(resources, intImageResource)
-                                                      .copy(Bitmap.Config.ARGB_8888, true)
+            .copy(Bitmap.Config.ARGB_8888, true)
         bmpSudokuBoard = BitmapFactory.decodeResource(resources, intImageResource)
-                                                      .copy(Bitmap.Config.ARGB_8888, true)
+            .copy(Bitmap.Config.ARGB_8888, true)
         bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
-                                                      .copy(Bitmap.Config.ARGB_8888, true)
+            .copy(Bitmap.Config.ARGB_8888, true)
         // Canvas
-        canvas            = Canvas(myImage!!)
+        canvas = Canvas(myImage!!)
         canvasSudokuBoard = Canvas(bmpSudokuBoard!!)
-        canvasNumDisp     = Canvas(bmpNumDisp!!)
+        canvasNumDisp = Canvas(bmpNumDisp!!)
 
         //------------------------------------------------------------------------------------------
         // Images Views
@@ -257,14 +237,98 @@ class JogarActivity : Activity() {
         determinaGrandezasGraficas()
         //------------------------------
 
-        //--- Desenha o SudokuBoard
-        //-------------------------------------------------------
-        desenhaSudokuBoard(true, canvasSudokuBoard!!)
-        //-------------------------------------------------------
-        copiaBmpByBuffer(bmpSudokuBoard, myImage)
-        iViewSudokuBoard!!.setImageBitmap(myImage)
+        //------------------------------------------------------------------------------------------
+        // Inicializa dados para deixar o jogo pronto
+        //------------------------------------------------------------------------------------------
+        //--- Recupera os dados recebidos via intent
+        action = intent.action.toString()
 
-        //--- Listeners para o evento onTouch dos ImageViews
+        // Armazena o gabarito em um array<int>
+        arIntNumsGab  = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
+        arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as ArrayList<Int>
+
+        // Gabarito inválido
+        if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
+
+            Log.d(cTAG, "-> Erro: array(s) com menos numeros que o necessário (81)")
+
+        }
+        // Gabarito e jogo válido
+        else {
+
+            var flagJogoOk = true
+
+            //--- "JogoGerado"
+            if (action == "JogoGerado") {
+
+                // Armazena o gabarito em um Array<Array<Int>> para processamento local
+                for (intLinha in 0..8) {
+
+                    for (intCol in 0..8) {
+
+                        arArIntNums[intLinha][intCol] = arIntNumsJogo[intLinha * 9 + intCol]
+                        arArIntGab[intLinha][intCol] = arIntNumsGab[intLinha * 9 + intCol]
+
+                    }
+                }
+            }
+
+            //--- "JogoAdaptado"
+            else if (action == "JogoAdaptado") {
+
+                idxPreset = intent.getIntExtra("intNumPreset", 0)
+
+                if (++idxPreset > 4) idxPreset = 1
+
+                when (idxPreset) {
+                    //------------------------------------------------
+                    1 -> arArIntNums = copiaArArInt(arArIntPreset1)
+                    //------------------------------------------------
+                    2 -> arArIntNums = copiaArArInt(arArIntPreset2)
+                    //------------------------------------------------
+                    3 -> arArIntNums = copiaArArInt(arArIntPreset3)
+                    //------------------------------------------------
+                    4 -> arArIntNums = copiaArArInt(arArIntPreset4)
+                    //------------------------------------------------
+                }
+
+                //--- Gera o gabarito para o jogo sugerido (preset)
+                arArIntGab = copiaArArInt(arArIntNums)
+                //---------------------------------------------------------------
+                flagJogoOk = SudokuBackTracking.solveSudoku(arArIntGab, 81)
+                //---------------------------------------------------------------
+
+                if (flagJogoOk) Log.d(cTAG, "-> Resolvido utilizando backTracking")
+                tvNivel!!.text = "${SudokuBackTracking.intNumBackTracking}"
+
+                if (arArIntNums.size == 81) {
+
+                    for (idxLin in 0..8) {
+
+                        for (idxCol in 0..8) {
+
+                            arIntNumsGab[idxLin * 9 + idxCol] = arArIntNums[idxLin][idxCol]
+                            arArIntGab[idxLin][idxCol] = arArIntNums[idxLin][idxCol]
+
+                        }
+                    }
+                }
+            } // Fim de JogoAdaptado
+
+            //-----------------------------------------
+            arArIntCopia = copiaArArInt(arArIntNums)
+            //-----------------------------------------
+
+            arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+            //-------------
+            iniciaJogo()
+            //-------------
+
+        } // Fim de gabarito recebido via intent ok
+
+        //------------------------------------------------------------------------------------------
+        // Listeners para o evento onTouch dos ImageViews
+        //------------------------------------------------------------------------------------------
         // SudokuBoard
         iViewSudokuBoard!!.setOnTouchListener { _, event -> //--- Coordenadas tocadas
             val x = event.x.toInt()
@@ -327,9 +391,9 @@ class JogarActivity : Activity() {
                 //					int intLinha = y / int_CellHeight;
                 val intNum = intCol + 1
                 val intQtidd = arIntNumsDisp[intNum - 1]
-                strLog = "-> Celula tocada em NumDisp: coluna = " + intCol +
-                        ", qtidd = " + intQtidd
-                Log.d(cTAG, strLog)
+                //strLog = "-> Celula tocada em NumDisp: coluna = " + intCol +
+                //        ", qtidd = " + intQtidd
+                //Log.d(cTAG, strLog)
 
                 //--- Verifica se ainda tem desse número para jogar e se esse número é válido.
                 val flagNumValido : Boolean
@@ -340,16 +404,16 @@ class JogarActivity : Activity() {
                     //----------------------------------------------------------
                     val intQuadMenor = determinaQm(intLinJogar, intColJogar)
                     //----------------------------------------------------------
-                    Log.d(
-                        cTAG, "-> linhaJogar= " + intLinJogar + " colJogar= " +
-                                intColJogar + " Qm = " + intQuadMenor
-                    )
+                    //Log.d(
+                    //    cTAG, "-> linhaJogar= " + intLinJogar + " colJogar= " +
+                    //            intColJogar + " Qm = " + intQuadMenor )
+
                     // Verifica se esse número ainda não existe no seu Qm e nem no seu QM
                     //-------------------------------------------------------------------------------
                     flagNumValido = verifValidade(intQuadMenor, intLinJogar, intColJogar, intNum)
                     //-------------------------------------------------------------------------------
                     if (flagNumValido) {
-                        Log.d(cTAG, "-> Número válido; será incluído no Sudoku board.")
+                        //Log.d(cTAG, "-> Número válido; será incluído no Sudoku board.")
 
                         //--- Atualiza o Sudoku board
                         //-------------------------------------------------------
@@ -379,35 +443,18 @@ class JogarActivity : Activity() {
                         mostraNumsIguais(intNum)
                         //--------------------------
                         flagJoga = false
-                    } else {
-                        Log.d(cTAG, "-> Número NÃO válido; NÃO será incluído no Sudoku board.")
                     }
+                    //else {
+                    //    Log.d(cTAG, "-> Número NÃO válido; NÃO será incluído no Sudoku board.")
+                    //}
                 }
             }
             false
         }
 
         //------------------------------------------------------------------------------------------
-        // Buttons
+        // Listeners para o evento onClick dos buttons
         //------------------------------------------------------------------------------------------
-        //--- Instancia objetos locais para os objetos XML
-        val btnRotate = findViewById<View>(R.id.buttonRotate) as Button
-        val btnDraw   = findViewById<View>(R.id.buttonDraw) as Button
-
-        //--- Listeners para o evento onClick dos buttons
-        // Rotate
-        btnRotate.setOnClickListener {
-            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                intGraus += 30
-                if (intGraus >= 360) intGraus = 0
-                val fLargura = (iViewSudokuBoard!!.width shr 1).toFloat() // Divide por 2
-                val fAltura = (iViewSudokuBoard!!.height shr 1).toFloat() // Divide por 2
-                iViewSudokuBoard!!.pivotX = fLargura
-                iViewSudokuBoard!!.pivotY = fAltura
-                iViewSudokuBoard!!.rotation = intGraus.toFloat()
-            //}
-        }
-
         // Texto / Bit Map
         btnDraw.setOnClickListener {
 
@@ -419,97 +466,8 @@ class JogarActivity : Activity() {
             //--------------------------------------------------------------------------------------
             if (btnDraw.text == strLegTexto) {
 
-                iViewSudokuBoard!!.setImageBitmap(bmpSudokuBoard)
-                copiaBmpByBuffer(bmpSudokuBoard, myImage)
-                copiaBmpByBuffer(myImage, bmpJogo)
-
-                //--- Escreve um preset para adaptação de jogo no Sudoku board
-                flagJoga = false
-                arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-
-                //--- Jogo Adaptado
-                if (action == "JogoAdaptado") {
-
-                    if (++idxPreset > 4) idxPreset = 1
-
-                    when (idxPreset) {
-                        //------------------------------------------------
-                        1 -> arArIntNums = copiaArArInt(arArIntPreset1)
-                        //------------------------------------------------
-                        2 -> arArIntNums = copiaArArInt(arArIntPreset2)
-                        //------------------------------------------------
-                        3 -> arArIntNums = copiaArArInt(arArIntPreset3)
-                        //------------------------------------------------
-                        4 -> arArIntNums = copiaArArInt(arArIntPreset4)
-                        //------------------------------------------------
-                    }
-
-                    if (arArIntNums.size == 81) {
-
-                        for (idxLin in 0..8) {
-
-                            for (idxCol in 0..8) {
-
-                                arIntNumsGab[idxLin * 9 + idxCol] = arArIntNums[idxLin][idxCol]
-                                arArIntGab [idxLin][idxCol]       = arArIntNums[idxLin][idxCol]
-
-                            }
-                        }
-                    }
-
-                    //--- Gera o gabarito para o jogo sugerido (preset)
-                    //-------------------------------------------------------------------
-                    val flagJogoOk = SudokuBackTracking.solveSudoku(arArIntGab, 81)
-                    //-------------------------------------------------------------------
-                    if (flagJogoOk) Log.d(cTAG, "-> Resolvido utilizando backTracking")
-                    tvNivel!!.text =  "${SudokuBackTracking.intNumBackTracking}"
-
-                }
-
-                for (intLinha in 0..8) {
-                    for (intCol in 0..8) {
-                        //-------------------------------------------
-                        val intNum = arArIntNums[intLinha][intCol]
-                        //-------------------------------------------
-                        if (intNum > 0) {
-                            val strTexto = intNum.toString()
-                            pincelAzul.textSize = intTamTxt * scale // 50 // 200
-                            //-------------------------------------------------------
-                            escreveCelula(intLinha, intCol, strTexto, pincelAzul)
-                            //-------------------------------------------------------
-                            arIntNumsDisp[intNum - 1]--
-                        }
-                    }
-                }
-                iViewSudokuBoard!!.setImageBitmap(myImage)
-                Log.d(cTAG, "-> Array qtidd de jogos disponível por número:")
-                for (intIdxNum in 0..8) {
-                    val intQtiJogos = arIntNumsDisp[intIdxNum]
-                    Log.d(cTAG, String.format("   %s %d %d", "Num", intIdxNum + 1, intQtiJogos))
-                }
-
-                //-------------------
-                atualizaNumDisp()
-                //-------------------
-                try {
-
-                    //bmpJogo = myImage;   //.copy(Bitmap.Config.ARGB_8888, false);
-                    //-----------------------------------
-                    copiaBmpByBuffer(myImage, bmpJogo)
-                    //-----------------------------------
-                } catch (exc: Exception) {
-                    Log.d(cTAG, "Erro: " + exc.message)
-                }
-
-                //--- Canvas
-                canvasNumDisp = Canvas(bmpNumDisp!!)
-                for (intIndx in 0..8) {
-                    pincelBranco.textSize = intTamTxt * scale // 50 // 200
-                    //-------------------
-                    atualizaNumDisp()
-                    //-------------------
-                }
-                iViewNumsDisps!!.setImageBitmap(bmpNumDisp)
+                iViewSudokuBoard!!.isEnabled = true
+                iViewNumsDisps!!.isEnabled   = true
 
                 //--- Prepara para voltar ao bitmap
                 btnDraw.text = strLegBitMap
@@ -525,62 +483,35 @@ class JogarActivity : Activity() {
 
                 strLog = "-> Tap no btn \"Reset\" "
                 Log.d(cTAG, strLog)
-                //txtDadosJogo?.text = strLog
 
-                //--- Gera um novo jogo
-                //-----------------------------------
-                arArIntGab = sdkGameGen.geraJogo()
-                //-----------------------------------
-                //txtDadosJogo?.append(sdkGameGen.txtDados)
-
-                //---------------------------------------
-                arArIntNums = copiaArArInt(arArIntGab)
-                //---------------------------------------
-                preparaJogo()
-                //--------------
-
-                //--- Atribui um nível ao jogo
                 //-----------------------------------------
-                arArIntCopia = copiaArArInt(arArIntNums)
-                //--------------------------------------------------------------------------------
-                val flagSolOk = SudokuBackTracking.solveSudoku(arArIntCopia, arArIntCopia.size)
-                //--------------------------------------------------------------------------------
-                if (flagSolOk) {
+                arArIntNums = copiaArArInt(arArIntCopia)
+                //-----------------------------------------
 
-                    val intNumBackTracking = SudokuBackTracking.intNumBackTracking
-                    Log.d(cTAG,String.format("%s %d", "-> Nível do jogo gerado: ", intNumBackTracking))
-                    tvNivel!!.text =  "$intNumBackTracking"
-
-                }
-
-                //--- Inicializa o board com os quadrados Sudoku
-                copiaBmpByBuffer(bmpSudokuBoard, myImage)
-
-                //--- Atualiza imageView do layout
-                //-------------------------------------------
-                iViewSudokuBoard!!.setImageBitmap(myImage)
-                //-------------------------------------------
-
-                //------------------------------------
-                copiaBmpByBuffer(myImage, bmpInic)
-                //------------------------------------
-                //------------------------------------
-                copiaBmpByBuffer(myImage, bmpJogo)
-                //------------------------------------
-
-                //--- Atualiza imageView dos números disponíveis
-                bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
-                    .copy(Bitmap.Config.ARGB_8888, true)
-                //--------------------------------------
-                iViewNumsDisps!!.setImageBitmap(bmpNumDisp)
-                //--------------------------------------
                 arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+                //-------------
+                iniciaJogo()
+                //-------------
 
                 //--- Prepara para voltar ao texto
                 btnDraw.text = strLegTexto
 
             }
         }
+
+        // Rotate
+        btnRotate.setOnClickListener {
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            intGraus += 30
+            if (intGraus >= 360) intGraus = 0
+            val fLargura = (iViewSudokuBoard!!.width shr 1).toFloat() // Divide por 2
+            val fAltura = (iViewSudokuBoard!!.height shr 1).toFloat() // Divide por 2
+            iViewSudokuBoard!!.pivotX = fLargura
+            iViewSudokuBoard!!.pivotY = fAltura
+            iViewSudokuBoard!!.rotation = intGraus.toFloat()
+            //}
+        }
+
     }
 
     //----------------------------------------------------------------------------------------------
@@ -686,9 +617,9 @@ class JogarActivity : Activity() {
         }
 
         //--- Atualiza a imageView do layout
-        //-------------------------------------
+        //-------------------------------------------
         iViewSudokuBoard!!.setImageBitmap(myImage)
-        //-------------------------------------
+        //-------------------------------------------
     }
 
     //--- mostraCelAJogar
@@ -774,9 +705,9 @@ class JogarActivity : Activity() {
         //        ", " + yCoord + ") = " + strTxt
         //Log.d(cTAG, strLog)
 
-        //-------------------------------------------------
+        //------------------------------------------------------------------------
         canvas!!.drawText(strTxt, xCoord.toFloat(), yCoord.toFloat(), pincel!!)
-        //-------------------------------------------------
+        //------------------------------------------------------------------------
 
         //--- Atualiza a imageView do layout
         //-------------------------------------------
@@ -787,6 +718,7 @@ class JogarActivity : Activity() {
 
     //--- atualiza numDisp
     private fun atualizaNumDisp() {
+
         val intOffSet = 3
 
         //--- Pinta as células
@@ -798,7 +730,9 @@ class JogarActivity : Activity() {
             //- Canto inferior direito do quadrado
             val intXInfDir = intXSupEsq + intCellwidth - intOffSet
             val intYInfDir = intCellheight - intOffSet
-            val intQtidd = arIntNumsDisp[intIdxCel]
+            //------------------------------------------
+            val intQtidd   = arIntNumsDisp[intIdxCel]
+            //------------------------------------------
             val pincelPintar = if (intQtidd > 0) pincelVerde else pincelBranco
             try {
                 //-----------------------------------------------------------------------------------
@@ -831,18 +765,20 @@ class JogarActivity : Activity() {
                 //--- Escreve o número na célula
                 val yCoord = intCellheight * 3 / 4
                 val xCoord = intCellwidth / 3 + intIdxCel * intCellwidth
-                //--- Escreve o valor na célula
+
                 val strTxt = (intIdxCel + 1).toString()
-                //--------------------------------------------------------------
+
+                pincelBranco.textSize = intTamTxt * scale
+                //----------------------------------------------------------------------------------
                 canvasNumDisp!!.drawText(strTxt, xCoord.toFloat(), yCoord.toFloat(), pincelBranco)
-                //--------------------------------------------------------------
+                //----------------------------------------------------------------------------------
             }
         }
 
         //--- Atualiza a imageView do layout
-        //--------------------------------------
+        //--------------------------------------------
         iViewNumsDisps!!.setImageBitmap(bmpNumDisp)
-        //--------------------------------------
+        //--------------------------------------------
     }
 
     //----------------------------------------------------------------------------------------------
@@ -1335,6 +1271,79 @@ class JogarActivity : Activity() {
         Log.d(cTAG, "-> Quantidade de Zeros: $intQtiZeros")
 
         return intQtiZeros
+
+    }
+
+    //--- iniciaJogo
+    private fun iniciaJogo() {
+
+        //*** Nesse ponto, arArIntNums (rascunho do jogo) e arArIntGab (gabarito) deverão estar Ok.
+        Log.d(cTAG, "-> Inicia o jogo")
+        Log.d(cTAG, "-> Jogo:")
+        //----------------------
+        listarQM(arArIntNums)
+        //----------------------
+        Log.d(cTAG, "-> Gabarito:")
+        //---------------------
+        listarQM(arArIntGab)
+        //---------------------
+
+        //--- Desenha o SudokuBoard
+        //-------------------------------------------------------
+        desenhaSudokuBoard(true, canvasSudokuBoard!!)
+        //-------------------------------------------------------
+        copiaBmpByBuffer(bmpSudokuBoard, myImage)
+        copiaBmpByBuffer(bmpSudokuBoard, bmpInic)
+        copiaBmpByBuffer(myImage, bmpJogo)
+
+        iViewSudokuBoard!!.setImageBitmap(myImage)
+
+        //--- Apresenta os números disponíveis
+        flagJoga = false
+        arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+
+        for (intLinha in 0..8) {
+
+            for (intCol in 0..8) {
+
+                //-------------------------------------------
+                val intNum = arArIntNums[intLinha][intCol]
+                //-------------------------------------------
+                if (intNum > 0) {
+
+                    val strTexto = intNum.toString()
+                    pincelAzul.textSize = intTamTxt * scale // 50 // 200
+                    //------------------------------------------------------
+                    escreveCelula(intLinha, intCol, strTexto, pincelAzul)
+                    //------------------------------------------------------
+                    arIntNumsDisp[intNum - 1]--
+
+                }
+            }
+        }
+        iViewSudokuBoard!!.setImageBitmap(myImage)
+
+        //------------------------------------
+        copiaBmpByBuffer(myImage, bmpJogo)
+        //------------------------------------
+
+        iViewSudokuBoard!!.isEnabled = false
+        iViewNumsDisps!!.isEnabled   = false
+
+        Log.d(cTAG, "-> Array qtidd de jogos disponível por número:")
+        for (intIdxNum in 0..8) {
+
+            val intQtiJogos = arIntNumsDisp[intIdxNum]
+            Log.d(cTAG, String.format("   %s %d %d", "Num", intIdxNum + 1, intQtiJogos))
+
+        }
+
+        //------------------
+        atualizaNumDisp()
+        //------------------
+
+        //--- Inicializa variável local
+        tvNivel!!.text = "${SudokuBackTracking.intNumBackTracking}"
 
     }
 
