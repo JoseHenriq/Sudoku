@@ -1,20 +1,25 @@
 package br.com.jhconsultores.sudoku
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
-import android.graphics.*
-import android.os.Build
 import android.os.Bundle
+
+import android.graphics.*
+import android.widget.*
+
+import android.content.Context
+import android.os.Build
+
 import android.util.Log
 import android.util.TypedValue
+
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+
+import android.annotation.SuppressLint
+import android.os.SystemClock
+import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+
 import java.lang.Exception
 import java.nio.IntBuffer
 
@@ -23,122 +28,128 @@ class JogarActivity : Activity() {
     //----------------------------------------------------------------------------------------------
     //                        Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
-    private var cTAG     = "Sudoku"
-    private var strLog   = ""
+    private var cTAG = "Sudoku"
+    private var strLog = ""
     private var strToast = ""
 
     private var intImageResource = 0
     private var bmpInic: Bitmap? = null // Board vazio Lido a partir do resource/drawable
-    private var bmpJogo: Bitmap? = null // Preenchido com o preset ou jogo gerado ANTES dos novos números
+    private var bmpJogo: Bitmap? = null // Preset ou jogo gerado ANTES dos novos números
 
-    private var myImage        : Bitmap? = null // Preenchido com o preset ou jogo gerado e novos números
-    private var bmpNumDisp     : Bitmap? = null
-    private var bmpSudokuBoard : Bitmap? = null
+    private var myImage: Bitmap?    = null // Preenchido com o preset ou jogo gerado e novos números
+    private var bmpNumDisp: Bitmap? = null
+    private var bmpSudokuBoard: Bitmap? = null
 
-    private var canvas           : Canvas? = null
-    private var canvasNumDisp    : Canvas? = null
+    private var canvas: Canvas? = null
+    private var canvasNumDisp: Canvas? = null
     private var canvasSudokuBoard: Canvas? = null
 
     private var iViewSudokuBoard: ImageView? = null
-    private var iViewNumsDisps  : ImageView? = null
+    private var iViewNumsDisps: ImageView? = null
 
-    private var tvNivel : TextView? = null
-    private var tvErros : TextView? = null
+    private var tvNivel: TextView? = null
+    private var tvErros: TextView? = null
     private var intContaErro = 0
 
     private var intTamTxt = 25 // 50 // 200 //
-    private var scale     = 0f
+    private var scale = 0f
 
-    private var pincelVerde   = Paint()
-    private var pincelBranco  = Paint()
-    private var pincelPreto   = Paint()
-    private var pincelAzul    = Paint()
+    private var pincelVerde = Paint()
+    private var pincelBranco = Paint()
+    private var pincelPreto = Paint()
+    private var pincelAzul = Paint()
     private var pincelLaranja = Paint()
     private var pincelPurple200 = Paint()
 
     //--- Medidas
     //- Células do board
-    private var intCellwidth  = 0
+    private var intCellwidth = 0
     private var intCellheight = 0
 
     //- Margens do board
-    private var intmargTopDp  = 0
+    private var intmargTopDp = 0
     private var intMargleftdp = 0
-    private var intMargtoppx  = 0
+    private var intMargtoppx = 0
     private var intMargleftpx = 0
 
     //- Imagem Sudoku board
-    private var intImgwidth  = 0
+    private var intImgwidth = 0
     private var intImgheight = 0
 
-    //--- Para o rotate
-    private var intGraus = 0
-
     //--- Controle de jogadas
-    private var intColJogar   = 0
-    private var intLinJogar   = 0
-    private var flagJoga      = false
+    private var intColJogar = 0
+    private var intLinJogar = 0
+    private var flagJoga = false
 
     private var arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-    private var arArIntGab    = Array(9) { Array(9) {0} }
+    private var arArIntGab = Array(9) { Array(9) { 0 } }
 
     private var idxPreset = 0
+
     //--- Preset 1
     private var arArIntPreset1 = arrayOf(
-        arrayOf (0, 0, 4, 6, 0, 5, 8, 0, 0),
-        arrayOf (6, 5, 0, 0, 8, 0, 0, 0, 0),
-        arrayOf (0, 0, 8, 0, 4, 7, 6, 0, 5),
-        arrayOf (2, 8, 0, 3, 5, 6, 0, 0, 0),
-        arrayOf (7, 4, 0, 0, 0, 8, 2, 5, 6),
-        arrayOf (5, 6, 0, 4, 7, 2, 9, 0, 8),
-        arrayOf (8, 2, 5, 7, 0, 4, 3, 6, 0),
-        arrayOf (4, 3, 6, 5, 2, 0, 0, 8, 0),
-        arrayOf (0, 0, 0, 8, 6, 3, 5, 4, 2))
+        arrayOf(0, 0, 4, 6, 0, 5, 8, 0, 0),
+        arrayOf(6, 5, 0, 0, 8, 0, 0, 0, 0),
+        arrayOf(0, 0, 8, 0, 4, 7, 6, 0, 5),
+        arrayOf(2, 8, 0, 3, 5, 6, 0, 0, 0),
+        arrayOf(7, 4, 0, 0, 0, 8, 2, 5, 6),
+        arrayOf(5, 6, 0, 4, 7, 2, 9, 0, 8),
+        arrayOf(8, 2, 5, 7, 0, 4, 3, 6, 0),
+        arrayOf(4, 3, 6, 5, 2, 0, 0, 8, 0),
+        arrayOf(0, 0, 0, 8, 6, 3, 5, 4, 2)
+    )
+
     //--- Preset 2
     private var arArIntPreset2 = arrayOf(
-        arrayOf (0, 6, 0, 7, 0, 8, 1, 9, 2),
-        arrayOf (1, 0, 5, 2, 0, 0, 0, 0, 7),
-        arrayOf (0, 2, 0, 0, 0, 6, 0, 0, 0),
-        arrayOf (0, 5, 0, 9, 3, 0, 0, 4, 0),
-        arrayOf (0, 0, 6, 5, 0, 2, 7, 8, 0),
-        arrayOf (9, 7, 0, 0, 0, 0, 3, 2, 5),
-        arrayOf (0, 0, 7, 4, 0, 0, 8, 0, 6),
-        arrayOf (8, 9, 4, 0, 7, 0, 0, 0, 0),
-        arrayOf (0, 1, 0, 3, 0, 0, 0, 7, 4))
+        arrayOf(0, 6, 0, 7, 0, 8, 1, 9, 2),
+        arrayOf(1, 0, 5, 2, 0, 0, 0, 0, 7),
+        arrayOf(0, 2, 0, 0, 0, 6, 0, 0, 0),
+        arrayOf(0, 5, 0, 9, 3, 0, 0, 4, 0),
+        arrayOf(0, 0, 6, 5, 0, 2, 7, 8, 0),
+        arrayOf(9, 7, 0, 0, 0, 0, 3, 2, 5),
+        arrayOf(0, 0, 7, 4, 0, 0, 8, 0, 6),
+        arrayOf(8, 9, 4, 0, 7, 0, 0, 0, 0),
+        arrayOf(0, 1, 0, 3, 0, 0, 0, 7, 4)
+    )
+
     //--- Preset 3
     private var arArIntPreset3 = arrayOf(
-        arrayOf (0, 0, 3, 5, 0, 0, 4, 9, 0),
-        arrayOf (7, 6, 0, 0, 0, 0, 5, 0, 1),
-        arrayOf (0, 5, 4, 0, 7, 3, 6, 0, 8),
-        arrayOf (0, 1, 0, 0, 0, 0, 3, 0, 0),
-        arrayOf (0, 0, 7, 2, 6, 1, 0, 0, 0),
-        arrayOf (2, 0, 6, 0, 9, 0, 0, 1, 4),
-        arrayOf (6, 3, 2, 8, 5, 0, 0, 0, 0),
-        arrayOf (4, 0, 0, 0, 0, 2, 8, 0, 6),
-        arrayOf (8, 0, 5, 0, 0, 7, 2, 0, 0))
+        arrayOf(0, 0, 3, 5, 0, 0, 4, 9, 0),
+        arrayOf(7, 6, 0, 0, 0, 0, 5, 0, 1),
+        arrayOf(0, 5, 4, 0, 7, 3, 6, 0, 8),
+        arrayOf(0, 1, 0, 0, 0, 0, 3, 0, 0),
+        arrayOf(0, 0, 7, 2, 6, 1, 0, 0, 0),
+        arrayOf(2, 0, 6, 0, 9, 0, 0, 1, 4),
+        arrayOf(6, 3, 2, 8, 5, 0, 0, 0, 0),
+        arrayOf(4, 0, 0, 0, 0, 2, 8, 0, 6),
+        arrayOf(8, 0, 5, 0, 0, 7, 2, 0, 0)
+    )
+
     //--- Preset 4
     private var arArIntPreset4 = arrayOf(
-        arrayOf (9, 0, 0, 8, 4, 1, 3, 0, 0),
-        arrayOf (0, 0, 1, 9, 0, 0, 4, 2, 0),
-        arrayOf (0, 0, 0, 2, 0, 0, 0, 1, 0),
-        arrayOf (8, 7, 0, 1, 0, 0, 5, 4, 0),
-        arrayOf (1, 5, 0, 3, 6, 0, 0, 0, 2),
-        arrayOf (2, 0, 0, 0, 0, 0, 7, 6, 0),
-        arrayOf (7, 2, 0, 0, 0, 5, 1, 9, 0),
-        arrayOf (6, 3, 0, 0, 0, 0, 2, 0, 7),
-        arrayOf (0, 1, 5, 7, 0, 2, 0, 0, 8))
+        arrayOf(9, 0, 0, 8, 4, 1, 3, 0, 0),
+        arrayOf(0, 0, 1, 9, 0, 0, 4, 2, 0),
+        arrayOf(0, 0, 0, 2, 0, 0, 0, 1, 0),
+        arrayOf(8, 7, 0, 1, 0, 0, 5, 4, 0),
+        arrayOf(1, 5, 0, 3, 6, 0, 0, 0, 2),
+        arrayOf(2, 0, 0, 0, 0, 0, 7, 6, 0),
+        arrayOf(7, 2, 0, 0, 0, 5, 1, 9, 0),
+        arrayOf(6, 3, 0, 0, 0, 0, 2, 0, 7),
+        arrayOf(0, 1, 5, 7, 0, 2, 0, 0, 8)
+    )
 
     //--- Preset para teste1
     private var arArIntNums = arrayOf(
-        arrayOf (0, 0, 4, 6, 0, 5, 8, 0, 0),
-        arrayOf (6, 5, 0, 0, 8, 0, 0, 0, 0),
-        arrayOf (0, 0, 8, 0, 4, 7, 6, 0, 5),
-        arrayOf (2, 8, 0, 3, 5, 6, 0, 0, 0),
-        arrayOf (7, 4, 0, 0, 0, 8, 2, 5, 6),
-        arrayOf (5, 6, 0, 4, 7, 2, 9, 0, 8),
-        arrayOf (8, 2, 5, 7, 0, 4, 3, 6, 0),
-        arrayOf (4, 3, 6, 5, 2, 0, 0, 8, 0),
-        arrayOf (0, 0, 0, 8, 6, 3, 5, 4, 2))
+        arrayOf(0, 0, 4, 6, 0, 5, 8, 0, 0),
+        arrayOf(6, 5, 0, 0, 8, 0, 0, 0, 0),
+        arrayOf(0, 0, 8, 0, 4, 7, 6, 0, 5),
+        arrayOf(2, 8, 0, 3, 5, 6, 0, 0, 0),
+        arrayOf(7, 4, 0, 0, 0, 8, 2, 5, 6),
+        arrayOf(5, 6, 0, 4, 7, 2, 9, 0, 8),
+        arrayOf(8, 2, 5, 7, 0, 4, 3, 6, 0),
+        arrayOf(4, 3, 6, 5, 2, 0, 0, 8, 0),
+        arrayOf(0, 0, 0, 8, 6, 3, 5, 4, 2)
+    )
 
     //--- Preset para teste2
     /*
@@ -163,14 +174,18 @@ class JogarActivity : Activity() {
         arrayOf ( 6, 5, 2, 3, 9, 8, 7, 4, 1 ))
     */
 
-    private var arArIntCopia = Array(9) { Array(9) {0} }
+    private var arArIntCopia = Array(9) { Array(9) { 0 } }
 
-    private var arIntNumsGab  = ArrayList<Int>()
+    private var arIntNumsGab = ArrayList<Int>()
     private var arIntNumsJogo = ArrayList<Int>()
 
     private var action = "JogoGerado"
-
+    //private var crono  = Chronometer(this)
     //val sudoGameGen = SudokuGameGenerator ()
+    //private var crono : Chronometer? = null  //(this)
+    private var strCronoInic = ""
+    //private var strCronoLeit = ""
+    private var timeStopped : Long = 0L
 
     //----------------------------------------------------------------------------------------------
     //                                     Eventos
@@ -187,8 +202,23 @@ class JogarActivity : Activity() {
         tvNivel = findViewById<View>(R.id.tv_Nivel) as TextView
         tvErros = findViewById<View>(R.id.tv_Erros) as TextView
 
-        val btnReset   = findViewById<View>(R.id.btnReset) as Button
-        val btnInicia  = findViewById<View>(R.id.btnInicia) as Button
+        strCronoInic = resources.getString(R.string.crono_inic)
+        //strCronoLeit = resources.getString(R.string.crono_inic)
+
+        //-------------------------------------
+        val crono = Chronometer(this)
+        //-------------------------------------
+
+        val btnReset  = findViewById<View>(R.id.btnReset) as Button
+        val btnInicia = findViewById<View>(R.id.btnInicia) as Button
+
+        //Chronometer(this).also { it -> crono = it } //findViewById<Chronometer>(R.id.chronometer) as Chronometer
+        //crono = findViewById(R.id.chronometer)
+        //crono = Chronometer(this)
+
+        //--------------------
+        preparaCrono(crono)
+        //--------------------
 
         //------------------------------------------------------------------------------------------
         // Objetos gráficos
@@ -234,7 +264,7 @@ class JogarActivity : Activity() {
         // Images Views
         //------------------------------------------------------------------------------------------
         iViewSudokuBoard = findViewById<View>(R.id.imageView1) as ImageView
-        iViewNumsDisps   = findViewById<View>(R.id.imageView2) as ImageView
+        iViewNumsDisps = findViewById<View>(R.id.imageView2) as ImageView
 
         //------------------------------
         determinaGrandezasGraficas()
@@ -247,7 +277,7 @@ class JogarActivity : Activity() {
         action = intent.action.toString()
 
         // Armazena o gabarito em um array<int>
-        arIntNumsGab  = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
+        arIntNumsGab = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
         arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as ArrayList<Int>
 
         // Gabarito inválido
@@ -259,7 +289,7 @@ class JogarActivity : Activity() {
         // Gabarito e jogo válido
         else {
 
-            val flagJogoOk : Boolean
+            val flagJogoOk: Boolean
 
             //--- "JogoGerado"
             if (action == "JogoGerado") {
@@ -399,7 +429,7 @@ class JogarActivity : Activity() {
                 //Log.d(cTAG, strLog)
 
                 //--- Verifica se ainda tem desse número para jogar e se esse número é válido.
-                var flagNumValido : Boolean
+                var flagNumValido: Boolean
                 if (intQtidd > 0) {
 
                     //--- Verifica se num válido
@@ -418,8 +448,8 @@ class JogarActivity : Activity() {
                     if (!flagNumValido) {
 
                         strLog = "-> Número NÃO válido (linha, coluna); NÃO será incluído" +
-                                                                                 " no Sudoku board."
-                        Log.d( cTAG, strLog)
+                                " no Sudoku board."
+                        Log.d(cTAG, strLog)
 
                         strToast = "Número NÃO Ok (linha ou coluna)"
                         //-----------------------------------------------------------------
@@ -435,7 +465,7 @@ class JogarActivity : Activity() {
 
                             flagNumValido = false
                             strLog = "-> Número NÃO válido (gab); NÃO será incluído" +
-                                                                                 " no Sudoku board."
+                                    " no Sudoku board."
                             Log.d(cTAG, strLog)
 
                             strToast = "Número NÃO Ok (gabarito)"
@@ -485,7 +515,9 @@ class JogarActivity : Activity() {
                         }
                     }
 
-                    if (!flagNumValido) { tvErros!!.text = "${++intContaErro}" }
+                    if (!flagNumValido) {
+                        tvErros!!.text = "${++intContaErro}"
+                    }
 
                 }
             }
@@ -499,9 +531,7 @@ class JogarActivity : Activity() {
         btnInicia.setOnClickListener {
 
             val strInicia = resources.getString(R.string.inicia)
-            val strPause  = resources.getString(R.string.pause)
-
-            val strReset  = resources.getString(R.string.reset)
+            val strPause = resources.getString(R.string.pause)
 
             //--------------------------------------------------------------------------------------
             // Legenda do botão: Inicia
@@ -509,19 +539,31 @@ class JogarActivity : Activity() {
             if (btnInicia.text == strInicia) {
 
                 iViewSudokuBoard!!.isEnabled = true
-                iViewNumsDisps!!.isEnabled   = true
+                iViewNumsDisps!!.isEnabled = true
+
+                //crono.text = strCronoLeit
+                crono.setBase(SystemClock.elapsedRealtime() + timeStopped)
+                //--------------
+                crono.start()
+                //--------------
 
                 btnInicia.text = strPause
 
             }
 
             //--------------------------------------------------------------------------------------
-            // Legenda do botão: ReInicia
+            // Legenda do botão: Pause
             //--------------------------------------------------------------------------------------
             else {
 
                 iViewSudokuBoard!!.isEnabled = false
-                iViewNumsDisps!!.isEnabled   = false
+                iViewNumsDisps!!.isEnabled = false
+
+                timeStopped = crono.getBase() - SystemClock.elapsedRealtime()
+                //-------------
+                crono.stop()
+                //-------------
+                //strCronoLeit = crono.text.toString()
 
                 btnInicia.text = strInicia
 
@@ -533,7 +575,7 @@ class JogarActivity : Activity() {
 
             tvNivel!!.text = ""
 
-            intContaErro   = 0
+            intContaErro = 0
             tvErros!!.text = "$intContaErro"
 
             strLog = "-> Tap no btn \"Reset\" "
@@ -549,7 +591,15 @@ class JogarActivity : Activity() {
             //-------------
 
             iViewSudokuBoard!!.isEnabled = false
-            iViewNumsDisps!!.isEnabled   = false
+            iViewNumsDisps!!.isEnabled = false
+
+            timeStopped = 0
+
+            //-------------
+            crono.stop()
+            //-------------
+
+            crono.setText(strCronoInic)
 
             btnInicia.text = resources.getString(R.string.inicia)
 
@@ -564,11 +614,11 @@ class JogarActivity : Activity() {
     //----------------------------------------------------------------------------------------------
     //--- desenhaSudokuBoard
     private fun desenhaSudokuBoard(flagApaga: Boolean, canvasDes: Canvas) {
-        var flCoordXInic : Float
-        var flCoordYInic : Float
-        var flCoordXFim  : Float
-        var flCoordYFim  : Float
-        val flPincelFino   = 3.toFloat()
+        var flCoordXInic: Float
+        var flCoordYInic: Float
+        var flCoordXFim: Float
+        var flCoordYFim: Float
+        val flPincelFino = 3.toFloat()
         val flPincelGrosso = 7.toFloat()
         val pincelDesenhar = pincelAzul // pincelPreto;
         if (flagApaga) {
@@ -773,7 +823,7 @@ class JogarActivity : Activity() {
             val intXInfDir = intXSupEsq + intCellwidth - intOffSet
             val intYInfDir = intCellheight - intOffSet
             //------------------------------------------
-            val intQtidd   = arIntNumsDisp[intIdxCel]
+            val intQtidd = arIntNumsDisp[intIdxCel]
             //------------------------------------------
             val pincelPintar = if (intQtidd > 0) pincelVerde else pincelBranco
             try {
@@ -1204,12 +1254,12 @@ class JogarActivity : Activity() {
          */
 
         //-------------------------------------------------------
-        val arArIntTmp = Array (9) {Array (9) { 0 } }
+        val arArIntTmp = Array(9) { Array(9) { 0 } }
         //-------------------------------------------------------
 
         for (intLin in 0..8) {
             for (intCol in 0..8) {
-                arArIntTmp  [intLin][intCol] = arArIntPreset[intLin][intCol]
+                arArIntTmp[intLin][intCol] = arArIntPreset[intLin][intCol]
                 arArIntCopia[intLin][intCol] = arArIntPreset[intLin][intCol]
             }
         }
@@ -1246,16 +1296,16 @@ class JogarActivity : Activity() {
             //Log.d(cTAG, strLog)
 
             //--- Margens do board
-            intmargTopDp  = resources.getDimension(R.dimen.MargemAcima).toInt()
+            intmargTopDp = resources.getDimension(R.dimen.MargemAcima).toInt()
             intMargleftdp = resources.getDimension(R.dimen.MargemEsquerda).toInt()
-            intMargtoppx  = toPixels2(this, intmargTopDp.toFloat())
+            intMargtoppx = toPixels2(this, intmargTopDp.toFloat())
             intMargleftpx = toPixels2(this, intMargleftdp.toFloat())
             //strLog = "   -Margens: Acima  :  " + intMargtoppx + " pixels, Esquerda:    " +
             //        intMargleftpx + " pixels"
             //Log.d(cTAG, strLog)
 
             //--- Imagem Sudoku board
-            intImgwidth  = bmpSudokuBoard!!.width
+            intImgwidth = bmpSudokuBoard!!.width
             intImgheight = bmpSudokuBoard!!.height
             //strLog = "   -Image  : Largura: " + intImgwidth + " pixels, Altura  :  " +
             //        intImgheight + " pixels"
@@ -1283,18 +1333,18 @@ class JogarActivity : Activity() {
     }
 
     //--- listarQM
-    private fun listarQM (quadMaior: Array<Array<Int>>) {
+    private fun listarQM(quadMaior: Array<Array<Int>>) {
 
         var strDados: String
         for (linha in 0..8) {
 
-            strLog   = "linha $linha : "
+            strLog = "linha $linha : "
             strDados = ""
             for (coluna in 0..8) {
 
                 val strTmp = "${quadMaior[linha][coluna]}" + if (coluna < 8) ", " else ""
                 strDados += strTmp
-                strLog   += strTmp
+                strLog += strTmp
 
             }
             Log.d(cTAG, strLog)
@@ -1323,7 +1373,7 @@ class JogarActivity : Activity() {
     private fun iniciaJogo() {
 
         //*** Nesse ponto, arArIntNums (rascunho do jogo) e arArIntGab (gabarito) deverão estar Ok.
-        intContaErro   = 0
+        intContaErro = 0
         tvErros!!.text = "$intContaErro"
 
         Log.d(cTAG, "-> Inicia o jogo")
@@ -1376,7 +1426,7 @@ class JogarActivity : Activity() {
         //------------------------------------
 
         iViewSudokuBoard!!.isEnabled = false
-        iViewNumsDisps!!.isEnabled   = false
+        iViewNumsDisps!!.isEnabled = false
 
         Log.d(cTAG, "-> Array qtidd de jogos disponível por número:")
         for (intIdxNum in 0..8) {
@@ -1392,6 +1442,31 @@ class JogarActivity : Activity() {
 
         //--- Inicializa variável local
         tvNivel!!.text = "${SudokuBackTracking.intNumBackTracking}"
+
+    }
+
+    //--- preparaCrono
+    private fun preparaCrono(crono : Chronometer) {
+
+        // set color and size of the text
+        crono.setTextColor(Color.BLUE)
+        crono.setTextSize(TypedValue.COMPLEX_UNIT_IN,0.15f)
+
+        // Adiciona o cronometro no layout
+        val layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        //layoutParams.setMargins(30, 40, 120, 40)
+        crono.layoutParams = layoutParams
+
+        val linearLayout = findViewById<LinearLayout>(R.id.crono_layout)
+        linearLayout?.addView(crono)
+
+        timeStopped = 0L
+        //--------------------------
+        crono.text = strCronoInic
+        //--------------------------
 
     }
 

@@ -34,4 +34,11 @@
     <string name="inicia"   > Inicia </string>
     <string name="pause"    > Pause  </string>
 
+    <string name="crono_inic">00:00</string>
+    <string name="nivel"     >Nivel: </string>
+    <string name="nivelVal"  >1000</string>
+    <string name="legErros"  >Erros:</string>
+    <string name="erros_inic">99</string>
+
+
 </resources>

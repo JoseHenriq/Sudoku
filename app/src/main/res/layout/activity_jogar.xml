@@ -6,55 +6,82 @@
     tools:context=".JogarActivity" >
 
     <RelativeLayout
-        android:layout_width ="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <!--- Nível do jogo -->
         <TextView android:id="@+id/tv_LegNivel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="@dimen/MargemAcima70dp"
 
-            android:textSize ="24dp"
-            android:textStyle="bold"
-            android:text     ="Nível: " />
+            android:text     ="@string/nivel"
+            android:textSize ="24sp"
+            android:textStyle="bold" />
 
         <TextView android:id="@+id/tv_Nivel"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_toRightOf="@id/tv_LegNivel"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="@dimen/MargemAcima70dp"
+            android:layout_toEndOf  ="@id/tv_LegNivel"
 
-            android:text="1000"
-            android:textSize="24dp"
+            android:text    ="@string/nivelVal"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <!--- Contador de erros -->
         <TextView android:id="@+id/tv_LegErros"
-            android:layout_width ="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginTop ="70dp"
-            android:layout_marginLeft="40dp"
-            android:layout_toRightOf ="@id/tv_Nivel"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop  ="@dimen/MargemAcima70dp"
+            android:layout_toEndOf    ="@id/tv_Nivel"
 
-            android:textSize ="24dp"
-            android:textStyle="bold"
-            android:text     ="Erros: " />
+            android:text     ="@string/legErros"
+            android:textSize ="24sp"
+            android:textStyle="bold" />
 
         <TextView android:id="@+id/tv_Erros"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="@dimen/MargemAcima70dp"
+            android:layout_toEndOf  ="@id/tv_LegErros"
+
+            android:text     ="@string/erros_inic"
+            android:textSize ="24sp"
+            android:textStyle="bold" />
+
+        <LinearLayout android:id="@+id/crono_layout"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+
+            android:layout_marginTop="@dimen/MargemAcima70dp"
+            android:layout_marginLeft="40dp"
+            android:layout_toRightOf="@id/tv_Erros"
+
+            android:orientation="horizontal" />
+
+        <!-- Cronometro -->
+        <!-- Chronometer
+
+            android:id="@+id/chronometer"
             android:layout_width ="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_toRightOf="@id/tv_LegErros"
-            android:layout_marginTop="70dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop  ="@dimen/MargemAcima70dp"
+            android:layout_toEndOf    ="@id/tv_Erros"
 
-            android:text     ="99"
-            android:textSize ="24dp"
-            android:textStyle="bold" />
+            android:text    ="@string/crono_inic"
+            android:textSize="20sp" /-->
 
     </RelativeLayout>
 
