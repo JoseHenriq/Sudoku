@@ -68,21 +68,6 @@
 
             android:orientation="horizontal" />
 
-        <!-- Cronometro -->
-        <!-- Chronometer
-
-            android:id="@+id/chronometer"
-            android:layout_width ="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop  ="@dimen/MargemAcima70dp"
-            android:layout_toEndOf    ="@id/tv_Erros"
-
-            android:text    ="@string/crono_inic"
-            android:textSize="20sp" /-->
-
     </RelativeLayout>
 
     <ImageView android:id="@+id/imageView1"
@@ -94,6 +79,31 @@
 
         android:contentDescription="@string/testeCanva3"
         android:src="@drawable/sudoku_board_w360h315" />
+
+    <!--- Quantidade de clues -->
+    <TextView android:id="@+id/tv_LegClues"
+        android:layout_width ="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/imageView1"
+
+        android:text     ="@string/legClues"
+        android:textSize ="15sp" />
+        <!--android:textStyle="bold" /-->
+
+    <TextView
+        android:id="@+id/tv_Clues"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below     ="@id/imageView1"
+        android:layout_toRightOf ="@id/tv_LegClues"
+        android:layout_marginLeft="10dp"
+
+        android:text="@string/clues_inic"
+        android:textSize="15sp" />
+        <!--android:textStyle="bold" /-->
 
     <ImageView android:id="@+id/imageView2"
         android:layout_width="wrap_content"

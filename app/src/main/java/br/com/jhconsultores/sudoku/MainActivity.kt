@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private var strOpcaoJogo = "JogoGerado"
 
-    private var intJogoAdaptar = 1
+    private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
 
     private var txtDadosJogo : TextView? = null
 
@@ -85,6 +85,8 @@ class MainActivity : AppCompatActivity() {
 
         txtDadosJogo?.append(sgg.txtDados)
 
+        // **** Os arrays preparados serão enviados pelo listener do botão JogaJogo ****
+
     }
 
     //--- Evento tapping no botão de adaptação de jogo
@@ -92,18 +94,27 @@ class MainActivity : AppCompatActivity() {
     fun btnAdaptaJogoClick(view : View?) {
 
         strOpcaoJogo = "JogoAdaptado"
-
         sgg.txtDados = ""
 
         strLog = "-> Tap no btnAdaptaJogo"
         Log.d(cTAG, strLog)
         txtDadosJogo?.text = strLog
 
-        //--- Adapta jogo
-        //---------------------------------------
+        //--- Prepara o preset para se conseguir o gabarito do jogo
+        if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 0
+        //-------------------------------------------
+        inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
+        //-------------------------------------------
+
+        sgg.quadMaiorRet = copiaArArInt(quadMaiorAdapta)
+
+        //--- Adapta jogo--------------------
+        //-----------------------------------------
         quadMaior = sgg.adaptaJogoAlgoritmo2()
-        //---------------------------------------
+        //-----------------------------------------
         txtDadosJogo?.append(sgg.txtDados)
+
+        // **** Os arrays preparados serão enviados pelo listener do botão JogaJogo ****
 
     }
 
@@ -119,9 +130,9 @@ class MainActivity : AppCompatActivity() {
         val arIntNumsGab = ArrayList <Int> ()
         for (idxLin in 0..8) {
             for (idxCol in 0..8) {
-                //--------------------------------------------------
+                //-------------------------------------------------
                 arIntNumsGab += sgg.quadMaiorRet[idxLin][idxCol]
-                //--------------------------------------------------
+                //-------------------------------------------------
             }
         }
 
@@ -147,6 +158,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /*
     //--- Verifica o Gerador de números aleatórios
     private fun testaGenRnd () {
 
@@ -174,6 +186,131 @@ class MainActivity : AppCompatActivity() {
         } while (intContaZero > 0)
 
         Log.d(cTAG, "-> Fim do teste do gerador RND!")
+
+    }
+    */
+
+    //--- inicQuadMaiorAdaptacao
+    private fun inicQuadMaiorAdaptacao(jogoAdaptar : Int) {
+
+        var array : Array <Int>
+        quadMaiorAdapta = arrayOf<Array<Int>>()
+
+            //--- Simula os dados iniciais propostos
+        when (jogoAdaptar) {
+
+            1 -> run {
+
+                for (linha in 0..8) {
+
+                    // array = arrayOf<Int>()
+                    array = when (linha) {
+
+                        0 -> arrayOf(0, 0, 4, 6, 0, 5, 8, 0, 0)
+                        1 -> arrayOf(6, 5, 0, 0, 8, 0, 0, 0, 0)
+                        2 -> arrayOf(0, 0, 8, 0, 4, 7, 6, 0, 5)
+                        3 -> arrayOf(2, 8, 0, 3, 5, 6, 0, 0, 0)
+                        4 -> arrayOf(7, 4, 0, 0, 0, 8, 2, 5, 6)
+                        5 -> arrayOf(5, 6, 0, 4, 7, 2, 9, 0, 8)
+                        6 -> arrayOf(8, 2, 5, 7, 0, 4, 3, 6, 0)
+                        7 -> arrayOf(4, 3, 6, 5, 2, 0, 0, 8, 0)
+                        else -> arrayOf(0, 0, 0, 8, 6, 3, 5, 4, 2)
+
+                    }
+                    quadMaiorAdapta += array
+
+                }
+            }
+
+            2 -> run {
+
+                for (linha in 0..8) {
+
+                    // array = arrayOf<Int>()
+                    array = when (linha) {
+
+                        0 -> arrayOf(0, 6, 0, 7, 0, 8, 1, 9, 2)
+                        1 -> arrayOf(1, 0, 5, 2, 0, 0, 0, 0, 7)
+                        2 -> arrayOf(0, 2, 0, 0, 0, 6, 0, 0, 0)
+                        3 -> arrayOf(0, 5, 0, 9, 3, 0, 0, 4, 0)
+                        4 -> arrayOf(0, 0, 6, 5, 0, 2, 7, 8, 0)
+                        5 -> arrayOf(9, 7, 0, 0, 0, 0, 3, 2, 5)
+                        6 -> arrayOf(0, 0, 7, 4, 0, 0, 8, 0, 6)
+                        7 -> arrayOf(8, 9, 4, 0, 7, 0, 0, 0, 0)
+                        else -> arrayOf(0, 1, 0, 3, 0, 0, 0, 7, 4)
+
+                    }
+                    quadMaiorAdapta += array
+                }
+            }
+
+            3 -> run {
+
+                for (linha in 0..8) {
+
+                    // array = arrayOf<Int>()
+                    array = when (linha) {
+
+                        0 -> arrayOf(0, 0, 3, 5, 0, 0, 4, 9, 0)
+                        1 -> arrayOf(7, 6, 0, 0, 0, 0, 5, 0, 1)
+                        2 -> arrayOf(0, 5, 4, 0, 7, 3, 6, 0, 8)
+                        3 -> arrayOf(0, 1, 0, 0, 0, 0, 3, 0, 0)
+                        4 -> arrayOf(0, 0, 7, 2, 6, 1, 0, 0, 0)
+                        5 -> arrayOf(2, 0, 6, 0, 9, 0, 0, 1, 4)
+                        6 -> arrayOf(6, 3, 2, 8, 5, 0, 0, 0, 0)
+                        7 -> arrayOf(4, 0, 0, 0, 0, 2, 8, 0, 6)
+                        else -> arrayOf(8, 0, 5, 0, 0, 7, 2, 0, 0)
+
+                    }
+                    quadMaiorAdapta += array
+                }
+            }
+
+            // 4
+            else -> run {
+
+                for (linha in 0..8) {
+
+                    // array = arrayOf<Int>()
+                    array = when (linha) {
+
+                        0 -> arrayOf(9, 0, 0, 8, 4, 1, 3, 0, 0)
+                        1 -> arrayOf(0, 0, 1, 9, 0, 0, 4, 2, 0)
+                        2 -> arrayOf(0, 0, 0, 2, 0, 0, 0, 1, 0)
+                        3 -> arrayOf(8, 7, 0, 1, 0, 0, 5, 4, 0)
+                        4 -> arrayOf(1, 5, 0, 3, 6, 0, 0, 0, 2)
+                        5 -> arrayOf(2, 0, 0, 0, 0, 0, 7, 6, 0)
+                        6 -> arrayOf(7, 2, 0, 0, 0, 5, 1, 9, 0)
+                        7 -> arrayOf(6, 3, 0, 0, 0, 0, 2, 0, 7)
+                        else -> arrayOf(0, 1, 5, 7, 0, 2, 0, 0, 8)
+
+                    }
+                    quadMaiorAdapta += array
+                }
+            }
+        }
+    }
+
+    //--- copiaArArInt
+    private fun copiaArArInt(arArIntPreset: Array<Array<Int>>): Array<Array<Int>> {
+
+        /* https://stackoverflow.com/questions/45199704/kotlin-2d-array-initialization
+            // A 6x5 array of Int, all set to 0.
+            var m = Array(6) {Array(5) {0} }
+         */
+
+        //-------------------------------------------------------
+        val arArIntTmp = Array(9) { Array(9) { 0 } }
+        //-------------------------------------------------------
+
+        for (intLin in 0..8) {
+            for (intCol in 0..8) {
+                arArIntTmp[intLin][intCol] = arArIntPreset[intLin][intCol]
+                //arArIntCopia[intLin][intCol] = arArIntPreset[intLin][intCol]
+            }
+        }
+
+        return arArIntTmp
 
     }
 

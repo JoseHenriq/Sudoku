@@ -14,7 +14,7 @@ class SudokuGameGenerator {
     var txtDados = ""
 
     var quadMaiorRet   = arrayOf<Array<Int>>()
-    var intJogoAdaptar = 1
+    var intJogoAdaptar = 0
 
     private var arArIntNums = Array(9) { Array(9) {0} }
 
@@ -88,10 +88,8 @@ class SudokuGameGenerator {
                 val strTmp = "-> Jogo ${contaTentaJogo + 1}: válido!"
                 Log.d(cTAG, strTmp)
 
-                if (txtDados.length > 0)
-                    txtDados = "${txtDados}\n$strTmp"
-                else
-                    txtDados = strTmp
+                txtDados = if (txtDados.isNotEmpty()) "${txtDados}\n$strTmp"
+                else strTmp
 
                 //------------------------------------
                 listaQM(quadMaiorRet, true)
@@ -124,7 +122,7 @@ class SudokuGameGenerator {
             //--- Atribui um nível ao jogo: resolve o jogo pelo algoritmo backTracking;
             //    considerarei como o "nível" do jogo, quantas vezes foi necessária a recursão.
             //---------------------------------------------
-            var arArIntCopia = copiaArArInt(arArIntNums)
+            val arArIntCopia = copiaArArInt(arArIntNums)
             SudokuBackTracking.intNumBackTracking = 0
             //--------------------------------------------------------------------------------
             val flagSolOk = SudokuBackTracking.solveSudoku(arArIntCopia, arArIntCopia.size)
@@ -245,8 +243,7 @@ class SudokuGameGenerator {
 
         val limAdaptaJogo   = 1    //20
         var contaAdaptaJogo = 0
-
-        quadMaiorRet = arrayOf()
+        var arArIntJogo     = Array(9) { Array(9) {0} }
 
         while (++contaAdaptaJogo <= limAdaptaJogo) {
 
@@ -258,10 +255,14 @@ class SudokuGameGenerator {
             txtDados = "${txtDados}$strTmp"
 
             //---------------------------------------
-            inicQuadMaiorAdaptacao(intJogoAdaptar)
+            //inicQuadMaiorAdaptacao(intJogoAdaptar)
             //---------------------------------------
+
+            //--- Preset enviado pelo MainActivity
+            //-------------------------------------
             listaQM(quadMaiorRet, false)
             //-------------------------------------
+            arArIntJogo = copiaArArInt(quadMaiorRet)
 
             SudokuBackTracking.intNumBackTracking = 0
             //---------------------------------------------------------------------------------
@@ -276,7 +277,21 @@ class SudokuGameGenerator {
 
                 txtDados = "${txtDados}\n$strLog"
 
+                Log.d(cTAG, "-> Gabarito do jogo (adaptação do preset):")
+                txtDados = "${txtDados}\n-> Gabarito:"
+                //-------------------------------------
                 listaQM(quadMaiorRet, true)
+                //-------------------------------------
+
+                Log.d(cTAG, "-> Jogo (preset):")
+                txtDados = "${txtDados}\n-> Preset:"
+                //-------------------------------------
+                listaQM(arArIntJogo, true)
+                //-------------------------------------
+
+                val intQtiZeros = quantZeros(arArIntJogo)
+                Log.d(cTAG, "-> Clues: $intQtiZeros")
+                txtDados = "${txtDados}\n-> Clues: $intQtiZeros"
 
             }
             else {
@@ -287,10 +302,11 @@ class SudokuGameGenerator {
             }
         }
 
-        return quadMaiorRet
+        return arArIntJogo
 
     }
 
+    /*
     //--- inicQuadMaiorAdaptacao
     private fun inicQuadMaiorAdaptacao(jogoAdaptar : Int) {
 
@@ -406,6 +422,7 @@ class SudokuGameGenerator {
         //-----------------
 
     }
+    */
 
     //----------------------------------------------------------------------------------------------
     // Funções gerais

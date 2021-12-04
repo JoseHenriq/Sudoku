@@ -49,6 +49,7 @@ class JogarActivity : Activity() {
 
     private var tvNivel: TextView? = null
     private var tvErros: TextView? = null
+    private var tvClues: TextView? = null
     private var intContaErro = 0
 
     private var intTamTxt = 25 // 50 // 200 //
@@ -82,74 +83,8 @@ class JogarActivity : Activity() {
     private var flagJoga    = false
 
     private var arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-    private var arArIntGab = Array(9) { Array(9) { 0 } }
-
-    private var idxPreset = 0
-
-    //--- Preset 1
-    private var arArIntPreset1 = arrayOf(
-        arrayOf(0, 0, 4, 6, 0, 5, 8, 0, 0),
-        arrayOf(6, 5, 0, 0, 8, 0, 0, 0, 0),
-        arrayOf(0, 0, 8, 0, 4, 7, 6, 0, 5),
-        arrayOf(2, 8, 0, 3, 5, 6, 0, 0, 0),
-        arrayOf(7, 4, 0, 0, 0, 8, 2, 5, 6),
-        arrayOf(5, 6, 0, 4, 7, 2, 9, 0, 8),
-        arrayOf(8, 2, 5, 7, 0, 4, 3, 6, 0),
-        arrayOf(4, 3, 6, 5, 2, 0, 0, 8, 0),
-        arrayOf(0, 0, 0, 8, 6, 3, 5, 4, 2)
-    )
-
-    //--- Preset 2
-    private var arArIntPreset2 = arrayOf(
-        arrayOf(0, 6, 0, 7, 0, 8, 1, 9, 2),
-        arrayOf(1, 0, 5, 2, 0, 0, 0, 0, 7),
-        arrayOf(0, 2, 0, 0, 0, 6, 0, 0, 0),
-        arrayOf(0, 5, 0, 9, 3, 0, 0, 4, 0),
-        arrayOf(0, 0, 6, 5, 0, 2, 7, 8, 0),
-        arrayOf(9, 7, 0, 0, 0, 0, 3, 2, 5),
-        arrayOf(0, 0, 7, 4, 0, 0, 8, 0, 6),
-        arrayOf(8, 9, 4, 0, 7, 0, 0, 0, 0),
-        arrayOf(0, 1, 0, 3, 0, 0, 0, 7, 4)
-    )
-
-    //--- Preset 3
-    private var arArIntPreset3 = arrayOf(
-        arrayOf(0, 0, 3, 5, 0, 0, 4, 9, 0),
-        arrayOf(7, 6, 0, 0, 0, 0, 5, 0, 1),
-        arrayOf(0, 5, 4, 0, 7, 3, 6, 0, 8),
-        arrayOf(0, 1, 0, 0, 0, 0, 3, 0, 0),
-        arrayOf(0, 0, 7, 2, 6, 1, 0, 0, 0),
-        arrayOf(2, 0, 6, 0, 9, 0, 0, 1, 4),
-        arrayOf(6, 3, 2, 8, 5, 0, 0, 0, 0),
-        arrayOf(4, 0, 0, 0, 0, 2, 8, 0, 6),
-        arrayOf(8, 0, 5, 0, 0, 7, 2, 0, 0)
-    )
-
-    //--- Preset 4
-    private var arArIntPreset4 = arrayOf(
-        arrayOf(9, 0, 0, 8, 4, 1, 3, 0, 0),
-        arrayOf(0, 0, 1, 9, 0, 0, 4, 2, 0),
-        arrayOf(0, 0, 0, 2, 0, 0, 0, 1, 0),
-        arrayOf(8, 7, 0, 1, 0, 0, 5, 4, 0),
-        arrayOf(1, 5, 0, 3, 6, 0, 0, 0, 2),
-        arrayOf(2, 0, 0, 0, 0, 0, 7, 6, 0),
-        arrayOf(7, 2, 0, 0, 0, 5, 1, 9, 0),
-        arrayOf(6, 3, 0, 0, 0, 0, 2, 0, 7),
-        arrayOf(0, 1, 5, 7, 0, 2, 0, 0, 8)
-    )
-
-    //--- Preset para teste1
-    private var arArIntNums = arrayOf(
-        arrayOf(0, 0, 4, 6, 0, 5, 8, 0, 0),
-        arrayOf(6, 5, 0, 0, 8, 0, 0, 0, 0),
-        arrayOf(0, 0, 8, 0, 4, 7, 6, 0, 5),
-        arrayOf(2, 8, 0, 3, 5, 6, 0, 0, 0),
-        arrayOf(7, 4, 0, 0, 0, 8, 2, 5, 6),
-        arrayOf(5, 6, 0, 4, 7, 2, 9, 0, 8),
-        arrayOf(8, 2, 5, 7, 0, 4, 3, 6, 0),
-        arrayOf(4, 3, 6, 5, 2, 0, 0, 8, 0),
-        arrayOf(0, 0, 0, 8, 6, 3, 5, 4, 2)
-    )
+    private var arArIntGab    = Array(9) { Array(9) { 0 } }
+    private var arArIntNums   = Array(9) { Array(9) { 0 } }
 
     //--- Preset para teste2
     /*
@@ -205,6 +140,7 @@ class JogarActivity : Activity() {
         //--- Instancia objetos locais para os objetos XML
         tvNivel = findViewById<View>(R.id.tv_Nivel) as TextView
         tvErros = findViewById<View>(R.id.tv_Erros) as TextView
+        tvClues = findViewById<View>(R.id.tv_Clues) as TextView
 
         strCronoInic = resources.getString(R.string.crono_inic)
         //strCronoLeit = resources.getString(R.string.crono_inic)
@@ -282,8 +218,8 @@ class JogarActivity : Activity() {
         action = intent.action.toString()
 
         // Armazena o gabarito em um array<int>
-        arIntNumsGab = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
-        arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as ArrayList<Int>
+        arIntNumsGab  = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
+        arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado")  as ArrayList<Int>
 
         // Gabarito inválido
         if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
@@ -296,69 +232,23 @@ class JogarActivity : Activity() {
 
             val flagJogoOk: Boolean
 
-            //--- "JogoGerado"
-            if (action == "JogoGerado") {
+            // Armazena o gabarito em um Array<Array<Int>> para processamento local
+            for (intLinha in 0..8) {
 
-                // Armazena o gabarito em um Array<Array<Int>> para processamento local
-                for (intLinha in 0..8) {
+                for (intCol in 0..8) {
 
-                    for (intCol in 0..8) {
+                    arArIntNums[intLinha][intCol] = arIntNumsJogo[intLinha * 9 + intCol]
+                    arArIntGab[intLinha][intCol]  = arIntNumsGab[intLinha * 9 + intCol]
 
-                        arArIntNums[intLinha][intCol] = arIntNumsJogo[intLinha * 9 + intCol]
-                        arArIntGab[intLinha][intCol] = arIntNumsGab[intLinha * 9 + intCol]
-
-                    }
                 }
             }
-
-            //--- "JogoAdaptado"
-            else if (action == "JogoAdaptado") {
-
-                idxPreset = intent.getIntExtra("intNumPreset", 0)
-
-                if (++idxPreset > 4) idxPreset = 1
-
-                when (idxPreset) {
-                    //------------------------------------------------
-                    1 -> arArIntNums = copiaArArInt(arArIntPreset1)
-                    //------------------------------------------------
-                    2 -> arArIntNums = copiaArArInt(arArIntPreset2)
-                    //------------------------------------------------
-                    3 -> arArIntNums = copiaArArInt(arArIntPreset3)
-                    //------------------------------------------------
-                    4 -> arArIntNums = copiaArArInt(arArIntPreset4)
-                    //------------------------------------------------
-                }
-
-                //--- Gera o gabarito para o jogo sugerido (preset)
-                arArIntGab = copiaArArInt(arArIntNums)
-                SudokuBackTracking.intNumBackTracking = 0
-                //---------------------------------------------------------------
-                flagJogoOk = SudokuBackTracking.solveSudoku(arArIntGab, 81)
-                //---------------------------------------------------------------
-
-                if (flagJogoOk) Log.d(cTAG, "-> Resolvido utilizando backTracking")
-                tvNivel!!.text = "${SudokuBackTracking.intNumBackTracking}"
-
-                if (arArIntNums.size == 81) {
-
-                    for (idxLin in 0..8) {
-
-                        for (idxCol in 0..8) {
-
-                            arIntNumsGab[idxLin * 9 + idxCol] = arArIntNums[idxLin][idxCol]
-                            arArIntGab[idxLin][idxCol] = arArIntNums[idxLin][idxCol]
-
-                        }
-                    }
-                }
-            } // Fim de JogoAdaptado
 
             //-----------------------------------------
             arArIntCopia = copiaArArInt(arArIntNums)
             //-----------------------------------------
 
             arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+
             //-------------
             iniciaJogo()
             //-------------
@@ -454,9 +344,9 @@ class JogarActivity : Activity() {
                     //------------------------------------------------------------------------------
                     if (!flagNumValido) {
 
-                        strLog = "-> Número NÃO válido (linha, coluna); NÃO será incluído" +
-                                " no Sudoku board."
-                        Log.d(cTAG, strLog)
+                        //strLog = "-> Número NÃO válido (linha, coluna ou quadro); NÃO será incluído" +
+                        //        " no Sudoku board."
+                        //Log.d(cTAG, strLog)
 
                         strToast = "Número NÃO Ok (linha, coluna ou quadro)"
                         //-----------------------------------------------------------------
@@ -618,19 +508,17 @@ class JogarActivity : Activity() {
             //-------------
 
             iViewSudokuBoard!!.isEnabled = false
-            iViewNumsDisps!!.isEnabled = false
+            iViewNumsDisps!!.isEnabled   = false
 
             timeStopped = 0
 
             //-------------
             crono.stop()
             //-------------
-
             crono.text = strCronoInic
 
             btnInicia.isEnabled = true
-
-            btnInicia.text = resources.getString(R.string.inicia)
+            btnInicia.text      = resources.getString(R.string.inicia)
 
         }
     }
@@ -1220,6 +1108,7 @@ class JogarActivity : Activity() {
 
         //--- Inicializa variável local
         tvNivel!!.text = "${SudokuBackTracking.intNumBackTracking}"
+        tvClues!!.text = quantZeros(arArIntNums).toString()
 
         //--- Verifica se fim de jogo
         var flagContJogo  = false
@@ -1259,6 +1148,21 @@ class JogarActivity : Activity() {
         //--------------------------
         crono.text = strCronoInic
         //--------------------------
+
+    }
+
+    //--- quantZeros
+    private fun quantZeros(arArIntJogo : Array <Array <Int>>) : Int{
+
+        var intQtiZeros = 0
+        for (idxLin in 0..8) {
+            for (idxCol in 0..8) {
+                if (arArIntJogo[idxLin][idxCol] == 0) intQtiZeros++
+            }
+        }
+        Log.d(cTAG, "-> Quantidade de Zeros: $intQtiZeros")
+
+        return intQtiZeros
 
     }
 
