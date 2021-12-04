@@ -5,27 +5,58 @@
     android:layout_height="match_parent"
     tools:context=".JogarActivity" >
 
-    <TextView android:id="@+id/tv_LegNivel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <RelativeLayout
+        android:layout_width ="match_parent"
+        android:layout_height="wrap_content" >
 
-        android:layout_marginTop="70dp"
+        <!--- Nível do jogo -->
+        <TextView android:id="@+id/tv_LegNivel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-        android:textSize ="24dp"
-        android:textStyle="bold"
-        android:text     ="Nível: " />
+            android:layout_marginTop="70dp"
 
-    <TextView
-        android:id="@+id/tv_Nivel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+            android:textSize ="24dp"
+            android:textStyle="bold"
+            android:text     ="Nível: " />
 
-        android:layout_toRightOf="@id/tv_LegNivel"
-        android:layout_marginTop="70dp"
+        <TextView android:id="@+id/tv_Nivel"
 
-        android:text="1000"
-        android:textSize="24dp"
-        android:textStyle="bold" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_toRightOf="@id/tv_LegNivel"
+            android:layout_marginTop="70dp"
+
+            android:text="1000"
+            android:textSize="24dp"
+            android:textStyle="bold" />
+
+        <!--- Contador de erros -->
+        <TextView android:id="@+id/tv_LegErros"
+            android:layout_width ="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop ="70dp"
+            android:layout_marginLeft="40dp"
+            android:layout_toRightOf ="@id/tv_Nivel"
+
+            android:textSize ="24dp"
+            android:textStyle="bold"
+            android:text     ="Erros: " />
+
+        <TextView android:id="@+id/tv_Erros"
+            android:layout_width ="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_toRightOf="@id/tv_LegErros"
+            android:layout_marginTop="70dp"
+
+            android:text     ="99"
+            android:textSize ="24dp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
 
     <ImageView android:id="@+id/imageView1"
         android:layout_width="wrap_content"
@@ -47,22 +78,26 @@
         android:contentDescription="@string/numDisp"
         android:src="@drawable/quadro_nums_disp" />
 
-    <Button android:id="@+id/buttonRotate"
+    <Button android:id="@+id/btnReset"
         style="?android:attr/buttonStyleSmall"
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_alignParentEnd   ="true"
         android:layout_alignParentBottom="true"
 
-        android:text="@string/rotate" />
+        android:textAllCaps ="false"
+        android:text="@string/reset" />
 
-    <Button android:id="@+id/buttonDraw"
+    <Button android:id="@+id/btnInicia"
         style="?android:attr/buttonStyleSmall"
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@id/buttonRotate"
 
-        android:text="@string/texto" />
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/btnReset"
+
+        android:textAllCaps ="false"
+        android:text="@string/inicia" />
 
 </RelativeLayout>

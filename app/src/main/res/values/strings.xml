@@ -29,8 +29,9 @@
     <string name="fitXY"       >FitXY</string>
 
     <!-- Legendas Buttons -->
-    <string name="rotate"      >Rotate</string>
-    <string name="texto"       > Inicia </string>
-    <string name="bitmap"      >  Reset </string>
+    <string name="reset"    > Reset  </string>
+    <string name="reinicia" >ReInicia</string>
+    <string name="inicia"   > Inicia </string>
+    <string name="pause"    > Pause  </string>
 
 </resources>

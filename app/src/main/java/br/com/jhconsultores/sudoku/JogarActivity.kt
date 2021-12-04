@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import java.lang.Exception
@@ -22,10 +23,9 @@ class JogarActivity : Activity() {
     //----------------------------------------------------------------------------------------------
     //                        Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
-    private var cTAG   = "Sudoku"
-    private var strLog = ""
-
-    private var sdkGameGen = SudokuGameGenerator ()
+    private var cTAG     = "Sudoku"
+    private var strLog   = ""
+    private var strToast = ""
 
     private var intImageResource = 0
     private var bmpInic: Bitmap? = null // Board vazio Lido a partir do resource/drawable
@@ -43,6 +43,8 @@ class JogarActivity : Activity() {
     private var iViewNumsDisps  : ImageView? = null
 
     private var tvNivel : TextView? = null
+    private var tvErros : TextView? = null
+    private var intContaErro = 0
 
     private var intTamTxt = 25 // 50 // 200 //
     private var scale     = 0f
@@ -182,10 +184,11 @@ class JogarActivity : Activity() {
         setContentView(R.layout.activity_jogar)
 
         //--- Instancia objetos locais para os objetos XML
-        tvNivel       = findViewById<View>(R.id.tv_Nivel) as TextView
+        tvNivel = findViewById<View>(R.id.tv_Nivel) as TextView
+        tvErros = findViewById<View>(R.id.tv_Erros) as TextView
 
-        val btnRotate = findViewById<View>(R.id.buttonRotate) as Button
-        val btnDraw   = findViewById<View>(R.id.buttonDraw) as Button
+        val btnReset   = findViewById<View>(R.id.btnReset) as Button
+        val btnInicia  = findViewById<View>(R.id.btnInicia) as Button
 
         //------------------------------------------------------------------------------------------
         // Objetos gráficos
@@ -256,7 +259,7 @@ class JogarActivity : Activity() {
         // Gabarito e jogo válido
         else {
 
-            var flagJogoOk = true
+            val flagJogoOk : Boolean
 
             //--- "JogoGerado"
             if (action == "JogoGerado") {
@@ -343,8 +346,8 @@ class JogarActivity : Activity() {
             //Log.d(cTAG, "viewCoord y: " + viewCoords[1])
 
             //--- Coordenadas reais (???)
-            val imageX = x - viewCoords[0] // viewCoords[0] is the X coordinate
-            val imageY = y - viewCoords[1] // viewCoords[1] is the y coordinate
+            //val imageX = x - viewCoords[0] // viewCoords[0] is the X coordinate
+            //val imageY = y - viewCoords[1] // viewCoords[1] is the y coordinate
             //Log.d(cTAG, "Real x: $imageX")
             //Log.d(cTAG, "Real y: $imageY")
 
@@ -396,7 +399,7 @@ class JogarActivity : Activity() {
                 //Log.d(cTAG, strLog)
 
                 //--- Verifica se ainda tem desse número para jogar e se esse número é válido.
-                val flagNumValido : Boolean
+                var flagNumValido : Boolean
                 if (intQtidd > 0) {
 
                     //--- Verifica se num válido
@@ -409,44 +412,81 @@ class JogarActivity : Activity() {
                     //            intColJogar + " Qm = " + intQuadMenor )
 
                     // Verifica se esse número ainda não existe no seu Qm e nem no seu QM
-                    //-------------------------------------------------------------------------------
+                    //------------------------------------------------------------------------------
                     flagNumValido = verifValidade(intQuadMenor, intLinJogar, intColJogar, intNum)
-                    //-------------------------------------------------------------------------------
-                    if (flagNumValido) {
-                        //Log.d(cTAG, "-> Número válido; será incluído no Sudoku board.")
+                    //------------------------------------------------------------------------------
+                    if (!flagNumValido) {
 
-                        //--- Atualiza o Sudoku board
-                        //-------------------------------------------------------
-                        pintaCelula(intLinJogar, intColJogar, pincelBranco)
-                        //--------------------------------------------------------------------------
-                        escreveCelula(intLinJogar, intColJogar, intNum.toString(), pincelAzul)
-                        //--------------------------------------------------------------------------
+                        strLog = "-> Número NÃO válido (linha, coluna); NÃO será incluído" +
+                                                                                 " no Sudoku board."
+                        Log.d( cTAG, strLog)
 
-                        //--------------------------------------------
-                        desenhaSudokuBoard(false, canvas!!)
-                        //--------------------------------------------
+                        strToast = "Número NÃO Ok (linha ou coluna)"
+                        //-----------------------------------------------------------------
+                        Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+                        //-----------------------------------------------------------------
 
-                        //--- Salva esse bitmap
-                        //------------------------------------
-                        copiaBmpByBuffer(myImage, bmpJogo)
-                        //------------------------------------
-
-                        //--- Atualiza a base de dados
-                        arArIntNums[intLinJogar][intColJogar] = intNum
-                        arIntNumsDisp[intNum - 1]--
-
-                        //-------------------
-                        atualizaNumDisp()
-                        //-------------------
-
-                        //--------------------------
-                        mostraNumsIguais(intNum)
-                        //--------------------------
-                        flagJoga = false
                     }
-                    //else {
-                    //    Log.d(cTAG, "-> Número NÃO válido; NÃO será incluído no Sudoku board.")
-                    //}
+                    // Verifica se esse número, nessa célula, é o mesmo do gabarito
+                    else {
+
+                        //--- Número diferente do num do gabarito
+                        if (intNum != arArIntGab[intLinJogar][intColJogar]) {
+
+                            flagNumValido = false
+                            strLog = "-> Número NÃO válido (gab); NÃO será incluído" +
+                                                                                 " no Sudoku board."
+                            Log.d(cTAG, strLog)
+
+                            strToast = "Número NÃO Ok (gabarito)"
+                            //-----------------------------------------------------------------
+                            Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+                            //-----------------------------------------------------------------
+
+                        }
+                        //--- Número OK qto ao gabarito
+                        else {
+
+                            Log.d(cTAG, "-> Número válido; será incluído no Sudoku board.")
+
+                            //strToast = "Número Ok!"
+                            //----------------------------------------------------------------
+                            //Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
+                            //----------------------------------------------------------------
+
+                            //--- Atualiza o Sudoku board
+                            //----------------------------------------------------
+                            pintaCelula(intLinJogar, intColJogar, pincelBranco)
+                            //-----------------------------------------------------------------------
+                            escreveCelula(intLinJogar, intColJogar, intNum.toString(), pincelAzul)
+                            //-----------------------------------------------------------------------
+
+                            //--------------------------------------------
+                            desenhaSudokuBoard(false, canvas!!)
+                            //--------------------------------------------
+
+                            //--- Salva esse bitmap
+                            //------------------------------------
+                            copiaBmpByBuffer(myImage, bmpJogo)
+                            //------------------------------------
+
+                            //--- Atualiza a base de dados
+                            arArIntNums[intLinJogar][intColJogar] = intNum
+                            arIntNumsDisp[intNum - 1]--
+
+                            //-------------------
+                            atualizaNumDisp()
+                            //-------------------
+
+                            //--------------------------
+                            mostraNumsIguais(intNum)
+                            //--------------------------
+                            flagJoga = false
+                        }
+                    }
+
+                    if (!flagNumValido) { tvErros!!.text = "${++intContaErro}" }
+
                 }
             }
             false
@@ -456,62 +496,64 @@ class JogarActivity : Activity() {
         // Listeners para o evento onClick dos buttons
         //------------------------------------------------------------------------------------------
         // Texto / Bit Map
-        btnDraw.setOnClickListener {
+        btnInicia.setOnClickListener {
 
-            val strLegTexto  = resources.getString(R.string.texto)
-            val strLegBitMap = resources.getString(R.string.bitmap)
+            val strInicia = resources.getString(R.string.inicia)
+            val strPause  = resources.getString(R.string.pause)
+
+            val strReset  = resources.getString(R.string.reset)
 
             //--------------------------------------------------------------------------------------
             // Legenda do botão: Inicia
             //--------------------------------------------------------------------------------------
-            if (btnDraw.text == strLegTexto) {
+            if (btnInicia.text == strInicia) {
 
                 iViewSudokuBoard!!.isEnabled = true
                 iViewNumsDisps!!.isEnabled   = true
 
-                //--- Prepara para voltar ao bitmap
-                btnDraw.text = strLegBitMap
+                btnInicia.text = strPause
 
             }
 
             //--------------------------------------------------------------------------------------
-            // Legenda do botão: Reset
+            // Legenda do botão: ReInicia
             //--------------------------------------------------------------------------------------
             else {
 
-                tvNivel!!.text = ""
+                iViewSudokuBoard!!.isEnabled = false
+                iViewNumsDisps!!.isEnabled   = false
 
-                strLog = "-> Tap no btn \"Reset\" "
-                Log.d(cTAG, strLog)
-
-                //-----------------------------------------
-                arArIntNums = copiaArArInt(arArIntCopia)
-                //-----------------------------------------
-
-                arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-                //-------------
-                iniciaJogo()
-                //-------------
-
-                //--- Prepara para voltar ao texto
-                btnDraw.text = strLegTexto
+                btnInicia.text = strInicia
 
             }
         }
 
-        // Rotate
-        btnRotate.setOnClickListener {
-            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            intGraus += 30
-            if (intGraus >= 360) intGraus = 0
-            val fLargura = (iViewSudokuBoard!!.width shr 1).toFloat() // Divide por 2
-            val fAltura = (iViewSudokuBoard!!.height shr 1).toFloat() // Divide por 2
-            iViewSudokuBoard!!.pivotX = fLargura
-            iViewSudokuBoard!!.pivotY = fAltura
-            iViewSudokuBoard!!.rotation = intGraus.toFloat()
-            //}
-        }
+        // Reset
+        btnReset.setOnClickListener {
 
+            tvNivel!!.text = ""
+
+            intContaErro   = 0
+            tvErros!!.text = "$intContaErro"
+
+            strLog = "-> Tap no btn \"Reset\" "
+            Log.d(cTAG, strLog)
+
+            //-----------------------------------------
+            arArIntNums = copiaArArInt(arArIntCopia)
+            //-----------------------------------------
+
+            arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+            //-------------
+            iniciaJogo()
+            //-------------
+
+            iViewSudokuBoard!!.isEnabled = false
+            iViewNumsDisps!!.isEnabled   = false
+
+            btnInicia.text = resources.getString(R.string.inicia)
+
+        }
     }
 
     //----------------------------------------------------------------------------------------------
@@ -784,6 +826,7 @@ class JogarActivity : Activity() {
     //----------------------------------------------------------------------------------------------
     // Outras
     //----------------------------------------------------------------------------------------------
+    /*
     //--- Prepara o jogo conforme Regras
     private fun preparaJogo() {
 
@@ -1017,6 +1060,7 @@ class JogarActivity : Activity() {
         //------------------------
 
     }
+    */
 
     //--- Determina a qual quadrado menor uma célula pertence
     private fun determinaQm(linQM: Int, colQM: Int): Int {
@@ -1194,10 +1238,9 @@ class JogarActivity : Activity() {
 			int int_dyHeight = m_size.y; */
 
             //Log.d(cTAG, "-> Grandezas gráficas:")
-            val displayMetrics = this.resources.displayMetrics
-            val intDyWidth     = displayMetrics.heightPixels
-            val intDyHeight    = displayMetrics.widthPixels
-
+            //val displayMetrics = this.resources.displayMetrics
+            //val intDyWidth     = displayMetrics.heightPixels
+            //val intDyHeight    = displayMetrics.widthPixels
             //strLog = "   -Display: Largura: " + intDyWidth  + " pixels, Altura  : " +
             //                                                               intDyHeight + " pixels"
             //Log.d(cTAG, strLog)
@@ -1259,6 +1302,7 @@ class JogarActivity : Activity() {
         }
     }
 
+    /*
     //--- quantZeros
     private fun quantZeros(arArIntJogo : Array <Array <Int>>) : Int{
 
@@ -1273,11 +1317,15 @@ class JogarActivity : Activity() {
         return intQtiZeros
 
     }
+    */
 
     //--- iniciaJogo
     private fun iniciaJogo() {
 
         //*** Nesse ponto, arArIntNums (rascunho do jogo) e arArIntGab (gabarito) deverão estar Ok.
+        intContaErro   = 0
+        tvErros!!.text = "$intContaErro"
+
         Log.d(cTAG, "-> Inicia o jogo")
         Log.d(cTAG, "-> Jogo:")
         //----------------------
