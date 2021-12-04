@@ -125,6 +125,7 @@ class SudokuGameGenerator {
             //    considerarei como o "nível" do jogo, quantas vezes foi necessária a recursão.
             //---------------------------------------------
             var arArIntCopia = copiaArArInt(arArIntNums)
+            SudokuBackTracking.intNumBackTracking = 0
             //--------------------------------------------------------------------------------
             val flagSolOk = SudokuBackTracking.solveSudoku(arArIntCopia, arArIntCopia.size)
             //--------------------------------------------------------------------------------
@@ -262,6 +263,7 @@ class SudokuGameGenerator {
             listaQM(quadMaiorRet, false)
             //-------------------------------------
 
+            SudokuBackTracking.intNumBackTracking = 0
             //---------------------------------------------------------------------------------
             val flagJogoOk = SudokuBackTracking.solveSudoku(quadMaiorRet, quadMaiorRet.size)
             //---------------------------------------------------------------------------------

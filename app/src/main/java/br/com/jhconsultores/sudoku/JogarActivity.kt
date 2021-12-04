@@ -79,7 +79,7 @@ class JogarActivity : Activity() {
     //--- Controle de jogadas
     private var intColJogar = 0
     private var intLinJogar = 0
-    private var flagJoga = false
+    private var flagJoga    = false
 
     private var arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
     private var arArIntGab = Array(9) { Array(9) { 0 } }
@@ -183,9 +183,13 @@ class JogarActivity : Activity() {
     //private var crono  = Chronometer(this)
     //val sudoGameGen = SudokuGameGenerator ()
     //private var crono : Chronometer? = null  //(this)
+    private lateinit var crono : Chronometer
     private var strCronoInic = ""
     //private var strCronoLeit = ""
     private var timeStopped : Long = 0L
+
+    private var strInicia = ""
+    private var strPause  = ""
 
     //----------------------------------------------------------------------------------------------
     //                                     Eventos
@@ -205,12 +209,13 @@ class JogarActivity : Activity() {
         strCronoInic = resources.getString(R.string.crono_inic)
         //strCronoLeit = resources.getString(R.string.crono_inic)
 
-        //-------------------------------------
-        val crono = Chronometer(this)
-        //-------------------------------------
+        //---------------------------------
+        crono = Chronometer(this)
+        //---------------------------------
 
         val btnReset  = findViewById<View>(R.id.btnReset) as Button
         val btnInicia = findViewById<View>(R.id.btnInicia) as Button
+        btnInicia.isEnabled = true
 
         //Chronometer(this).also { it -> crono = it } //findViewById<Chronometer>(R.id.chronometer) as Chronometer
         //crono = findViewById(R.id.chronometer)
@@ -327,6 +332,7 @@ class JogarActivity : Activity() {
 
                 //--- Gera o gabarito para o jogo sugerido (preset)
                 arArIntGab = copiaArArInt(arArIntNums)
+                SudokuBackTracking.intNumBackTracking = 0
                 //---------------------------------------------------------------
                 flagJogoOk = SudokuBackTracking.solveSudoku(arArIntGab, 81)
                 //---------------------------------------------------------------
@@ -413,6 +419,7 @@ class JogarActivity : Activity() {
 
         // Números Disponíveis para se colocar em jogo
         iViewNumsDisps!!.setOnTouchListener { _, event -> //--- Só transfere o número para o board se estiver jogando
+
             if (flagJoga) {
 
                 //--- Coordenadas do numsDisps tocadas
@@ -451,7 +458,7 @@ class JogarActivity : Activity() {
                                 " no Sudoku board."
                         Log.d(cTAG, strLog)
 
-                        strToast = "Número NÃO Ok (linha ou coluna)"
+                        strToast = "Número NÃO Ok (linha, coluna ou quadro)"
                         //-----------------------------------------------------------------
                         Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
                         //-----------------------------------------------------------------
@@ -477,7 +484,7 @@ class JogarActivity : Activity() {
                         //--- Número OK qto ao gabarito
                         else {
 
-                            Log.d(cTAG, "-> Número válido; será incluído no Sudoku board.")
+                            //Log.d(cTAG, "-> Número válido; será incluído no Sudoku board.")
 
                             //strToast = "Número Ok!"
                             //----------------------------------------------------------------
@@ -511,13 +518,33 @@ class JogarActivity : Activity() {
                             //--------------------------
                             mostraNumsIguais(intNum)
                             //--------------------------
+
                             flagJoga = false
+
                         }
                     }
 
                     if (!flagNumValido) {
                         tvErros!!.text = "${++intContaErro}"
                     }
+
+                }
+
+                //--- Verifica se fim de jogo
+                var flagContJogo  = false
+                for (idxVetorNumDisp in 0..8) {
+
+                    if (arIntNumsDisp[idxVetorNumDisp] > 0) flagContJogo = true
+
+                }
+                //--- Se já foram utilizados todos os números disponíveis, pára o cronometro
+                if (!flagContJogo) {
+
+                    crono.stop()
+                    flagJoga = false
+
+                    btnInicia.text      = strInicia
+                    btnInicia.isEnabled = false
 
                 }
             }
@@ -530,8 +557,8 @@ class JogarActivity : Activity() {
         // Texto / Bit Map
         btnInicia.setOnClickListener {
 
-            val strInicia = resources.getString(R.string.inicia)
-            val strPause = resources.getString(R.string.pause)
+            strInicia = resources.getString(R.string.inicia)
+            strPause = resources.getString(R.string.pause)
 
             //--------------------------------------------------------------------------------------
             // Legenda do botão: Inicia
@@ -542,7 +569,7 @@ class JogarActivity : Activity() {
                 iViewNumsDisps!!.isEnabled = true
 
                 //crono.text = strCronoLeit
-                crono.setBase(SystemClock.elapsedRealtime() + timeStopped)
+                crono.base = SystemClock.elapsedRealtime() + timeStopped
                 //--------------
                 crono.start()
                 //--------------
@@ -559,7 +586,7 @@ class JogarActivity : Activity() {
                 iViewSudokuBoard!!.isEnabled = false
                 iViewNumsDisps!!.isEnabled = false
 
-                timeStopped = crono.getBase() - SystemClock.elapsedRealtime()
+                timeStopped = crono.base - SystemClock.elapsedRealtime()
                 //-------------
                 crono.stop()
                 //-------------
@@ -599,7 +626,9 @@ class JogarActivity : Activity() {
             crono.stop()
             //-------------
 
-            crono.setText(strCronoInic)
+            crono.text = strCronoInic
+
+            btnInicia.isEnabled = true
 
             btnInicia.text = resources.getString(R.string.inicia)
 
@@ -614,6 +643,7 @@ class JogarActivity : Activity() {
     //----------------------------------------------------------------------------------------------
     //--- desenhaSudokuBoard
     private fun desenhaSudokuBoard(flagApaga: Boolean, canvasDes: Canvas) {
+
         var flCoordXInic: Float
         var flCoordYInic: Float
         var flCoordXFim: Float
@@ -811,7 +841,7 @@ class JogarActivity : Activity() {
     //--- atualiza numDisp
     private fun atualizaNumDisp() {
 
-        val intOffSet = 3
+        val intOffSet     = 3
 
         //--- Pinta as células
         for (intIdxCel in 0..8) {
@@ -859,11 +889,11 @@ class JogarActivity : Activity() {
                 val xCoord = intCellwidth / 3 + intIdxCel * intCellwidth
 
                 val strTxt = (intIdxCel + 1).toString()
-
                 pincelBranco.textSize = intTamTxt * scale
                 //----------------------------------------------------------------------------------
                 canvasNumDisp!!.drawText(strTxt, xCoord.toFloat(), yCoord.toFloat(), pincelBranco)
                 //----------------------------------------------------------------------------------
+
             }
         }
 
@@ -871,247 +901,12 @@ class JogarActivity : Activity() {
         //--------------------------------------------
         iViewNumsDisps!!.setImageBitmap(bmpNumDisp)
         //--------------------------------------------
+
     }
 
     //----------------------------------------------------------------------------------------------
     // Outras
     //----------------------------------------------------------------------------------------------
-    /*
-    //--- Prepara o jogo conforme Regras
-    private fun preparaJogo() {
-
-        //---------------------------------------
-        // arArIntNums = copiaArArInt(arArIntTst)
-        //---------------------------------------
-
-        Log.d(cTAG, "-> Jogo antes da preparação:")
-        //-----------------------
-        listarQM (arArIntNums)
-        //-----------------------
-
-        //------------------------------------------------------------------------------------------
-        // Regra1: todos os Qm devem conter pelo menos dois zeros
-        //------------------------------------------------------------------------------------------
-        for (quadMenor in 0..8) {
-
-            val arLinsQM = calcLinsQM(quadMenor)
-            val arColsQM = calcColsQM(quadMenor)
-
-            val arIntCelQM = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
-            for (idxLin in 0..2) {
-                for (idxCol in 0..2) {
-
-                    arIntCelQM[idxLin * 3 + idxCol] =
-                                                    arArIntNums[arLinsQM[idxLin]][arColsQM[idxCol]]
-                }
-            }
-            var intQtiZeros = 0
-            val arIntNumRnd = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-            var flagQmOk = false
-            while (!flagQmOk) {
-
-                var flagNumOk = false
-                while (!flagNumOk) {
-
-                    //--- Gera número aleatório sem repetição
-                    //-----------------------------
-                    val numRnd = (1..9).random()
-                    //-----------------------------
-                    if (arIntNumRnd[numRnd - 1] > 0) {
-
-                        arIntNumRnd[numRnd - 1] = 0
-                        arIntCelQM [numRnd - 1] = 0
-
-                        flagNumOk = true
-                        if (++intQtiZeros > 1) flagQmOk = true
-
-                    }
-                }
-            }
-
-            for (linMenor in 0..2) {
-
-                for (colMenor in 0..2) {
-
-                    val valCel = arIntCelQM[linMenor * 3 + colMenor]
-                    arArIntNums[arLinsQM[linMenor]][arColsQM[colMenor]] = valCel
-
-                }
-            }
-        }
-        Log.d(cTAG, "-> Jogo após a preparação conforme a Regra1:")
-        //-----------------------
-        listarQM (arArIntNums)
-        //-----------------------
-
-        //------------------------------------------------------------------------------------------
-        // Regra2: todas as linhas devem conter pelo menos dois zeros
-        //------------------------------------------------------------------------------------------
-        for (intLinha in 0..8) {
-
-            val arIntNumRnd = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-
-            //--- Lê a linha toda e armazena-a num vetor
-            val arIntCelLin = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
-            for (intCol in 0..8) {arIntCelLin[intCol] = arArIntNums[intLinha][intCol]}
-
-            //--- Conta qtos zeros essa linha já tem
-            var intQtiZeros = 0
-            for (intCol in 0..8) { if (arIntCelLin[intCol] == 0) intQtiZeros++ }
-
-            //--- Enqto NÃO tiver pelo menos 2 zeros na linha, gera um índice aleatório e se o vetor
-            //    que controla os numRND tiver nesse índice valor diferente de zero, zera-o.
-            while (intQtiZeros < 2) {
-
-                var flagNumOk = false
-                while (!flagNumOk) {
-
-                    //--- Gera número aleatório sem repetição
-                    //-----------------------------
-                    val numRnd = (1..9).random()
-                    //-----------------------------
-                    if (arIntNumRnd[numRnd - 1] > 0) {
-
-                        arIntNumRnd[numRnd - 1] = 0
-                        if (arIntCelLin [numRnd - 1] > 0) { arIntCelLin [numRnd - 1] = 0 }
-
-                        flagNumOk = true
-                        intQtiZeros ++
-
-                    }
-                }
-            }
-
-            //--- Retorna as células à linha
-            for (idxColQM in 0..8) { arArIntNums[intLinha][idxColQM] = arIntCelLin[idxColQM] }
-
-        }
-        Log.d(cTAG, "-> Jogo após a preparação conforme a Regra2:")
-        //-----------------------
-        listarQM (arArIntNums)
-        //-----------------------
-
-        //------------------------------------------------------------------------------------------
-        // Regra3: todas as colunas devem conter pelo menos dois zeros
-        //------------------------------------------------------------------------------------------
-        for (intCol in 0..8) {
-
-            //--- Vetor para evitar o uso de idx repetidos
-            val arIntNumRnd = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-
-            //--- Lê a coluna toda e armazena-a num vetor
-            val arIntCelCol = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
-            for (intLinha in 0..8) {arIntCelCol[intLinha] = arArIntNums[intLinha][intCol]}
-
-            //--- Conta qtos zeros essa linha já tem
-            var intQtiZeros = 0
-            for (intLinha in 0..8) { if (arIntCelCol[intLinha] == 0) intQtiZeros++ }
-
-            //--- Enqto NÃO tiver pelo menos 2 zeros na linha, gera um índice aleatório e se o vetor
-            //    que controla os numRND tiver nesse índice valor diferente de zero, zera-o.
-            while (intQtiZeros < 2) {
-
-                var flagNumOk = false
-                while (!flagNumOk) {
-
-                    //--- Gera número aleatório sem repetição
-                    //-----------------------------
-                    val numRnd = (1..9).random()
-                    //-----------------------------
-                    if (arIntNumRnd[numRnd - 1] > 0) {
-
-                        arIntNumRnd[numRnd - 1] = 0
-                        if (arIntCelCol [numRnd - 1] > 0) { arIntCelCol [numRnd - 1] = 0 }
-
-                        flagNumOk = true
-                        intQtiZeros ++
-
-                    }
-                }
-            }
-
-            //--- Retorna as células à coluna
-            for (idxLinhaQM in 0..8) { arArIntNums[idxLinhaQM][intCol] = arIntCelCol[idxLinhaQM] }
-
-        }
-        Log.d(cTAG, "-> Jogo após a preparação conforme a Regra3:")
-        //-----------------------
-        listarQM (arArIntNums)
-        //-----------------------
-
-        //------------------------------------------------------------------------------------------
-        // Regra4: completa as casas com zero conforme o nível do jogo
-        //------------------------------------------------------------------------------------------
-        //--- Para a Regra4, determina a qtidd de Zeros no jogo
-        //var intQtiZeros = 0
-        //for (idxLin in 0..8) {
-        //    for (idxCol in 0..8) { if (arArIntNums[idxLin][idxCol] == 0) intQtiZeros++ }
-        //}
-        //Log.d(cTAG, "-> Quantidade de Zeros após a Regra3: $intQtiZeros")
-
-        //------------------------------------------
-        var intQtiZeros = quantZeros(arArIntNums)
-        //------------------------------------------
-
-        /* Regra1 zera pelo menos 2 células para cada Qm;
-           Regra2 zera pelo menos 2 células a cada linha e
-           Regra3 zera pelo menos 2 células a cada coluna
-           a qtidd de zeros totalizou 26. Ficou muito fácil a solução.
-
-           Nos 4 presets-exemplos, a qtidd de zeros está entre 32 e 43
-         */
-
-        val intQtiMaxZeros = 40
-
-        //--- Vetor para evitar repetição de números Rnd
-        var arIntNumRnd = Array(81) { 0 }
-
-        for (idxConta in 0..80) {
-            arIntNumRnd [idxConta] = idxConta + 1
-            //Log.d(cTAG, "   [$idxConta] = ${arIntNumRnd [idxConta]}")
-        }
-        while (intQtiZeros < intQtiMaxZeros) {
-
-            //Log.d(cTAG, "-> intQtiZeros = $intQtiZeros intQtiMaxZeros = $intQtiMaxZeros")
-
-            var flagNumOk = false
-            while (!flagNumOk) {
-
-                //--- Gera número aleatório sem repetição
-                //------------------------------
-                val numRnd = (0..81).random()
-                //------------------------------
-
-                //Log.d(cTAG, "-> numRnd = $numRnd arIntNumRnd[numRnd]=${arIntNumRnd[numRnd]}" )
-                if (arIntNumRnd[numRnd] > 0) {
-
-                    arIntNumRnd[numRnd] = 0
-
-                    val intLinha  = numRnd / 9
-                    val intColuna = numRnd % 9
-                    if (arArIntNums[intLinha][intColuna] > 0) {
-
-                        arArIntNums[intLinha][intColuna] = 0
-                        intQtiZeros ++
-
-                    }
-                    //Log.d(cTAG, "-> linha = $intLinha coluna = $intColuna" )
-
-                    flagNumOk = true
-
-                }
-            }
-        }
-        Log.d(cTAG, "-> Jogo após a preparação conforme a Regra4:")
-        //-----------------------
-        listarQM (arArIntNums)
-        //------------------------
-        quantZeros(arArIntNums)
-        //------------------------
-
-    }
-    */
-
     //--- Determina a qual quadrado menor uma célula pertence
     private fun determinaQm(linQM: Int, colQM: Int): Int {
 
@@ -1352,23 +1147,6 @@ class JogarActivity : Activity() {
         }
     }
 
-    /*
-    //--- quantZeros
-    private fun quantZeros(arArIntJogo : Array <Array <Int>>) : Int{
-
-        var intQtiZeros = 0
-        for (idxLin in 0..8) {
-            for (idxCol in 0..8) {
-                if (arArIntJogo[idxLin][idxCol] == 0) intQtiZeros++
-            }
-        }
-        Log.d(cTAG, "-> Quantidade de Zeros: $intQtiZeros")
-
-        return intQtiZeros
-
-    }
-    */
-
     //--- iniciaJogo
     private fun iniciaJogo() {
 
@@ -1443,6 +1221,20 @@ class JogarActivity : Activity() {
         //--- Inicializa variável local
         tvNivel!!.text = "${SudokuBackTracking.intNumBackTracking}"
 
+        //--- Verifica se fim de jogo
+        var flagContJogo  = false
+        for (idxVetorNumDisp in 0..8) {
+
+            if (arIntNumsDisp[idxVetorNumDisp] > 0) flagContJogo = true
+
+        }
+        //--- Se já foram utilizados todos os números disponíveis, pára o cronometro
+        if (!flagContJogo) {
+
+            crono.stop()
+            flagJoga = false
+
+        }
     }
 
     //--- preparaCrono
