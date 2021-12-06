@@ -16,6 +16,9 @@ class SudokuGameGenerator {
     var quadMaiorRet   = arrayOf<Array<Int>>()
     var intJogoAdaptar = 0
 
+    var flagJogoGeradoOk   = false
+    var flagJogoAdaptadoOk = false
+
     private var arArIntNums = Array(9) { Array(9) {0} }
 
     //----------------------------------------------------------------------------------------------
@@ -25,7 +28,8 @@ class SudokuGameGenerator {
     @SuppressLint("SetTextI18n")
     fun geraJogo() : Array<Array<Int>> {
 
-        var flagJogoOk      = false
+        flagJogoGeradoOk    = false
+
         var contaTentaJogo  = 0
         val limTentaJogo    = 150
         var flagQuadMenorOk : Boolean
@@ -34,7 +38,7 @@ class SudokuGameGenerator {
         inicQuadMaiorGeracao()
         //-----------------------
 
-        while (!flagJogoOk && contaTentaJogo < limTentaJogo) {  // && !flagTimeOut) {          //contaTentaJogo < 50) {  // 20) {   // 10) {
+        while (!flagJogoGeradoOk && contaTentaJogo < limTentaJogo) {  // && !flagTimeOut) {          //contaTentaJogo < 50) {  // 20) {   // 10) {
 
             //Log.d(cTAG, "-> Gera o jogo ${contaTentaJogo + 1}")
 
@@ -68,7 +72,7 @@ class SudokuGameGenerator {
 
             }
 
-            //--- Verifica se jogo válido
+            //--- Verifica se o jogo Gerado é válido
             var flagJogoVal = true
             for (idxLinhaQM in 0..8) {
 
@@ -92,9 +96,9 @@ class SudokuGameGenerator {
                 else strTmp
 
                 //------------------------------------
-                listaQM(quadMaiorRet, true)
+                listaQM(quadMaiorRet, false)
                 //------------------------------------
-                flagJogoOk = true
+                flagJogoGeradoOk = true
 
             }
             else { contaTentaJogo ++ }
@@ -107,6 +111,7 @@ class SudokuGameGenerator {
             Log.d(cTAG, "-> Tentou $limTentaJogo jogos. Fim.")
 
         }
+
         //--- Conseguiu!
         else {
             //-----------------------------------------
@@ -118,6 +123,11 @@ class SudokuGameGenerator {
             //--------------
             preparaJogo()      // arArIntNums: jogo preparado para ser jogado
             //--------------
+
+            Log.d(cTAG, "-> Jogo gerado preparado:")
+            //-----------------------------------
+            listaQM(arArIntNums, true)
+            //-----------------------------------
 
             //--- Atribui um nível ao jogo: resolve o jogo pelo algoritmo backTracking;
             //    considerarei como o "nível" do jogo, quantas vezes foi necessária a recursão.
@@ -245,6 +255,8 @@ class SudokuGameGenerator {
         var contaAdaptaJogo = 0
         var arArIntJogo     = Array(9) { Array(9) {0} }
 
+        flagJogoAdaptadoOk  = false
+
         while (++contaAdaptaJogo <= limAdaptaJogo) {
 
             Log.d(cTAG, "-> Adapta o jogo $contaAdaptaJogo:")
@@ -265,11 +277,11 @@ class SudokuGameGenerator {
             arArIntJogo = copiaArArInt(quadMaiorRet)
 
             SudokuBackTracking.intNumBackTracking = 0
-            //---------------------------------------------------------------------------------
-            val flagJogoOk = SudokuBackTracking.solveSudoku(quadMaiorRet, quadMaiorRet.size)
-            //---------------------------------------------------------------------------------
+            //-------------------------------------------------------------------------------------
+            flagJogoAdaptadoOk = SudokuBackTracking.solveSudoku(quadMaiorRet, quadMaiorRet.size)
+            //-------------------------------------------------------------------------------------
             val intNumBackTracking = SudokuBackTracking.intNumBackTracking
-            if (flagJogoOk) {
+            if (flagJogoAdaptadoOk) {
 
                 strLog  = "-> Jogo com preset $intJogoAdaptar adaptado"
                 strLog += " ( backTracking = $intNumBackTracking ):"
@@ -280,7 +292,7 @@ class SudokuGameGenerator {
                 Log.d(cTAG, "-> Gabarito do jogo (adaptação do preset):")
                 txtDados = "${txtDados}\n-> Gabarito:"
                 //-------------------------------------
-                listaQM(quadMaiorRet, true)
+                listaQM(quadMaiorRet, false)
                 //-------------------------------------
 
                 Log.d(cTAG, "-> Jogo (preset):")
@@ -475,6 +487,7 @@ class SudokuGameGenerator {
     }
 
     //--- listaquadMaiorRet
+    // flagShow: se true libera a apresentação do QM na tela do smartphone
     @SuppressLint("SetTextI18n")
     fun listaQM (quadMaior: Array<Array<Int>>, flagShow : Boolean) {
 
@@ -558,6 +571,7 @@ class SudokuGameGenerator {
         return flagNumeroOk
 
     }
+
     //--- copiaArArInt
     private fun copiaArArInt(arArIntPreset: Array<Array<Int>>): Array<Array<Int>> {
 
@@ -787,13 +801,9 @@ class SudokuGameGenerator {
         Log.d(cTAG, "-> Jogo após a preparação conforme a Regra4:")
 
         txtDados = "${txtDados}\n-> Jogo preparado R(1,2,3,4):"
-        //-----------------------------------
-        listaQM(arArIntNums, true)
-        //-----------------------------------
-
-        //------------------------
-        //quantZeros(arArIntNums)
-        //------------------------
+        //------------------------------------
+        listaQM(arArIntNums, false)
+        //------------------------------------
 
     }
 

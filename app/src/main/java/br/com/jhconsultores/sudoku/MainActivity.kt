@@ -9,6 +9,7 @@ import android.widget.Button
 
 //import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -126,36 +127,50 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
         txtDadosJogo?.text = strLog
 
-        //--- Envia o jogo gerado para ser usado como gabarito
-        val arIntNumsGab = ArrayList <Int> ()
-        for (idxLin in 0..8) {
-            for (idxCol in 0..8) {
-                //-------------------------------------------------
-                arIntNumsGab += sgg.quadMaiorRet[idxLin][idxCol]
-                //-------------------------------------------------
-            }
+        //--- Se não tiver jogo válido, informa ao usuário
+        if (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk) {
+
+            val strToast = "Não há jogo válido!"
+            //-----------------------------------------------------------------
+            Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
+            //-----------------------------------------------------------------
+
+            Log.d(cTAG, "-> $strToast")
+
         }
+        else {
 
-        //--- Envia o jogo preparado para ser jogado
-        val arIntNumsJogo = ArrayList <Int> ()
-        for (idxLin in 0..8) {
-            for (idxCol in 0..8) {
-                //-------------------------------------------
-                arIntNumsJogo += quadMaior[idxLin][idxCol]
-                //-------------------------------------------
+            //--- Envia o jogo gerado para ser usado como gabarito
+            val arIntNumsGab = ArrayList<Int>()
+            for (idxLin in 0..8) {
+                for (idxCol in 0..8) {
+                    //-------------------------------------------------
+                    arIntNumsGab += sgg.quadMaiorRet[idxLin][idxCol]
+                    //-------------------------------------------------
+                }
             }
+
+            //--- Envia o jogo preparado para ser jogado
+            val arIntNumsJogo = ArrayList<Int>()
+            for (idxLin in 0..8) {
+                for (idxCol in 0..8) {
+                    //-------------------------------------------
+                    arIntNumsJogo += quadMaior[idxLin][idxCol]
+                    //-------------------------------------------
+                }
+            }
+
+            //--- Prepara a Intent para chamar JogarActivity
+            val intent = Intent(this, JogarActivity::class.java)
+            intent.action = strOpcaoJogo
+            intent.putExtra("NivelDoJogo", SudokuBackTracking.intNumBackTracking)
+            intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
+            intent.putIntegerArrayListExtra("JogoPreparado", arIntNumsJogo)
+            //----------------------
+            startActivity(intent)
+            //----------------------
+
         }
-
-        //--- Prepara a Intent para chamar JogarActivity
-        val intent = Intent(this, JogarActivity::class.java)
-        intent.action = strOpcaoJogo
-        intent.putExtra("NivelDoJogo", SudokuBackTracking.intNumBackTracking)
-        intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
-        intent.putIntegerArrayListExtra("JogoPreparado",  arIntNumsJogo)
-        //----------------------
-        startActivity(intent)
-        //----------------------
-
     }
 
     /*
@@ -165,7 +180,7 @@ class MainActivity : AppCompatActivity() {
         //--- Inicializa um vetor para evitar repetição de números Rnd
         val arIntNumRnd = Array(81) { 0 }
 
-        Log.d(cTAG, "-> Inicio do teste do gerador RND ...")
+        Log.d(cTAG, "-> Início do teste do gerador RND ...")
 
         var intContaZero = 0
         do {
@@ -315,4 +330,3 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
-
