@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         txtDadosJogo!!.text = ""
+        sgg.txtDados        = ""
 
     }
 
@@ -77,7 +78,10 @@ class MainActivity : AppCompatActivity() {
 
         strLog = "-> Tap no btnGeraJogo"
         Log.d(cTAG, strLog)
+
         //txtDadosJogo?.text = strLog
+        txtDadosJogo?.text = ""
+        sgg.txtDados = ""
 
         //--- Gera um novo jogo
         //---------------------------
@@ -99,10 +103,13 @@ class MainActivity : AppCompatActivity() {
 
         strLog = "-> Tap no btnAdaptaJogo"
         Log.d(cTAG, strLog)
-        txtDadosJogo?.text = strLog
+
+        //txtDadosJogo?.text = strLog
+        txtDadosJogo?.text = ""
+        sgg.txtDados = ""
 
         //--- Prepara o preset para se conseguir o gabarito do jogo
-        if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 0
+        if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
         //-------------------------------------------
         inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
         //-------------------------------------------
@@ -125,7 +132,9 @@ class MainActivity : AppCompatActivity() {
 
         strLog = "-> Tap no btnJogaJogo"
         Log.d(cTAG, strLog)
-        txtDadosJogo?.text = strLog
+
+        txtDadosJogo?.text = ""
+        sgg.txtDados       = ""
 
         //--- Se não tiver jogo válido, informa ao usuário
         if (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk) {

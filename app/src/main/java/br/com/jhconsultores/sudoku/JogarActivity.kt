@@ -427,6 +427,8 @@ class JogarActivity : Activity() {
                 //--- Se já foram utilizados todos os números disponíveis, pára o cronometro
                 if (!flagContJogo) {
 
+                    Log.d(cTAG, "-> ${crono.text} - Fim")
+
                     crono.stop()
                     flagJoga = false
 
@@ -1130,6 +1132,7 @@ class JogarActivity : Activity() {
         if (!flagContJogo) {
 
             Log.d(cTAG, "-> ${crono.text} - Fim")
+
             crono.stop()
             flagJoga = false
 

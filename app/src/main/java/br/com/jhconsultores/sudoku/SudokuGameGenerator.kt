@@ -2,6 +2,7 @@ package br.com.jhconsultores.sudoku
 
 import android.annotation.SuppressLint
 import android.util.Log
+import br.com.jhconsultores.sudoku.SudokuBackTracking.intNumBackTracking
 
 class SudokuGameGenerator {
 
@@ -50,14 +51,8 @@ class SudokuGameGenerator {
                 var numTentaGeracao = 0
                 while (!flagQuadMenorOk && numTentaGeracao < 50) {
 
-                    //Log.d(cTAG, "   - tenta gerar Qm$quad: ${numTentaGeracao + 1}")
-
                     //----------------------------
                     array = geraQuadMenor(quad)
-                    //----------------------------
-
-                    //----------------------------
-                    //listaQuadMenor(quad, array)
                     //----------------------------
 
                     if (!array.contains(0) && !array.contains(-1)) flagQuadMenorOk = true
@@ -92,8 +87,7 @@ class SudokuGameGenerator {
                 val strTmp = "-> Jogo ${contaTentaJogo + 1}: válido!"
                 Log.d(cTAG, strTmp)
 
-                txtDados = if (txtDados.isNotEmpty()) "${txtDados}\n$strTmp"
-                else strTmp
+                txtDados = ""
 
                 //------------------------------------
                 listaQM(quadMaiorRet, false)
@@ -144,11 +138,17 @@ class SudokuGameGenerator {
                 listaQM(arArIntCopia, false)
                 //-------------------------------------
 
-                val intNumBackTracking = SudokuBackTracking.intNumBackTracking
-                Log.d(cTAG, String.format("%s %d", "-> Nível do jogo gerado: ", intNumBackTracking))
+                val intQtiZeros = quantZeros(arArIntNums)
 
-                txtDados = "${txtDados}\n-> Quantidade de clues:  ${quantZeros(arArIntNums)}"
-                txtDados = "${txtDados}\n-> Nível do jogo gerado: $intNumBackTracking"
+                var strQtiZerosPad = intQtiZeros.toString().padStart(4)
+                strLog   = String.format ( "%s %s", "-> Quantidade de clues:", strQtiZerosPad)
+                Log.d(cTAG, strLog)
+                txtDados = "${txtDados}\n$strLog"
+
+                var strNivelJogoPad = intNumBackTracking.toString().padStart(4)
+                strLog   = String.format( "%s %s", "-> Nível do jogo gerado:", strNivelJogoPad)
+                Log.d(cTAG, strLog)
+                txtDados = "${txtDados}\n$strLog"
 
             }
         }
@@ -264,7 +264,8 @@ class SudokuGameGenerator {
 
             val strTmp = "\n-> Adapta jogo com preset $intJogoAdaptar"
 
-            txtDados = "${txtDados}$strTmp"
+            // txtDados = "${txtDados}$strTmp"
+            txtDados = ""
 
             //---------------------------------------
             //inicQuadMaiorAdaptacao(intJogoAdaptar)
@@ -284,26 +285,33 @@ class SudokuGameGenerator {
             if (flagJogoAdaptadoOk) {
 
                 strLog  = "-> Jogo com preset $intJogoAdaptar adaptado"
-                strLog += " ( backTracking = $intNumBackTracking ):"
                 Log.d(cTAG, strLog)
 
-                txtDados = "${txtDados}\n$strLog"
+                txtDados = "$strLog"
 
                 Log.d(cTAG, "-> Gabarito do jogo (adaptação do preset):")
-                txtDados = "${txtDados}\n-> Gabarito:"
+                //txtDados = "${txtDados}\n-> Gabarito:"
                 //-------------------------------------
                 listaQM(quadMaiorRet, false)
                 //-------------------------------------
 
                 Log.d(cTAG, "-> Jogo (preset):")
-                txtDados = "${txtDados}\n-> Preset:"
+                //txtDados = "${txtDados}\n-> Preset:"
                 //-------------------------------------
                 listaQM(arArIntJogo, true)
                 //-------------------------------------
 
                 val intQtiZeros = quantZeros(arArIntJogo)
-                Log.d(cTAG, "-> Clues: $intQtiZeros")
-                txtDados = "${txtDados}\n-> Clues: $intQtiZeros"
+
+                var strQtiZerosPad = intQtiZeros.toString().padStart(4)
+                strLog   = String.format ( "%s %s", "-> Quantidade de clues:", strQtiZerosPad)
+                Log.d(cTAG, strLog)
+                txtDados = "${txtDados}\n$strLog"
+
+                var strNivelJogoPad = intNumBackTracking.toString().padStart(4)
+                strLog   = String.format( "%s %s", "-> Nível do jogo gerado:", strNivelJogoPad)
+                Log.d(cTAG, strLog)
+                txtDados = "${txtDados}\n$strLog"
 
             }
             else {
@@ -506,6 +514,7 @@ class SudokuGameGenerator {
             Log.d(cTAG, strLog)
 
             val strDadosTmp = "\n" + strDados
+            //val strDadosTmp = strDados
 
             if (flagShow) txtDados = "${txtDados}$strDadosTmp"
 
@@ -800,7 +809,8 @@ class SudokuGameGenerator {
         }
         Log.d(cTAG, "-> Jogo após a preparação conforme a Regra4:")
 
-        txtDados = "${txtDados}\n-> Jogo preparado R(1,2,3,4):"
+        //txtDados = "${txtDados}\n-> Jogo preparado R(1,2,3,4):"
+        txtDados = "-> Jogo preparado R(1,2,3,4):"
         //------------------------------------
         listaQM(arArIntNums, false)
         //------------------------------------
@@ -816,7 +826,7 @@ class SudokuGameGenerator {
                 if (arArIntJogo[idxLin][idxCol] == 0) intQtiZeros++
             }
         }
-        Log.d(cTAG, "-> Quantidade de Zeros: $intQtiZeros")
+        //Log.d(cTAG, "-> Quantidade de Zeros: $intQtiZeros")
 
         return intQtiZeros
 
