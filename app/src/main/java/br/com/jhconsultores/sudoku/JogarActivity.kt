@@ -545,7 +545,7 @@ class JogarActivity : Activity() {
         var flagApagaBoard : Boolean = flagApaga
 
         //--- Redesenha o board a partir do zero
-        flagApagaBoard = true
+        //flagApagaBoard = true
         if (flagApagaBoard) {
 
             //-----------------------------------------------------------------------------
@@ -617,14 +617,14 @@ class JogarActivity : Activity() {
                 if (arArIntNums[intLin][intColuna] == intNum) {
 
                     //--- Pinta a célula
-                    //-----------------------------------------------------------------
-                    pintaCelula(intLin, intColuna, pincelPurple200) //, canvasMyImage!!)
-                    //-----------------------------------------------------------------
+                    //------------------------------------------------
+                    pintaCelula(intLin, intColuna, pincelPurple200)
+                    //------------------------------------------------
 
                     //--- Escreve o número na célula
                     pincelBranco.textSize = intTamTxt * scale
                     //------------------------------------------------------------------
-                    escreveCelula(intLin, intColuna, intNum.toString(), pincelBranco) //, canvasMyImage!!)
+                    escreveCelula(intLin, intColuna, intNum.toString(), pincelBranco)
                     //------------------------------------------------------------------
                 }
             }
@@ -734,38 +734,12 @@ class JogarActivity : Activity() {
     //--- pintaCelula no canvasMyImage
     private fun pintaCelula(intLinha: Int, intCol: Int, pincelPintar: Paint?) {
 
-        val intOffSetXSup: Int
-        val intOffSetYSup: Int
-        val intOffSetXInf: Int
-        val intOffSetYInf: Int
-
-        when {
-            intLinha < 3 -> {
-                intOffSetXSup = 4
-                intOffSetYSup = 4
-                intOffSetXInf = 2
-                intOffSetYInf = 2
-            }
-            intLinha < 6 -> {
-                intOffSetXSup = 4
-                intOffSetYSup = 4
-                intOffSetXInf = 2
-                intOffSetYInf = 2
-            }
-            else -> {
-                intOffSetXSup = 4
-                intOffSetYSup = 4
-                intOffSetXInf = 1
-                intOffSetYInf = 0
-            }
-        }
-
         //- Canto superior esquerdo do quadrado
-        val intXSupEsq = intCol   * intCellwidth  + intOffSetXSup
-        val intYSupEsq = intLinha * intCellheight + intOffSetYSup
+        val intXSupEsq = intCol   * intCellwidth
+        val intYSupEsq = intLinha * intCellheight
         //- Canto inferior direito do quadrado
-        val intXInfDir = intXSupEsq + intCellwidth  - intOffSetXInf
-        val intYInfDir = intYSupEsq + intCellheight - intOffSetYInf
+        val intXInfDir = intXSupEsq + intCellwidth
+        val intYInfDir = intYSupEsq + intCellheight
         //-------------------------------------------------------------------------------
         canvasMyImage!!.drawRect(
             intXSupEsq.toFloat(),
@@ -775,6 +749,9 @@ class JogarActivity : Activity() {
             pincelPintar!!
         )
         //-------------------------------------------------------------------------------
+        desenhaSudokuBoard(false)
+        //-----------------------------------
+
     }
 
     //--- escreveCelula no canvasMyImage

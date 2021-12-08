@@ -1,16 +1,17 @@
 package br.com.jhconsultores.sudoku
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+
 import android.view.View
-import android.widget.Button
-import android.widget.RadioGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
 
 //import android.widget.ScrollView
-import android.widget.TextView
-import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,7 +27,13 @@ class MainActivity : AppCompatActivity() {
     private var btnAdaptaJogo : Button? = null
     private var btnJogaJogo   : Button? = null
 
-    private lateinit var groupRBnivel : RadioGroup
+    private lateinit var groupRBnivel   : RadioGroup
+    private lateinit var rbFacil        : RadioButton
+    private lateinit var rbMedio        : RadioButton
+    private lateinit var rbDificil      : RadioButton
+    private lateinit var rbMuitoDificil : RadioButton
+
+    private lateinit var edtViewSubNivel: EditText
 
     private var strOpcaoJogo = "JogoGerado"
 
@@ -35,6 +42,12 @@ class MainActivity : AppCompatActivity() {
     private var txtDadosJogo : TextView? = null
 
     private var sgg = SudokuGameGenerator ()
+
+    // Núm     0   17          38          49      56-61   81
+    // clues  81   64          43          32      25-20    0
+    //        |xxxx|  DIFÍCIL  |   MÉDIO   |  FÁCIL |xxxxxxx|
+    //                |            |                |
+    // SETUP         60           40             R1,2,3
 
     //----------------------------------------------------------------------------------------------
     // Eventos da MainActivity
@@ -55,8 +68,18 @@ class MainActivity : AppCompatActivity() {
         btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
 
         groupRBnivel  = findViewById(R.id.radioGrpNivel)
+        rbFacil       = findViewById<RadioButton>(R.id.nivelFacil)
+        rbMedio       = findViewById<RadioButton>(R.id.nivelMédio)
+        rbDificil     = findViewById<RadioButton>(R.id.nivelDifícil)
+        rbMuitoDificil= findViewById<RadioButton>(R.id.nivelMuitoDifícil)
+
+        edtViewSubNivel= findViewById<EditText>(R.id.edtViewSubNivel)
 
         txtDadosJogo  = findViewById(R.id.txtJogos)
+
+        //hideSoftKeyboard(currentFocus ?: View(this))
+
+        //closeKeyBoard()
 
     }
 
@@ -67,6 +90,10 @@ class MainActivity : AppCompatActivity() {
 
         txtDadosJogo!!.text = ""
         sgg.txtDados        = ""
+
+        //--------------------------
+        prepRBniveis(true)
+        //--------------------------
 
     }
 
@@ -93,9 +120,24 @@ class MainActivity : AppCompatActivity() {
         sgg.txtDados = ""
 
         //--- Gera um novo jogo
-        //---------------------------
-        quadMaior = sgg.geraJogo()
-        //---------------------------
+        var nivelJogo = when {
+
+            rbFacil.isChecked   -> 20
+
+            rbMedio.isChecked   -> 30
+
+            rbDificil.isChecked -> 40
+
+            rbMuitoDificil.isChecked -> 50
+
+            else -> 0
+
+        }
+        nivelJogo += edtViewSubNivel.text.toString().toInt()
+
+        //------------------------------------
+        quadMaior = sgg.geraJogo(nivelJogo)
+        //------------------------------------
 
         txtDadosJogo?.append(sgg.txtDados)
 
@@ -193,6 +235,37 @@ class MainActivity : AppCompatActivity() {
             //----------------------
 
         }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // Funções para o atendimento de tapping nos radio buttons
+    //----------------------------------------------------------------------------------------------
+    fun rbJogoFacil(view : View?) {
+
+        strLog  = "-> onClick rbJogoFacil"
+        Log.d(cTAG, strLog)
+
+    }
+
+    fun rbJogoMedio(view : View?) {
+
+        strLog  = "-> onClick rbJogoMedio"
+        Log.d(cTAG, strLog)
+
+    }
+
+    fun rbJogoDificil(view : View?) {
+
+        strLog  = "-> onClick rbJogoDificil"
+        Log.d(cTAG, strLog)
+
+    }
+
+    fun rbJogoMuitoDificil(view : View?) {
+
+        strLog  = "-> onClick rbJogoMuitoDificil"
+        Log.d(cTAG, strLog)
+
     }
 
     //----------------------------------------------------------------------------------------------
@@ -334,6 +407,33 @@ class MainActivity : AppCompatActivity() {
 
             }
 
+        }
+    }
+
+    //--- Esconde o keyboard
+    /*
+    private fun hideSoftKeyboard(view : View) {
+
+        val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow(view.windowToken, 0)
+
+    }
+     */
+
+    /*
+    private fun Context.hideSoftKeyboard(view: View) {
+
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+
+    }
+    */
+
+    private fun closeKeyBoard() {
+        val view = this.currentFocus
+        if (view != null) {
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
 

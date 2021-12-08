@@ -42,9 +42,12 @@
     <string name="legClues"  >Clues: </string>
     <string name="clues_inic">0</string>
 
+    <string name="legNivel"    >Nivel:</string>
     <string name="nivelFacil"  >Fácil</string>
     <string name="nivelMedio"  >Médio</string>
     <string name="nivelDificil">Difícil</string>
-    <string name="legNivel"    >Nivel do jogo:</string>
+    <string name="nivelMuitoDificil">Muito difícil</string>
+    <string name="subNivel">Sub Nível: </string>
+    <string name="valor0">0</string>
 
 </resources>

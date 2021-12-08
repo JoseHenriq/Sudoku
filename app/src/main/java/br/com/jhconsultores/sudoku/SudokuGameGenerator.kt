@@ -27,7 +27,7 @@ class SudokuGameGenerator {
     //----------------------------------------------------------------------------------------------
     //--- GeraJogo
     @SuppressLint("SetTextI18n")
-    fun geraJogo() : Array<Array<Int>> {
+    fun geraJogo(nivelJogo : Int) : Array<Array<Int>> {
 
         flagJogoGeradoOk    = false
 
@@ -114,9 +114,9 @@ class SudokuGameGenerator {
 
             //--- Prepara arArIntNums para o jogo: deixa com zeros onde o usuário irá jogar;
             //    a qti de zeros será tão maior quanto o grau de dificuldade for maior.
-            //--------------
-            preparaJogo()      // arArIntNums: jogo preparado para ser jogado
-            //--------------
+            //-----------------------
+            preparaJogo(nivelJogo)      // arArIntNums: jogo preparado para ser jogado
+            //-----------------------
 
             Log.d(cTAG, "-> Jogo gerado preparado:")
             //-----------------------------------
@@ -604,7 +604,7 @@ class SudokuGameGenerator {
     }
 
     //--- Prepara o jogo conforme Regras
-    private fun preparaJogo() {
+    private fun preparaJogo(nivelJogo : Int) {
 
         //Log.d(cTAG, "-> Jogo antes da preparação:")
         //-----------------------
@@ -614,6 +614,7 @@ class SudokuGameGenerator {
         //------------------------------------------------------------------------------------------
         // Regra1: todos os Qm devem conter pelo menos dois zeros cada
         //------------------------------------------------------------------------------------------
+        var qtiZerosNivel = 0
         for (quadMenor in 0..8) {
 
             val arLinsQM = calcLinsQM(quadMenor)
@@ -625,6 +626,7 @@ class SudokuGameGenerator {
 
                     arIntCelQM[idxLin * 3 + idxCol] =
                         arArIntNums[arLinsQM[idxLin]][arColsQM[idxCol]]
+
                 }
             }
             var intQtiZeros = 0
@@ -657,6 +659,8 @@ class SudokuGameGenerator {
 
                     val valCel = arIntCelQM[linMenor * 3 + colMenor]
                     arArIntNums[arLinsQM[linMenor]][arColsQM[colMenor]] = valCel
+
+                    if (valCel == 0 && ++qtiZerosNivel > nivelJogo) break
 
                 }
             }
@@ -762,55 +766,68 @@ class SudokuGameGenerator {
         //-------------------------------------
 
         //------------------------------------------------------------------------------------------
-        // Regra4: completa as casas com zero conforme o nível do jogo
+        // Regra4: para os níveis médios completa as casas com zero conforme o nível do jogo
         //------------------------------------------------------------------------------------------
+        if (nivelJogo > 0) {
 
-        //--- Para a Regra4, determina a qtidd de Zeros no jogo
-        //------------------------------------------
-        var intQtiZeros = quantZeros(arArIntNums)
-        //------------------------------------------
-        //--- Inicializa um vetor para evitar repetição de números Rnd
-        val arIntNumRnd = Array(81) { 0 }
-        for (idxConta in 0..80) { arIntNumRnd [idxConta] = idxConta + 1 }
+            //--- Para a Regra4, determina a qtidd de Zeros no jogo
+            //------------------------------------------
+            var intQtiZeros = quantZeros(arArIntNums)
+            //------------------------------------------
+            //--- Inicializa um vetor para evitar repetição de números Rnd
+            val arIntNumRnd = Array(81) { 0 }
+            for (idxConta in 0..80) {
+                arIntNumRnd[idxConta] = idxConta + 1
+            }
 
-        val intQtiMaxZeros = 40
-        while (intQtiZeros < intQtiMaxZeros) {
+            val intQtiMaxZeros = nivelJogo     // 40
+            while (intQtiZeros < intQtiMaxZeros) {
 
-            //Log.d(cTAG, "-> intQtiZeros = $intQtiZeros intQtiMaxZeros = $intQtiMaxZeros")
+                //Log.d(cTAG, "-> intQtiZeros = $intQtiZeros intQtiMaxZeros = $intQtiMaxZeros")
 
-            var flagNumOk = false
-            while (!flagNumOk) {
+                var flagNumOk = false
+                while (!flagNumOk) {
 
-                //--- Gera número aleatório sem repetição
-                //---------------------------------
-                val numRndGen = (1..81).random()     // Gera os números aleatórios de 1 a 81 inclus.
-                //---------------------------------
+                    //--- Gera número aleatório sem repetição
+                    //---------------------------------
+                    val numRndGen =
+                        (1..81).random()     // Gera os números aleatórios de 1 a 81 inclus.
+                    //---------------------------------
 
-                //Log.d(cTAG, "-> numRnd = $numRnd arIntNumRnd[numRnd]=${arIntNumRnd[numRnd]}" )
-                val numRnd = numRndGen - 1
-                if (arIntNumRnd[numRnd] > 0) {
+                    //Log.d(cTAG, "-> numRnd = $numRnd arIntNumRnd[numRnd]=${arIntNumRnd[numRnd]}" )
+                    val numRnd = numRndGen - 1
+                    if (arIntNumRnd[numRnd] > 0) {
 
-                    arIntNumRnd[numRnd] = 0
+                        arIntNumRnd[numRnd] = 0
 
-                    val intLinha  = numRnd / 9
-                    val intColuna = numRnd % 9
-                    if (arArIntNums[intLinha][intColuna] > 0) {
+                        val intLinha = numRnd / 9
+                        val intColuna = numRnd % 9
+                        if (arArIntNums[intLinha][intColuna] > 0) {
 
-                        arArIntNums[intLinha][intColuna] = 0
-                        intQtiZeros ++
+                            arArIntNums[intLinha][intColuna] = 0
+                            intQtiZeros++
+
+                        }
+                        //Log.d(cTAG, "-> linha = $intLinha coluna = $intColuna" )
+
+                        flagNumOk = true
 
                     }
-                    //Log.d(cTAG, "-> linha = $intLinha coluna = $intColuna" )
-
-                    flagNumOk = true
-
                 }
             }
-        }
-        Log.d(cTAG, "-> Jogo após a preparação conforme a Regra4:")
+            strLog   = "-> Jogo após a preparação conforme a Regra4"
+            //txtDados = "${txtDados}\n-> Jogo preparado R(1,2,3,4):"
+            txtDados = "-> Jogo preparado R(1,2,3,4):"
 
-        //txtDados = "${txtDados}\n-> Jogo preparado R(1,2,3,4):"
-        txtDados = "-> Jogo preparado R(1,2,3,4):"
+        }
+        else {
+
+            strLog = "-> Jogo após a preparação conforme as Regra1,2,3 "
+            txtDados = "-> Jogo preparado R(1,2,3):"
+
+        }
+        Log.d(cTAG, strLog)
+
         //------------------------------------
         listaQM(arArIntNums, false)
         //------------------------------------
