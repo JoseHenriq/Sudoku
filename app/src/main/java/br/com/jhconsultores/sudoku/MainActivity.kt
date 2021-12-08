@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //--- Evento tapping no botão de adaptação de jogo
+    //--- Evento tapping no botão para jogar o jogo
     @Suppress("UNUSED_PARAMETER")
     fun btnJogaJogoClick(view : View?) {
 
@@ -182,45 +182,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /*
-    //--- Verifica o Gerador de números aleatórios
-    private fun testaGenRnd () {
-
-        //--- Inicializa um vetor para evitar repetição de números Rnd
-        val arIntNumRnd = Array(81) { 0 }
-
-        Log.d(cTAG, "-> Início do teste do gerador RND ...")
-
-        var intContaZero = 0
-        do {
-
-            //--- Gera número aleatório sem repetição
-            //---------------------------------
-            val numRnd = (1..81).random()      // gera de 1 a 81 inclusives
-            //---------------------------------
-            if (arIntNumRnd[numRnd - 1] == 0) { arIntNumRnd[numRnd - 1] = numRnd }
-
-            intContaZero = 0
-            for (idxNumRnd in 0..80) {
-
-                if (arIntNumRnd[idxNumRnd] == 0) intContaZero++
-
-            }
-
-        } while (intContaZero > 0)
-
-        Log.d(cTAG, "-> Fim do teste do gerador RND!")
-
-    }
-    */
-
+    //----------------------------------------------------------------------------------------------
+    // Funções
+    //----------------------------------------------------------------------------------------------
     //--- inicQuadMaiorAdaptacao
     private fun inicQuadMaiorAdaptacao(jogoAdaptar : Int) {
 
         var array : Array <Int>
         quadMaiorAdapta = arrayOf<Array<Int>>()
 
-            //--- Simula os dados iniciais propostos
+        //--- Simula os dados iniciais propostos
         when (jogoAdaptar) {
 
             1 -> run {
@@ -337,5 +308,37 @@ class MainActivity : AppCompatActivity() {
         return arArIntTmp
 
     }
+
+    /*
+    //--- Verifica o Gerador de números aleatórios
+    private fun testaGenRnd () {
+
+        //--- Inicializa um vetor para evitar repetição de números Rnd
+        val arIntNumRnd = Array(81) { 0 }
+
+        Log.d(cTAG, "-> Início do teste do gerador RND ...")
+
+        var intContaZero = 0
+        do {
+
+            //--- Gera número aleatório sem repetição
+            //---------------------------------
+            val numRnd = (1..81).random()      // gera de 1 a 81 inclusives
+            //---------------------------------
+            if (arIntNumRnd[numRnd - 1] == 0) { arIntNumRnd[numRnd - 1] = numRnd }
+
+            intContaZero = 0
+            for (idxNumRnd in 0..80) {
+
+                if (arIntNumRnd[idxNumRnd] == 0) intContaZero++
+
+            }
+
+        } while (intContaZero > 0)
+
+        Log.d(cTAG, "-> Fim do teste do gerador RND!")
+
+    }
+    */
 
 }

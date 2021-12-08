@@ -259,8 +259,8 @@ class SudokuGameGenerator {
 
         while (++contaAdaptaJogo <= limAdaptaJogo) {
 
-            Log.d(cTAG, "-> Adapta o jogo $contaAdaptaJogo:")
-            Log.d(cTAG, "   - preset $intJogoAdaptar")
+            Log.d(cTAG, "-> Preset $intJogoAdaptar")
+            Log.d(cTAG, "   - tenta adaptar o jogo ($contaAdaptaJogo)")
 
             val strTmp = "\n-> Adapta jogo com preset $intJogoAdaptar"
 

@@ -70,15 +70,17 @@
 
     </RelativeLayout>
 
-    <ImageView android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
+    <ImageView android:id    ="@+id/imageView1"
+        android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
         android:layout_marginStart="@dimen/MargemEsquerdaBoard"
         android:layout_marginTop  ="@dimen/MargemAcima"
 
         android:contentDescription="@string/testeCanva3"
-        android:src="@drawable/sudoku_board_w360h315" />
+        android:src="@drawable/sudoku_board3"/>
+
+    <!--android:src="@drawable/sudoku_board_w360h315"-->
 
     <!--- Quantidade de clues -->
     <TextView android:id="@+id/tv_LegClues"

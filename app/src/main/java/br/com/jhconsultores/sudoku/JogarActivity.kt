@@ -141,17 +141,15 @@ class JogarActivity : Activity() {
         tvErros = findViewById<View>(R.id.tv_Erros) as TextView
         tvClues = findViewById<View>(R.id.tv_Clues) as TextView
 
-        strCronoInic = resources.getString(R.string.crono_inic)
-
-        //---------------------------------
-        crono = Chronometer(this)
-        //---------------------------------
-
-        val btnReset  = findViewById<View>(R.id.btnReset) as Button
+        val btnReset  = findViewById<View>(R.id.btnReset)  as Button
         val btnInicia = findViewById<View>(R.id.btnInicia) as Button
         btnInicia.isEnabled = true
 
-        //--------------------
+        //--- Cronômetro
+        strCronoInic = resources.getString(R.string.crono_inic)
+        //---------------------------------
+        crono = Chronometer(this)
+        //---------------------------------
         preparaCrono(crono)
         //--------------------
 
@@ -217,7 +215,7 @@ class JogarActivity : Activity() {
         arIntNumsGab  = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
         arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado")  as ArrayList<Int>
 
-        // Gabarito inválido
+        // Gabarito e/ou jogo inválidos
         if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
 
             Log.d(cTAG, "-> Erro: array(s) com menos numeros que o necessário (81)")
@@ -226,15 +224,12 @@ class JogarActivity : Activity() {
         // Gabarito e jogo válido
         else {
 
-            //val flagJogoOk: Boolean
-
             // Armazena o gabarito em um Array<Array<Int>> para processamento local
             for (intLinha in 0..8) {
-
                 for (intCol in 0..8) {
 
                     arArIntNums[intLinha][intCol] = arIntNumsJogo[intLinha * 9 + intCol] // Jogo
-                    arArIntGab[intLinha][intCol]  = arIntNumsGab[intLinha * 9 + intCol]  // Gabarito
+                    arArIntGab[intLinha][intCol]  = arIntNumsGab[intLinha  * 9 + intCol] // Gabarito
 
                 }
             }
@@ -314,9 +309,10 @@ class JogarActivity : Activity() {
                 val x = event.x.toInt()
 
                 //--- Coordenada X e valor da célula tocada
-                val intCol = x / intCellwidth
-                val intNum = intCol + 1
+                val intCol   = x / intCellwidth
+                val intNum   = intCol + 1
                 val intQtidd = arIntNumsDisp[intNum - 1]
+
                 //strLog = "-> Celula tocada em NumDisp: coluna = " + intCol +
                 //        ", qtidd = " + intQtidd
                 //Log.d(cTAG, strLog)
@@ -326,10 +322,11 @@ class JogarActivity : Activity() {
                 if (intQtidd > 0) {
 
                     //--- Verifica se num válido
-                    // Determina a que Qm o numero pertence
+                    // Determina a que Qm o número pertence
                     //----------------------------------------------------------
                     val intQuadMenor = determinaQm(intLinJogar, intColJogar)
                     //----------------------------------------------------------
+
                     //Log.d(
                     //    cTAG, "-> linhaJogar= " + intLinJogar + " colJogar= " +
                     //            intColJogar + " Qm = " + intQuadMenor )
@@ -357,6 +354,7 @@ class JogarActivity : Activity() {
                         if (intNum != arArIntGab[intLinJogar][intColJogar]) {
 
                             flagNumValido = false
+
                             //strLog = "-> Número NÃO válido (gab); NÃO será incluído" +
                             //         " no Sudoku board."
                             //Log.d(cTAG, strLog)
@@ -379,18 +377,19 @@ class JogarActivity : Activity() {
 
                             //--- Atualiza o Sudoku board
                             //----------------------------------------------------------------------
-                            pintaCelula(intLinJogar, intColJogar, pincelBranco)  //, canvasSudokuBoard!!)
+                            pintaCelula(intLinJogar, intColJogar, pincelBranco)
                             //----------------------------------------------------------------------
                             escreveCelula(intLinJogar, intColJogar, intNum.toString(), pincelAzul)
-                                                                          //   ,canvasSudokuBoard!!)
                             //----------------------------------------------------------------------
-                            desenhaSudokuBoard(false) //, canvasSudokuBoard!!)
-                            //--------------------------------------------------------
+                            desenhaSudokuBoard(false)
+                            //-----------------------------------
+                            PreencheJogo()
+                            //---------------
 
                             //--- Salva esse bitmap
-                            //------------------------------------
+                            //--------------------------------------
                             copiaBmpByBuffer(bmpMyImage, bmpJogo)
-                            //------------------------------------
+                            //--------------------------------------
 
                             //--- Atualiza a base de dados
                             arArIntNums[intLinJogar][intColJogar] = intNum
@@ -451,7 +450,7 @@ class JogarActivity : Activity() {
             strReInicia = resources.getString(R.string.reinicia)
 
             //--------------------------------------------------------------------------------------
-            // Legenda do botão: Inicia
+            // Legenda do botão: Inicia ou ReInicia
             //--------------------------------------------------------------------------------------
             if (btnInicia.text == strInicia || btnInicia.text == strReInicia) {
 
@@ -476,14 +475,13 @@ class JogarActivity : Activity() {
             else {
 
                 Log.d(cTAG, "-> ${crono.text} - $strPause")
-
-                iViewSudokuBoard!!.isEnabled = false
-                iViewNumsDisps!!.isEnabled   = false
-
                 timeStopped = crono.base - SystemClock.elapsedRealtime()
                 //-------------
                 crono.stop()
                 //-------------
+
+                iViewSudokuBoard!!.isEnabled = false
+                iViewNumsDisps!!.isEnabled   = false
 
                 btnInicia.text = strReInicia
 
@@ -493,15 +491,20 @@ class JogarActivity : Activity() {
         // Reset
         btnReset.setOnClickListener {
 
+            strLog = "-> Tap no btn \"Reset\" "
+            Log.d(cTAG, strLog)
+
             tvNivel!!.text = ""
 
             intContaErro = 0
             tvErros!!.text = "$intContaErro"
 
-            strLog = "-> Tap no btn \"Reset\" "
-            Log.d(cTAG, strLog)
-
             Log.d(cTAG, "-> ${crono.text} - Reset")
+            timeStopped = 0
+            //-------------
+            crono.stop()
+            //-------------
+            crono.text = strCronoInic
 
             //-----------------------------------------
             arArIntNums = copiaArArInt(arArIntCopia)
@@ -515,17 +518,11 @@ class JogarActivity : Activity() {
             iViewSudokuBoard!!.isEnabled = false
             iViewNumsDisps!!.isEnabled   = false
 
-            timeStopped = 0
-
-            //-------------
-            crono.stop()
-            //-------------
-            crono.text = strCronoInic
-
             btnInicia.isEnabled = true
             btnInicia.text      = resources.getString(R.string.inicia)
 
         }
+
     }
 
     //----------------------------------------------------------------------------------------------
@@ -541,12 +538,15 @@ class JogarActivity : Activity() {
         var flCoordYInic: Float
         var flCoordXFim : Float
         var flCoordYFim : Float
-        val flPincelFino   = 3.toFloat()
-        val flPincelGrosso = 7.toFloat()
-        val pincelDesenhar = pincelAzul // pincelPreto;
+        val flPincelFino   = 2.toFloat()
+        val flPincelGrosso = 6.toFloat()
+        val pincelDesenhar = pincelPreto
+
+        var flagApagaBoard : Boolean = flagApaga
 
         //--- Redesenha o board a partir do zero
-        if (flagApaga) {
+        flagApagaBoard = true
+        if (flagApagaBoard) {
 
             //-----------------------------------------------------------------------------
             canvasMyImage!!.drawRect(
@@ -563,20 +563,20 @@ class JogarActivity : Activity() {
         for (intLinha in 0..9) {
             flCoordXInic = 0f
             flCoordYInic = (intLinha * intCellheight).toFloat()
+
             flCoordXFim = (9 * intCellwidth).toFloat()
             flCoordYFim = flCoordYInic
+
             var flLargPincel = flPincelFino
             if (intLinha % 3 == 0) {
                 flLargPincel = flPincelGrosso
                 if (flCoordYInic > 0) flCoordYInic--
-                if (flCoordYFim > 0) flCoordYFim--
+                if (flCoordYFim > 0)  flCoordYFim--
             }
             pincelDesenhar.strokeWidth = flLargPincel
             //--------------------------------------------------------------------------------------
             canvasMyImage!!.drawLine(
-                flCoordXInic, flCoordYInic, flCoordXFim, flCoordYFim,
-                pincelDesenhar
-            )
+                flCoordXInic, flCoordYInic, flCoordXFim, flCoordYFim, pincelDesenhar )
             //--------------------------------------------------------------------------------------
         }
         //--- Desenha as linhas verticais
@@ -586,7 +586,6 @@ class JogarActivity : Activity() {
             flCoordXFim = flCoordXInic
             flCoordYFim = (9 * intCellheight).toFloat()
             var flLargPincel = flPincelFino
-
             if (intCol % 3 == 0) {
                 flLargPincel = flPincelGrosso
                 if (flCoordXInic > 0) flCoordXInic--
@@ -601,6 +600,7 @@ class JogarActivity : Activity() {
             )
             //--------------------------------------------------------------------------------------
         }
+
     }
 
     //--- mostraNumsIguais (canvas do Sudoku board)
@@ -634,28 +634,29 @@ class JogarActivity : Activity() {
         //-------------------------------------------
         iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
         //-------------------------------------------
+
     }
 
     //--- mostraCelAJogar
     private fun mostraCelAJogar(intLin: Int, intColuna: Int) {
 
         //--- Atualiza a imageView do layout
-        //myImage = bmpJogo;
-        //------------------------------------
+        //--------------------------------------
         copiaBmpByBuffer(bmpJogo, bmpMyImage)
-        //------------------------------------
+        //----------------------------------------------
         iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
-        //-----------------------------------
+        //----------------------------------------------
 
         //--- Pintura da celula
-        //---------------------------------------------------------------
-        pintaCelula(intLin, intColuna, pincelLaranja)  //, canvasMyImage!!)
-        //---------------------------------------------------------------
+        //----------------------------------------------
+        pintaCelula(intLin, intColuna, pincelLaranja)
+        //----------------------------------------------
 
         //--- Atualiza a imageView do layout
         //----------------------------------------------
         iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
         //----------------------------------------------
+
     }
 
     //----------------------------------------------------------------------------------------------
@@ -730,13 +731,13 @@ class JogarActivity : Activity() {
     //----------------------------------------------------------------------------------------------
     // Gráficas - funções comuns aos canvas
     //----------------------------------------------------------------------------------------------
-    //--- pintaCelula
+    //--- pintaCelula no canvasMyImage
     private fun pintaCelula(intLinha: Int, intCol: Int, pincelPintar: Paint?) {
 
         val intOffSetXSup: Int
         val intOffSetYSup: Int
         val intOffSetXInf: Int
-        val intOffSetYInf: Int // = 0;
+        val intOffSetYInf: Int
 
         when {
             intLinha < 3 -> {
@@ -776,7 +777,7 @@ class JogarActivity : Activity() {
         //-------------------------------------------------------------------------------
     }
 
-    //--- escreveCelula
+    //--- escreveCelula no canvasMyImage
     private fun escreveCelula(yCell: Int, xCell: Int, strTxt: String, pincel: Paint?) {
 
         //--- Coordenada Y (linhas)
@@ -1064,42 +1065,27 @@ class JogarActivity : Activity() {
         //---------------------
 
         //--- Desenha o SudokuBoard
-        //-------------------------------------------------------
-        desenhaSudokuBoard(true) //, canvasSudokuBoard!!)
-        //-------------------------------------------------------
+        //----------------------------------
+        desenhaSudokuBoard(true)
+        //----------------------------------
+        PreencheJogo()
+        //---------------
+
+        /*
         copiaBmpByBuffer(bmpSudokuBoard, bmpMyImage)
         copiaBmpByBuffer(bmpSudokuBoard, bmpInic)
         copiaBmpByBuffer(bmpMyImage, bmpJogo)
+        */
 
         iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
 
         //--- Apresenta o jogo preparado e prepara o array dos números disponíveis
         flagJoga = false
-        arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
 
-        for (intLinha in 0..8) {
+        //---------------
+        PreencheJogo()
+        //---------------
 
-            for (intCol in 0..8) {
-
-                //-------------------------------------------
-                val intNum = arArIntNums[intLinha][intCol]
-                //-------------------------------------------
-                if (intNum > 0) {
-
-                    val strTexto = intNum.toString()
-                    pincelAzul.textSize = intTamTxt * scale // 50 // 200
-                    //------------------------------------------------------
-                    escreveCelula(intLinha, intCol, strTexto, pincelAzul) //, canvasMyImage!!)
-                    //------------------------------------------------------
-                    arIntNumsDisp[intNum - 1]--
-
-                }
-            }
-        }
-        iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
-        //------------------------------------
-        copiaBmpByBuffer(bmpMyImage, bmpJogo)
-        //------------------------------------
         iViewSudokuBoard!!.isEnabled = false
 
         //--- Apresenta os números disponíveis
@@ -1138,6 +1124,37 @@ class JogarActivity : Activity() {
 
         }
     }
+
+    //--- PreencheJogo
+    private fun PreencheJogo() {
+
+        arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+
+        for (intLinha in 0..8) {
+
+            for (intCol in 0..8) {
+
+                //-------------------------------------------
+                val intNum = arArIntNums[intLinha][intCol]
+                //-------------------------------------------
+                if (intNum > 0) {
+
+                    val strTexto = intNum.toString()
+                    pincelAzul.textSize = intTamTxt * scale // 50 // 200
+                    //------------------------------------------------------
+                    escreveCelula(intLinha, intCol, strTexto, pincelAzul) //, canvasMyImage!!)
+                    //------------------------------------------------------
+                    arIntNumsDisp[intNum - 1]--
+
+                }
+            }
+        }
+        iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
+        //------------------------------------
+        copiaBmpByBuffer(bmpMyImage, bmpJogo)
+        //------------------------------------
+
+     }
 
     //--- preparaCrono
     private fun preparaCrono(crono : Chronometer) {
@@ -1178,5 +1195,4 @@ class JogarActivity : Activity() {
         return intQtiZeros
 
     }
-
 }
