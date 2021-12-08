@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.RadioGroup
 
 //import android.widget.ScrollView
 import android.widget.TextView
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
     private var btnGeraJogo   : Button? = null
     private var btnAdaptaJogo : Button? = null
     private var btnJogaJogo   : Button? = null
+
+    private lateinit var groupRBnivel : RadioGroup
 
     private var strOpcaoJogo = "JogoGerado"
 
@@ -51,6 +54,8 @@ class MainActivity : AppCompatActivity() {
         btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
         btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
 
+        groupRBnivel  = findViewById(R.id.radioGrpNivel)
+
         txtDadosJogo  = findViewById(R.id.txtJogos)
 
     }
@@ -76,6 +81,10 @@ class MainActivity : AppCompatActivity() {
 
         sgg.txtDados = ""
 
+        //--------------------------
+        prepRBniveis(true)
+        //--------------------------
+
         strLog = "-> Tap no btnGeraJogo"
         Log.d(cTAG, strLog)
 
@@ -100,6 +109,8 @@ class MainActivity : AppCompatActivity() {
 
         strOpcaoJogo = "JogoAdaptado"
         sgg.txtDados = ""
+
+        prepRBniveis(false)
 
         strLog = "-> Tap no btnAdaptaJogo"
         Log.d(cTAG, strLog)
@@ -132,6 +143,8 @@ class MainActivity : AppCompatActivity() {
 
         strLog = "-> Tap no btnJogaJogo"
         Log.d(cTAG, strLog)
+
+        prepRBniveis(false)
 
         txtDadosJogo?.text = ""
         sgg.txtDados       = ""
@@ -307,6 +320,21 @@ class MainActivity : AppCompatActivity() {
 
         return arArIntTmp
 
+    }
+
+    //--- Prepara rbNivel
+    private fun prepRBniveis(habilita : Boolean){
+
+        val intIdxChild = groupRBnivel.childCount - 1
+        if (intIdxChild > 0) {
+
+            for (idxRB in 0..intIdxChild) {
+
+                groupRBnivel.getChildAt(idxRB).isEnabled = habilita
+
+            }
+
+        }
     }
 
     /*

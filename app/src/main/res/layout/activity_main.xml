@@ -42,47 +42,121 @@
         android:orientation  ="horizontal"
         app:layout_constraintGuide_percent="0.5" />
 
+    <TextView android:id ="@+id/legNivel"
+
+        android:layout_width ="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf    ="parent"
+
+        android:layout_marginTop  ="@dimen/RB_MargemTop"
+        android:layout_marginStart="@dimen/RB_MargemEsquerda"
+
+        android:textSize         ="@dimen/TamanhoTxt"
+        android:text             ="@string/legNivel"/>
+
+    <!-- Radio Buttons para escolha do nível do jogo qdo gerar Jogo-->
+    <RadioGroup
+        android:id="@+id/radioGrpNivel"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="@dimen/RB_MargemEsquerda"
+
+        android:gravity="center_vertical"
+
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@id/legNivel"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/nivelFacil"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+
+            android:paddingStart="0dp"
+
+            android:text="@string/nivelFacil"
+            tools:ignore="RtlSymmetry" />
+
+        <RadioButton
+            android:id="@+id/nivelMédio"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/nivelMedio" />
+
+        <RadioButton
+            android:id="@+id/nivelDifícil"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/nivelDificil" />
+
+    </RadioGroup>
+
+    <!-- Separador entre nível do jogo e scrollView -->
+    <View
+        android:id="@+id/separador_nivel_scroll"
+
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+
+        android:background="@android:color/darker_gray"
+
+        app:layout_constraintTop_toBottomOf="@id/radioGrpNivel"
+
+        tools:ignore="MissingConstraints" />
+
     <!-- Textview com scrolling -->
-    <ScrollView android:id="@+id/srcTextScrollView"
+    <ScrollView
+        android:id="@+id/srcTextScrollView"
+
         android:layout_width ="match_parent"
         android:layout_height="0dp"
 
         android:fillViewport="true"
-        android:scrollbars  ="vertical"
+        android:scrollbars="vertical"
 
         app:layout_constraintBottom_toTopOf="@id/btn_AdaptarJogo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias ="1.0"
-        tools:layout_editor_absoluteX      ="-1dp">
+        app:layout_constraintTop_toBottomOf="@id/separador_nivel_scroll"
+
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="-1dp">
 
         <TextView
             android:id="@+id/txtJogos"
 
-            android:layout_width      ="match_parent"
+            android:layout_width="wrap_content"
 
-            android:layout_height     ="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
 
-            android:layout_marginEnd   ="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="0dp"
 
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf    ="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf ="@id/guide_center_horiz" />
+            app:layout_constraintTop_toBottomOf="@id/guide_center_horiz" />
 
     </ScrollView>
 
     <!-- Separador entre resultados e botões -->
-    <View
-        android:id           ="@+id/separador_resultados_botões"
+    <View android:id ="@+id/separador_resultados_botões"
+
         android:layout_width ="match_parent"
         android:layout_height="1dp"
 
         app:layout_constraintTop_toBottomOf="@id/srcTextScrollView"
 
-        android:background   ="@android:color/darker_gray"
-        tools:ignore="MissingConstraints" />
+        android:background ="@android:color/darker_gray" />
 
     <!-- 4- Botões -->
     <Button android:id="@+id/btn_GerarJogo"
