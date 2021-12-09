@@ -137,396 +137,426 @@ class JogarActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_jogar)
+        try {
+            setContentView(R.layout.activity_jogar)
 
-        //--- Instancia objetos locais para os objetos XML
-        tvNivel    = findViewById<TextView>(R.id.tv_Nivel)
-        tvSubNivel = findViewById<TextView>(R.id.tv_Subnivel)
-        tvErros    = findViewById<TextView>(R.id.tv_Erros)
-        tvClues    = findViewById<TextView>(R.id.tv_Clues)
+            //--- Instancia objetos locais para os objetos XML
+            tvNivel = findViewById<TextView>(R.id.tv_Nivel)
+            tvSubNivel = findViewById<TextView>(R.id.tv_Subnivel)
+            tvErros = findViewById<TextView>(R.id.tv_Erros)
+            tvClues = findViewById<TextView>(R.id.tv_Clues)
 
-        val btnReset  = findViewById<View>(R.id.btnReset)  as Button
-        val btnInicia = findViewById<View>(R.id.btnInicia) as Button
-        btnInicia.isEnabled = true
+            val btnReset = findViewById<View>(R.id.btnReset) as Button
+            val btnInicia = findViewById<View>(R.id.btnInicia) as Button
+            btnInicia.isEnabled = true
 
-        //--- Cronômetro
-        strCronoInic = resources.getString(R.string.crono_inic)
-        //---------------------------------
-        crono = Chronometer(this)
-        //---------------------------------
-        preparaCrono(crono)
-        //--------------------
+            //--- Cronômetro
+            strCronoInic = resources.getString(R.string.crono_inic)
+            //---------------------------------
+            crono = Chronometer(this)
+            //---------------------------------
+            preparaCrono(crono)
+            //--------------------
 
-        //------------------------------------------------------------------------------------------
-        // Objetos gráficos
-        //------------------------------------------------------------------------------------------
-        // Grandezas gráficas
-        scale = resources.displayMetrics.density
+            //------------------------------------------------------------------------------------------
+            // Objetos gráficos
+            //------------------------------------------------------------------------------------------
+            // Grandezas gráficas
+            scale = resources.displayMetrics.density
 
-        // Pincéis
-        // ContextCompat.getColor(context, R.color.your_color);
-        pincelVerde.color =
-            ContextCompat.getColor(this, R.color.verde)       // resources.getColor(R.color.verde)
-        pincelBranco.color =
-            ContextCompat.getColor(this, R.color.white)       // resources.getColor(R.color.white)
-        pincelPreto.color =
-            ContextCompat.getColor(this, R.color.black)       // resources.getColor(R.color.black)
-        pincelAzul.color =
-            ContextCompat.getColor(this, R.color.azul)        // resources.getColor(R.color.azul)
-        pincelLaranja.color =
-            ContextCompat.getColor(this, R.color.laranja)     // resources.getColor(R.color.laranja)
-        pincelPurple200.color = ContextCompat.getColor(
-            this,
-            R.color.purple_200
-        )  // resources.getColor(R.color.purple_200)
+            // Pincéis
+            // ContextCompat.getColor(context, R.color.your_color);
+            pincelVerde.color =
+                ContextCompat.getColor(
+                    this,
+                    R.color.verde
+                )       // resources.getColor(R.color.verde)
+            pincelBranco.color =
+                ContextCompat.getColor(
+                    this,
+                    R.color.white
+                )       // resources.getColor(R.color.white)
+            pincelPreto.color =
+                ContextCompat.getColor(
+                    this,
+                    R.color.black
+                )       // resources.getColor(R.color.black)
+            pincelAzul.color =
+                ContextCompat.getColor(
+                    this,
+                    R.color.azul
+                )        // resources.getColor(R.color.azul)
+            pincelLaranja.color =
+                ContextCompat.getColor(
+                    this,
+                    R.color.laranja
+                )     // resources.getColor(R.color.laranja)
+            pincelPurple200.color = ContextCompat.getColor(
+                this,
+                R.color.purple_200
+            )  // resources.getColor(R.color.purple_200)
 
-        // Bit maps
-        intImageResource = R.drawable.sudoku_board_w360h315
-        bmpMyImage = BitmapFactory.decodeResource(resources, intImageResource)
-            .copy(Bitmap.Config.ARGB_8888, true)
-        bmpJogo = BitmapFactory.decodeResource(resources, intImageResource)
-            .copy(Bitmap.Config.ARGB_8888, true)
-        bmpInic = BitmapFactory.decodeResource(resources, intImageResource)
-            .copy(Bitmap.Config.ARGB_8888, true)
-        bmpSudokuBoard = BitmapFactory.decodeResource(resources, intImageResource)
-            .copy(Bitmap.Config.ARGB_8888, true)
-        bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
-            .copy(Bitmap.Config.ARGB_8888, true)
+            // Bit maps
+            intImageResource = R.drawable.sudoku_board3
+            bmpMyImage = BitmapFactory.decodeResource(resources, intImageResource)
+                .copy(Bitmap.Config.ARGB_8888, true)
+            bmpJogo = BitmapFactory.decodeResource(resources, intImageResource)
+                .copy(Bitmap.Config.ARGB_8888, true)
+            bmpInic = BitmapFactory.decodeResource(resources, intImageResource)
+                .copy(Bitmap.Config.ARGB_8888, true)
+            bmpSudokuBoard = BitmapFactory.decodeResource(resources, intImageResource)
+                .copy(Bitmap.Config.ARGB_8888, true)
 
-        // Canvas
-        canvasMyImage     = Canvas(bmpMyImage!!)
+            bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
+                .copy(Bitmap.Config.ARGB_8888, true)
 
-        canvasSudokuBoard = Canvas(bmpSudokuBoard!!)
-        canvasNumDisp     = Canvas(bmpNumDisp!!)
+            // Canvas
+            canvasMyImage     = Canvas(bmpMyImage!!)
+            canvasSudokuBoard = Canvas(bmpSudokuBoard!!)
 
-        //------------------------------------------------------------------------------------------
-        // Images Views
-        //------------------------------------------------------------------------------------------
-        iViewSudokuBoard = findViewById<View>(R.id.imageView1) as ImageView
-        iViewNumsDisps   = findViewById<View>(R.id.imageView2) as ImageView
+            canvasNumDisp = Canvas(bmpNumDisp!!)
 
-        //------------------------------
-        determinaGrandezasGraficas()
-        //------------------------------
+            //------------------------------------------------------------------------------------------
+            // Images Views
+            //------------------------------------------------------------------------------------------
+            iViewSudokuBoard = findViewById<View>(R.id.imageView1) as ImageView
+            iViewNumsDisps = findViewById<View>(R.id.imageView2) as ImageView
 
-        //------------------------------------------------------------------------------------------
-        // Inicializa dados para deixar o jogo pronto
-        //------------------------------------------------------------------------------------------
-        //--- Recupera os dados recebidos via intent
-        action          = intent.action.toString()
-        strNivelJogo    = intent.getStringExtra("strNivelJogo") as String
-        strSubNivelJogo = intent.getStringExtra("strSubNivelJogo") as String
+            //------------------------------
+            determinaGrandezasGraficas()
+            //------------------------------
 
-        // Armazena o gabarito em um array<int>
-        arIntNumsGab  = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
-        arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado")  as ArrayList<Int>
+            //------------------------------------------------------------------------------------------
+            // Inicializa dados para deixar o jogo pronto
+            //------------------------------------------------------------------------------------------
+            //--- Recupera os dados recebidos via intent
+            action = intent.action.toString()
+            strNivelJogo = intent.getStringExtra("strNivelJogo") as String
+            strSubNivelJogo = intent.getStringExtra("strSubNivelJogo") as String
 
-        // Gabarito e/ou jogo inválidos
-        if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
+            // Armazena o gabarito em um array<int>
+            arIntNumsGab = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
+            arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as ArrayList<Int>
 
-            Log.d(cTAG, "-> Erro: array(s) com menos numeros que o necessário (81)")
+            // Gabarito e/ou jogo inválidos
+            if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
 
-        }
-        // Gabarito e jogo válido
-        else {
+                Log.d(cTAG, "-> Erro: array(s) com menos numeros que o necessário (81)")
 
-            // Armazena o gabarito em um Array<Array<Int>> para processamento local
-            for (intLinha in 0..8) {
-                for (intCol in 0..8) {
-
-                    arArIntNums[intLinha][intCol] = arIntNumsJogo[intLinha * 9 + intCol] // Jogo
-                    arArIntGab[intLinha][intCol]  = arIntNumsGab[intLinha  * 9 + intCol] // Gabarito
-
-                }
             }
-
-            //-----------------------------------------
-            arArIntCopia = copiaArArInt(arArIntNums)
-            //-----------------------------------------
-
-            arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-
-            //-------------
-            iniciaJogo()
-            //-------------
-
-        } // Fim de gabarito recebido via intent ok
-
-        //------------------------------------------------------------------------------------------
-        // Listeners para o evento onTouch dos ImageViews
-        //------------------------------------------------------------------------------------------
-        // SudokuBoard
-        iViewSudokuBoard!!.setOnTouchListener { _, event -> //--- Coordenadas tocadas
-            val x = event.x.toInt()
-            val y = event.y.toInt()
-            //Log.d(cTAG, "touched x: $x")
-            //Log.d(cTAG, "touched y: $y")
-
-            //--- OffSets das coordenadas na Janela (???)
-            val viewCoords = IntArray(2)
-            iViewSudokuBoard!!.getLocationOnScreen(viewCoords)
-            //Log.d(cTAG, "viewCoord x: " + viewCoords[0])
-            //Log.d(cTAG, "viewCoord y: " + viewCoords[1])
-
-            //--- Coordenadas reais (???)
-            //val imageX = x - viewCoords[0] // viewCoords[0] is the X coordinate
-            //val imageY = y - viewCoords[1] // viewCoords[1] is the y coordinate
-            //Log.d(cTAG, "Real x: $imageX")
-            //Log.d(cTAG, "Real y: $imageY")
-
-            //--- Coordenadas da célula tocada
-            val intCol   = x / intCellwidth
-            val intLinha = y / intCellheight
-            //-------------------------------------------
-            val intNum = arArIntNums[intLinha][intCol]
-            //-------------------------------------------
-            //strLog = "-> Celula tocada: linha = " + intLinha + ", coluna = " + intCol +
-            //        ", numero = " + intNum
-            //Log.d(cTAG, strLog)
-
-            //--- Se a célula tocada contiver um número, "pinta" todas as células que contiverem
-            //    o mesmo número.
-            if (intNum > 0) {
-                flagJoga    = false    // Não quer jogar; só quer analisar ...
-                intLinJogar = 0
-                intColJogar = 0
-                //-------------------------
-                mostraNumsIguais(intNum)
-                //-------------------------
-            }
-            //--- Se não contiver um número, quer jogar
+            // Gabarito e jogo válido
             else {
-                flagJoga    = true     // Vamos ao jogo!
-                intLinJogar = intLinha
-                intColJogar = intCol
-                //------------------------------------------
-                mostraCelAJogar(intLinJogar, intColJogar)
-                //------------------------------------------
-            }
-            false
-        }
 
-        // Números Disponíveis para se colocar em jogo
-        iViewNumsDisps!!.setOnTouchListener { _, event -> //--- Só transfere o número para o board se estiver jogando
+                // Armazena o gabarito em um Array<Array<Int>> para processamento local
+                for (intLinha in 0..8) {
+                    for (intCol in 0..8) {
 
-            if (flagJoga) {
-
-                //--- Coordenada X do numsDisps tocada
-                val x = event.x.toInt()
-
-                //--- Coordenada X e valor da célula tocada
-                val intCol   = x / intCellwidth
-                val intNum   = intCol + 1
-                val intQtidd = arIntNumsDisp[intNum - 1]
-
-                //strLog = "-> Celula tocada em NumDisp: coluna = " + intCol +
-                //        ", qtidd = " + intQtidd
-                //Log.d(cTAG, strLog)
-
-                //--- Verifica se ainda tem desse número para jogar e se esse número é válido.
-                var flagNumValido: Boolean
-                if (intQtidd > 0) {
-
-                    //--- Verifica se num válido
-                    // Determina a que Qm o número pertence
-                    //----------------------------------------------------------
-                    val intQuadMenor = determinaQm(intLinJogar, intColJogar)
-                    //----------------------------------------------------------
-
-                    //Log.d(
-                    //    cTAG, "-> linhaJogar= " + intLinJogar + " colJogar= " +
-                    //            intColJogar + " Qm = " + intQuadMenor )
-
-                    // Verifica se esse número ainda não existe no seu Qm e nem no seu QM
-                    //------------------------------------------------------------------------------
-                    flagNumValido = verifValidade(intQuadMenor, intLinJogar, intColJogar, intNum)
-                    //------------------------------------------------------------------------------
-                    if (!flagNumValido) {
-
-                        //strLog = "-> Número NÃO válido (linha, coluna ou quadro); NÃO será incluído" +
-                        //        " no Sudoku board."
-                        //Log.d(cTAG, strLog)
-
-                        strToast = "Número NÃO Ok (linha, coluna ou quadro)"
-                        //-----------------------------------------------------------------
-                        Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
-                        //-----------------------------------------------------------------
+                        arArIntNums[intLinha][intCol] = arIntNumsJogo[intLinha * 9 + intCol] // Jogo
+                        arArIntGab[intLinha][intCol] =
+                            arIntNumsGab[intLinha * 9 + intCol] // Gabarito
 
                     }
-                    // Verifica se esse número, nessa célula, é o mesmo do gabarito
-                    else {
+                }
 
-                        //--- Número diferente do num do gabarito
-                        if (intNum != arArIntGab[intLinJogar][intColJogar]) {
+                //-----------------------------------------
+                arArIntCopia = copiaArArInt(arArIntNums)
+                //-----------------------------------------
 
-                            flagNumValido = false
+                arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
 
-                            //strLog = "-> Número NÃO válido (gab); NÃO será incluído" +
-                            //         " no Sudoku board."
+                //-------------
+                iniciaJogo()
+                //-------------
+
+            } // Fim de gabarito recebido via intent ok
+
+            //------------------------------------------------------------------------------------------
+            // Listeners para o evento onTouch dos ImageViews
+            //------------------------------------------------------------------------------------------
+            // SudokuBoard
+            iViewSudokuBoard!!.setOnTouchListener { _, event -> //--- Coordenadas tocadas
+                val x = event.x.toInt()
+                val y = event.y.toInt()
+                //Log.d(cTAG, "touched x: $x")
+                //Log.d(cTAG, "touched y: $y")
+
+                //--- OffSets das coordenadas na Janela (???)
+                val viewCoords = IntArray(2)
+                iViewSudokuBoard!!.getLocationOnScreen(viewCoords)
+                //Log.d(cTAG, "viewCoord x: " + viewCoords[0])
+                //Log.d(cTAG, "viewCoord y: " + viewCoords[1])
+
+                //--- Coordenadas reais (???)
+                //val imageX = x - viewCoords[0] // viewCoords[0] is the X coordinate
+                //val imageY = y - viewCoords[1] // viewCoords[1] is the y coordinate
+                //Log.d(cTAG, "Real x: $imageX")
+                //Log.d(cTAG, "Real y: $imageY")
+
+                //--- Coordenadas da célula tocada
+                val intCol = x / intCellwidth
+                val intLinha = y / intCellheight
+                //-------------------------------------------
+                val intNum = arArIntNums[intLinha][intCol]
+                //-------------------------------------------
+                //strLog = "-> Celula tocada: linha = " + intLinha + ", coluna = " + intCol +
+                //        ", numero = " + intNum
+                //Log.d(cTAG, strLog)
+
+                //--- Se a célula tocada contiver um número, "pinta" todas as células que contiverem
+                //    o mesmo número.
+                if (intNum > 0) {
+                    flagJoga = false    // Não quer jogar; só quer analisar ...
+                    intLinJogar = 0
+                    intColJogar = 0
+                    //-------------------------
+                    mostraNumsIguais(intNum)
+                    //-------------------------
+                }
+                //--- Se não contiver um número, quer jogar
+                else {
+                    flagJoga = true     // Vamos ao jogo!
+                    intLinJogar = intLinha
+                    intColJogar = intCol
+                    //------------------------------------------
+                    mostraCelAJogar(intLinJogar, intColJogar)
+                    //------------------------------------------
+                }
+                false
+            }
+
+            // Números Disponíveis para se colocar em jogo
+            iViewNumsDisps!!.setOnTouchListener { _, event -> //--- Só transfere o número para o board se estiver jogando
+
+                if (flagJoga) {
+
+                    //--- Coordenada X do numsDisps tocada
+                    val x = event.x.toInt()
+
+                    //--- Coordenada X e valor da célula tocada
+                    val intCol = x / intCellwidth
+                    val intNum = intCol + 1
+                    val intQtidd = arIntNumsDisp[intNum - 1]
+
+                    //strLog = "-> Celula tocada em NumDisp: coluna = " + intCol +
+                    //        ", qtidd = " + intQtidd
+                    //Log.d(cTAG, strLog)
+
+                    //--- Verifica se ainda tem desse número para jogar e se esse número é válido.
+                    var flagNumValido: Boolean
+                    if (intQtidd > 0) {
+
+                        //--- Verifica se num válido
+                        // Determina a que Qm o número pertence
+                        //----------------------------------------------------------
+                        val intQuadMenor = determinaQm(intLinJogar, intColJogar)
+                        //----------------------------------------------------------
+
+                        //Log.d(
+                        //    cTAG, "-> linhaJogar= " + intLinJogar + " colJogar= " +
+                        //            intColJogar + " Qm = " + intQuadMenor )
+
+                        // Verifica se esse número ainda não existe no seu Qm e nem no seu QM
+                        //------------------------------------------------------------------------------
+                        flagNumValido =
+                            verifValidade(intQuadMenor, intLinJogar, intColJogar, intNum)
+                        //------------------------------------------------------------------------------
+                        if (!flagNumValido) {
+
+                            //strLog = "-> Número NÃO válido (linha, coluna ou quadro); NÃO será incluído" +
+                            //        " no Sudoku board."
                             //Log.d(cTAG, strLog)
 
-                            strToast = "Número NÃO Ok (gabarito)"
+                            strToast = "Número NÃO Ok (linha, coluna ou quadro)"
                             //-----------------------------------------------------------------
                             Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
                             //-----------------------------------------------------------------
 
                         }
-                        //--- Número OK qto ao gabarito
+                        // Verifica se esse número, nessa célula, é o mesmo do gabarito
                         else {
 
-                            //Log.d(cTAG, "-> Número válido; será incluído no Sudoku board.")
+                            //--- Número diferente do num do gabarito
+                            if (intNum != arArIntGab[intLinJogar][intColJogar]) {
 
-                            //strToast = "Número Ok!"
-                            //----------------------------------------------------------------
-                            //Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
-                            //----------------------------------------------------------------
+                                flagNumValido = false
 
-                            //--- Atualiza o Sudoku board
-                            //----------------------------------------------------------------------
-                            pintaCelula(intLinJogar, intColJogar, pincelBranco)
-                            //----------------------------------------------------------------------
-                            escreveCelula(intLinJogar, intColJogar, intNum.toString(), pincelAzul)
-                            //----------------------------------------------------------------------
-                            desenhaSudokuBoard(false)
-                            //-----------------------------------
-                            PreencheJogo()
-                            //---------------
+                                //strLog = "-> Número NÃO válido (gab); NÃO será incluído" +
+                                //         " no Sudoku board."
+                                //Log.d(cTAG, strLog)
 
-                            //--- Salva esse bitmap
-                            //--------------------------------------
-                            copiaBmpByBuffer(bmpMyImage, bmpJogo)
-                            //--------------------------------------
+                                strToast = "Número NÃO Ok (gabarito)"
+                                //-----------------------------------------------------------------
+                                Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+                                //-----------------------------------------------------------------
 
-                            //--- Atualiza a base de dados
-                            arArIntNums[intLinJogar][intColJogar] = intNum
-                            arIntNumsDisp[intNum - 1]--
+                            }
+                            //--- Número OK qto ao gabarito
+                            else {
 
-                            //--- Atualiza a qtidd disponível para esse número
-                            //-------------------
-                            atualizaNumDisp()
-                            //-------------------
+                                //Log.d(cTAG, "-> Número válido; será incluído no Sudoku board.")
 
-                            //--- Destaca os números iguais a esse já jogados
-                            //--------------------------
-                            mostraNumsIguais(intNum)
-                            //--------------------------
+                                //strToast = "Número Ok!"
+                                //----------------------------------------------------------------
+                                //Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
+                                //----------------------------------------------------------------
 
-                            flagJoga = false
+                                //--- Atualiza o Sudoku board
+                                //----------------------------------------------------------------------
+                                pintaCelula(intLinJogar, intColJogar, pincelBranco)
+                                //----------------------------------------------------------------------
+                                escreveCelula(
+                                    intLinJogar,
+                                    intColJogar,
+                                    intNum.toString(),
+                                    pincelAzul
+                                )
+                                //----------------------------------------------------------------------
+                                desenhaSudokuBoard(false)
+                                //-----------------------------------
+                                PreencheJogo()
+                                //---------------
 
+                                //--- Salva esse bitmap
+                                //--------------------------------------
+                                copiaBmpByBuffer(bmpMyImage, bmpJogo)
+                                //--------------------------------------
+
+                                //--- Atualiza a base de dados
+                                arArIntNums[intLinJogar][intColJogar] = intNum
+                                arIntNumsDisp[intNum - 1]--
+
+                                //--- Atualiza a qtidd disponível para esse número
+                                //-------------------
+                                atualizaNumDisp()
+                                //-------------------
+
+                                //--- Destaca os números iguais a esse já jogados
+                                //--------------------------
+                                mostraNumsIguais(intNum)
+                                //--------------------------
+
+                                flagJoga = false
+
+                            }
                         }
+
+                        if (!flagNumValido) {
+                            tvErros!!.text = "${++intContaErro}"
+                        }
+
                     }
 
-                    if (!flagNumValido) {
-                        tvErros!!.text = "${++intContaErro}"
+                    //--- Verifica se fim de jogo (todas as qtidds foram zeradas
+                    var flagContJogo = false
+                    for (idxVetorNumDisp in 0..8) {
+
+                        if (arIntNumsDisp[idxVetorNumDisp] > 0) flagContJogo = true
+
                     }
+                    //--- Se já foram utilizados todos os números disponíveis, pára o cronometro
+                    if (!flagContJogo) {
+
+                        Log.d(cTAG, "-> ${crono.text} - Fim")
+
+                        crono.stop()
+                        flagJoga = false
+
+                        btnInicia.text = strInicia
+                        btnInicia.isEnabled = false
+
+                    }
+                }
+                false
+            }
+
+            //------------------------------------------------------------------------------------------
+            // Listeners para o evento onClick dos buttons
+            //------------------------------------------------------------------------------------------
+            // Texto / Bit Map
+            btnInicia.setOnClickListener {
+
+                strInicia = resources.getString(R.string.inicia)
+                strPause = resources.getString(R.string.pause)
+                strReInicia = resources.getString(R.string.reinicia)
+
+                //--------------------------------------------------------------------------------------
+                // Legenda do botão: Inicia ou ReInicia
+                //--------------------------------------------------------------------------------------
+                if (btnInicia.text == strInicia || btnInicia.text == strReInicia) {
+
+                    strLog = if (btnInicia.text == strInicia) strInicia else strReInicia
+                    Log.d(cTAG, "-> ${crono.text} - $strLog")
+
+                    iViewSudokuBoard!!.isEnabled = true
+                    iViewNumsDisps!!.isEnabled = true
+
+                    crono.base = SystemClock.elapsedRealtime() + timeStopped
+                    //--------------
+                    crono.start()
+                    //--------------
+
+                    btnInicia.text = strPause
 
                 }
 
-                //--- Verifica se fim de jogo (todas as qtidds foram zeradas
-                var flagContJogo = false
-                for (idxVetorNumDisp in 0..8) {
+                //--------------------------------------------------------------------------------------
+                // Legenda do botão: Pause
+                //--------------------------------------------------------------------------------------
+                else {
 
-                    if (arIntNumsDisp[idxVetorNumDisp] > 0) flagContJogo = true
-
-                }
-                //--- Se já foram utilizados todos os números disponíveis, pára o cronometro
-                if (!flagContJogo) {
-
-                    Log.d(cTAG, "-> ${crono.text} - Fim")
-
+                    Log.d(cTAG, "-> ${crono.text} - $strPause")
+                    timeStopped = crono.base - SystemClock.elapsedRealtime()
+                    //-------------
                     crono.stop()
-                    flagJoga = false
+                    //-------------
 
-                    btnInicia.text      = strInicia
-                    btnInicia.isEnabled = false
+                    iViewSudokuBoard!!.isEnabled = false
+                    iViewNumsDisps!!.isEnabled = false
+
+                    btnInicia.text = strReInicia
 
                 }
             }
-            false
-        }
 
-        //------------------------------------------------------------------------------------------
-        // Listeners para o evento onClick dos buttons
-        //------------------------------------------------------------------------------------------
-        // Texto / Bit Map
-        btnInicia.setOnClickListener {
+            // Reset
+            btnReset.setOnClickListener {
 
-            strInicia   = resources.getString(R.string.inicia)
-            strPause    = resources.getString(R.string.pause)
-            strReInicia = resources.getString(R.string.reinicia)
+                strLog = "-> Tap no btn \"Reset\" "
+                Log.d(cTAG, strLog)
 
-            //--------------------------------------------------------------------------------------
-            // Legenda do botão: Inicia ou ReInicia
-            //--------------------------------------------------------------------------------------
-            if (btnInicia.text == strInicia || btnInicia.text == strReInicia) {
+                tvNivel!!.text = ""
+                tvSubNivel!!.text = ""
 
-                strLog = if (btnInicia.text == strInicia) strInicia else strReInicia
-                Log.d(cTAG, "-> ${crono.text} - $strLog")
+                intContaErro = 0
+                tvErros!!.text = "$intContaErro"
 
-                iViewSudokuBoard!!.isEnabled = true
-                iViewNumsDisps!!.isEnabled   = true
-
-                crono.base = SystemClock.elapsedRealtime() + timeStopped
-                //--------------
-                crono.start()
-                //--------------
-
-                btnInicia.text = strPause
-
-            }
-
-            //--------------------------------------------------------------------------------------
-            // Legenda do botão: Pause
-            //--------------------------------------------------------------------------------------
-            else {
-
-                Log.d(cTAG, "-> ${crono.text} - $strPause")
-                timeStopped = crono.base - SystemClock.elapsedRealtime()
+                Log.d(cTAG, "-> ${crono.text} - Reset")
+                timeStopped = 0
                 //-------------
                 crono.stop()
                 //-------------
+                crono.text = strCronoInic
+
+                //-----------------------------------------
+                arArIntNums = copiaArArInt(arArIntCopia)
+                //-----------------------------------------
+
+                arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+                //-------------
+                iniciaJogo()
+                //-------------
 
                 iViewSudokuBoard!!.isEnabled = false
-                iViewNumsDisps!!.isEnabled   = false
+                iViewNumsDisps!!.isEnabled = false
 
-                btnInicia.text = strReInicia
+                btnInicia.isEnabled = true
+                btnInicia.text = resources.getString(R.string.inicia)
 
             }
-        }
 
-        // Reset
-        btnReset.setOnClickListener {
+        } catch (exc : Exception) {
 
-            strLog = "-> Tap no btn \"Reset\" "
-            Log.d(cTAG, strLog)
-
-            tvNivel!!.text    = ""
-            tvSubNivel!!.text = ""
-
-            intContaErro = 0
-            tvErros!!.text = "$intContaErro"
-
-            Log.d(cTAG, "-> ${crono.text} - Reset")
-            timeStopped = 0
-            //-------------
-            crono.stop()
-            //-------------
-            crono.text = strCronoInic
-
-            //-----------------------------------------
-            arArIntNums = copiaArArInt(arArIntCopia)
-            //-----------------------------------------
-
-            arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-            //-------------
-            iniciaJogo()
-            //-------------
-
-            iViewSudokuBoard!!.isEnabled = false
-            iViewNumsDisps!!.isEnabled   = false
-
-            btnInicia.isEnabled = true
-            btnInicia.text      = resources.getString(R.string.inicia)
+            Log.d(cTAG, "Erro: ${exc.message}")
 
         }
 

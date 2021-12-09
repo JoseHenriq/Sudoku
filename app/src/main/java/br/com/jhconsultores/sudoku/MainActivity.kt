@@ -1,17 +1,13 @@
 package br.com.jhconsultores.sudoku
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+
+import android.content.Intent
 import android.util.Log
 
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
-
-//import android.widget.ScrollView
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,11 +40,12 @@ class MainActivity : AppCompatActivity() {
 
     private var sgg = SudokuGameGenerator ()
 
-    // Núm     0   17          38          49      56-61   81
-    // clues  81   64          43          32      25-20    0
-    //        |xxxx|  DIFÍCIL  |   MÉDIO   |  FÁCIL |xxxxxxx|
-    //                |            |                |
-    // SETUP         60           40             R1,2,3
+    // Núm     0   21               31        41          51       61       81
+    // clues  81   60               50        40          30       20
+    //        |xxxx|  MUITO DIFÍCIL  |DIFÍCIL  |   MÉDIO   |  FÁCIL |xxxxxxx|
+    // SETUP      60                50        40          30       20
+
+    val arIntLimNiveis = arrayOf (20, 30, 40, 50)
 
     //----------------------------------------------------------------------------------------------
     // Eventos da MainActivity
@@ -180,7 +177,6 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> Tap no btnAdaptaJogo"
         Log.d(cTAG, strLog)
 
-        //txtDadosJogo?.text = strLog
         txtDadosJogo?.text = ""
         sgg.txtDados = ""
 
@@ -197,6 +193,21 @@ class MainActivity : AppCompatActivity() {
         quadMaior = sgg.adaptaJogoAlgoritmo2()
         //-----------------------------------------
         txtDadosJogo?.append(sgg.txtDados)
+
+        val nivelJogo    = sgg.intQtiZeros / 10
+        val subNivelJogo = sgg.intQtiZeros % 10
+        var rbNivelJogo : RadioButton = when (nivelJogo) {
+
+            2 -> rbFacil
+            3 -> rbMedio
+            4 -> rbDificil
+            5 -> rbMuitoDificil
+            else -> rbFacil
+
+        }
+        rbNivelJogo.isChecked = true
+
+        edtViewSubNivel.setText(subNivelJogo.toString())
 
         // **** Os arrays preparados serão enviados pelo listener do botão JogaJogo ****
 
@@ -454,6 +465,7 @@ class MainActivity : AppCompatActivity() {
     }
     */
 
+    /*
     private fun closeKeyBoard() {
         val view = this.currentFocus
         if (view != null) {
@@ -461,6 +473,7 @@ class MainActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
+    */
 
     /*
     //--- Verifica o Gerador de números aleatórios

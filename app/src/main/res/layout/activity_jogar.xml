@@ -57,15 +57,16 @@
             android:textSize="24sp" />
 
         <!--- Contador de erros -->
-        <TextView android:id="@+id/tv_LegErros"
-            android:layout_width ="wrap_content"
+        <TextView
+            android:id="@+id/tv_LegErros"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             android:layout_marginStart="200dp"
-            android:layout_marginTop  ="@dimen/MargemAcima70dp"
+            android:layout_marginTop="@dimen/MargemAcima70dp"
 
-            android:text     ="@string/legErros"
-            android:textSize ="24sp"
+            android:text="@string/legErros"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView android:id="@+id/tv_Erros"
@@ -91,7 +92,7 @@
 
     </RelativeLayout>
 
-    <ImageView android:id    ="@+id/imageView1"
+    <ImageView android:id ="@+id/imageView1"
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
@@ -99,11 +100,13 @@
         android:layout_marginTop  ="@dimen/MargemAcima"
 
         android:contentDescription="@string/testeCanva3"
-        android:src="@drawable/sudoku_board3"/>
+        android:src="@drawable/sudoku_board3" />
+        <!-- S5Duos Android 6.0.1: -
+             add Gradle / proguard-rules.pro
+             keep class android.support.v7.widget.** { *; } /-->
 
-    <!--android:src="@drawable/sudoku_board_w360h315"-->
 
-    <!--- Quantidade de clues -->
+<!--- Quantidade de clues -->
     <TextView android:id="@+id/tv_LegClues"
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
@@ -137,6 +140,13 @@
         android:layout_below="@id/imageView1"
         android:contentDescription="@string/numDisp"
         android:src="@drawable/quadro_nums_disp" />
+        <!-- S5Duos Android 6.0.1: -
+          add Gradle / proguard-rules.pro
+          keep class android.support.v7.widget.** { *; }
+
+          src: os bitmaps devem estar no diretório "@drawable" !!!
+
+          -->
 
     <Button android:id="@+id/btnReset"
         style="?android:attr/buttonStyleSmall"

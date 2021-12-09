@@ -2,6 +2,7 @@ package br.com.jhconsultores.sudoku
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.RadioButton
 import br.com.jhconsultores.sudoku.SudokuBackTracking.intNumBackTracking
 
 class SudokuGameGenerator {
@@ -16,6 +17,7 @@ class SudokuGameGenerator {
 
     var quadMaiorRet   = arrayOf<Array<Int>>()
     var intJogoAdaptar = 0
+    var intQtiZeros    = 0
 
     var flagJogoGeradoOk   = false
     var flagJogoAdaptadoOk = false
@@ -145,10 +147,29 @@ class SudokuGameGenerator {
                 Log.d(cTAG, strLog)
                 txtDados = "${txtDados}\n$strLog"
 
+                /*
                 val strNivelJogoPad = intNumBackTracking.toString().padStart(4)
-                strLog   = String.format( "%s %s", "-> Nível do jogo gerado:", strNivelJogoPad)
+                strLog   = String.format( "%s %s", "-> Nível do jogo adaptado:", strNivelJogoPad)
+                 */
+
+                val intNivelJogo    = intQtiZeros / 10
+                val intSubnivelJogo = intQtiZeros % 10
+                var strNivelJogo = when (intNivelJogo) {
+
+                    2 -> "Fácil"
+                    3 -> "Médio"
+                    4 -> "Difícil"
+                    5 -> "Muito difícil"
+                    else -> "Fácil"
+
+                }
+
+                strLog  = "-> Nível jogo gerado: $strNivelJogo"
                 Log.d(cTAG, strLog)
-                txtDados = "${txtDados}\n$strLog"
+                val strLog1 = "    - subnível: ${intSubnivelJogo.toString()}"
+                Log.d(cTAG, strLog1)
+
+                txtDados = "${txtDados}\n$strLog\n$strLog1"
 
             }
         }
@@ -301,17 +322,38 @@ class SudokuGameGenerator {
                 listaQM(arArIntJogo, true)
                 //-------------------------------------
 
-                val intQtiZeros = quantZeros(arArIntJogo)
+                intQtiZeros = quantZeros(arArIntJogo)
 
                 val strQtiZerosPad = intQtiZeros.toString().padStart(4)
                 strLog   = String.format ( "%s %s", "-> Quantidade de clues:", strQtiZerosPad)
                 Log.d(cTAG, strLog)
                 txtDados = "${txtDados}\n$strLog"
 
+                /*
                 val strNivelJogoPad = intNumBackTracking.toString().padStart(4)
-                strLog   = String.format( "%s %s", "-> Nível do jogo gerado:", strNivelJogoPad)
+                strLog   = String.format( "%s %s", "-> Nível do jogo adaptado:", strNivelJogoPad)
                 Log.d(cTAG, strLog)
                 txtDados = "${txtDados}\n$strLog"
+                 */
+
+                val intNivelJogo    = intQtiZeros / 10
+                val intSubnivelJogo = intQtiZeros % 10
+                var strNivelJogo = when (intNivelJogo) {
+
+                    2 -> "Fácil"
+                    3 -> "Médio"
+                    4 -> "Difícil"
+                    5 -> "Muito difícil"
+                    else -> "Fácil"
+
+                }
+
+                strLog  = "-> Nível jogo adaptado: $strNivelJogo"
+                Log.d(cTAG, strLog)
+                val strLog1 = "    - subnível: ${intSubnivelJogo.toString()}"
+                Log.d(cTAG, strLog1)
+
+                txtDados = "${txtDados}\n$strLog\n$strLog1"
 
             }
             else {
