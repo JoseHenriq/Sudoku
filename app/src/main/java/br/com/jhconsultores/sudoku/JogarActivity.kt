@@ -48,9 +48,10 @@ class JogarActivity : Activity() {
     private var iViewSudokuBoard: ImageView? = null
     private var iViewNumsDisps  : ImageView? = null
 
-    private var tvNivel: TextView? = null
-    private var tvErros: TextView? = null
-    private var tvClues: TextView? = null
+    private var tvNivel   : TextView? = null
+    private var tvSubNivel: TextView? = null
+    private var tvErros   : TextView? = null
+    private var tvClues   : TextView? = null
     private var intContaErro = 0
 
     private var intTamTxt = 25 // 50 // 200 //
@@ -115,7 +116,9 @@ class JogarActivity : Activity() {
     private var arIntNumsGab  = ArrayList<Int>()   // Gabarito
     private var arIntNumsJogo = ArrayList<Int>()   // Jogo
 
-    private var action = "JogoGerado"
+    private var action          = "JogoGerado"
+    private var strNivelJogo    = "Fácil"
+    private var strSubNivelJogo = "0"
 
     private lateinit var crono : Chronometer
     private var strCronoInic   = ""
@@ -137,9 +140,10 @@ class JogarActivity : Activity() {
         setContentView(R.layout.activity_jogar)
 
         //--- Instancia objetos locais para os objetos XML
-        tvNivel = findViewById<View>(R.id.tv_Nivel) as TextView
-        tvErros = findViewById<View>(R.id.tv_Erros) as TextView
-        tvClues = findViewById<View>(R.id.tv_Clues) as TextView
+        tvNivel    = findViewById<TextView>(R.id.tv_Nivel)
+        tvSubNivel = findViewById<TextView>(R.id.tv_Subnivel)
+        tvErros    = findViewById<TextView>(R.id.tv_Erros)
+        tvClues    = findViewById<TextView>(R.id.tv_Clues)
 
         val btnReset  = findViewById<View>(R.id.btnReset)  as Button
         val btnInicia = findViewById<View>(R.id.btnInicia) as Button
@@ -209,7 +213,9 @@ class JogarActivity : Activity() {
         // Inicializa dados para deixar o jogo pronto
         //------------------------------------------------------------------------------------------
         //--- Recupera os dados recebidos via intent
-        action = intent.action.toString()
+        action          = intent.action.toString()
+        strNivelJogo    = intent.getStringExtra("strNivelJogo") as String
+        strSubNivelJogo = intent.getStringExtra("strSubNivelJogo") as String
 
         // Armazena o gabarito em um array<int>
         arIntNumsGab  = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
@@ -494,7 +500,8 @@ class JogarActivity : Activity() {
             strLog = "-> Tap no btn \"Reset\" "
             Log.d(cTAG, strLog)
 
-            tvNivel!!.text = ""
+            tvNivel!!.text    = ""
+            tvSubNivel!!.text = ""
 
             intContaErro = 0
             tvErros!!.text = "$intContaErro"
@@ -1081,8 +1088,9 @@ class JogarActivity : Activity() {
         //------------------
 
         //--- Inicializa variáveis locais
-        tvNivel!!.text = "${SudokuBackTracking.intNumBackTracking}"
-        tvClues!!.text = quantZeros(arArIntNums).toString()
+        tvNivel!!.text    = " $strNivelJogo"      //"${SudokuBackTracking.intNumBackTracking}"
+        tvSubNivel!!.text = " $strSubNivelJogo"
+        tvClues!!.text    = quantZeros(arArIntNums).toString()
 
         //--- Verifica se fim de jogo
         var flagContJogo  = false

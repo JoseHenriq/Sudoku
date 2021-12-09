@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var edtViewSubNivel: EditText
 
     private var strOpcaoJogo = "JogoGerado"
+    private var strNivelJogo = "Fácil"
 
     private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
 
@@ -94,6 +95,7 @@ class MainActivity : AppCompatActivity() {
         //--------------------------
         prepRBniveis(true)
         //--------------------------
+        edtViewSubNivel.isEnabled = true
 
     }
 
@@ -111,6 +113,7 @@ class MainActivity : AppCompatActivity() {
         //--------------------------
         prepRBniveis(true)
         //--------------------------
+        edtViewSubNivel.isEnabled = true
 
         strLog = "-> Tap no btnGeraJogo"
         Log.d(cTAG, strLog)
@@ -122,17 +125,34 @@ class MainActivity : AppCompatActivity() {
         //--- Gera um novo jogo
         var nivelJogo = when {
 
-            rbFacil.isChecked   -> 20
+            rbFacil.isChecked   -> {
+                strNivelJogo = "Fácil"
+                20
+            }
 
-            rbMedio.isChecked   -> 30
+            rbMedio.isChecked   -> {
+                strNivelJogo = "Médio"
+                30
+            }
+            rbDificil.isChecked -> {
+                strNivelJogo = "Difícil"
+                40
+            }
 
-            rbDificil.isChecked -> 40
+            rbMuitoDificil.isChecked -> {
+                strNivelJogo = "Muito Difícil"
+                50
+            }
 
-            rbMuitoDificil.isChecked -> 50
-
-            else -> 0
+            else -> {
+                strNivelJogo = "Muito fácil"
+                0
+            }
 
         }
+        strLog = "   - Nível: $strNivelJogo ($nivelJogo) Subnível: ${edtViewSubNivel.text}"
+        Log.d(cTAG, strLog)
+
         nivelJogo += edtViewSubNivel.text.toString().toInt()
 
         //------------------------------------
@@ -152,7 +172,10 @@ class MainActivity : AppCompatActivity() {
         strOpcaoJogo = "JogoAdaptado"
         sgg.txtDados = ""
 
+        //---------------------------
         prepRBniveis(false)
+        //---------------------------
+        edtViewSubNivel.isEnabled = false
 
         strLog = "-> Tap no btnAdaptaJogo"
         Log.d(cTAG, strLog)
@@ -228,6 +251,8 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, JogarActivity::class.java)
             intent.action = strOpcaoJogo
             intent.putExtra("NivelDoJogo", SudokuBackTracking.intNumBackTracking)
+            intent.putExtra("strNivelJogo", strNivelJogo)
+            intent.putExtra("strSubNivelJogo", edtViewSubNivel.text.toString())
             intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
             intent.putIntegerArrayListExtra("JogoPreparado", arIntNumsJogo)
             //----------------------

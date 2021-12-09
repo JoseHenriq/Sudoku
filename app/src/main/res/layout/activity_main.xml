@@ -127,7 +127,7 @@
         android:layout_marginStart="5dp"
 
         android:textSize         ="@dimen/TamanhoTxt"
-        android:text             ="@string/subNivel"/>
+        android:text             ="@string/legSubnivel"/>
 
     <!-- 2- EditText para edição do subnível: de 0 à 9 -->
     <EditText
