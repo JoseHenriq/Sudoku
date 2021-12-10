@@ -4,11 +4,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.util.Log
 
 import android.view.View
 import android.widget.*
 
+@Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
 
     //----------------------------------------------------------------------------------------------
@@ -19,9 +24,9 @@ class MainActivity : AppCompatActivity() {
 
     private var quadMaior = arrayOf<Array<Int>>()
 
-    private var btnGeraJogo   : Button? = null
-    private var btnAdaptaJogo : Button? = null
-    private var btnJogaJogo   : Button? = null
+    private lateinit var btnGeraJogo   : Button
+    private lateinit var btnAdaptaJogo : Button
+    private lateinit var btnJogaJogo   : Button
 
     private lateinit var groupRBnivel   : RadioGroup
     private lateinit var rbFacil        : RadioButton
@@ -36,16 +41,16 @@ class MainActivity : AppCompatActivity() {
 
     private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
 
-    private var txtDadosJogo : TextView? = null
+    private lateinit var txtDadosJogo : TextView
 
     private var sgg = SudokuGameGenerator ()
 
-    // Núm     0   21               31        41          51       61       81
-    // clues  81   60               50        40          30       20
-    //        |xxxx|  MUITO DIFÍCIL  |DIFÍCIL  |   MÉDIO   |  FÁCIL |xxxxxxx|
+    // Núm     0   21               31        41          51       61     81
+    // clues  81   60               50        40          30       20      0
+    //        |----|----------------|---------|-----------|--------|-------|
+    //        |xxxx|  MUITO DIFÍCIL | DIFÍCIL |   MÉDIO   |  FÁCIL |xxxxxxx|
+    //        |----|----------------|---------|-----------|--------|-------|
     // SETUP      60                50        40          30       20
-
-    val arIntLimNiveis = arrayOf (20, 30, 40, 50)
 
     //----------------------------------------------------------------------------------------------
     // Eventos da MainActivity
@@ -66,18 +71,14 @@ class MainActivity : AppCompatActivity() {
         btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
 
         groupRBnivel  = findViewById(R.id.radioGrpNivel)
-        rbFacil       = findViewById<RadioButton>(R.id.nivelFacil)
-        rbMedio       = findViewById<RadioButton>(R.id.nivelMédio)
-        rbDificil     = findViewById<RadioButton>(R.id.nivelDifícil)
-        rbMuitoDificil= findViewById<RadioButton>(R.id.nivelMuitoDifícil)
+        rbFacil       = findViewById(R.id.nivelFacil)
+        rbMedio       = findViewById(R.id.nivelMédio)
+        rbDificil     = findViewById(R.id.nivelDifícil)
+        rbMuitoDificil= findViewById(R.id.nivelMuitoDifícil)
 
-        edtViewSubNivel= findViewById<EditText>(R.id.edtViewSubNivel)
+        edtViewSubNivel= findViewById(R.id.edtViewSubNivel)
 
         txtDadosJogo  = findViewById(R.id.txtJogos)
-
-        //hideSoftKeyboard(currentFocus ?: View(this))
-
-        //closeKeyBoard()
 
     }
 
@@ -86,8 +87,8 @@ class MainActivity : AppCompatActivity() {
 
         super.onResume()
 
-        txtDadosJogo!!.text = ""
-        sgg.txtDados        = ""
+        txtDadosJogo.text = ""
+        sgg.txtDados      = ""
 
         //--------------------------
         prepRBniveis(true)
@@ -97,11 +98,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     //----------------------------------------------------------------------------------------------
-    // Funções para o atendimento ao tapping nos botões
+    // Funções para o atendimento ao tapping nos botões (declarados no xml)
     //----------------------------------------------------------------------------------------------
     //--- Evento tapping no botão de geração de jogo
     @Suppress("UNUSED_PARAMETER")
     fun btnGeraJogoClick(view : View?) {
+
+        strLog = "-> Tap no btnGeraJogo"
+        Log.d(cTAG, strLog)
 
         strOpcaoJogo = "JogoGerado"
 
@@ -112,12 +116,8 @@ class MainActivity : AppCompatActivity() {
         //--------------------------
         edtViewSubNivel.isEnabled = true
 
-        strLog = "-> Tap no btnGeraJogo"
-        Log.d(cTAG, strLog)
-
-        //txtDadosJogo?.text = strLog
-        txtDadosJogo?.text = ""
-        sgg.txtDados = ""
+        txtDadosJogo.text = ""
+        sgg.txtDados      = ""
 
         //--- Gera um novo jogo
         var nivelJogo = when {
@@ -156,9 +156,13 @@ class MainActivity : AppCompatActivity() {
         quadMaior = sgg.geraJogo(nivelJogo)
         //------------------------------------
 
-        txtDadosJogo?.append(sgg.txtDados)
+        // txtDadosJogo.append(sgg.txtDados)
 
-        // **** Os arrays preparados serão enviados pelo listener do botão JogaJogo ****
+        //-------------------------------
+        preencheSudokuBoard(quadMaior)
+        //-------------------------------
+
+        // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
 
     }
 
@@ -166,37 +170,32 @@ class MainActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun btnAdaptaJogoClick(view : View?) {
 
-        strOpcaoJogo = "JogoAdaptado"
-        sgg.txtDados = ""
-
-        //---------------------------
-        prepRBniveis(false)
-        //---------------------------
-        edtViewSubNivel.isEnabled = false
-
         strLog = "-> Tap no btnAdaptaJogo"
         Log.d(cTAG, strLog)
 
-        txtDadosJogo?.text = ""
-        sgg.txtDados = ""
+        strOpcaoJogo      = "JogoAdaptado"
+        txtDadosJogo.text = ""
+        sgg.txtDados      = ""
 
         //--- Prepara o preset para se conseguir o gabarito do jogo
         if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
+        txtDadosJogo.text = String.format("%s%d","Preset #", sgg.intJogoAdaptar)
+
         //-------------------------------------------
         inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
         //-------------------------------------------
 
         sgg.quadMaiorRet = copiaArArInt(quadMaiorAdapta)
 
-        //--- Adapta jogo--------------------
-        //-----------------------------------------
+        //---------------------------------------
         quadMaior = sgg.adaptaJogoAlgoritmo2()
-        //-----------------------------------------
-        txtDadosJogo?.append(sgg.txtDados)
+        //---------------------------------------
+        //txtDadosJogo.append(sgg.txtDados)
 
+        //--- Apresenta o nível e o subnível do preset
         val nivelJogo    = sgg.intQtiZeros / 10
         val subNivelJogo = sgg.intQtiZeros % 10
-        var rbNivelJogo : RadioButton = when (nivelJogo) {
+        val rbNivelJogo : RadioButton = when (nivelJogo) {
 
             2 -> rbFacil
             3 -> rbMedio
@@ -209,7 +208,16 @@ class MainActivity : AppCompatActivity() {
 
         edtViewSubNivel.setText(subNivelJogo.toString())
 
-        // **** Os arrays preparados serão enviados pelo listener do botão JogaJogo ****
+        //---------------------------
+        prepRBniveis(false)
+        //---------------------------
+        edtViewSubNivel.isEnabled = false
+
+        //-------------------------------
+        preencheSudokuBoard(quadMaior)
+        //-------------------------------
+
+        // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
 
     }
 
@@ -222,8 +230,8 @@ class MainActivity : AppCompatActivity() {
 
         prepRBniveis(false)
 
-        txtDadosJogo?.text = ""
-        sgg.txtDados       = ""
+        txtDadosJogo.text = ""
+        sgg.txtDados      = ""
 
         //--- Se não tiver jogo válido, informa ao usuário
         if (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk) {
@@ -307,11 +315,71 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     // Funções
     //----------------------------------------------------------------------------------------------
+
+    //--- preencheSudokuBoard
+    private fun preencheSudokuBoard(arArIntJogo : Array<Array<Int>>) {
+
+        //--- Pincel
+        val pincelAzul = Paint()
+        val intTamTxt  = 25
+        val scale      = resources.displayMetrics.density
+
+        //--- ImageView
+        val ivSudokuBoard = findViewById<View>(R.id.ivSudokuBoardMain) as ImageView
+
+        //--- Bmp
+        val bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
+                                                      .copy(Bitmap.Config.ARGB_8888, true)
+        //--- Canvas
+        val canvasMyImage = Canvas(bmpMyImage)
+
+        //--- Escreve nas células
+        val intCellwidth  = bmpMyImage.width  / 9
+        val intCellheight = bmpMyImage.height / 9
+
+        for (intLinha in 0..8) {
+
+            for (intCol in 0..8) {
+
+                //-------------------------------------------
+                val intNum = arArIntJogo[intLinha][intCol]
+                //-------------------------------------------
+                if (intNum > 0) {
+
+                    val strTexto = intNum.toString()
+
+                    pincelAzul.textSize = intTamTxt * scale
+
+                    // Declarada em JogarActivity
+                    // escreveCelula(intLinha, intCol, strTexto, pincel!!) // canvasMyImage!!
+
+                    //--- Coordenada Y (linhas)
+                    //--------------------------------------------------------------
+                    val yCoord = intCellheight * 3 / 4 + intLinha * intCellheight
+                    //--------------------------------------------------------------
+
+                    //--- Coordenada X (colunas)
+                    //------------------------------------------------------
+                    val xCoord = intCellwidth / 3 + intCol * intCellwidth
+                    //------------------------------------------------------
+
+                    //------------------------------------------------------------------------------
+                    canvasMyImage.drawText(strTexto, xCoord.toFloat(), yCoord.toFloat(),
+                                                                                        pincelAzul)
+                    //------------------------------------------------------------------------------
+
+                }
+            }
+        }
+        ivSudokuBoard.setImageBitmap(bmpMyImage)
+
+    }
+
     //--- inicQuadMaiorAdaptacao
     private fun inicQuadMaiorAdaptacao(jogoAdaptar : Int) {
 
         var array : Array <Int>
-        quadMaiorAdapta = arrayOf<Array<Int>>()
+        quadMaiorAdapta = arrayOf()
 
         //--- Simula os dados iniciais propostos
         when (jogoAdaptar) {
@@ -416,15 +484,12 @@ class MainActivity : AppCompatActivity() {
             var m = Array(6) {Array(5) {0} }
          */
 
-        //-------------------------------------------------------
+        //------------------------------------------------------
         val arArIntTmp = Array(9) { Array(9) { 0 } }
-        //-------------------------------------------------------
+        //------------------------------------------------------
 
         for (intLin in 0..8) {
-            for (intCol in 0..8) {
-                arArIntTmp[intLin][intCol] = arArIntPreset[intLin][intCol]
-                //arArIntCopia[intLin][intCol] = arArIntPreset[intLin][intCol]
-            }
+            for (intCol in 0..8) { arArIntTmp[intLin][intCol] = arArIntPreset[intLin][intCol] }
         }
 
         return arArIntTmp
@@ -432,48 +497,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- Prepara rbNivel
-    private fun prepRBniveis(habilita : Boolean){
+    private fun prepRBniveis(habOuDesab : Boolean){
 
         val intIdxChild = groupRBnivel.childCount - 1
         if (intIdxChild > 0) {
 
-            for (idxRB in 0..intIdxChild) {
-
-                groupRBnivel.getChildAt(idxRB).isEnabled = habilita
-
-            }
+            for (idxRB in 0..intIdxChild) { groupRBnivel.getChildAt(idxRB).isEnabled = habOuDesab }
 
         }
     }
-
-    //--- Esconde o keyboard
-    /*
-    private fun hideSoftKeyboard(view : View) {
-
-        val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        manager.hideSoftInputFromWindow(view.windowToken, 0)
-
-    }
-     */
-
-    /*
-    private fun Context.hideSoftKeyboard(view: View) {
-
-        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-
-    }
-    */
-
-    /*
-    private fun closeKeyBoard() {
-        val view = this.currentFocus
-        if (view != null) {
-            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-    }
-    */
 
     /*
     //--- Verifica o Gerador de números aleatórios

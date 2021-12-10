@@ -141,12 +141,12 @@ class JogarActivity : Activity() {
             setContentView(R.layout.activity_jogar)
 
             //--- Instancia objetos locais para os objetos XML
-            tvNivel = findViewById<TextView>(R.id.tv_Nivel)
-            tvSubNivel = findViewById<TextView>(R.id.tv_Subnivel)
-            tvErros = findViewById<TextView>(R.id.tv_Erros)
-            tvClues = findViewById<TextView>(R.id.tv_Clues)
+            tvNivel    = findViewById(R.id.tv_Nivel)
+            tvSubNivel = findViewById(R.id.tv_Subnivel)
+            tvErros = findViewById(R.id.tv_Erros)
+            tvClues = findViewById(R.id.tv_Clues)
 
-            val btnReset = findViewById<View>(R.id.btnReset) as Button
+            val btnReset  = findViewById<View>(R.id.btnReset)  as Button
             val btnInicia = findViewById<View>(R.id.btnInicia) as Button
             btnInicia.isEnabled = true
 
@@ -219,8 +219,8 @@ class JogarActivity : Activity() {
             //------------------------------------------------------------------------------------------
             // Images Views
             //------------------------------------------------------------------------------------------
-            iViewSudokuBoard = findViewById<View>(R.id.imageView1) as ImageView
-            iViewNumsDisps = findViewById<View>(R.id.imageView2) as ImageView
+            iViewSudokuBoard = findViewById<View>(R.id.ivSudokuBoard) as ImageView
+            iViewNumsDisps = findViewById<View>(R.id.ivNumDisp) as ImageView
 
             //------------------------------
             determinaGrandezasGraficas()
@@ -252,7 +252,7 @@ class JogarActivity : Activity() {
                     for (intCol in 0..8) {
 
                         arArIntNums[intLinha][intCol] = arIntNumsJogo[intLinha * 9 + intCol] // Jogo
-                        arArIntGab[intLinha][intCol] =
+                        arArIntGab[intLinha][intCol]  =
                             arIntNumsGab[intLinha * 9 + intCol] // Gabarito
 
                     }
@@ -1014,7 +1014,7 @@ class JogarActivity : Activity() {
             //Log.d(cTAG, strLog)
 
             //--- Imagem Sudoku board
-            intImgwidth = bmpSudokuBoard!!.width
+            intImgwidth  = bmpSudokuBoard!!.width
             intImgheight = bmpSudokuBoard!!.height
             //strLog = "   -Image  : Largura: " + intImgwidth + " pixels, Altura  :  " +
             //        intImgheight + " pixels"

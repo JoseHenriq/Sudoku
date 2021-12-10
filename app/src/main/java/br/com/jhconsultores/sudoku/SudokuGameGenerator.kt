@@ -2,7 +2,6 @@ package br.com.jhconsultores.sudoku
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.RadioButton
 import br.com.jhconsultores.sudoku.SudokuBackTracking.intNumBackTracking
 
 class SudokuGameGenerator {
@@ -154,7 +153,7 @@ class SudokuGameGenerator {
 
                 val intNivelJogo    = intQtiZeros / 10
                 val intSubnivelJogo = intQtiZeros % 10
-                var strNivelJogo = when (intNivelJogo) {
+                val strNivelJogo = when (intNivelJogo) {
 
                     2 -> "Fácil"
                     3 -> "Médio"
@@ -166,7 +165,7 @@ class SudokuGameGenerator {
 
                 strLog  = "-> Nível jogo gerado: $strNivelJogo"
                 Log.d(cTAG, strLog)
-                val strLog1 = "    - subnível: ${intSubnivelJogo.toString()}"
+                val strLog1 = "    - subnível: $intSubnivelJogo"
                 Log.d(cTAG, strLog1)
 
                 txtDados = "${txtDados}\n$strLog\n$strLog1"
@@ -302,7 +301,7 @@ class SudokuGameGenerator {
             //-------------------------------------------------------------------------------------
             flagJogoAdaptadoOk = SudokuBackTracking.solveSudoku(quadMaiorRet, quadMaiorRet.size)
             //-------------------------------------------------------------------------------------
-            val intNumBackTracking = SudokuBackTracking.intNumBackTracking
+            //val intNumBackTracking = SudokuBackTracking.intNumBackTracking
             if (flagJogoAdaptadoOk) {
 
                 strLog  = "-> Jogo com preset $intJogoAdaptar adaptado"
@@ -338,7 +337,7 @@ class SudokuGameGenerator {
 
                 val intNivelJogo    = intQtiZeros / 10
                 val intSubnivelJogo = intQtiZeros % 10
-                var strNivelJogo = when (intNivelJogo) {
+                val strNivelJogo = when (intNivelJogo) {
 
                     2 -> "Fácil"
                     3 -> "Médio"
@@ -350,7 +349,7 @@ class SudokuGameGenerator {
 
                 strLog  = "-> Nível jogo adaptado: $strNivelJogo"
                 Log.d(cTAG, strLog)
-                val strLog1 = "    - subnível: ${intSubnivelJogo.toString()}"
+                val strLog1 = "    - subnível: $intSubnivelJogo"
                 Log.d(cTAG, strLog1)
 
                 txtDados = "${txtDados}\n$strLog\n$strLog1"

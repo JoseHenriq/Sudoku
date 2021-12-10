@@ -4,7 +4,7 @@
 
     <dimen name ="MargemAcima"    > 100dp </dimen>
     <dimen name ="MargemDireita"  >   2dp </dimen>
-    <dimen name ="MargemEsquerda" >   2dp </dimen>
+    <dimen name ="MargemEsquerda" >  10dp </dimen>
     <dimen name ="MargemAcima70dp">  70dp </dimen>
 
     <dimen name ="RB_MargemEsquerda"> 20dp </dimen>

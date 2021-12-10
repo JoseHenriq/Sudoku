@@ -128,10 +128,8 @@
 
         android:textSize         ="@dimen/TamanhoTxt"
         android:text             ="@string/legSubnivel"/>
-
     <!-- 2- EditText para edição do subnível: de 0 à 9 -->
-    <EditText
-        android:id="@+id/edtViewSubNivel"
+    <EditText android:id="@+id/edtViewSubNivel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -148,37 +146,62 @@
         app:layout_constraintStart_toEndOf="@id/legSubNivel"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Separador entre nível do jogo e scrollView -->
-    <View
-
-        android:id="@+id/separador_nivel_scroll"
+    <!-- Separador entre subnível do jogo e imageView Jogo -->
+    <View android:id="@+id/separador_subnivel_ivJogo"
 
         android:layout_width ="match_parent"
         android:layout_height="1dp"
 
-        android:layout_marginTop="10dp"
         android:background="@android:color/darker_gray"
 
-        app:layout_constraintTop_toBottomOf="@id/legSubNivel" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf ="@id/edtViewSubNivel"
+        android:layout_marginTop            ="10dp" />
 
-    <!-- Textview com scrolling -->
-    <ScrollView
-        android:id="@+id/srcTextScrollView"
+    <ImageView android:id ="@+id/ivSudokuBoardMain"
+        android:layout_width ="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop  ="10dp"
+        app:layout_constraintTop_toBottomOf ="@id/separador_subnivel_ivJogo"
+
+        android:contentDescription="@string/testeCanva3"
+        android:src="@drawable/sudoku_board3" />
+
+    <!-- Android 6.0.1 (S5Duos):
+         1- add Gradle / proguard-rules.pro:
+         'keep class android.support.v7.widget.** { *; }'
+         2- os jpgs devem ser copiados para res/drawable /-->
+
+    <!-- Separador entre imageView do jogo e scrollView -->
+    <View android:id="@+id/separador_ivJogo_scroll"
+
+        android:layout_width ="match_parent"
+        android:layout_height="1dp"
+
+        android:background="@android:color/darker_gray"
+
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/ivSudokuBoardMain" />
+
+    <!-- scrolling e seu Textview -->
+    <ScrollView android:id="@+id/srcTextScrollView"
 
         android:layout_width ="match_parent"
         android:layout_height="0dp"
 
         android:fillViewport="true"
-        android:scrollbars="vertical"
+        android:scrollbars  ="vertical"
 
         app:layout_constraintBottom_toTopOf="@id/btn_AdaptarJogo"
-        app:layout_constraintTop_toBottomOf="@id/separador_nivel_scroll"
+        app:layout_constraintTop_toBottomOf="@id/separador_ivJogo_scroll"
 
         app:layout_constraintVertical_bias="1.0"
-        tools:layout_editor_absoluteX="-1dp">
+        tools:layout_editor_absoluteX     ="-1dp">
 
-        <TextView
-            android:id="@+id/txtJogos"
+        <TextView android:id="@+id/txtJogos"
 
             android:layout_width="wrap_content"
 
@@ -226,7 +249,6 @@
         android:text         ="@string/gera_novo_jogo"
 
         android:onClick      ="btnGeraJogoClick" />
-
     <Button android:id="@+id/btn_AdaptarJogo"
 
         android:layout_width ="@dimen/WidthBotao"
@@ -246,7 +268,6 @@
         android:text         ="@string/adaptar_jogo"
 
         android:onClick="btnAdaptaJogoClick"/>
-
     <Button android:id="@+id/btn_JogarJogo"
 
         android:layout_width ="@dimen/WidthBotao"
