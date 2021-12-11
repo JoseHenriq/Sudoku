@@ -54,6 +54,8 @@ class JogarActivity : Activity() {
     private var tvClues   : TextView? = null
     private var intContaErro = 0
 
+    private lateinit var toolBar : Toolbar
+
     private var intTamTxt = 25 // 50 // 200 //
     private var scale     = 0f
 
@@ -145,6 +147,8 @@ class JogarActivity : Activity() {
             tvSubNivel = findViewById(R.id.tv_Subnivel)
             tvErros    = findViewById(R.id.tv_Erros)
             tvClues    = findViewById(R.id.tv_Clues)
+
+            toolBar    = findViewById(R.id.toolbar)
 
             val btnReset  = findViewById<View>(R.id.btnReset)  as Button
             val btnInicia = findViewById<View>(R.id.btnInicia) as Button
@@ -500,6 +504,14 @@ class JogarActivity : Activity() {
             Log.d(cTAG, "Erro: ${exc.message}")
 
         }
+
+        /*
+        //--- Prepara o actionBar (toolBar)
+        //setting toolbar
+        setSupportActionBar(toolBar)
+        //home navigation
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        */
 
     }
 

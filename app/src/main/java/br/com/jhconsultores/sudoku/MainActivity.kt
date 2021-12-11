@@ -10,11 +10,14 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.core.widget.doOnTextChanged
 
 @Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
@@ -91,6 +94,26 @@ class MainActivity : AppCompatActivity() {
         //-----------------------------
 
         edtViewSubNivel= findViewById(R.id.edtViewSubNivel)
+
+        //https://www.tutorialkart.com/kotlin-android/android-edittext-on-text-change/
+        edtViewSubNivel.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {}
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+                // tvSample.setText("Text in EditText : $s")
+
+                if (s.isNotEmpty())
+                    //---------------------------
+                    verMudancaNivel(nivelJogo)
+                    //---------------------------
+
+            }
+
+        })
 
         txtDadosJogo  = findViewById(R.id.txtJogos)
 
@@ -199,21 +222,26 @@ class MainActivity : AppCompatActivity() {
         strLog = "   - Nível: $strNivelJogo ($nivelJogo) Subnível: ${edtViewSubNivel.text}"
         Log.d(cTAG, strLog)
 
-        subNivelJogo   = edtViewSubNivel.text.toString().toInt()
-        nivelTotalJogo = nivelJogo + subNivelJogo
+        if (edtViewSubNivel.text.toString().isNotEmpty()) {
 
-        //-----------------------------------------
-        quadMaior = sgg.geraJogo(nivelTotalJogo)
-        //-----------------------------------------
+            subNivelJogo   = edtViewSubNivel.text.toString().toInt()
+            nivelTotalJogo = nivelJogo + subNivelJogo
 
-        // txtDadosJogo.append(sgg.txtDados)
+            //-----------------------------------------
+            quadMaior = sgg.geraJogo(nivelTotalJogo)
+            //-----------------------------------------
 
-        //-------------------------------
-        preencheSudokuBoard(quadMaior)
-        //-------------------------------
+            // txtDadosJogo.append(sgg.txtDados)
 
-        // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
+            //-------------------------------
+            preencheSudokuBoard(quadMaior)
+            //-------------------------------
 
+            // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
+
+        }
+        else Toast.makeText(this, "Não é possível gerar o jogo sem subnivel!",
+                                                                         Toast.LENGTH_SHORT).show()
     }
 
     //--- Evento tapping no botão de adaptação de jogo
@@ -236,6 +264,9 @@ class MainActivity : AppCompatActivity() {
         //-------------------------------------------
 
         sgg.quadMaiorRet = copiaArArInt(quadMaiorAdapta)
+
+        sgg.flagJogoGeradoOk   = true
+        sgg.flagJogoAdaptadoOk = true
 
         //---------------------------------------
         quadMaior = sgg.adaptaJogoAlgoritmo2()
@@ -280,8 +311,8 @@ class MainActivity : AppCompatActivity() {
         //prepRBniveis(false)
         //-------------------------------
 
-        if (strOpcaoJogo.equals("JogoAdaptado")) txtDadosJogo.text = String.format("%s%d","Preset #", sgg.intJogoAdaptar)
-        else txtDadosJogo.text = ""
+        txtDadosJogo.text = if (strOpcaoJogo.equals("JogoAdaptado"))
+                                       String.format("%s%d","Preset #", sgg.intJogoAdaptar) else ""
         sgg.txtDados = ""
 
         //--- Se não tiver jogo válido, informa ao usuário
@@ -575,21 +606,27 @@ class MainActivity : AppCompatActivity() {
     //--- verMudancaNivel
     private fun verMudancaNivel(intNivel : Int) {
 
-        var intNivelTotal = intNivel +  edtViewSubNivel.text.toString().toInt()
-        if (intNivelTotal != nivelJogo) {
+        if (strOpcaoJogo.equals("JogoGerado")) {
 
-            sgg.flagJogoGeradoOk   = false
-            sgg.flagJogoAdaptadoOk = false
+            if (edtViewSubNivel.text.toString().isNotEmpty()) {
 
-            val arArIntJogo = Array(9) { Array(9) {0} }
-            //---------------------------------
-            preencheSudokuBoard(arArIntJogo)
-            //---------------------------------
+                var intNivelTotal = intNivel + edtViewSubNivel.text.toString().toInt()
+                if (intNivelTotal != nivelJogo) {
 
-            nivelJogo = intNivelTotal
+                    sgg.flagJogoGeradoOk = false
+                    sgg.flagJogoAdaptadoOk = false
 
+                    val arArIntJogo = Array(9) { Array(9) { 0 } }
+                    //---------------------------------
+                    preencheSudokuBoard(arArIntJogo)
+                    //---------------------------------
+
+                    nivelJogo = intNivelTotal
+
+                }
+            } else Toast.makeText( this, "Não é possível gerar o jogo sem subnivel!",
+                                                                         Toast.LENGTH_SHORT).show()
         }
-
     }
 
     /*

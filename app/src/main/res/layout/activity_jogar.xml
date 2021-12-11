@@ -1,14 +1,32 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools  ="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools ="http://schemas.android.com/tools"
     android:layout_width ="match_parent"
     android:layout_height="match_parent"
-    tools:context=".JogarActivity" >
+    xmlns:app    ="http://schemas.android.com/apk/res-auto"
+    tools:context=".JogarActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+
+        android:layout_width ="match_parent"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf    ="parent"
+
+        android:background="@color/design_default_color_primary"
+        app:titleTextColor="@color/white"
+
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:title         ="@string/app_name" />
 
     <RelativeLayout
         android:id="@+id/infos"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="60dp"
+        app:layout_constraintTop_toTopOf="@id/toolbar">
 
         <!--- Nível do jogo -->
         <TextView
@@ -16,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="5dp"
 
             android:text="@string/nivel"
             android:textSize="24sp"
@@ -28,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="5dp"
             android:layout_toEndOf="@id/tv_LegNivel"
 
             android:text="Muito difícil"
@@ -41,7 +59,7 @@
             android:layout_height="wrap_content"
 
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/tv_Nivel"
 
             android:text="@string/legSubnivel"
@@ -54,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="5dp"
             android:layout_toEndOf="@id/tv_LegSubNivel"
 
             android:text="9"
@@ -67,7 +85,7 @@
             android:layout_height="wrap_content"
 
             android:layout_marginStart="200dp"
-            android:layout_marginTop="@dimen/MargemAcima70dp"
+            android:layout_marginTop="30dp"
 
             android:text="@string/legErros"
             android:textSize="24sp"
@@ -78,32 +96,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginTop="@dimen/MargemAcima70dp"
+            android:layout_marginTop="30dp"
             android:layout_toEndOf="@id/tv_LegErros"
 
             android:text="@string/erros_inic"
             android:textSize="24sp" />
 
         <!--- Crono (será add no JogarActivity -->
-        <LinearLayout android:id="@+id/crono_layout"
+        <LinearLayout
+            android:id="@+id/crono_layout"
 
-            android:layout_width ="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             android:layout_marginLeft="10dp"
-            android:layout_marginTop ="@dimen/MargemAcima70dp"
-            android:layout_toRightOf ="@id/tv_Erros"
+            android:layout_marginTop="@dimen/MargemAcima70dp"
+            android:layout_toRightOf="@id/tv_Erros"
 
-            android:orientation ="horizontal" />
+            android:orientation="horizontal" />
 
     </RelativeLayout>
 
-    <ImageView android:id ="@+id/ivSudokuBoard"
-        android:layout_width ="wrap_content"
+    <ImageView
+        android:id="@+id/ivSudokuBoard"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
         android:layout_marginStart="10dp"
-        android:layout_marginTop  ="@dimen/MargemAcima"
+        android:layout_marginTop="130dp"
 
         android:contentDescription="@string/testeCanva3"
         android:src="@drawable/sudoku_board3" />
@@ -151,7 +171,8 @@
          2- os jpgs devem ser copiados para res/drawable /-->
 
     <!-- Buttons -->
-    <Button android:id="@+id/btnReset"
+    <Button
+        android:id="@+id/btnReset"
         style="?android:attr/buttonStyleSmall"
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
@@ -159,17 +180,19 @@
         android:layout_alignParentEnd   ="true"
         android:layout_alignParentBottom="true"
 
-        android:textAllCaps ="false"
-        android:text="@string/reset" />
-    <Button android:id="@+id/btnInicia"
+        android:text="@string/reset"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/btnInicia"
         style="?android:attr/buttonStyleSmall"
-        android:layout_width ="wrap_content"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
         android:layout_alignParentBottom="true"
         android:layout_toStartOf="@id/btnReset"
 
-        android:textAllCaps ="false"
-        android:text="@string/inicia" />
+        android:text="@string/inicia"
+        android:textAllCaps="false" />
 
 </RelativeLayout>
