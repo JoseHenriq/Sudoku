@@ -17,13 +17,19 @@ import android.view.View
 import android.annotation.SuppressLint
 import android.os.SystemClock
 import android.view.ViewGroup
+
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+
+//import androidx.appcompat.widget.Toolbar
+//import com.google.android.material.appbar.MaterialToolbar
+//import androidx.appcompat.app.AppCompatActivity
 
 import java.lang.Exception
 import java.nio.IntBuffer
 
-class JogarActivity : Activity() {
+class JogarActivity : AppCompatActivity() {   //Activity() {
 
     //----------------------------------------------------------------------------------------------
     //                        Instancializações e inicializações
@@ -54,7 +60,9 @@ class JogarActivity : Activity() {
     private var tvClues   : TextView? = null
     private var intContaErro = 0
 
-    private lateinit var toolBar : Toolbar
+    //private lateinit var toolBar : MaterialToolbar
+    //private lateinit var toolBar : Toolbar
+    private lateinit var toolBar : androidx.appcompat.widget.Toolbar
 
     private var intTamTxt = 25 // 50 // 200 //
     private var scale     = 0f
@@ -139,6 +147,7 @@ class JogarActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+
         try {
             setContentView(R.layout.activity_jogar)
 
@@ -148,7 +157,23 @@ class JogarActivity : Activity() {
             tvErros    = findViewById(R.id.tv_Erros)
             tvClues    = findViewById(R.id.tv_Clues)
 
-            toolBar    = findViewById(R.id.toolbar)
+            //toolBar = findViewById(R.id.toolbar1)
+            toolBar = findViewById(R.id.toolbar2)
+
+            /*
+            //setting toolbar
+            val activity = AppCompatActivity()
+            //---------------------------------------
+            activity.setSupportActionBar(toolBar)
+            //---------------------------------------
+            //home navigation
+            //-----------------------------------------------------------
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            //-----------------------------------------------------------
+            */
+
+            setSupportActionBar(toolBar)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
             val btnReset  = findViewById<View>(R.id.btnReset)  as Button
             val btnInicia = findViewById<View>(R.id.btnInicia) as Button
@@ -1135,7 +1160,7 @@ class JogarActivity : Activity() {
         //------------------
 
         //--- Inicializa variáveis locais
-        tvNivel!!.text    = strNivelJogo      //"${SudokuBackTracking.intNumBackTracking}"
+        tvNivel!!.text    = strNivelJogo
         tvSubNivel!!.text = strSubNivelJogo
         tvClues!!.text    = quantZeros(arArIntNums).toString()
 

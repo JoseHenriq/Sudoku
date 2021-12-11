@@ -277,11 +277,26 @@ class MainActivity : AppCompatActivity() {
         subNivelJogo = sgg.intQtiZeros % 10
         val rbNivelJogo : RadioButton = when (nivelJogo) {
 
-            20 -> rbFacil
-            30 -> rbMedio
-            40 -> rbDificil
-            50 -> rbMuitoDificil
-            else -> rbFacil
+            20 -> {
+                strNivelJogo = "Fácil"
+                rbFacil
+            }
+            30 -> {
+                strNivelJogo = "Médio"
+                rbMedio
+            }
+            40 -> {
+                strNivelJogo = "Difícil"
+                rbDificil
+            }
+            50 -> {
+                strNivelJogo = "Muito Difícil"
+                rbMuitoDificil
+            }
+            else -> {
+                strNivelJogo = "Fácil"
+                rbFacil
+            }
 
         }
         rbNivelJogo.isChecked = true
@@ -480,7 +495,31 @@ class MainActivity : AppCompatActivity() {
         //--- Simula os dados iniciais propostos
         when (jogoAdaptar) {
 
+            // Nível: fácil  Subnível: 0 (nívelTotal: 20)
             1 -> run {
+
+                for (linha in 0..8) {
+
+                    // array = arrayOf<Int>()
+                    array = when (linha) {
+
+                        0 -> arrayOf(6, 0, 8, 7, 4, 0, 1, 0, 2)
+                        1 -> arrayOf(3, 2, 0, 6, 8, 1, 0, 7, 5)
+                        2 -> arrayOf(7, 5, 1, 9, 0, 3, 4, 0, 8)
+                        3 -> arrayOf(9, 6, 3, 5, 0, 8, 0, 2, 0)
+                        4 -> arrayOf(0, 4, 2, 3, 7, 0, 8, 9, 1)
+                        5 -> arrayOf(1, 8, 0, 0, 9, 4, 6, 5, 3)
+                        6 -> arrayOf(2, 1, 6, 8, 3, 9, 0, 0, 7)
+                        7 -> arrayOf(0, 7, 5, 1, 6, 0, 3, 8, 9)
+                        else -> arrayOf(8, 3, 0, 0, 5, 7, 2, 1, 6)
+
+                    }
+                    quadMaiorAdapta += array
+                }
+            }
+
+            // Nível: médio  Subnível: 2 (nívelTotal: 32)
+            2 -> run {
 
                 for (linha in 0..8) {
 
@@ -503,28 +542,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            2 -> run {
-
-                for (linha in 0..8) {
-
-                    // array = arrayOf<Int>()
-                    array = when (linha) {
-
-                        0 -> arrayOf(0, 6, 0, 7, 0, 8, 1, 9, 2)
-                        1 -> arrayOf(1, 0, 5, 2, 0, 0, 0, 0, 7)
-                        2 -> arrayOf(0, 2, 0, 0, 0, 6, 0, 0, 0)
-                        3 -> arrayOf(0, 5, 0, 9, 3, 0, 0, 4, 0)
-                        4 -> arrayOf(0, 0, 6, 5, 0, 2, 7, 8, 0)
-                        5 -> arrayOf(9, 7, 0, 0, 0, 0, 3, 2, 5)
-                        6 -> arrayOf(0, 0, 7, 4, 0, 0, 8, 0, 6)
-                        7 -> arrayOf(8, 9, 4, 0, 7, 0, 0, 0, 0)
-                        else -> arrayOf(0, 1, 0, 3, 0, 0, 0, 7, 4)
-
-                    }
-                    quadMaiorAdapta += array
-                }
-            }
-
+            // Nível: difícil  Subnível: 3 (nívelTotal: 43)
             3 -> run {
 
                 for (linha in 0..8) {
@@ -547,6 +565,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            // Nível: muito difícil  Subnível: 9 (nívelTotal: 59)
             // 4
             else -> run {
 
@@ -555,15 +574,15 @@ class MainActivity : AppCompatActivity() {
                     // array = arrayOf<Int>()
                     array = when (linha) {
 
-                        0 -> arrayOf(9, 0, 0, 8, 4, 1, 3, 0, 0)
-                        1 -> arrayOf(0, 0, 1, 9, 0, 0, 4, 2, 0)
-                        2 -> arrayOf(0, 0, 0, 2, 0, 0, 0, 1, 0)
-                        3 -> arrayOf(8, 7, 0, 1, 0, 0, 5, 4, 0)
-                        4 -> arrayOf(1, 5, 0, 3, 6, 0, 0, 0, 2)
-                        5 -> arrayOf(2, 0, 0, 0, 0, 0, 7, 6, 0)
-                        6 -> arrayOf(7, 2, 0, 0, 0, 5, 1, 9, 0)
-                        7 -> arrayOf(6, 3, 0, 0, 0, 0, 2, 0, 7)
-                        else -> arrayOf(0, 1, 5, 7, 0, 2, 0, 0, 8)
+                        0 -> arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
+                        1 -> arrayOf(0, 0, 0, 0, 0, 0, 0, 8, 9)
+                        2 -> arrayOf(0, 0, 0, 0, 0, 8, 1, 6, 2)
+                        3 -> arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
+                        4 -> arrayOf(0, 0, 0, 0, 3, 0, 6, 0, 0)
+                        5 -> arrayOf(0, 6, 0, 8, 0, 0, 0, 1, 0)
+                        6 -> arrayOf(0, 0, 0, 0, 6, 1, 0, 3, 0)
+                        7 -> arrayOf(0, 0, 1, 4, 8, 5, 0, 0, 0)
+                        else -> arrayOf(8, 0, 0, 0, 7, 3, 0, 5, 0)
 
                     }
                     quadMaiorAdapta += array
@@ -613,7 +632,7 @@ class MainActivity : AppCompatActivity() {
                 var intNivelTotal = intNivel + edtViewSubNivel.text.toString().toInt()
                 if (intNivelTotal != nivelJogo) {
 
-                    sgg.flagJogoGeradoOk = false
+                    sgg.flagJogoGeradoOk   = false
                     sgg.flagJogoAdaptadoOk = false
 
                     val arArIntJogo = Array(9) { Array(9) { 0 } }

@@ -5,8 +5,12 @@
     xmlns:app    ="http://schemas.android.com/apk/res-auto"
     tools:context=".JogarActivity">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <!-- include layout="@layout/toolbar"/-->
+
+    <!--com.google.android.material.appbar.MaterialToolbar-->
+    <androidx.appcompat.widget.Toolbar
+
+        android:id="@+id/toolbar2"
 
         android:layout_width ="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +30,7 @@
         android:layout_height="wrap_content"
 
         android:layout_marginTop="60dp"
-        app:layout_constraintTop_toTopOf="@id/toolbar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <!--- Nível do jogo -->
         <TextView
@@ -97,6 +101,7 @@
             android:layout_height="wrap_content"
 
             android:layout_marginTop="30dp"
+            android:layout_marginLeft="5dp"
             android:layout_toEndOf="@id/tv_LegErros"
 
             android:text="@string/erros_inic"
@@ -110,8 +115,8 @@
             android:layout_height="wrap_content"
 
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="@dimen/MargemAcima70dp"
-            android:layout_toRightOf="@id/tv_Erros"
+            android:layout_marginTop ="32dp"
+            android:layout_toRightOf ="@id/tv_Erros"
 
             android:orientation="horizontal" />
 

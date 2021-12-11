@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".JogarActivity" />
+        <activity android:name=".JogarActivity"
+            android:parentActivityName=".MainActivity" />
 
     </application>
 
