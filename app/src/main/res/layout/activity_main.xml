@@ -129,7 +129,8 @@
         android:textSize         ="@dimen/TamanhoTxt"
         android:text             ="@string/legSubnivel"/>
     <!-- 2- EditText para edição do subnível: de 0 à 9 -->
-    <EditText android:id="@+id/edtViewSubNivel"
+    <EditText
+        android:id="@+id/edtViewSubNivel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -140,8 +141,9 @@
 
         android:inputType="numberDecimal"
         android:maxLength="1"
+
         android:maxLines="1"
-        android:text="@string/valor0"
+        android:text    ="@string/valor0"
         android:textSize="@dimen/TamanhoTxt"
         app:layout_constraintStart_toEndOf="@id/legSubNivel"
         app:layout_constraintTop_toTopOf="parent" />
@@ -238,7 +240,6 @@
         app:layout_constraintEnd_toEndOf      ="@id/guide_umTerco_esq"
         app:layout_constraintBottom_toBottomOf="parent"
 
-        android:layout_marginEnd  ="@dimen/MargemDireita"
         android:layout_marginStart="@dimen/MargemEsquerda"
 
         android:textColor ="@android:color/white"
@@ -254,7 +255,6 @@
         android:layout_width ="@dimen/WidthBotao"
         android:layout_height="@dimen/HeightBotao"
 
-        android:layout_marginEnd  ="@dimen/MargemDireita"
         android:layout_marginStart="@dimen/MargemEsquerda"
 
         app:layout_constraintStart_toEndOf    ="@id/guide_umTerco_esq"
@@ -273,8 +273,8 @@
         android:layout_width ="@dimen/WidthBotao"
         android:layout_height="@dimen/HeightBotao"
 
-        android:layout_marginEnd  ="@dimen/MargemDireita"
         android:layout_marginStart="@dimen/MargemEsquerda"
+        android:layout_marginEnd  ="10dp"
 
         app:layout_constraintStart_toEndOf    ="@id/guide_umTerco_dir"
         app:layout_constraintEnd_toEndOf      ="parent"

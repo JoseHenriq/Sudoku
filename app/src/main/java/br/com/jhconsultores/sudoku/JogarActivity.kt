@@ -143,8 +143,8 @@ class JogarActivity : Activity() {
             //--- Instancia objetos locais para os objetos XML
             tvNivel    = findViewById(R.id.tv_Nivel)
             tvSubNivel = findViewById(R.id.tv_Subnivel)
-            tvErros = findViewById(R.id.tv_Erros)
-            tvClues = findViewById(R.id.tv_Clues)
+            tvErros    = findViewById(R.id.tv_Erros)
+            tvClues    = findViewById(R.id.tv_Clues)
 
             val btnReset  = findViewById<View>(R.id.btnReset)  as Button
             val btnInicia = findViewById<View>(R.id.btnInicia) as Button
@@ -158,85 +158,26 @@ class JogarActivity : Activity() {
             preparaCrono(crono)
             //--------------------
 
-            //------------------------------------------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             // Objetos gráficos
-            //------------------------------------------------------------------------------------------
-            // Grandezas gráficas
-            scale = resources.displayMetrics.density
+            //--------------------------------------------------------------------------------------
 
-            // Pincéis
-            // ContextCompat.getColor(context, R.color.your_color);
-            pincelVerde.color =
-                ContextCompat.getColor(
-                    this,
-                    R.color.verde
-                )       // resources.getColor(R.color.verde)
-            pincelBranco.color =
-                ContextCompat.getColor(
-                    this,
-                    R.color.white
-                )       // resources.getColor(R.color.white)
-            pincelPreto.color =
-                ContextCompat.getColor(
-                    this,
-                    R.color.black
-                )       // resources.getColor(R.color.black)
-            pincelAzul.color =
-                ContextCompat.getColor(
-                    this,
-                    R.color.azul
-                )        // resources.getColor(R.color.azul)
-            pincelLaranja.color =
-                ContextCompat.getColor(
-                    this,
-                    R.color.laranja
-                )     // resources.getColor(R.color.laranja)
-            pincelPurple200.color = ContextCompat.getColor(
-                this,
-                R.color.purple_200
-            )  // resources.getColor(R.color.purple_200)
+            //------------------------
+            inicializaObjGraficos()
+            //------------------------
 
-            // Bit maps
-            intImageResource = R.drawable.sudoku_board3
-            bmpMyImage = BitmapFactory.decodeResource(resources, intImageResource)
-                .copy(Bitmap.Config.ARGB_8888, true)
-            bmpJogo = BitmapFactory.decodeResource(resources, intImageResource)
-                .copy(Bitmap.Config.ARGB_8888, true)
-            bmpInic = BitmapFactory.decodeResource(resources, intImageResource)
-                .copy(Bitmap.Config.ARGB_8888, true)
-            bmpSudokuBoard = BitmapFactory.decodeResource(resources, intImageResource)
-                .copy(Bitmap.Config.ARGB_8888, true)
-
-            bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
-                .copy(Bitmap.Config.ARGB_8888, true)
-
-            // Canvas
-            canvasMyImage     = Canvas(bmpMyImage!!)
-            canvasSudokuBoard = Canvas(bmpSudokuBoard!!)
-
-            canvasNumDisp = Canvas(bmpNumDisp!!)
-
-            //------------------------------------------------------------------------------------------
-            // Images Views
-            //------------------------------------------------------------------------------------------
-            iViewSudokuBoard = findViewById<View>(R.id.ivSudokuBoard) as ImageView
-            iViewNumsDisps = findViewById<View>(R.id.ivNumDisp) as ImageView
-
-            //------------------------------
-            determinaGrandezasGraficas()
-            //------------------------------
-
-            //------------------------------------------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             // Inicializa dados para deixar o jogo pronto
-            //------------------------------------------------------------------------------------------
+            //--------------------------------------------------------------------------------------
+
             //--- Recupera os dados recebidos via intent
             action = intent.action.toString()
-            strNivelJogo = intent.getStringExtra("strNivelJogo") as String
+            strNivelJogo    = intent.getStringExtra("strNivelJogo") as String
             strSubNivelJogo = intent.getStringExtra("strSubNivelJogo") as String
 
             // Armazena o gabarito em um array<int>
             arIntNumsGab = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
-            arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as ArrayList<Int>
+            arIntNumsJogo= intent.getIntegerArrayListExtra("JogoPreparado")  as ArrayList<Int>
 
             // Gabarito e/ou jogo inválidos
             if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
@@ -413,7 +354,7 @@ class JogarActivity : Activity() {
                                 //----------------------------------------------------------------------
                                 desenhaSudokuBoard(false)
                                 //-----------------------------------
-                                PreencheJogo()
+                                preencheJogo()
                                 //---------------
 
                                 //--- Salva esse bitmap
@@ -579,7 +520,7 @@ class JogarActivity : Activity() {
         val flPincelGrosso = 6.toFloat()
         val pincelDesenhar = pincelPreto
 
-        var flagApagaBoard : Boolean = flagApaga
+        val flagApagaBoard : Boolean = flagApaga
 
         //--- Redesenha o board a partir do zero
         //flagApagaBoard = true
@@ -821,6 +762,76 @@ class JogarActivity : Activity() {
     //----------------------------------------------------------------------------------------------
     // Outras
     //----------------------------------------------------------------------------------------------
+    //--- inicializaObjGraficos
+    @RequiresApi(Build.VERSION_CODES.R)
+    private fun inicializaObjGraficos() {
+
+        // Grandezas gráficas
+        scale = resources.displayMetrics.density
+
+        // Pincéis
+        // ContextCompat.getColor(context, R.color.your_color);
+        pincelVerde.color =
+            ContextCompat.getColor(
+                this,
+                R.color.verde
+            )       // resources.getColor(R.color.verde)
+        pincelBranco.color =
+            ContextCompat.getColor(
+                this,
+                R.color.white
+            )       // resources.getColor(R.color.white)
+        pincelPreto.color =
+            ContextCompat.getColor(
+                this,
+                R.color.black
+            )       // resources.getColor(R.color.black)
+        pincelAzul.color =
+            ContextCompat.getColor(
+                this,
+                R.color.azul
+            )        // resources.getColor(R.color.azul)
+        pincelLaranja.color =
+            ContextCompat.getColor(
+                this,
+                R.color.laranja
+            )     // resources.getColor(R.color.laranja)
+        pincelPurple200.color = ContextCompat.getColor(
+            this,
+            R.color.purple_200
+        )  // resources.getColor(R.color.purple_200)
+
+        // Bit maps
+        intImageResource = R.drawable.sudoku_board3
+        bmpMyImage = BitmapFactory.decodeResource(resources, intImageResource)
+            .copy(Bitmap.Config.ARGB_8888, true)
+        bmpJogo = BitmapFactory.decodeResource(resources, intImageResource)
+            .copy(Bitmap.Config.ARGB_8888, true)
+        bmpInic = BitmapFactory.decodeResource(resources, intImageResource)
+            .copy(Bitmap.Config.ARGB_8888, true)
+        bmpSudokuBoard = BitmapFactory.decodeResource(resources, intImageResource)
+            .copy(Bitmap.Config.ARGB_8888, true)
+
+        bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
+            .copy(Bitmap.Config.ARGB_8888, true)
+
+        // Canvas
+        canvasMyImage = Canvas(bmpMyImage!!)
+        canvasSudokuBoard = Canvas(bmpSudokuBoard!!)
+
+        canvasNumDisp = Canvas(bmpNumDisp!!)
+
+        //------------------------------------------------------------------------------------------
+        // Images Views
+        //------------------------------------------------------------------------------------------
+        iViewSudokuBoard = findViewById<View>(R.id.ivSudokuBoard) as ImageView
+        iViewNumsDisps   = findViewById<View>(R.id.ivNumDisp) as ImageView
+
+        //-----------------------------
+        determinaGrandezasGraficas()
+        //-----------------------------
+    }
+
     //--- Determina a qual quadrado menor uma célula pertence
     private fun determinaQm(linQM: Int, colQM: Int): Int {
 
@@ -1082,14 +1093,8 @@ class JogarActivity : Activity() {
         //----------------------------------
         desenhaSudokuBoard(true)
         //----------------------------------
-        PreencheJogo()
+        preencheJogo()
         //---------------
-
-        /*
-        copiaBmpByBuffer(bmpSudokuBoard, bmpMyImage)
-        copiaBmpByBuffer(bmpSudokuBoard, bmpInic)
-        copiaBmpByBuffer(bmpMyImage, bmpJogo)
-        */
 
         iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
 
@@ -1097,7 +1102,7 @@ class JogarActivity : Activity() {
         flagJoga = false
 
         //---------------
-        PreencheJogo()
+        preencheJogo()
         //---------------
 
         iViewSudokuBoard!!.isEnabled = false
@@ -1118,8 +1123,8 @@ class JogarActivity : Activity() {
         //------------------
 
         //--- Inicializa variáveis locais
-        tvNivel!!.text    = " $strNivelJogo"      //"${SudokuBackTracking.intNumBackTracking}"
-        tvSubNivel!!.text = " $strSubNivelJogo"
+        tvNivel!!.text    = strNivelJogo      //"${SudokuBackTracking.intNumBackTracking}"
+        tvSubNivel!!.text = strSubNivelJogo
         tvClues!!.text    = quantZeros(arArIntNums).toString()
 
         //--- Verifica se fim de jogo
@@ -1141,7 +1146,7 @@ class JogarActivity : Activity() {
     }
 
     //--- PreencheJogo
-    private fun PreencheJogo() {
+    private fun preencheJogo() {
 
         arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
 

@@ -1,5 +1,7 @@
 package br.com.jhconsultores.sudoku
 
+import android.app.Activity
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
@@ -11,6 +13,7 @@ import android.graphics.Paint
 import android.util.Log
 
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 
 @Suppress("UNUSED_PARAMETER")
@@ -36,8 +39,16 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var edtViewSubNivel: EditText
 
-    private var strOpcaoJogo = "JogoGerado"
-    private var strNivelJogo = "Fácil"
+    private var strOpcaoJogo   = "JogoGerado"
+    private var strNivelJogo   = "Fácil"
+    private var nivelJogo      = 0
+    private var subNivelJogo   = 0
+    private var nivelTotalJogo = 0
+
+    private val FACIL         = 20
+    private val MEDIO         = 30
+    private val DIFICIL       = 40
+    private val MUITO_DIFICIL = 50
 
     private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
 
@@ -66,15 +77,18 @@ class MainActivity : AppCompatActivity() {
         //--------------
 
         //--- Instancializações e inicializações
-        btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
         btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
         btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
+        btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
 
         groupRBnivel  = findViewById(R.id.radioGrpNivel)
         rbFacil       = findViewById(R.id.nivelFacil)
         rbMedio       = findViewById(R.id.nivelMédio)
         rbDificil     = findViewById(R.id.nivelDifícil)
         rbMuitoDificil= findViewById(R.id.nivelMuitoDifícil)
+        //-----------------------------
+        prepRBniveis(true)
+        //-----------------------------
 
         edtViewSubNivel= findViewById(R.id.edtViewSubNivel)
 
@@ -87,15 +101,50 @@ class MainActivity : AppCompatActivity() {
 
         super.onResume()
 
-        txtDadosJogo.text = ""
-        sgg.txtDados      = ""
+        //txtDadosJogo.text = ""
+        //sgg.txtDados      = ""
 
-        //--------------------------
-        prepRBniveis(true)
-        //--------------------------
-        edtViewSubNivel.isEnabled = true
+        //edtViewSubNivel.isEnabled = true
 
     }
+
+    /* Trying to hidden Soft keyboard
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+
+        super.onPostCreate(savedInstanceState)
+
+        // btnGeraJogo.requestFocus()
+
+        /*
+        try {
+            val imm: InputMethodManager =
+                                       getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+
+        } catch (exc : Exception) { Log.d(cTAG, "Erro: $exc") }
+        btnGeraJogo.requestFocus()
+        */
+
+        /*
+        try {
+
+            //val activity: Activity? = null
+            //val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+
+            val sharedPref = this.getPreferences(Context.MODE_PRIVATE) ?: return
+            val keyboard = sharedPref.getBoolean("keyboard", true)
+
+            Toast.makeText(this, keyboard.toString(), Toast.LENGTH_LONG).show()
+
+            //if (!keyboard) {
+            if (keyboard) { edtViewSubNivel.showSoftInputOnFocus = false //here i must disable the virtual keyboard
+            }
+
+        } catch (exc : Exception) { Log.d(cTAG, "Erro: $exc") }
+        */
+
+    }
+     */
 
     //----------------------------------------------------------------------------------------------
     // Funções para o atendimento ao tapping nos botões (declarados no xml)
@@ -120,25 +169,25 @@ class MainActivity : AppCompatActivity() {
         sgg.txtDados      = ""
 
         //--- Gera um novo jogo
-        var nivelJogo = when {
+        nivelJogo = when {
 
             rbFacil.isChecked   -> {
                 strNivelJogo = "Fácil"
-                20
+                FACIL
             }
 
             rbMedio.isChecked   -> {
                 strNivelJogo = "Médio"
-                30
+                MEDIO
             }
             rbDificil.isChecked -> {
                 strNivelJogo = "Difícil"
-                40
+                DIFICIL
             }
 
             rbMuitoDificil.isChecked -> {
                 strNivelJogo = "Muito Difícil"
-                50
+                MUITO_DIFICIL
             }
 
             else -> {
@@ -150,11 +199,12 @@ class MainActivity : AppCompatActivity() {
         strLog = "   - Nível: $strNivelJogo ($nivelJogo) Subnível: ${edtViewSubNivel.text}"
         Log.d(cTAG, strLog)
 
-        nivelJogo += edtViewSubNivel.text.toString().toInt()
+        subNivelJogo   = edtViewSubNivel.text.toString().toInt()
+        nivelTotalJogo = nivelJogo + subNivelJogo
 
-        //------------------------------------
-        quadMaior = sgg.geraJogo(nivelJogo)
-        //------------------------------------
+        //-----------------------------------------
+        quadMaior = sgg.geraJogo(nivelTotalJogo)
+        //-----------------------------------------
 
         // txtDadosJogo.append(sgg.txtDados)
 
@@ -190,24 +240,22 @@ class MainActivity : AppCompatActivity() {
         //---------------------------------------
         quadMaior = sgg.adaptaJogoAlgoritmo2()
         //---------------------------------------
-        //txtDadosJogo.append(sgg.txtDados)
 
         //--- Apresenta o nível e o subnível do preset
-        val nivelJogo    = sgg.intQtiZeros / 10
-        val subNivelJogo = sgg.intQtiZeros % 10
+        nivelJogo    = (sgg.intQtiZeros / 10) * 10
+        subNivelJogo = sgg.intQtiZeros % 10
         val rbNivelJogo : RadioButton = when (nivelJogo) {
 
-            2 -> rbFacil
-            3 -> rbMedio
-            4 -> rbDificil
-            5 -> rbMuitoDificil
+            20 -> rbFacil
+            30 -> rbMedio
+            40 -> rbDificil
+            50 -> rbMuitoDificil
             else -> rbFacil
 
         }
         rbNivelJogo.isChecked = true
 
         edtViewSubNivel.setText(subNivelJogo.toString())
-
         //---------------------------
         prepRBniveis(false)
         //---------------------------
@@ -228,10 +276,13 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> Tap no btnJogaJogo"
         Log.d(cTAG, strLog)
 
-        prepRBniveis(false)
+        //-------------------------------
+        //prepRBniveis(false)
+        //-------------------------------
 
-        txtDadosJogo.text = ""
-        sgg.txtDados      = ""
+        if (strOpcaoJogo.equals("JogoAdaptado")) txtDadosJogo.text = String.format("%s%d","Preset #", sgg.intJogoAdaptar)
+        else txtDadosJogo.text = ""
+        sgg.txtDados = ""
 
         //--- Se não tiver jogo válido, informa ao usuário
         if (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk) {
@@ -269,7 +320,6 @@ class MainActivity : AppCompatActivity() {
             //--- Prepara a Intent para chamar JogarActivity
             val intent = Intent(this, JogarActivity::class.java)
             intent.action = strOpcaoJogo
-            intent.putExtra("NivelDoJogo", SudokuBackTracking.intNumBackTracking)
             intent.putExtra("strNivelJogo", strNivelJogo)
             intent.putExtra("strSubNivelJogo", edtViewSubNivel.text.toString())
             intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
@@ -282,12 +332,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     //----------------------------------------------------------------------------------------------
-    // Funções para o atendimento de tapping nos radio buttons
+    // Funções para o atendimento de tapping nos radioButtons
     //----------------------------------------------------------------------------------------------
     fun rbJogoFacil(view : View?) {
 
         strLog  = "-> onClick rbJogoFacil"
         Log.d(cTAG, strLog)
+
+        //-----------------------
+        verMudancaNivel(FACIL)
+        //-----------------------
 
     }
 
@@ -296,6 +350,10 @@ class MainActivity : AppCompatActivity() {
         strLog  = "-> onClick rbJogoMedio"
         Log.d(cTAG, strLog)
 
+        //-----------------------
+        verMudancaNivel(MEDIO)
+        //-----------------------
+
     }
 
     fun rbJogoDificil(view : View?) {
@@ -303,12 +361,20 @@ class MainActivity : AppCompatActivity() {
         strLog  = "-> onClick rbJogoDificil"
         Log.d(cTAG, strLog)
 
+        //-------------------------
+        verMudancaNivel(DIFICIL)
+        //-------------------------
+
     }
 
     fun rbJogoMuitoDificil(view : View?) {
 
         strLog  = "-> onClick rbJogoMuitoDificil"
         Log.d(cTAG, strLog)
+
+        //-------------------------------
+        verMudancaNivel(MUITO_DIFICIL)
+        //-------------------------------
 
     }
 
@@ -319,18 +385,17 @@ class MainActivity : AppCompatActivity() {
     //--- preencheSudokuBoard
     private fun preencheSudokuBoard(arArIntJogo : Array<Array<Int>>) {
 
-        //--- Pincel
+        //--- Objetos gráficos
+        // Paint
         val pincelAzul = Paint()
         val intTamTxt  = 25
         val scale      = resources.displayMetrics.density
-
-        //--- ImageView
+        // ImageView
         val ivSudokuBoard = findViewById<View>(R.id.ivSudokuBoardMain) as ImageView
-
-        //--- Bmp
+        // Bmp
         val bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
                                                       .copy(Bitmap.Config.ARGB_8888, true)
-        //--- Canvas
+        // Canvas
         val canvasMyImage = Canvas(bmpMyImage)
 
         //--- Escreve nas células
@@ -505,6 +570,26 @@ class MainActivity : AppCompatActivity() {
             for (idxRB in 0..intIdxChild) { groupRBnivel.getChildAt(idxRB).isEnabled = habOuDesab }
 
         }
+    }
+
+    //--- verMudancaNivel
+    private fun verMudancaNivel(intNivel : Int) {
+
+        var intNivelTotal = intNivel +  edtViewSubNivel.text.toString().toInt()
+        if (intNivelTotal != nivelJogo) {
+
+            sgg.flagJogoGeradoOk   = false
+            sgg.flagJogoAdaptadoOk = false
+
+            val arArIntJogo = Array(9) { Array(9) {0} }
+            //---------------------------------
+            preencheSudokuBoard(arArIntJogo)
+            //---------------------------------
+
+            nivelJogo = intNivelTotal
+
+        }
+
     }
 
     /*
