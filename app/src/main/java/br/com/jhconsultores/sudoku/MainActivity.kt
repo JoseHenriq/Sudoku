@@ -1,7 +1,6 @@
 package br.com.jhconsultores.sudoku
 
-import android.app.Activity
-import android.content.Context
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
@@ -15,9 +14,9 @@ import android.text.TextWatcher
 import android.util.Log
 
 import android.view.View
-import android.view.inputmethod.InputMethodManager
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.*
-import androidx.core.widget.doOnTextChanged
 
 @Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
@@ -30,6 +29,8 @@ class MainActivity : AppCompatActivity() {
 
     private var quadMaior = arrayOf<Array<Int>>()
 
+    private lateinit var ivSudokuBoardMain : ImageView
+
     private lateinit var btnGeraJogo   : Button
     private lateinit var btnAdaptaJogo : Button
     private lateinit var btnJogaJogo   : Button
@@ -40,7 +41,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rbDificil      : RadioButton
     private lateinit var rbMuitoDificil : RadioButton
 
+    private lateinit var groupRBadapta : RadioGroup
+    private lateinit var rbPreset      : RadioButton
+    private lateinit var rbEdicao      : RadioButton
+
     private lateinit var edtViewSubNivel: EditText
+    private var flagAdaptaPreset = true
 
     private var strOpcaoJogo   = "JogoGerado"
     private var strNivelJogo   = "Fácil"
@@ -70,6 +76,7 @@ class MainActivity : AppCompatActivity() {
     // Eventos da MainActivity
     //----------------------------------------------------------------------------------------------
     //--- onCreate
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -80,6 +87,8 @@ class MainActivity : AppCompatActivity() {
         //--------------
 
         //--- Instancializações e inicializações
+        ivSudokuBoardMain = findViewById(R.id.ivSudokuBoardMain)
+
         btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
         btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
         btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
@@ -92,8 +101,12 @@ class MainActivity : AppCompatActivity() {
         //-----------------------------
         prepRBniveis(true)
         //-----------------------------
-
         edtViewSubNivel= findViewById(R.id.edtViewSubNivel)
+
+        groupRBadapta = findViewById(R.id.radioGrpAdapta)
+        rbPreset      = findViewById(R.id.preset)
+        rbEdicao      = findViewById(R.id.edicao)
+        groupRBadapta.visibility = INVISIBLE
 
         //https://www.tutorialkart.com/kotlin-android/android-edittext-on-text-change/
         edtViewSubNivel.addTextChangedListener(object : TextWatcher {
@@ -117,6 +130,66 @@ class MainActivity : AppCompatActivity() {
 
         txtDadosJogo  = findViewById(R.id.txtJogos)
 
+        //------------------------------------------------------------------------------------------
+        // Listener para o evento onTouch do ImageView
+        //------------------------------------------------------------------------------------------
+        ivSudokuBoardMain.setOnTouchListener { _, event -> //--- Coordenadas tocadas
+
+            val jogarJogo = JogarActivity()
+
+            val x = event.x.toInt()
+            val y = event.y.toInt()
+            Log.d(cTAG, "touched x: $x")
+            Log.d(cTAG, "touched y: $y")
+
+            //--- OffSets das coordenadas na Janela (???)
+            val viewCoords = IntArray(2)
+
+            ivSudokuBoardMain.getLocationOnScreen(viewCoords)
+            Log.d(cTAG, "viewCoord x: " + viewCoords[0])
+            Log.d(cTAG, "viewCoord y: " + viewCoords[1])
+
+            //--- Coordenadas reais (???)
+            val imageX = x - viewCoords[0] // viewCoords[0] is the X coordinate
+            val imageY = y - viewCoords[1] // viewCoords[1] is the y coordinate
+            Log.d(cTAG, "Real x: $imageX")
+            Log.d(cTAG, "Real y: $imageY")
+
+            /*
+            //--- Coordenadas da célula tocada
+            val intCol   = x / intCellwidth
+            val intLinha = y / intCellheight
+            //-----------------------------------------------------
+            val intNum = arArIntNums[intLinha][intCol]
+            //-----------------------------------------------------
+            //strLog = "-> Celula tocada: linha = " + intLinha + ", coluna = " + intCol +
+            //        ", numero = " + intNum
+            //Log.d(cTAG, strLog)
+
+            //--- Se a célula tocada contiver um número, "pinta" todas as células que contiverem
+            //    o mesmo número.
+            if (intNum > 0) {
+                flagJoga = false    // Não quer jogar; só quer analisar ...
+                intLinJogar = 0
+                intColJogar = 0
+                //-------------------------
+                mostraNumsIguais(intNum)
+                //-------------------------
+            }
+            //--- Se não contiver um número, quer jogar
+            else {
+                flagJoga = true     // Vamos ao jogo!
+                intLinJogar = intLinha
+                intColJogar = intCol
+                //------------------------------------------
+                mostraCelAJogar(intLinJogar, intColJogar)
+                //------------------------------------------
+            }
+            */
+
+            false
+
+        }
     }
 
     //--- onResume
@@ -188,6 +261,8 @@ class MainActivity : AppCompatActivity() {
         //--------------------------
         edtViewSubNivel.isEnabled = true
 
+        groupRBadapta.visibility = INVISIBLE
+
         txtDadosJogo.text = ""
         sgg.txtDados      = ""
 
@@ -254,6 +329,8 @@ class MainActivity : AppCompatActivity() {
         strOpcaoJogo      = "JogoAdaptado"
         txtDadosJogo.text = ""
         sgg.txtDados      = ""
+
+        groupRBadapta.visibility = VISIBLE
 
         //--- Prepara o preset para se conseguir o gabarito do jogo
         if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
@@ -378,7 +455,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //----------------------------------------------------------------------------------------------
-    // Funções para o atendimento de tapping nos radioButtons
+    // Funções para o atendimento de tapping nos radioButtons de escolha de níveis de jogo
     //----------------------------------------------------------------------------------------------
     fun rbJogoFacil(view : View?) {
 
@@ -425,8 +502,54 @@ class MainActivity : AppCompatActivity() {
     }
 
     //----------------------------------------------------------------------------------------------
+    // Funções para o atendimento de tapping nos radioButtons de escolha da adaptação de jogo
+    //----------------------------------------------------------------------------------------------
+    fun RBpresetClick(view : View?) {
+
+        strLog  = "-> onClick rbPreset"
+        Log.d(cTAG, strLog)
+
+        if (!flagAdaptaPreset) {
+
+            //-------------------------
+            btnAdaptaJogoClick(view)
+            //-------------------------
+            flagAdaptaPreset = true
+
+        }
+
+    }
+
+    fun RBedicaoClick(view : View?) {
+
+        strLog  = "-> onClick rbEdicao"
+        Log.d(cTAG, strLog)
+
+        flagAdaptaPreset = false
+
+        //------------
+        editaJogo()
+        //------------
+
+    }
+
+    //----------------------------------------------------------------------------------------------
     // Funções
     //----------------------------------------------------------------------------------------------
+
+    //--- editaJogo
+    private fun editaJogo() {
+
+        txtDadosJogo.setText("")
+
+        val arArIntJogo = Array(9) { Array(9) { 0 } }
+        //---------------------------------
+        preencheSudokuBoard(arArIntJogo)
+        //---------------------------------
+
+
+
+    }
 
     //--- preencheSudokuBoard
     private fun preencheSudokuBoard(arArIntJogo : Array<Array<Int>>) {
@@ -437,7 +560,7 @@ class MainActivity : AppCompatActivity() {
         val intTamTxt  = 25
         val scale      = resources.displayMetrics.density
         // ImageView
-        val ivSudokuBoard = findViewById<View>(R.id.ivSudokuBoardMain) as ImageView
+        //val ivSudokuBoardMain = findViewById<View>(R.id.ivSudokuBoardMain) as ImageView
         // Bmp
         val bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
                                                       .copy(Bitmap.Config.ARGB_8888, true)
@@ -482,7 +605,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        ivSudokuBoard.setImageBitmap(bmpMyImage)
+        ivSudokuBoardMain.setImageBitmap(bmpMyImage)
 
     }
 

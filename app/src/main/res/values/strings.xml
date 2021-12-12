@@ -50,5 +50,8 @@
 
     <string name="legSubnivel" >Sub Nível: </string>
     <string name="valor0"      >0</string>
+    <string name="prioridade">prioridade</string>
+    <string name="edicao">Edição</string>
+    <string name="preset">Preset</string>
 
 </resources>

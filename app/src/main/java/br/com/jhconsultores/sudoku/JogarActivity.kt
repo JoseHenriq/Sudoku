@@ -1,6 +1,5 @@
 package br.com.jhconsultores.sudoku
 
-import android.app.Activity
 import android.os.Bundle
 
 import android.graphics.*
@@ -60,8 +59,6 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     private var tvClues   : TextView? = null
     private var intContaErro = 0
 
-    //private lateinit var toolBar : MaterialToolbar
-    //private lateinit var toolBar : Toolbar
     private lateinit var toolBar : androidx.appcompat.widget.Toolbar
 
     private var intTamTxt = 25 // 50 // 200 //
@@ -94,7 +91,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     private var intLinJogar = 0
     private var flagJoga    = false
 
-    private var arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+    private var arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
     private var arArIntGab    = Array(9) { Array(9) { 0 } }
     private var arArIntNums   = Array(9) { Array(9) { 0 } }
 
@@ -157,21 +154,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             tvErros    = findViewById(R.id.tv_Erros)
             tvClues    = findViewById(R.id.tv_Clues)
 
-            //toolBar = findViewById(R.id.toolbar1)
             toolBar = findViewById(R.id.toolbar2)
-
-            /*
-            //setting toolbar
-            val activity = AppCompatActivity()
-            //---------------------------------------
-            activity.setSupportActionBar(toolBar)
-            //---------------------------------------
-            //home navigation
-            //-----------------------------------------------------------
-            activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            //-----------------------------------------------------------
-            */
-
             setSupportActionBar(toolBar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -232,7 +215,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                 arArIntCopia = copiaArArInt(arArIntNums)
                 //-----------------------------------------
 
-                arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+                arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
 
                 //-------------
                 iniciaJogo()
@@ -511,7 +494,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                 arArIntNums = copiaArArInt(arArIntCopia)
                 //-----------------------------------------
 
-                arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+                arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
                 //-------------
                 iniciaJogo()
                 //-------------
@@ -1185,7 +1168,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     //--- PreencheJogo
     private fun preencheJogo() {
 
-        arIntNumsDisp = intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+        arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
 
         for (intLinha in 0..8) {
 
