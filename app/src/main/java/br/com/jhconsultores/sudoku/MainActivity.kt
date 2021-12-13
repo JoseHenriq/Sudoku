@@ -17,6 +17,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.*
+import androidx.core.view.isVisible
 
 @Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
@@ -30,6 +31,9 @@ class MainActivity : AppCompatActivity() {
     private var quadMaior = arrayOf<Array<Int>>()
 
     private lateinit var ivSudokuBoardMain : ImageView
+    private var bmpMyImage : Bitmap? = null
+    private var intCellwidth  = 0
+    private var intCellheight = 0
 
     private lateinit var btnGeraJogo   : Button
     private lateinit var btnAdaptaJogo : Button
@@ -60,6 +64,7 @@ class MainActivity : AppCompatActivity() {
     private val MUITO_DIFICIL = 50
 
     private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
+    private var arArIntNums     = Array(9) { Array(9) { 0 } }
 
     private lateinit var txtDadosJogo : TextView
 
@@ -82,13 +87,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //--------------
-        // testaGenRnd ()
-        //--------------
-
         //--- Instancializações e inicializações
-        ivSudokuBoardMain = findViewById(R.id.ivSudokuBoardMain)
-
         btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
         btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
         btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
@@ -107,6 +106,13 @@ class MainActivity : AppCompatActivity() {
         rbPreset      = findViewById(R.id.preset)
         rbEdicao      = findViewById(R.id.edicao)
         groupRBadapta.visibility = INVISIBLE
+
+        //--- Objetos gráficos
+        ivSudokuBoardMain = findViewById(R.id.ivSudokuBoardMain)
+        bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
+            .copy(Bitmap.Config.ARGB_8888, true)
+        intCellwidth  = bmpMyImage!!.width  / 9
+        intCellheight = bmpMyImage!!.height / 9
 
         //https://www.tutorialkart.com/kotlin-android/android-edittext-on-text-change/
         edtViewSubNivel.addTextChangedListener(object : TextWatcher {
@@ -135,8 +141,6 @@ class MainActivity : AppCompatActivity() {
         //------------------------------------------------------------------------------------------
         ivSudokuBoardMain.setOnTouchListener { _, event -> //--- Coordenadas tocadas
 
-            val jogarJogo = JogarActivity()
-
             val x = event.x.toInt()
             val y = event.y.toInt()
             Log.d(cTAG, "touched x: $x")
@@ -155,19 +159,19 @@ class MainActivity : AppCompatActivity() {
             Log.d(cTAG, "Real x: $imageX")
             Log.d(cTAG, "Real y: $imageY")
 
-            /*
             //--- Coordenadas da célula tocada
             val intCol   = x / intCellwidth
             val intLinha = y / intCellheight
             //-----------------------------------------------------
             val intNum = arArIntNums[intLinha][intCol]
             //-----------------------------------------------------
-            //strLog = "-> Celula tocada: linha = " + intLinha + ", coluna = " + intCol +
-            //        ", numero = " + intNum
-            //Log.d(cTAG, strLog)
+            strLog = "-> Celula tocada: linha = " + intLinha + ", coluna = " + intCol +
+                                                                            ", numero = " + intNum
+            Log.d(cTAG, strLog)
 
             //--- Se a célula tocada contiver um número, "pinta" todas as células que contiverem
             //    o mesmo número.
+            /*
             if (intNum > 0) {
                 flagJoga = false    // Não quer jogar; só quer analisar ...
                 intLinJogar = 0
@@ -355,7 +359,7 @@ class MainActivity : AppCompatActivity() {
         //-------------------------------
 
         //--- Se não tiver jogo válido, informa ao usuário
-        if (rbEdicao.isChecked || (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk)) {
+        if ((groupRBadapta.isVisible && rbEdicao.isChecked) || (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk)) {
 
             val strToast = "Não há jogo válido!"
             //-----------------------------------------------------------------
@@ -367,7 +371,7 @@ class MainActivity : AppCompatActivity() {
         }
         else {
 
-            txtDadosJogo.text = if (strOpcaoJogo.equals("JogoAdaptado"))
+            txtDadosJogo.text = if (strOpcaoJogo == "JogoAdaptado")
                                        String.format("%s%d","Preset #", sgg.intJogoAdaptar) else ""
             sgg.txtDados = ""
 
@@ -491,7 +495,7 @@ class MainActivity : AppCompatActivity() {
     //--- editaJogo
     private fun editaJogo() {
 
-        txtDadosJogo.setText("")
+        txtDadosJogo.text = ""
 
         val arArIntJogo = Array(9) { Array(9) { 0 } }
         //---------------------------------
@@ -512,15 +516,12 @@ class MainActivity : AppCompatActivity() {
         val scale      = resources.displayMetrics.density
         // ImageView
         //val ivSudokuBoardMain = findViewById<View>(R.id.ivSudokuBoardMain) as ImageView
-        // Bmp
-        val bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
-                                                      .copy(Bitmap.Config.ARGB_8888, true)
         // Canvas
-        val canvasMyImage = Canvas(bmpMyImage)
+        val canvasMyImage = Canvas(bmpMyImage!!)
 
         //--- Escreve nas células
-        val intCellwidth  = bmpMyImage.width  / 9
-        val intCellheight = bmpMyImage.height / 9
+        intCellwidth  = bmpMyImage!!.width  / 9
+        intCellheight = bmpMyImage!!.height / 9
 
         for (intLinha in 0..8) {
 
@@ -699,14 +700,14 @@ class MainActivity : AppCompatActivity() {
     //--- verMudancaNivel
     private fun verMudancaNivel(intNivel : Int) {
 
-        if (strOpcaoJogo.equals("JogoGerado")) {
+        if (strOpcaoJogo == "JogoGerado") {
 
             if (edtViewSubNivel.text.toString().isNotEmpty()) {
 
-                var intNivelTotal = intNivel + edtViewSubNivel.text.toString().toInt()
+                val intNivelTotal = intNivel + edtViewSubNivel.text.toString().toInt()
                 if (intNivelTotal != nivelJogo) {
 
-                    sgg.flagJogoGeradoOk   = false
+                    sgg.flagJogoGeradoOk = false
                     sgg.flagJogoAdaptadoOk = false
 
                     val arArIntJogo = Array(9) { Array(9) { 0 } }
@@ -717,41 +718,13 @@ class MainActivity : AppCompatActivity() {
                     nivelJogo = intNivelTotal
 
                 }
-            } else Toast.makeText( this, "Não é possível gerar o jogo sem subnivel!",
-                                                                         Toast.LENGTH_SHORT).show()
+            } else Toast.makeText(
+                this, "Não é possível gerar o jogo sem subnivel!",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
-    /*
-    //--- Verifica o Gerador de números aleatórios
-    private fun testaGenRnd () {
-
-        //--- Inicializa um vetor para evitar repetição de números Rnd
-        val arIntNumRnd = Array(81) { 0 }
-
-        Log.d(cTAG, "-> Início do teste do gerador RND ...")
-
-        var intContaZero = 0
-        do {
-
-            //--- Gera número aleatório sem repetição
-            //---------------------------------
-            val numRnd = (1..81).random()      // gera de 1 a 81 inclusives
-            //---------------------------------
-            if (arIntNumRnd[numRnd - 1] == 0) { arIntNumRnd[numRnd - 1] = numRnd }
-
-            intContaZero = 0
-            for (idxNumRnd in 0..80) {
-
-                if (arIntNumRnd[idxNumRnd] == 0) intContaZero++
-
-            }
-
-        } while (intContaZero > 0)
-
-        Log.d(cTAG, "-> Fim do teste do gerador RND!")
-
-    }
-    */
-
 }
+
+
