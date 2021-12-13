@@ -190,57 +190,8 @@ class MainActivity : AppCompatActivity() {
             false
 
         }
-    }
-
-    //--- onResume
-    override fun onResume() {
-
-        super.onResume()
-
-        //txtDadosJogo.text = ""
-        //sgg.txtDados      = ""
-
-        //edtViewSubNivel.isEnabled = true
 
     }
-
-    /* Trying to hidden Soft keyboard
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-
-        super.onPostCreate(savedInstanceState)
-
-        // btnGeraJogo.requestFocus()
-
-        /*
-        try {
-            val imm: InputMethodManager =
-                                       getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-
-        } catch (exc : Exception) { Log.d(cTAG, "Erro: $exc") }
-        btnGeraJogo.requestFocus()
-        */
-
-        /*
-        try {
-
-            //val activity: Activity? = null
-            //val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-
-            val sharedPref = this.getPreferences(Context.MODE_PRIVATE) ?: return
-            val keyboard = sharedPref.getBoolean("keyboard", true)
-
-            Toast.makeText(this, keyboard.toString(), Toast.LENGTH_LONG).show()
-
-            //if (!keyboard) {
-            if (keyboard) { edtViewSubNivel.showSoftInputOnFocus = false //here i must disable the virtual keyboard
-            }
-
-        } catch (exc : Exception) { Log.d(cTAG, "Erro: $exc") }
-        */
-
-    }
-     */
 
     //----------------------------------------------------------------------------------------------
     // Funções para o atendimento ao tapping nos botões (declarados no xml)
@@ -403,12 +354,8 @@ class MainActivity : AppCompatActivity() {
         //prepRBniveis(false)
         //-------------------------------
 
-        txtDadosJogo.text = if (strOpcaoJogo.equals("JogoAdaptado"))
-                                       String.format("%s%d","Preset #", sgg.intJogoAdaptar) else ""
-        sgg.txtDados = ""
-
         //--- Se não tiver jogo válido, informa ao usuário
-        if (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk) {
+        if (rbEdicao.isChecked || (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk)) {
 
             val strToast = "Não há jogo válido!"
             //-----------------------------------------------------------------
@@ -419,6 +366,10 @@ class MainActivity : AppCompatActivity() {
 
         }
         else {
+
+            txtDadosJogo.text = if (strOpcaoJogo.equals("JogoAdaptado"))
+                                       String.format("%s%d","Preset #", sgg.intJogoAdaptar) else ""
+            sgg.txtDados = ""
 
             //--- Envia o jogo gerado para ser usado como gabarito
             val arIntNumsGab = ArrayList<Int>()
