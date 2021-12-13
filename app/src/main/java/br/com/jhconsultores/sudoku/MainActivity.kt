@@ -17,6 +17,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 
 @Suppress("UNUSED_PARAMETER")
@@ -30,10 +31,20 @@ class MainActivity : AppCompatActivity() {
 
     private var quadMaior = arrayOf<Array<Int>>()
 
+    //--- Objetos gráficos
     private lateinit var ivSudokuBoardMain : ImageView
-    private var bmpMyImage : Bitmap? = null
+
+    private var bmpMyImageInic : Bitmap? = null
+    private var bmpMyImageBack : Bitmap? = null
+    private var bmpMyImage     : Bitmap? = null
     private var intCellwidth  = 0
     private var intCellheight = 0
+    private var pincelBranco  = Paint()
+    private var pincelPreto   = Paint()
+    private var pincelAzul    = Paint()
+    private var pincelLaranja = Paint()
+
+    private var canvasMyImage : Canvas? = null
 
     private lateinit var btnGeraJogo   : Button
     private lateinit var btnAdaptaJogo : Button
@@ -68,7 +79,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var txtDadosJogo : TextView
 
-    private var sgg = SudokuGameGenerator ()
+    private var sgg       = SudokuGameGenerator ()
+    private var jogarJogo = JogarActivity()
 
     // Núm     0   21               31        41          51       61     81
     // clues  81   60               50        40          30       20      0
@@ -109,10 +121,24 @@ class MainActivity : AppCompatActivity() {
 
         //--- Objetos gráficos
         ivSudokuBoardMain = findViewById(R.id.ivSudokuBoardMain)
-        bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
+
+        bmpMyImage        = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
             .copy(Bitmap.Config.ARGB_8888, true)
-        intCellwidth  = bmpMyImage!!.width  / 9
-        intCellheight = bmpMyImage!!.height / 9
+        bmpMyImageInic    = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
+            .copy(Bitmap.Config.ARGB_8888, true)
+        bmpMyImageBack = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
+            .copy(Bitmap.Config.ARGB_8888, true)
+
+        intCellwidth   = bmpMyImage!!.width  / 9
+        intCellheight  = bmpMyImage!!.height / 9
+
+        try { canvasMyImage?.setBitmap( bmpMyImage!! ) }
+        catch (exc : Exception) { Log.d( cTAG, "Erro: ${exc.message}" ) }
+
+        pincelBranco.color  = ContextCompat.getColor(this, R.color.white )
+        pincelPreto.color   = ContextCompat.getColor(this, R.color.black )
+        pincelAzul.color    = ContextCompat.getColor(this, R.color.azul)
+        pincelLaranja.color = ContextCompat.getColor(this, R.color.laranja)
 
         //https://www.tutorialkart.com/kotlin-android/android-edittext-on-text-change/
         edtViewSubNivel.addTextChangedListener(object : TextWatcher {
@@ -137,62 +163,188 @@ class MainActivity : AppCompatActivity() {
         txtDadosJogo  = findViewById(R.id.txtJogos)
 
         //------------------------------------------------------------------------------------------
-        // Listener para o evento onTouch do ImageView
+        // Listener para o evento onTouch do ImageView (só utilizado na edição).
         //------------------------------------------------------------------------------------------
         ivSudokuBoardMain.setOnTouchListener { _, event -> //--- Coordenadas tocadas
 
-            val x = event.x.toInt()
-            val y = event.y.toInt()
-            Log.d(cTAG, "touched x: $x")
-            Log.d(cTAG, "touched y: $y")
+            if (groupRBadapta.isVisible && rbEdicao.isChecked) {
 
-            //--- OffSets das coordenadas na Janela (???)
-            val viewCoords = IntArray(2)
+                val x = event.x.toInt()
+                val y = event.y.toInt()
+                Log.d(cTAG, "touched x: $x")
+                Log.d(cTAG, "touched y: $y")
 
-            ivSudokuBoardMain.getLocationOnScreen(viewCoords)
-            Log.d(cTAG, "viewCoord x: " + viewCoords[0])
-            Log.d(cTAG, "viewCoord y: " + viewCoords[1])
+                //--- OffSets das coordenadas na Janela (???)
+                val viewCoords = IntArray(2)
 
-            //--- Coordenadas reais (???)
-            val imageX = x - viewCoords[0] // viewCoords[0] is the X coordinate
-            val imageY = y - viewCoords[1] // viewCoords[1] is the y coordinate
-            Log.d(cTAG, "Real x: $imageX")
-            Log.d(cTAG, "Real y: $imageY")
+                ivSudokuBoardMain.getLocationOnScreen(viewCoords)
+                Log.d(cTAG, "viewCoord x: " + viewCoords[0])
+                Log.d(cTAG, "viewCoord y: " + viewCoords[1])
 
-            //--- Coordenadas da célula tocada
-            val intCol   = x / intCellwidth
-            val intLinha = y / intCellheight
-            //-----------------------------------------------------
-            val intNum = arArIntNums[intLinha][intCol]
-            //-----------------------------------------------------
-            strLog = "-> Celula tocada: linha = " + intLinha + ", coluna = " + intCol +
-                                                                            ", numero = " + intNum
-            Log.d(cTAG, strLog)
+                //--- Coordenadas reais (???)
+                val imageX = x - viewCoords[0] // viewCoords[0] is the X coordinate
+                val imageY = y - viewCoords[1] // viewCoords[1] is the y coordinate
+                Log.d(cTAG, "Real x: $imageX")
+                Log.d(cTAG, "Real y: $imageY")
 
-            //--- Se a célula tocada contiver um número, "pinta" todas as células que contiverem
-            //    o mesmo número.
-            /*
-            if (intNum > 0) {
-                flagJoga = false    // Não quer jogar; só quer analisar ...
-                intLinJogar = 0
-                intColJogar = 0
-                //-------------------------
-                mostraNumsIguais(intNum)
-                //-------------------------
+                //--- Coordenadas da célula tocada
+                val intCol   = x / intCellwidth
+                val intLinha = y / intCellheight
+                //-----------------------------------------------------
+                val intNum = arArIntNums[intLinha][intCol]
+                //-----------------------------------------------------
+                strLog = "-> Celula tocada: linha = " + intLinha + ", coluna = " + intCol +
+                                                                                ", numero = " + intNum
+                Log.d(cTAG, strLog)
+
+                //--- Se a célula tocada contiver um número, "pinta" todas as células que contiverem
+                //    o mesmo número.
+                /*
+                if (intNum > 0) {
+                    flagJoga = false    // Não quer jogar; só quer analisar ...
+                    intLinJogar = 0
+                    intColJogar = 0
+                    //-------------------------
+                    mostraNumsIguais(intNum)
+                    //-------------------------
+                }
+                //--- Se não contiver um número, quer jogar
+                else {
+                    flagJoga = true     // Vamos ao jogo!
+                    intLinJogar = intLinha
+                    intColJogar = intCol
+                    //------------------------------------------
+                    mostraCelAJogar(intLinJogar, intColJogar)
+                    //------------------------------------------
+                }
+                */
+
+                //-----------------------------------
+                mostraCelAEditar(intLinha, intCol)
+                //-----------------------------------
+
             }
-            //--- Se não contiver um número, quer jogar
-            else {
-                flagJoga = true     // Vamos ao jogo!
-                intLinJogar = intLinha
-                intColJogar = intCol
-                //------------------------------------------
-                mostraCelAJogar(intLinJogar, intColJogar)
-                //------------------------------------------
-            }
-            */
 
             false
 
+        }
+
+    }
+
+    //--- mostraCelAEditar
+    private fun mostraCelAEditar(intLinha : Int, intCol : Int) {
+
+        //-------------------------------------------------------
+        jogarJogo.copiaBmpByBuffer(bmpMyImageBack, bmpMyImage)
+        //-------------------------------------------------------
+
+        canvasMyImage = Canvas (bmpMyImage!!)
+
+        //--- Pinta de laranja a célula tocada
+        //---------------------------------------------
+        pintaCelula(intLinha, intCol, pincelLaranja)
+        //---------------------------------------------
+
+        //-------------------------------------------------------
+        jogarJogo.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
+        //-------------------------------------------------------
+
+    }
+
+    //--- pintaCelula no canvasMyImage
+    private fun pintaCelula(intLinha: Int, intCol: Int, pincelPintar: Paint?) {
+
+        //- Canto superior esquerdo do quadrado
+        val flXSupEsq = (intCol   * intCellwidth).toFloat()
+        val flYSupEsq = (intLinha * intCellheight).toFloat()
+        //- Canto inferior direito do quadrado
+        val flXInfDir = flXSupEsq + intCellwidth.toFloat()
+        val flYInfDir = flYSupEsq + intCellheight.toFloat()
+        //--------------------------------------------------------------------------------------
+        canvasMyImage?.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPintar!! )
+        //--------------------------------------------------------------------------------------
+        ivSudokuBoardMain.setImageBitmap(bmpMyImage)
+
+        //-----------------------------------
+        desenhaSudokuBoard(false)
+        //-----------------------------------
+
+
+
+    }
+
+    //--- desenhaSudokuBoard
+    private fun desenhaSudokuBoard(flagApaga: Boolean) {
+
+        var flCoordXInic: Float
+        var flCoordYInic: Float
+        var flCoordXFim : Float
+        var flCoordYFim : Float
+        val flPincelFino   = 2.toFloat()
+        val flPincelGrosso = 6.toFloat()
+        val pincelDesenhar = pincelPreto
+
+        val flagApagaBoard : Boolean = flagApaga
+
+        //--- Redesenha o board a partir do zero
+        //flagApagaBoard = true
+        if (flagApagaBoard) {
+
+            //-----------------------------------------------------------------------------
+            bmpMyImage?.height?.toFloat()?.let {
+                bmpMyImage?.width?.toFloat()?.let { it1 ->
+                    canvasMyImage?.drawRect(
+                        0f,
+                        0f,
+                        it1,
+                        it,
+                        pincelBranco
+                    )
+                }
+            }
+            //-----------------------------------------------------------------------------
+        }
+
+        //--- Desenha as linhas horizontais
+        for (intLinha in 0..9) {
+            flCoordXInic = 0f
+            flCoordYInic = (intLinha * intCellheight).toFloat()
+
+            flCoordXFim = (9 * intCellwidth).toFloat()
+            flCoordYFim = flCoordYInic
+
+            var flLargPincel = flPincelFino
+            if (intLinha % 3 == 0) {
+                flLargPincel = flPincelGrosso
+                if (flCoordYInic > 0) flCoordYInic--
+                if (flCoordYFim > 0)  flCoordYFim--
+            }
+            pincelDesenhar.strokeWidth = flLargPincel
+            //--------------------------------------------------------------------------------------
+            canvasMyImage?.drawLine(
+                flCoordXInic, flCoordYInic, flCoordXFim, flCoordYFim, pincelDesenhar )
+            //--------------------------------------------------------------------------------------
+        }
+        //--- Desenha as linhas verticais
+        for (intCol in 0..9) {
+            flCoordXInic = (intCol * intCellwidth).toFloat()
+            flCoordYInic = 0f
+            flCoordXFim = flCoordXInic
+            flCoordYFim = (9 * intCellheight).toFloat()
+            var flLargPincel = flPincelFino
+            if (intCol % 3 == 0) {
+                flLargPincel = flPincelGrosso
+                if (flCoordXInic > 0) flCoordXInic--
+                if (flCoordXFim > 0) flCoordXFim--
+            }
+
+            pincelDesenhar.strokeWidth = flLargPincel
+            //--------------------------------------------------------------------------------------
+            canvasMyImage?.drawLine(
+                flCoordXInic, flCoordYInic, flCoordXFim, flCoordYFim,
+                pincelDesenhar
+            )
+            //--------------------------------------------------------------------------------------
         }
 
     }
@@ -278,7 +430,7 @@ class MainActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun btnAdaptaJogoClick(view : View?) {
 
-        strLog = "-> Tap no btnAdaptaJogo"
+        strLog  = "-> Tap no btnAdaptaJogo"
         Log.d(cTAG, strLog)
 
         strOpcaoJogo      = "JogoAdaptado"
@@ -286,62 +438,74 @@ class MainActivity : AppCompatActivity() {
         sgg.txtDados      = ""
 
         groupRBadapta.visibility = VISIBLE
+        strLog  = "   - rbAdapta: "
+        strLog += if (rbPreset.isChecked) "Preset" else "Edição"
+        Log.d(cTAG, strLog)
 
-        //--- Prepara o preset para se conseguir o gabarito do jogo
-        if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
-        txtDadosJogo.text = String.format("%s%d","Preset #", sgg.intJogoAdaptar)
+        //--- PRESET
+        if (rbPreset.isChecked) {
+            //--- Prepara o preset para se conseguir o gabarito do jogo
+            if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
+            txtDadosJogo.text = String.format("%s%d", "Preset #", sgg.intJogoAdaptar)
 
-        //-------------------------------------------
-        inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
-        //-------------------------------------------
+            //-------------------------------------------
+            inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
+            //-------------------------------------------
 
-        sgg.quadMaiorRet = copiaArArInt(quadMaiorAdapta)
+            sgg.quadMaiorRet = copiaArArInt(quadMaiorAdapta)
 
-        sgg.flagJogoGeradoOk   = true
-        sgg.flagJogoAdaptadoOk = true
+            sgg.flagJogoGeradoOk = true
+            sgg.flagJogoAdaptadoOk = true
 
-        //---------------------------------------
-        quadMaior = sgg.adaptaJogoAlgoritmo2()
-        //---------------------------------------
+            //---------------------------------------
+            quadMaior = sgg.adaptaJogoAlgoritmo2()
+            //---------------------------------------
 
-        //--- Apresenta o nível e o subnível do preset
-        nivelJogo    = (sgg.intQtiZeros / 10) * 10
-        subNivelJogo = sgg.intQtiZeros % 10
-        val rbNivelJogo : RadioButton = when (nivelJogo) {
+            //--- Apresenta o nível e o subnível do preset
+            nivelJogo = (sgg.intQtiZeros / 10) * 10
+            subNivelJogo = sgg.intQtiZeros % 10
+            val rbNivelJogo: RadioButton = when (nivelJogo) {
 
-            20 -> {
-                strNivelJogo = "Fácil"
-                rbFacil
+                20 -> {
+                    strNivelJogo = "Fácil"
+                    rbFacil
+                }
+                30 -> {
+                    strNivelJogo = "Médio"
+                    rbMedio
+                }
+                40 -> {
+                    strNivelJogo = "Difícil"
+                    rbDificil
+                }
+                50 -> {
+                    strNivelJogo = "Muito Difícil"
+                    rbMuitoDificil
+                }
+                else -> {
+                    strNivelJogo = "Fácil"
+                    rbFacil
+                }
+
             }
-            30 -> {
-                strNivelJogo = "Médio"
-                rbMedio
-            }
-            40 -> {
-                strNivelJogo = "Difícil"
-                rbDificil
-            }
-            50 -> {
-                strNivelJogo = "Muito Difícil"
-                rbMuitoDificil
-            }
-            else -> {
-                strNivelJogo = "Fácil"
-                rbFacil
-            }
+            rbNivelJogo.isChecked = true
+
+            edtViewSubNivel.setText(subNivelJogo.toString())
+            //---------------------------
+            prepRBniveis(false)
+            //---------------------------
+            edtViewSubNivel.isEnabled = false
+
+            //-------------------------------
+            preencheSudokuBoard(quadMaior)
+            //-------------------------------
 
         }
-        rbNivelJogo.isChecked = true
 
-        edtViewSubNivel.setText(subNivelJogo.toString())
-        //---------------------------
-        prepRBniveis(false)
-        //---------------------------
-        edtViewSubNivel.isEnabled = false
+        //--- EDIÇÃO
+        else {
 
-        //-------------------------------
-        preencheSudokuBoard(quadMaior)
-        //-------------------------------
+        }
 
         // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
 
@@ -482,8 +646,20 @@ class MainActivity : AppCompatActivity() {
 
         flagAdaptaPreset = false
 
+        txtDadosJogo.text = ""
+
+        //bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board4)
+        //    .copy(Bitmap.Config.ARGB_8888, true)
+        bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
+                                                    .copy(Bitmap.Config.ARGB_8888, true)
+        ivSudokuBoardMain.setImageBitmap(bmpMyImage)
+
+        //-------------------------------------------------------
+        jogarJogo.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
+        //-------------------------------------------------------
+
         //------------
-        editaJogo()
+        //editaJogo()
         //------------
 
     }
@@ -511,17 +687,16 @@ class MainActivity : AppCompatActivity() {
 
         //--- Objetos gráficos
         // Paint
-        val pincelAzul = Paint()
         val intTamTxt  = 25
         val scale      = resources.displayMetrics.density
-        // ImageView
-        //val ivSudokuBoardMain = findViewById<View>(R.id.ivSudokuBoardMain) as ImageView
-        // Canvas
-        val canvasMyImage = Canvas(bmpMyImage!!)
 
+        bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
+            .copy(Bitmap.Config.ARGB_8888, true)
         //--- Escreve nas células
         intCellwidth  = bmpMyImage!!.width  / 9
         intCellheight = bmpMyImage!!.height / 9
+
+        val canvasMyImage = Canvas(bmpMyImage!!)
 
         for (intLinha in 0..8) {
 
@@ -550,13 +725,16 @@ class MainActivity : AppCompatActivity() {
                     //------------------------------------------------------
 
                     //------------------------------------------------------------------------------
-                    canvasMyImage.drawText(strTexto, xCoord.toFloat(), yCoord.toFloat(),
-                                                                                        pincelAzul)
+                    canvasMyImage.drawText(strTexto, xCoord.toFloat(), yCoord.toFloat(), pincelAzul)
                     //------------------------------------------------------------------------------
 
                 }
             }
         }
+        //-------------------------------------------------------
+        jogarJogo.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
+        //-------------------------------------------------------
+
         ivSudokuBoardMain.setImageBitmap(bmpMyImage)
 
     }

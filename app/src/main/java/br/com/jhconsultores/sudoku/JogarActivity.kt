@@ -974,7 +974,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     }
 
     //--- copiaBmpByBuffer
-    private fun copiaBmpByBuffer(bmpSrc: Bitmap?, bmpDest: Bitmap?) {
+    fun copiaBmpByBuffer(bmpSrc: Bitmap?, bmpDest: Bitmap?) {
         val buffBase = IntBuffer.allocate(bmpSrc!!.width * bmpSrc.height)
         //--------------------------------------
         bmpSrc.copyPixelsToBuffer(buffBase)
