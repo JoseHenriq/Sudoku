@@ -12,6 +12,7 @@ import android.graphics.Paint
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 
 import android.view.View
 import android.view.View.INVISIBLE
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     //--- Objetos gráficos
     private lateinit var ivSudokuBoardMain: ImageView
+    private lateinit var ivNumDisp        : ImageView
 
     private var bmpMyImageInic: Bitmap? = null
     private var bmpMyImageBack: Bitmap? = null
@@ -84,6 +86,8 @@ class MainActivity : AppCompatActivity() {
 
     private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
     private var arArIntNums     = Array(9) { Array(9) { 0 } }
+
+    private var arIntNumsDisp   = Array(9) { 9 }
 
     private lateinit var txtDadosJogo: TextView
 
@@ -216,7 +220,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
 
         //----------------------
-        // desInflateIVNumDisp()
+        desInflateIVNumDisp()
         //----------------------
         rbPreset.isChecked = true
 
@@ -294,7 +298,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
 
         //----------------------
-        // desInflateIVNumDisp()
+        desInflateIVNumDisp()
         //----------------------
         rbPreset.isChecked = true
 
@@ -397,7 +401,7 @@ class MainActivity : AppCompatActivity() {
         } else {
 
             //----------------------
-            // desInflateIVNumDisp()
+            desInflateIVNumDisp()
             //----------------------
             rbPreset.isChecked = true
 
@@ -442,6 +446,7 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     // Funções para o atendimento de tapping nos radioButtons de escolha de níveis de jogo
     //----------------------------------------------------------------------------------------------
+    //--- rbJogoFacil
     fun rbJogoFacil(view: View?) {
 
         strLog = "-> onClick rbJogoFacil"
@@ -453,6 +458,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //--- rbJogoMedio
     fun rbJogoMedio(view: View?) {
 
         strLog = "-> onClick rbJogoMedio"
@@ -464,6 +470,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //--- rbJogoDificil
     fun rbJogoDificil(view: View?) {
 
         strLog = "-> onClick rbJogoDificil"
@@ -475,6 +482,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //--- rbJogoMuitoDificil
     fun rbJogoMuitoDificil(view: View?) {
 
         strLog = "-> onClick rbJogoMuitoDificil"
@@ -489,13 +497,14 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     // Funções para o atendimento de tapping nos radioButtons de escolha da adaptação de jogo
     //----------------------------------------------------------------------------------------------
+    //--- RBpresetClick
     fun RBpresetClick(view: View?) {
 
         strLog = "-> onClick rbPreset"
         Log.d(cTAG, strLog)
 
         //----------------------
-        // desInflateIVNumDisp()
+        desInflateIVNumDisp()
         //----------------------
 
         if (!flagAdaptaPreset) {
@@ -509,6 +518,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //--- RBedicaoClick
     fun RBedicaoClick(view: View?) {
 
         strLog = "-> onClick rbEdicao"
@@ -517,7 +527,16 @@ class MainActivity : AppCompatActivity() {
         flagAdaptaPreset = false
         txtDadosJogo.text = ""
 
-        //--- Image view do jogo
+        //------------------------------------------------------------------------------------------
+        // Image view dos números disponíveis
+        //------------------------------------------------------------------------------------------
+        //-------------------
+        preparaIVNumDisp()
+        //-------------------
+
+        //------------------------------------------------------------------------------------------
+        // Image view do jogo
+        //------------------------------------------------------------------------------------------
         //bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board4)
         //    .copy(Bitmap.Config.ARGB_8888, true)
         bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
@@ -567,6 +586,110 @@ class MainActivity : AppCompatActivity() {
         //-----------------------------------
 
 
+
+    }
+
+    //--- inflateIVNumDisp
+    private fun inflateIVNumDisp() {
+
+        val layout   = findViewById<LinearLayout>(R.id.loImageViewNumDisp)
+        val inflater = LayoutInflater.from(this)
+
+        ivNumDisp = (inflater.inflate(R.layout.inflate_ivnumdisp, layout, false)
+                as ImageView)
+        layout.addView(ivNumDisp)
+
+    }
+
+    //--- desInflateIVNumDisp
+    private fun desInflateIVNumDisp() {
+
+        val layout = findViewById<LinearLayout>(R.id.loImageViewNumDisp)
+        layout.removeAllViews()
+
+    }
+
+    //--- preparaIVNumDisp
+    private fun preparaIVNumDisp() {
+
+        //--- Inflate a Image View dos números a serem inseridos no jogo
+        //-------------------
+        inflateIVNumDisp()
+        //-------------------
+
+        //--- Pinta-o e preenche-o
+        arIntNumsDisp = Array(9) { 9 }
+        val bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
+            .copy(Bitmap.Config.ARGB_8888, true)
+        val canvasNumDisp = Canvas(bmpNumDisp)
+
+        //- Canto superior esquerdo do retângulo
+        var flXSupEsq = 0f
+        var flYSupEsq = 0f
+
+        //- Canto inferior direito do quadrado
+        var flXInfDir = flXSupEsq + 9 * intCellwidth.toFloat()
+        var flYInfDir = intCellheight.toFloat()
+        //---------------------------------------------------------------------------------
+        canvasNumDisp.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelVerde)
+        //---------------------------------------------------------------------------------
+
+        //--- Desenha-o
+        val pincelFino = 2.toFloat()
+        val pincelGrosso = 6.toFloat()
+        // Linha horizontal superior
+        pincelPreto.strokeWidth = pincelGrosso
+        flXSupEsq = 0f
+        flYSupEsq = 0f
+        flXInfDir = (9 * intCellwidth).toFloat()
+        flYInfDir = 0f
+        //---------------------------------------------------------------------------------
+        canvasNumDisp.drawLine( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
+        //---------------------------------------------------------------------------------
+        // Linha horizontal inferior
+        flXSupEsq = 0f
+        flYSupEsq = intCellheight.toFloat()
+        flXInfDir = (9 * intCellwidth).toFloat()
+        flYInfDir = flYSupEsq
+        //---------------------------------------------------------------------------------
+        canvasNumDisp.drawLine( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
+        //---------------------------------------------------------------------------------
+        // Linhas verticais
+        for (idxCel in 0..9)
+        {
+
+            pincelPreto.strokeWidth = if (idxCel % 3 == 0) pincelGrosso else pincelFino
+            //- Canto superior esquerdo do retângulo
+            flXSupEsq = (idxCel * intCellwidth).toFloat()
+            flYSupEsq = 0f
+            //- Canto inferior direito do quadrado
+            flXInfDir = flXSupEsq
+            flYInfDir = intCellheight.toFloat()
+            //---------------------------------------------------------------------------------
+            canvasNumDisp.drawLine(flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
+            //---------------------------------------------------------------------------------
+
+        }
+
+        //--- Escreve os números
+        pincelBranco.textSize = intTamTxt * scale
+        for (numDisp in 1..9)
+        {
+
+            val strNum = numDisp.toString()
+            val idxNum = numDisp - 1
+
+            val yCoord = intCellheight * 3 / 4
+            val xCoord = intCellwidth / 3 + idxNum * intCellwidth
+
+            //---------------------------------------------------------------------------------
+            canvasNumDisp.drawText(strNum, xCoord.toFloat(), yCoord.toFloat(), pincelBranco)
+            //---------------------------------------------------------------------------------
+
+        }
+
+        //--- Atualiza a image view
+        ivNumDisp.setImageBitmap(bmpNumDisp)
 
     }
 
@@ -896,5 +1019,3 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
-
-

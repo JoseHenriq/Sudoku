@@ -1,0 +1,11 @@
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/imageView3"
+    android:layout_width ="match_parent"
+    android:layout_height="match_parent"
+
+    android:layout_below      ="@id/ivSudokuBoardMain"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop  ="100dp"
+    android:contentDescription="@string/numDisp"
+    android:src ="@drawable/quadro_nums_disp" />

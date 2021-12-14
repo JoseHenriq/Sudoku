@@ -1,7 +1,4 @@
 
-    private lateinit var ivNumDisp: ImageView
-    private var arIntNumsDisp = Array(9) { 0 }
-
 
     /*
     //--- trataCelTocada em Números disponíveis
@@ -39,97 +36,6 @@
         layout.removeAllViews()
 
     }
-
-    //--- preparaIVNumDisp
-    /*
-    private fun preparaIVNumDisp() {
-
-        //--- Inflate a Image View dos números a serem inseridos no jogo
-        //-------------------
-        inflateIVNumDisp()
-        //-------------------
-
-        //--- Preenche o array
-        arIntNumsDisp  = Array (9 ) { 9 }
-        val bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
-            .copy(Bitmap.Config.ARGB_8888, true)
-
-        //--- Pinta o bitmap
-        val canvasNumDisp = Canvas(bmpNumDisp)
-
-        //- Canto superior esquerdo do retângulo
-        var flXSupEsq = 0f
-        var flYSupEsq = 0f
-
-        //- Canto inferior direito do quadrado
-        var flXInfDir = flXSupEsq + 9 * intCellwidth.toFloat()
-        var flYInfDir = intCellheight.toFloat()
-        //---------------------------------------------------------------------------------
-        canvasNumDisp.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelVerde)
-        //---------------------------------------------------------------------------------
-
-        //--- Desenha-o
-        val pincelFino = 2.toFloat()
-        val pincelGrosso = 6.toFloat()
-        // Linha horizontal superior
-        pincelPreto.strokeWidth = pincelGrosso
-        flXSupEsq = 0f
-        flYSupEsq = 0f
-        flXInfDir = (9 * intCellwidth).toFloat()
-        flYInfDir = 0f
-        //---------------------------------------------------------------------------------
-        canvasNumDisp.drawLine( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
-        //---------------------------------------------------------------------------------
-        // Linha horizontal inferior
-        flXSupEsq = 0f
-        flYSupEsq = intCellheight.toFloat()
-        flXInfDir = (9 * intCellwidth).toFloat()
-        flYInfDir = flYSupEsq
-        //---------------------------------------------------------------------------------
-        canvasNumDisp.drawLine( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
-        //---------------------------------------------------------------------------------
-        // Linhas verticais
-        for (idxCel in 0..9)
-        {
-
-            pincelPreto.strokeWidth = if (idxCel % 3 == 0) pincelGrosso else pincelFino
-            //- Canto superior esquerdo do retângulo
-            flXSupEsq = (idxCel * intCellwidth).toFloat()
-            flYSupEsq = 0f
-            //- Canto inferior direito do quadrado
-            flXInfDir = flXSupEsq
-            flYInfDir = intCellheight.toFloat()
-            //---------------------------------------------------------------------------------
-            canvasNumDisp.drawLine(flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
-            //---------------------------------------------------------------------------------
-
-        }
-
-        //--- Escreve os números
-        pincelBranco.textSize = intTamTxt * scale
-        for (numDisp in 1..9)
-        {
-
-            val strNum = numDisp.toString()
-            val idxNum = numDisp - 1
-
-            val yCoord = intCellheight * 3 / 4
-            val xCoord = intCellwidth / 3 + idxNum * intCellwidth
-
-            //---------------------------------------------------------------------------------
-            canvasNumDisp.drawText(strNum, xCoord.toFloat(), yCoord.toFloat(), pincelBranco)
-            //---------------------------------------------------------------------------------
-
-        }
-
-        //--- Atualiza a image view
-        ivNumDisp.setImageBitmap(bmpNumDisp)
-
-    }
-     */
-    */
-
-
 
     /*
     fun ivNumDisp3Click (view: View?) {
