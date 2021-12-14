@@ -12,7 +12,6 @@ import android.graphics.Paint
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
 
 import android.view.View
 import android.view.View.INVISIBLE
@@ -207,6 +206,19 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        ivNumDisp.setOnTouchListener { _, event ->
+
+            val x = event.x.toInt()
+            Log.d(cTAG, "touched x: $x")
+
+            //------------------------
+            // preencheJogoEditado (x)
+            //------------------------
+
+            false
+
+        }
+
     }
 
     //----------------------------------------------------------------------------------------------
@@ -220,8 +232,9 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
 
         //----------------------
-        desInflateIVNumDisp()
+        //desInflateIVNumDisp()
         //----------------------
+        ivNumDisp.visibility = INVISIBLE
         rbPreset.isChecked = true
 
         strOpcaoJogo = "JogoGerado"
@@ -298,8 +311,9 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
 
         //----------------------
-        desInflateIVNumDisp()
+        //desInflateIVNumDisp()
         //----------------------
+        ivNumDisp.visibility = INVISIBLE
         rbPreset.isChecked = true
 
         strOpcaoJogo = "JogoAdaptado"
@@ -401,9 +415,10 @@ class MainActivity : AppCompatActivity() {
         } else {
 
             //----------------------
-            desInflateIVNumDisp()
+            //desInflateIVNumDisp()
             //----------------------
-            rbPreset.isChecked = true
+            ivNumDisp.visibility = INVISIBLE
+            rbPreset.isChecked   = true
 
             txtDadosJogo.text = if (strOpcaoJogo == "JogoAdaptado")
                 String.format("%s%d", "Preset #", sgg.intJogoAdaptar) else ""
@@ -504,8 +519,9 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
 
         //----------------------
-        desInflateIVNumDisp()
+        //desInflateIVNumDisp()
         //----------------------
+        ivNumDisp.visibility = INVISIBLE
 
         if (!flagAdaptaPreset) {
 
@@ -589,6 +605,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /*
     //--- inflateIVNumDisp
     @SuppressLint("ClickableViewAccessibility")
     private fun inflateIVNumDisp() {
@@ -613,7 +630,9 @@ class MainActivity : AppCompatActivity() {
         layout.addView(ivNumDisp)
 
     }
+     */
 
+    /*
     //--- desInflateIVNumDisp
     private fun desInflateIVNumDisp() {
 
@@ -621,14 +640,16 @@ class MainActivity : AppCompatActivity() {
         layout.removeAllViews()
 
     }
+    */
 
     //--- preparaIVNumDisp
     private fun preparaIVNumDisp() {
 
         //--- Inflate a Image View dos números a serem inseridos no jogo
         //-------------------
-        inflateIVNumDisp()
+        //inflateIVNumDisp()
         //-------------------
+        ivNumDisp.visibility = VISIBLE
 
         //--- Pinta-o e preenche-o
         arIntNumsDisp = Array(9) { 9 }
@@ -715,7 +736,9 @@ class MainActivity : AppCompatActivity() {
         intTamTxt = 25
         scale     = resources.displayMetrics.density
 
-        ivSudokuBoardMain  = findViewById(R.id.ivSudokuBoardMain)
+        ivSudokuBoardMain    = findViewById(R.id.ivSudokuBoardMain)
+        ivNumDisp            = findViewById(R.id.imageView3)
+        ivNumDisp.visibility = INVISIBLE
 
         bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
             .copy(Bitmap.Config.ARGB_8888, true)

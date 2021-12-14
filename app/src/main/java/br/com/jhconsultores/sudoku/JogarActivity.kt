@@ -228,6 +228,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //------------------------------------------------------------------------------------------
             // SudokuBoard
             iViewSudokuBoard!!.setOnTouchListener { _, event -> //--- Coordenadas tocadas
+
                 val x = event.x.toInt()
                 val y = event.y.toInt()
                 //Log.d(cTAG, "touched x: $x")

@@ -147,7 +147,7 @@
         app:layout_constraintStart_toEndOf="@id/legSubNivel"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 2- Radio Buttons para escolha se adapta preset ou edição -->
+    <!-- Radio Buttons para escolha se adapta preset ou edição -->
     <RadioGroup android:id="@+id/radioGrpAdapta"
 
         android:layout_width ="155dp"
@@ -207,23 +207,24 @@
 
         android:contentDescription="@string/testeCanva3"
         android:src="@drawable/sudoku_board3" />
-
     <!-- Android 6.0.1 (S5Duos):
          1- add Gradle / proguard-rules.pro:
          'keep class android.support.v7.widget.** { *; }'
          2- os jpgs devem ser copiados para res/drawable /-->
 
-    <!-- Layout para inflar a ImageView dos números a serem inseridos no board-->
-    <LinearLayout android:id="@+id/loImageViewNumDisp"
+    <ImageView android:id ="@+id/imageView3"
 
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf ="@id/ivSudokuBoardMain"
-        android:orientation="vertical">
+        app:layout_constraintTop_toBottomOf ="@id/separador_ivJogo_scroll"
 
-    </LinearLayout>
+        android:layout_marginStart="10dp"
+        android:layout_marginTop  ="50dp"
+
+        android:contentDescription="@string/numDisp"
+        android:src ="@drawable/quadro_nums_disp" />
 
     <!-- Separador entre imageView do jogo e scrollView -->
     <View android:id="@+id/separador_ivJogo_scroll"
