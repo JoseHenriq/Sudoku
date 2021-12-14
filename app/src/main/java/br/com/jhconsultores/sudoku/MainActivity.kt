@@ -12,7 +12,6 @@ import android.graphics.Paint
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
 
 import android.view.View
 import android.view.View.INVISIBLE
@@ -27,44 +26,44 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     //                         Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
-    private val cTAG = "Sudoku"
+    private val cTAG   = "Sudoku"
     private var strLog = ""
 
     //--- Objetos gráficos
     private lateinit var ivSudokuBoardMain: ImageView
-    private lateinit var ivNumDisp: ImageView
 
     private var bmpMyImageInic: Bitmap? = null
     private var bmpMyImageBack: Bitmap? = null
-    private var bmpMyImage: Bitmap? = null
+    private var bmpMyImage    : Bitmap? = null
 
-    private var intCellwidth = 0
+    private var intCellwidth  = 0
     private var intCellheight = 0
 
-    private var pincelVerde = Paint()
-    private var pincelBranco = Paint()
-    private var pincelPreto = Paint()
-    private var pincelAzul = Paint()
+    private var pincelVerde   = Paint()
+    private var pincelBranco  = Paint()
+    private var pincelPreto   = Paint()
+    private var pincelAzul    = Paint()
     private var pincelLaranja = Paint()
 
-    private var canvasMyImage: Canvas? = null
     private var intTamTxt = 25
-    private var scale = 0f
+    private var scale     = 0f
+
+    private var canvasMyImage: Canvas? = null
 
     //--- Botões principais
-    private lateinit var btnGeraJogo: Button
-    private lateinit var btnAdaptaJogo: Button
-    private lateinit var btnJogaJogo: Button
+    private lateinit var btnGeraJogo   : Button
+    private lateinit var btnAdaptaJogo : Button
+    private lateinit var btnJogaJogo   : Button
 
-    private lateinit var groupRBnivel: RadioGroup
-    private lateinit var rbFacil: RadioButton
-    private lateinit var rbMedio: RadioButton
-    private lateinit var rbDificil: RadioButton
+    private lateinit var groupRBnivel  : RadioGroup
+    private lateinit var rbFacil       : RadioButton
+    private lateinit var rbMedio       : RadioButton
+    private lateinit var rbDificil     : RadioButton
     private lateinit var rbMuitoDificil: RadioButton
 
-    private lateinit var groupRBadapta: RadioGroup
-    private lateinit var rbPreset: RadioButton
-    private lateinit var rbEdicao: RadioButton
+    private lateinit var groupRBadapta : RadioGroup
+    private lateinit var rbPreset      : RadioButton
+    private lateinit var rbEdicao      : RadioButton
 
     private lateinit var edtViewSubNivel: EditText
     private var flagAdaptaPreset = true
@@ -72,20 +71,19 @@ class MainActivity : AppCompatActivity() {
     //--- Objetos para o jogo
     private var quadMaior = arrayOf<Array<Int>>()
 
-    private var strOpcaoJogo = "JogoGerado"
-    private var strNivelJogo = "Fácil"
-    private var nivelJogo = 0
-    private var subNivelJogo = 0
+    private var strOpcaoJogo   = "JogoGerado"
+    private var strNivelJogo   = "Fácil"
+    private var nivelJogo      = 0
+    private var subNivelJogo   = 0
     private var nivelTotalJogo = 0
 
     private val FACIL = 20
     private val MEDIO = 30
-    private val DIFICIL = 40
+    private val DIFICIL       = 40
     private val MUITO_DIFICIL = 50
 
     private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
-    private var arArIntNums = Array(9) { Array(9) { 0 } }
-    private var arIntNumsDisp = Array(9) { 0 }
+    private var arArIntNums     = Array(9) { Array(9) { 0 } }
 
     private lateinit var txtDadosJogo: TextView
 
@@ -109,14 +107,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //--- Instancializações e inicializações
-        btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
-        btnJogaJogo = findViewById(R.id.btn_JogarJogo)
-        btnGeraJogo = findViewById(R.id.btn_GerarJogo)
+        btnAdaptaJogo  = findViewById(R.id.btn_AdaptarJogo)
+        btnJogaJogo    = findViewById(R.id.btn_JogarJogo)
+        btnGeraJogo    = findViewById(R.id.btn_GerarJogo)
 
-        groupRBnivel = findViewById(R.id.radioGrpNivel)
-        rbFacil = findViewById(R.id.nivelFacil)
-        rbMedio = findViewById(R.id.nivelMédio)
-        rbDificil = findViewById(R.id.nivelDifícil)
+        groupRBnivel   = findViewById(R.id.radioGrpNivel)
+        rbFacil        = findViewById(R.id.nivelFacil)
+        rbMedio        = findViewById(R.id.nivelMédio)
+        rbDificil      = findViewById(R.id.nivelDifícil)
         rbMuitoDificil = findViewById(R.id.nivelMuitoDifícil)
         //-----------------------------
         prepRBniveis(true)
@@ -124,8 +122,8 @@ class MainActivity : AppCompatActivity() {
         edtViewSubNivel = findViewById(R.id.edtViewSubNivel)
 
         groupRBadapta = findViewById(R.id.radioGrpAdapta)
-        rbPreset = findViewById(R.id.preset)
-        rbEdicao = findViewById(R.id.edicao)
+        rbPreset      = findViewById(R.id.preset)
+        rbEdicao      = findViewById(R.id.edicao)
         groupRBadapta.visibility = INVISIBLE
 
         //--- Objetos gráficos
@@ -195,26 +193,6 @@ class MainActivity : AppCompatActivity() {
 
                 //--- Se a célula tocada contiver um número, "pinta" todas as células que contiverem
                 //    o mesmo número.
-                /*
-                if (intNum > 0) {
-                    flagJoga = false    // Não quer jogar; só quer analisar ...
-                    intLinJogar = 0
-                    intColJogar = 0
-                    //-------------------------
-                    mostraNumsIguais(intNum)
-                    //-------------------------
-                }
-                //--- Se não contiver um número, quer jogar
-                else {
-                    flagJoga = true     // Vamos ao jogo!
-                    intLinJogar = intLinha
-                    intColJogar = intCol
-                    //------------------------------------------
-                    mostraCelAJogar(intLinJogar, intColJogar)
-                    //------------------------------------------
-                }
-                */
-
                 //-----------------------------------
                 mostraCelAEditar(intLinha, intCol)
                 //-----------------------------------
@@ -238,7 +216,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
 
         //----------------------
-        desInflateIVNumDisp()
+        // desInflateIVNumDisp()
         //----------------------
         rbPreset.isChecked = true
 
@@ -295,18 +273,16 @@ class MainActivity : AppCompatActivity() {
             //-----------------------------------------
             quadMaior = sgg.geraJogo(nivelTotalJogo)
             //-----------------------------------------
-
-            // txtDadosJogo.append(sgg.txtDados)
-
-            //-------------------------------
             preencheSudokuBoard(quadMaior)
             //-------------------------------
 
             // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
 
         } else Toast.makeText(
+
             this, "Não é possível gerar o jogo sem subnivel!",
             Toast.LENGTH_SHORT
+
         ).show()
     }
 
@@ -318,7 +294,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
 
         //----------------------
-        desInflateIVNumDisp()
+        // desInflateIVNumDisp()
         //----------------------
         rbPreset.isChecked = true
 
@@ -407,10 +383,6 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> Tap no btnJogaJogo"
         Log.d(cTAG, strLog)
 
-        //-------------------------------
-        //prepRBniveis(false)
-        //-------------------------------
-
         //--- Se não tiver jogo válido, informa ao usuário
         if ((groupRBadapta.isVisible && rbEdicao.isChecked) ||
             (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk)
@@ -425,7 +397,7 @@ class MainActivity : AppCompatActivity() {
         } else {
 
             //----------------------
-            desInflateIVNumDisp()
+            // desInflateIVNumDisp()
             //----------------------
             rbPreset.isChecked = true
 
@@ -523,7 +495,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
 
         //----------------------
-        desInflateIVNumDisp()
+        // desInflateIVNumDisp()
         //----------------------
 
         if (!flagAdaptaPreset) {
@@ -545,181 +517,6 @@ class MainActivity : AppCompatActivity() {
         flagAdaptaPreset = false
         txtDadosJogo.text = ""
 
-        //--- Image view dos números disponíveis
-        //-------------------
-        preparaIVNumDisp()
-        //-------------------
-
-        this.ivNumDisp.setOnTouchListener { _, event ->
-
-            //--- Coordenada X do numsDisps tocada
-            val xEvent = event.x.toInt()
-
-            //-----------------------
-            trataCelTocada(xEvent)
-            //-----------------------
-
-            false
-
-        }
-
-        /*
-
-            /*
-                val flagJoga = false
-
-                //--- Só transfere o número para o board se estiver jogando
-                if (flagJoga) {
-
-                    //--- Coordenada X do numsDisps tocada
-                    val x = event.x.toInt()
-
-                    //--- Coordenada X e valor da célula tocada
-                    val intCol = x / intCellwidth
-                    val intNum = intCol + 1
-                    val intQtidd = arIntNumsDisp[intNum - 1]
-
-                    /*
-                    //strLog = "-> Celula tocada em NumDisp: coluna = " + intCol +
-                    //        ", qtidd = " + intQtidd
-                    //Log.d(cTAG, strLog)
-
-                    //--- Verifica se ainda tem desse número para jogar e se esse número é válido.
-                    var flagNumValido: Boolean
-                    if (intQtidd > 0) {
-
-                        //--- Verifica se num válido
-                        // Determina a que Qm o número pertence
-                        //----------------------------------------------------------
-                        val intQuadMenor = determinaQm(intLinJogar, intColJogar)
-                        //----------------------------------------------------------
-
-                        //Log.d(
-                        //    cTAG, "-> linhaJogar= " + intLinJogar + " colJogar= " +
-                        //            intColJogar + " Qm = " + intQuadMenor )
-
-                        // Verifica se esse número ainda não existe no seu Qm e nem no seu QM
-                        //------------------------------------------------------------------------------
-                        flagNumValido =
-                            verifValidade(intQuadMenor, intLinJogar, intColJogar, intNum)
-                        //------------------------------------------------------------------------------
-                        if (!flagNumValido) {
-
-                            //strLog = "-> Número NÃO válido (linha, coluna ou quadro); NÃO será incluído" +
-                            //        " no Sudoku board."
-                            //Log.d(cTAG, strLog)
-
-                            strToast = "Número NÃO Ok (linha, coluna ou quadro)"
-                            //-----------------------------------------------------------------
-                            Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
-                            //-----------------------------------------------------------------
-
-                        }
-                        // Verifica se esse número, nessa célula, é o mesmo do gabarito
-                        else {
-
-                            //--- Número diferente do num do gabarito
-                            if (intNum != arArIntGab[intLinJogar][intColJogar]) {
-
-                                flagNumValido = false
-
-                                //strLog = "-> Número NÃO válido (gab); NÃO será incluído" +
-                                //         " no Sudoku board."
-                                //Log.d(cTAG, strLog)
-
-                                strToast = "Número NÃO Ok (gabarito)"
-                                //-----------------------------------------------------------------
-                                Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
-                                //-----------------------------------------------------------------
-
-                            }
-                            //--- Número OK qto ao gabarito
-                            else {
-
-                                //Log.d(cTAG, "-> Número válido; será incluído no Sudoku board.")
-
-                                //strToast = "Número Ok!"
-                                //----------------------------------------------------------------
-                                //Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
-                                //----------------------------------------------------------------
-
-                                //--- Atualiza o Sudoku board
-                                //----------------------------------------------------------------------
-                                pintaCelula(intLinJogar, intColJogar, pincelBranco)
-                                //----------------------------------------------------------------------
-                                escreveCelula(
-                                    intLinJogar,
-                                    intColJogar,
-                                    intNum.toString(),
-                                    pincelAzul
-                                )
-                                //----------------------------------------------------------------------
-                                desenhaSudokuBoard(false)
-                                //-----------------------------------
-                                preencheJogo()
-                                //---------------
-
-                                //--- Salva esse bitmap
-                                //--------------------------------------
-                                copiaBmpByBuffer(bmpMyImage, bmpJogo)
-                                //--------------------------------------
-
-                                //--- Atualiza a base de dados
-                                arArIntNums[intLinJogar][intColJogar] = intNum
-                                arIntNumsDisp[intNum - 1]--
-
-                                //--- Atualiza a qtidd disponível para esse número
-                                //-------------------
-                                atualizaNumDisp()
-                                //-------------------
-
-                                //--- Destaca os números iguais a esse já jogados
-                                //--------------------------
-                                mostraNumsIguais(intNum)
-                                //--------------------------
-
-                                flagJoga = false
-
-                            }
-                        }
-
-                        if (!flagNumValido) {
-                            tvErros!!.text = "${++intContaErro}"
-                        }
-
-                    }
-
-                    //--- Verifica se fim de jogo (todas as qtidds foram zeradas
-                    var flagContJogo = false
-                    for (idxVetorNumDisp in 0..8) {
-
-                        if (arIntNumsDisp[idxVetorNumDisp] > 0) flagContJogo = true
-
-                    }
-                    //--- Se já foram utilizados todos os números disponíveis, pára o cronometro
-                    if (!flagContJogo) {
-
-                        Log.d(cTAG, "-> ${crono.text} - Fim")
-
-                        crono.stop()
-                        flagJoga = false
-
-                        btnInicia.text = strInicia
-                        btnInicia.isEnabled = false
-
-                    }
-                }
-                */
-
-                }
-
-             */
-
-            false
-
-        }
-        */
-
         //--- Image view do jogo
         //bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board4)
         //    .copy(Bitmap.Config.ARGB_8888, true)
@@ -736,127 +533,6 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     //                           Funções edição de jogos
     //----------------------------------------------------------------------------------------------
-
-    //--- trataCelTocada
-    private fun trataCelTocada(xEvent : Int) {
-
-        val x = xEvent
-
-        //--- Coordenada X e valor da célula tocada
-        val intCol = x / intCellwidth
-        val intNum = intCol + 1
-        val intQtidd = arIntNumsDisp[intNum - 1]
-        strLog = "-> Celula tocada em NumDisp: coluna = $intCol, qtidd = $intQtidd"
-        Log.d(cTAG, strLog)
-
-    }
-
-    //--- inflateIVNumDisp
-    private fun inflateIVNumDisp() {
-
-        val layout   = findViewById<LinearLayout>(R.id.loImageViewNumDisp)
-        val inflater = LayoutInflater.from(this)
-
-        ivNumDisp = (inflater.inflate(R.layout.inflate_ivnumdisp, layout, false)
-                                                                                      as ImageView)
-        layout.addView(ivNumDisp)
-
-    }
-
-    //--- desInflateIVNumDisp
-    private fun desInflateIVNumDisp() {
-
-        val layout = findViewById<LinearLayout>(R.id.loImageViewNumDisp)
-        layout.removeAllViews()
-
-    }
-
-    //--- preparaIVNumDisp
-    private fun preparaIVNumDisp() {
-
-        //--- Inflate a Image View dos números a serem inseridos no jogo
-        //-------------------
-        inflateIVNumDisp()
-        //-------------------
-
-        //--- Preenche o array
-        arIntNumsDisp  = Array (9 ) { 9 }
-        val bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
-            .copy(Bitmap.Config.ARGB_8888, true)
-
-        //--- Pinta o bitmap
-        val canvasNumDisp = Canvas(bmpNumDisp)
-
-        //- Canto superior esquerdo do retângulo
-        var flXSupEsq = 0f
-        var flYSupEsq = 0f
-
-        //- Canto inferior direito do quadrado
-        var flXInfDir = flXSupEsq + 9 * intCellwidth.toFloat()
-        var flYInfDir = intCellheight.toFloat()
-        //---------------------------------------------------------------------------------
-        canvasNumDisp.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelVerde)
-        //---------------------------------------------------------------------------------
-
-        //--- Desenha-o
-        val pincelFino = 2.toFloat()
-        val pincelGrosso = 6.toFloat()
-        // Linha horizontal superior
-        pincelPreto.strokeWidth = pincelGrosso
-        flXSupEsq = 0f
-        flYSupEsq = 0f
-        flXInfDir = (9 * intCellwidth).toFloat()
-        flYInfDir = 0f
-        //---------------------------------------------------------------------------------
-        canvasNumDisp.drawLine( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
-        //---------------------------------------------------------------------------------
-        // Linha horizontal inferior
-        flXSupEsq = 0f
-        flYSupEsq = intCellheight.toFloat()
-        flXInfDir = (9 * intCellwidth).toFloat()
-        flYInfDir = flYSupEsq
-        //---------------------------------------------------------------------------------
-        canvasNumDisp.drawLine( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
-        //---------------------------------------------------------------------------------
-        // Linhas verticais
-        for (idxCel in 0..9)
-        {
-
-            pincelPreto.strokeWidth = if (idxCel % 3 == 0) pincelGrosso else pincelFino
-            //- Canto superior esquerdo do retângulo
-            flXSupEsq = (idxCel * intCellwidth).toFloat()
-            flYSupEsq = 0f
-            //- Canto inferior direito do quadrado
-            flXInfDir = flXSupEsq
-            flYInfDir = intCellheight.toFloat()
-            //---------------------------------------------------------------------------------
-            canvasNumDisp.drawLine(flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
-            //---------------------------------------------------------------------------------
-
-        }
-
-        //--- Escreve os números
-        pincelBranco.textSize = intTamTxt * scale
-        for (numDisp in 1..9)
-        {
-
-            val strNum = numDisp.toString()
-            val idxNum = numDisp - 1
-
-            val yCoord = intCellheight * 3 / 4
-            val xCoord = intCellwidth / 3 + idxNum * intCellwidth
-
-            //---------------------------------------------------------------------------------
-            canvasNumDisp.drawText(strNum, xCoord.toFloat(), yCoord.toFloat(), pincelBranco)
-            //---------------------------------------------------------------------------------
-
-        }
-
-        //--- Atualiza a image view
-        ivNumDisp.setImageBitmap(bmpNumDisp)
-
-    }
-
     //--- mostraCelAEditar
     private fun mostraCelAEditar(intLinha : Int, intCol : Int) {
 
@@ -869,10 +545,6 @@ class MainActivity : AppCompatActivity() {
         //---------------------------------------------
         pintaCelula(intLinha, intCol, pincelLaranja)
         //---------------------------------------------
-
-        //-------------------------------------------------------
-        jogarJogo.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
-        //-------------------------------------------------------
 
     }
 
@@ -905,7 +577,7 @@ class MainActivity : AppCompatActivity() {
     private fun inicializaObjGraf() {
 
         intTamTxt = 25
-        scale = resources.displayMetrics.density
+        scale     = resources.displayMetrics.density
 
         ivSudokuBoardMain  = findViewById(R.id.ivSudokuBoardMain)
 
@@ -920,16 +592,6 @@ class MainActivity : AppCompatActivity() {
         intCellheight = bmpMyImage!!.height / 9
 
         canvasMyImage?.setBitmap(bmpMyImage!!)
-
-        /*
-        try {
-
-            canvasMyImage?.setBitmap(bmpMyImage!!)
-
-        } catch (exc: Exception) {
-            Log.d(cTAG, "Erro: ${exc.message}")
-        }
-         */
 
         pincelVerde.color   = ContextCompat.getColor(this, R.color.verde)
         pincelBranco.color  = ContextCompat.getColor(this, R.color.white)
@@ -1040,9 +702,6 @@ class MainActivity : AppCompatActivity() {
                     val strTexto = intNum.toString()
 
                     pincelAzul.textSize = intTamTxt * scale
-
-                    // Declarada em JogarActivity
-                    // escreveCelula(intLinha, intCol, strTexto, pincel!!) // canvasMyImage!!
 
                     //--- Coordenada Y (linhas)
                     //--------------------------------------------------------------
@@ -1234,15 +893,6 @@ class MainActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }
-    }
-
-    private fun ivNumDisp3Click (view: View?) {
-
-        Toast.makeText(
-            this, "Clicou no imageview dos NumDisps!",
-            Toast.LENGTH_SHORT
-        ).show()
-
     }
 
 }
