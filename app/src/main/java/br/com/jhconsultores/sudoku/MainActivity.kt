@@ -590,13 +590,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- inflateIVNumDisp
+    @SuppressLint("ClickableViewAccessibility")
     private fun inflateIVNumDisp() {
 
         val layout   = findViewById<LinearLayout>(R.id.loImageViewNumDisp)
         val inflater = LayoutInflater.from(this)
 
         ivNumDisp = (inflater.inflate(R.layout.inflate_ivnumdisp, layout, false)
-                as ImageView)
+                                                                                      as ImageView)
+        ivNumDisp.setOnTouchListener { _, event ->
+
+            val x = event.x.toInt()
+            Log.d(cTAG, "touched x: $x")
+
+            //------------------------
+            // preencheJogoEditado (x)
+            //------------------------
+
+            false
+
+        }
         layout.addView(ivNumDisp)
 
     }
