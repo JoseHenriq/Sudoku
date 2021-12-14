@@ -213,6 +213,18 @@
          'keep class android.support.v7.widget.** { *; }'
          2- os jpgs devem ser copiados para res/drawable /-->
 
+    <!-- Layout para inflar a ImageView dos números a serem inseridos no board-->
+    <LinearLayout android:id="@+id/loImageViewNumDisp"
+
+        android:layout_width ="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf ="@id/ivSudokuBoardMain"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
     <!-- Separador entre imageView do jogo e scrollView -->
     <View android:id="@+id/separador_ivJogo_scroll"
 

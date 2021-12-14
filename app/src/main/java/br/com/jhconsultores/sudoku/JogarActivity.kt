@@ -513,14 +513,6 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
         }
 
-        /*
-        //--- Prepara o actionBar (toolBar)
-        //setting toolbar
-        setSupportActionBar(toolBar)
-        //home navigation
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        */
-
     }
 
     //----------------------------------------------------------------------------------------------

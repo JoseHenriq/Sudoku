@@ -12,6 +12,7 @@ import android.graphics.Paint
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 
 import android.view.View
 import android.view.View.INVISIBLE
@@ -26,71 +27,79 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     //                         Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
-    private val cTAG   = "Sudoku"
+    private val cTAG = "Sudoku"
     private var strLog = ""
 
-    private var quadMaior = arrayOf<Array<Int>>()
-
     //--- Objetos gráficos
-    private lateinit var ivSudokuBoardMain : ImageView
+    private lateinit var ivSudokuBoardMain: ImageView
+    private lateinit var ivNumDisp: ImageView
 
-    private var bmpMyImageInic : Bitmap? = null
-    private var bmpMyImageBack : Bitmap? = null
-    private var bmpMyImage     : Bitmap? = null
-    private var intCellwidth  = 0
+    private var bmpMyImageInic: Bitmap? = null
+    private var bmpMyImageBack: Bitmap? = null
+    private var bmpMyImage: Bitmap? = null
+
+    private var intCellwidth = 0
     private var intCellheight = 0
-    private var pincelBranco  = Paint()
-    private var pincelPreto   = Paint()
-    private var pincelAzul    = Paint()
+
+    private var pincelVerde = Paint()
+    private var pincelBranco = Paint()
+    private var pincelPreto = Paint()
+    private var pincelAzul = Paint()
     private var pincelLaranja = Paint()
 
-    private var canvasMyImage : Canvas? = null
+    private var canvasMyImage: Canvas? = null
+    private var intTamTxt = 25
+    private var scale = 0f
 
-    private lateinit var btnGeraJogo   : Button
-    private lateinit var btnAdaptaJogo : Button
-    private lateinit var btnJogaJogo   : Button
+    //--- Botões principais
+    private lateinit var btnGeraJogo: Button
+    private lateinit var btnAdaptaJogo: Button
+    private lateinit var btnJogaJogo: Button
 
-    private lateinit var groupRBnivel   : RadioGroup
-    private lateinit var rbFacil        : RadioButton
-    private lateinit var rbMedio        : RadioButton
-    private lateinit var rbDificil      : RadioButton
-    private lateinit var rbMuitoDificil : RadioButton
+    private lateinit var groupRBnivel: RadioGroup
+    private lateinit var rbFacil: RadioButton
+    private lateinit var rbMedio: RadioButton
+    private lateinit var rbDificil: RadioButton
+    private lateinit var rbMuitoDificil: RadioButton
 
-    private lateinit var groupRBadapta : RadioGroup
-    private lateinit var rbPreset      : RadioButton
-    private lateinit var rbEdicao      : RadioButton
+    private lateinit var groupRBadapta: RadioGroup
+    private lateinit var rbPreset: RadioButton
+    private lateinit var rbEdicao: RadioButton
 
     private lateinit var edtViewSubNivel: EditText
     private var flagAdaptaPreset = true
 
-    private var strOpcaoJogo   = "JogoGerado"
-    private var strNivelJogo   = "Fácil"
-    private var nivelJogo      = 0
-    private var subNivelJogo   = 0
+    //--- Objetos para o jogo
+    private var quadMaior = arrayOf<Array<Int>>()
+
+    private var strOpcaoJogo = "JogoGerado"
+    private var strNivelJogo = "Fácil"
+    private var nivelJogo = 0
+    private var subNivelJogo = 0
     private var nivelTotalJogo = 0
 
-    private val FACIL         = 20
-    private val MEDIO         = 30
-    private val DIFICIL       = 40
+    private val FACIL = 20
+    private val MEDIO = 30
+    private val DIFICIL = 40
     private val MUITO_DIFICIL = 50
 
     private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
-    private var arArIntNums     = Array(9) { Array(9) { 0 } }
+    private var arArIntNums = Array(9) { Array(9) { 0 } }
+    private var arIntNumsDisp = Array(9) { 0 }
 
-    private lateinit var txtDadosJogo : TextView
+    private lateinit var txtDadosJogo: TextView
 
-    private var sgg       = SudokuGameGenerator ()
+    private var sgg = SudokuGameGenerator()
     private var jogarJogo = JogarActivity()
 
-    // Núm     0   21               31        41          51       61     81
-    // clues  81   60               50        40          30       20      0
+    // Núm     0   22               31        41          51       61     81
+    // clues  81   59               50        40          30       20      0
     //        |----|----------------|---------|-----------|--------|-------|
     //        |xxxx|  MUITO DIFÍCIL | DIFÍCIL |   MÉDIO   |  FÁCIL |xxxxxxx|
     //        |----|----------------|---------|-----------|--------|-------|
-    // SETUP      60                50        40          30       20
 
     //----------------------------------------------------------------------------------------------
-    // Eventos da MainActivity
+    // Eventos e listeners da MainActivity
     //----------------------------------------------------------------------------------------------
     //--- onCreate
     @SuppressLint("ClickableViewAccessibility")
@@ -101,45 +110,32 @@ class MainActivity : AppCompatActivity() {
 
         //--- Instancializações e inicializações
         btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
-        btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
-        btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
+        btnJogaJogo = findViewById(R.id.btn_JogarJogo)
+        btnGeraJogo = findViewById(R.id.btn_GerarJogo)
 
-        groupRBnivel  = findViewById(R.id.radioGrpNivel)
-        rbFacil       = findViewById(R.id.nivelFacil)
-        rbMedio       = findViewById(R.id.nivelMédio)
-        rbDificil     = findViewById(R.id.nivelDifícil)
-        rbMuitoDificil= findViewById(R.id.nivelMuitoDifícil)
+        groupRBnivel = findViewById(R.id.radioGrpNivel)
+        rbFacil = findViewById(R.id.nivelFacil)
+        rbMedio = findViewById(R.id.nivelMédio)
+        rbDificil = findViewById(R.id.nivelDifícil)
+        rbMuitoDificil = findViewById(R.id.nivelMuitoDifícil)
         //-----------------------------
         prepRBniveis(true)
         //-----------------------------
-        edtViewSubNivel= findViewById(R.id.edtViewSubNivel)
+        edtViewSubNivel = findViewById(R.id.edtViewSubNivel)
 
         groupRBadapta = findViewById(R.id.radioGrpAdapta)
-        rbPreset      = findViewById(R.id.preset)
-        rbEdicao      = findViewById(R.id.edicao)
+        rbPreset = findViewById(R.id.preset)
+        rbEdicao = findViewById(R.id.edicao)
         groupRBadapta.visibility = INVISIBLE
 
         //--- Objetos gráficos
-        ivSudokuBoardMain = findViewById(R.id.ivSudokuBoardMain)
+        //--------------------
+        inicializaObjGraf()
+        //--------------------
 
-        bmpMyImage        = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
-            .copy(Bitmap.Config.ARGB_8888, true)
-        bmpMyImageInic    = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
-            .copy(Bitmap.Config.ARGB_8888, true)
-        bmpMyImageBack = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
-            .copy(Bitmap.Config.ARGB_8888, true)
-
-        intCellwidth   = bmpMyImage!!.width  / 9
-        intCellheight  = bmpMyImage!!.height / 9
-
-        try { canvasMyImage?.setBitmap( bmpMyImage!! ) }
-        catch (exc : Exception) { Log.d( cTAG, "Erro: ${exc.message}" ) }
-
-        pincelBranco.color  = ContextCompat.getColor(this, R.color.white )
-        pincelPreto.color   = ContextCompat.getColor(this, R.color.black )
-        pincelAzul.color    = ContextCompat.getColor(this, R.color.azul)
-        pincelLaranja.color = ContextCompat.getColor(this, R.color.laranja)
-
+        //------------------------------------------------------------------------------------------
+        // Listener para mudança do texto subnivel (editView)
+        //------------------------------------------------------------------------------------------
         //https://www.tutorialkart.com/kotlin-android/android-edittext-on-text-change/
         edtViewSubNivel.addTextChangedListener(object : TextWatcher {
 
@@ -152,18 +148,18 @@ class MainActivity : AppCompatActivity() {
                 // tvSample.setText("Text in EditText : $s")
 
                 if (s.isNotEmpty())
-                    //---------------------------
-                    verMudancaNivel(nivelJogo)
-                    //---------------------------
+                //---------------------------
+                    verifMudancaNivel(nivelJogo)
+                //---------------------------
 
             }
 
         })
 
-        txtDadosJogo  = findViewById(R.id.txtJogos)
+        txtDadosJogo = findViewById(R.id.txtJogos)
 
         //------------------------------------------------------------------------------------------
-        // Listener para o evento onTouch do ImageView (só utilizado na edição).
+        // Listener para os eventos onTouch dos ImageViews (só utilizados na edição).
         //------------------------------------------------------------------------------------------
         ivSudokuBoardMain.setOnTouchListener { _, event -> //--- Coordenadas tocadas
 
@@ -188,13 +184,13 @@ class MainActivity : AppCompatActivity() {
                 Log.d(cTAG, "Real y: $imageY")
 
                 //--- Coordenadas da célula tocada
-                val intCol   = x / intCellwidth
+                val intCol = x / intCellwidth
                 val intLinha = y / intCellheight
                 //-----------------------------------------------------
                 val intNum = arArIntNums[intLinha][intCol]
                 //-----------------------------------------------------
                 strLog = "-> Celula tocada: linha = " + intLinha + ", coluna = " + intCol +
-                                                                                ", numero = " + intNum
+                        ", numero = " + intNum
                 Log.d(cTAG, strLog)
 
                 //--- Se a célula tocada contiver um número, "pinta" todas as células que contiverem
@@ -231,6 +227,636 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //----------------------------------------------------------------------------------------------
+    // Funções para o atendimento ao tapping nos botões (declaradas no xml)
+    //----------------------------------------------------------------------------------------------
+    //--- Evento tapping no botão de geração de jogo
+    @Suppress("UNUSED_PARAMETER")
+    fun btnGeraJogoClick(view: View?) {
+
+        strLog = "-> Tap no btnGeraJogo"
+        Log.d(cTAG, strLog)
+
+        //----------------------
+        desInflateIVNumDisp()
+        //----------------------
+        rbPreset.isChecked = true
+
+        strOpcaoJogo = "JogoGerado"
+
+        sgg.txtDados = ""
+
+        //--------------------------
+        prepRBniveis(true)
+        //--------------------------
+        edtViewSubNivel.isEnabled = true
+
+        groupRBadapta.visibility = INVISIBLE
+
+        txtDadosJogo.text = ""
+        sgg.txtDados = ""
+
+        //--- Gera um novo jogo
+        nivelJogo = when {
+
+            rbFacil.isChecked -> {
+                strNivelJogo = "Fácil"
+                FACIL
+            }
+
+            rbMedio.isChecked -> {
+                strNivelJogo = "Médio"
+                MEDIO
+            }
+            rbDificil.isChecked -> {
+                strNivelJogo = "Difícil"
+                DIFICIL
+            }
+
+            rbMuitoDificil.isChecked -> {
+                strNivelJogo = "Muito Difícil"
+                MUITO_DIFICIL
+            }
+
+            else -> {
+                strNivelJogo = "Muito fácil"
+                0
+            }
+
+        }
+        strLog = "   - Nível: $strNivelJogo ($nivelJogo) Subnível: ${edtViewSubNivel.text}"
+        Log.d(cTAG, strLog)
+
+        if (edtViewSubNivel.text.toString().isNotEmpty()) {
+
+            subNivelJogo = edtViewSubNivel.text.toString().toInt()
+            nivelTotalJogo = nivelJogo + subNivelJogo
+
+            //-----------------------------------------
+            quadMaior = sgg.geraJogo(nivelTotalJogo)
+            //-----------------------------------------
+
+            // txtDadosJogo.append(sgg.txtDados)
+
+            //-------------------------------
+            preencheSudokuBoard(quadMaior)
+            //-------------------------------
+
+            // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
+
+        } else Toast.makeText(
+            this, "Não é possível gerar o jogo sem subnivel!",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    //--- Evento tapping no botão de adaptação de jogo
+    @Suppress("UNUSED_PARAMETER")
+    fun btnAdaptaJogoClick(view: View?) {
+
+        strLog = "-> Tap no btnAdaptaJogo"
+        Log.d(cTAG, strLog)
+
+        //----------------------
+        desInflateIVNumDisp()
+        //----------------------
+        rbPreset.isChecked = true
+
+        strOpcaoJogo = "JogoAdaptado"
+        txtDadosJogo.text = ""
+        sgg.txtDados = ""
+
+        groupRBadapta.visibility = VISIBLE
+        strLog = "   - rbAdapta: "
+        strLog += if (rbPreset.isChecked) "Preset" else "Edição"
+        Log.d(cTAG, strLog)
+
+        //--- PRESET
+        if (rbPreset.isChecked) {
+            //--- Prepara o preset para se conseguir o gabarito do jogo
+            if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
+            txtDadosJogo.text = String.format("%s%d", "Preset #", sgg.intJogoAdaptar)
+
+            //-------------------------------------------
+            inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
+            //-------------------------------------------
+
+            sgg.quadMaiorRet = copiaArArInt(quadMaiorAdapta)
+
+            sgg.flagJogoGeradoOk = true
+            sgg.flagJogoAdaptadoOk = true
+
+            //---------------------------------------
+            quadMaior = sgg.adaptaJogoAlgoritmo2()
+            //---------------------------------------
+
+            //--- Apresenta o nível e o subnível do preset
+            nivelJogo = (sgg.intQtiZeros / 10) * 10
+            subNivelJogo = sgg.intQtiZeros % 10
+            val rbNivelJogo: RadioButton = when (nivelJogo) {
+
+                20 -> {
+                    strNivelJogo = "Fácil"
+                    rbFacil
+                }
+                30 -> {
+                    strNivelJogo = "Médio"
+                    rbMedio
+                }
+                40 -> {
+                    strNivelJogo = "Difícil"
+                    rbDificil
+                }
+                50 -> {
+                    strNivelJogo = "Muito Difícil"
+                    rbMuitoDificil
+                }
+                else -> {
+                    strNivelJogo = "Fácil"
+                    rbFacil
+                }
+
+            }
+            rbNivelJogo.isChecked = true
+
+            edtViewSubNivel.setText(subNivelJogo.toString())
+            //---------------------------
+            prepRBniveis(false)
+            //---------------------------
+            edtViewSubNivel.isEnabled = false
+
+            //-------------------------------
+            preencheSudokuBoard(quadMaior)
+            //-------------------------------
+
+        }
+
+        //--- EDIÇÃO
+        else {
+
+        }
+
+        // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
+
+    }
+
+    //--- Evento tapping no botão para jogar o jogo
+    @Suppress("UNUSED_PARAMETER")
+    fun btnJogaJogoClick(view: View?) {
+
+        strLog = "-> Tap no btnJogaJogo"
+        Log.d(cTAG, strLog)
+
+        //-------------------------------
+        //prepRBniveis(false)
+        //-------------------------------
+
+        //--- Se não tiver jogo válido, informa ao usuário
+        if ((groupRBadapta.isVisible && rbEdicao.isChecked) ||
+            (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk)
+        ) {
+            val strToast = "Não há jogo válido!"
+            //-----------------------------------------------------------------
+            Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
+            //-----------------------------------------------------------------
+
+            Log.d(cTAG, "-> $strToast")
+
+        } else {
+
+            //----------------------
+            desInflateIVNumDisp()
+            //----------------------
+            rbPreset.isChecked = true
+
+            txtDadosJogo.text = if (strOpcaoJogo == "JogoAdaptado")
+                String.format("%s%d", "Preset #", sgg.intJogoAdaptar) else ""
+            sgg.txtDados = ""
+
+            //--- Envia o jogo gerado para ser usado como gabarito
+            val arIntNumsGab = ArrayList<Int>()
+            for (idxLin in 0..8) {
+                for (idxCol in 0..8) {
+                    //-------------------------------------------------
+                    arIntNumsGab += sgg.quadMaiorRet[idxLin][idxCol]
+                    //-------------------------------------------------
+                }
+            }
+
+            //--- Envia o jogo preparado para ser jogado
+            val arIntNumsJogo = ArrayList<Int>()
+            for (idxLin in 0..8) {
+                for (idxCol in 0..8) {
+                    //-------------------------------------------
+                    arIntNumsJogo += quadMaior[idxLin][idxCol]
+                    //-------------------------------------------
+                }
+            }
+
+            //--- Prepara a Intent para chamar JogarActivity
+            val intent = Intent(this, JogarActivity::class.java)
+            intent.action = strOpcaoJogo
+            intent.putExtra("strNivelJogo", strNivelJogo)
+            intent.putExtra("strSubNivelJogo", edtViewSubNivel.text.toString())
+            intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
+            intent.putIntegerArrayListExtra("JogoPreparado", arIntNumsJogo)
+            //----------------------
+            startActivity(intent)
+            //----------------------
+
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // Funções para o atendimento de tapping nos radioButtons de escolha de níveis de jogo
+    //----------------------------------------------------------------------------------------------
+    fun rbJogoFacil(view: View?) {
+
+        strLog = "-> onClick rbJogoFacil"
+        Log.d(cTAG, strLog)
+
+        //-----------------------
+        verifMudancaNivel(FACIL)
+        //-----------------------
+
+    }
+
+    fun rbJogoMedio(view: View?) {
+
+        strLog = "-> onClick rbJogoMedio"
+        Log.d(cTAG, strLog)
+
+        //-----------------------
+        verifMudancaNivel(MEDIO)
+        //-----------------------
+
+    }
+
+    fun rbJogoDificil(view: View?) {
+
+        strLog = "-> onClick rbJogoDificil"
+        Log.d(cTAG, strLog)
+
+        //-------------------------
+        verifMudancaNivel(DIFICIL)
+        //-------------------------
+
+    }
+
+    fun rbJogoMuitoDificil(view: View?) {
+
+        strLog = "-> onClick rbJogoMuitoDificil"
+        Log.d(cTAG, strLog)
+
+        //-------------------------------
+        verifMudancaNivel(MUITO_DIFICIL)
+        //-------------------------------
+
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // Funções para o atendimento de tapping nos radioButtons de escolha da adaptação de jogo
+    //----------------------------------------------------------------------------------------------
+    fun RBpresetClick(view: View?) {
+
+        strLog = "-> onClick rbPreset"
+        Log.d(cTAG, strLog)
+
+        //----------------------
+        desInflateIVNumDisp()
+        //----------------------
+
+        if (!flagAdaptaPreset) {
+
+            //-------------------------
+            btnAdaptaJogoClick(view)
+            //-------------------------
+            flagAdaptaPreset = true
+
+        }
+
+    }
+
+    fun RBedicaoClick(view: View?) {
+
+        strLog = "-> onClick rbEdicao"
+        Log.d(cTAG, strLog)
+
+        flagAdaptaPreset = false
+        txtDadosJogo.text = ""
+
+        //--- Image view dos números disponíveis
+        //-------------------
+        preparaIVNumDisp()
+        //-------------------
+
+        this.ivNumDisp.setOnTouchListener { _, event ->
+
+            //--- Coordenada X do numsDisps tocada
+            val xEvent = event.x.toInt()
+
+            //-----------------------
+            trataCelTocada(xEvent)
+            //-----------------------
+
+            false
+
+        }
+
+        /*
+
+            /*
+                val flagJoga = false
+
+                //--- Só transfere o número para o board se estiver jogando
+                if (flagJoga) {
+
+                    //--- Coordenada X do numsDisps tocada
+                    val x = event.x.toInt()
+
+                    //--- Coordenada X e valor da célula tocada
+                    val intCol = x / intCellwidth
+                    val intNum = intCol + 1
+                    val intQtidd = arIntNumsDisp[intNum - 1]
+
+                    /*
+                    //strLog = "-> Celula tocada em NumDisp: coluna = " + intCol +
+                    //        ", qtidd = " + intQtidd
+                    //Log.d(cTAG, strLog)
+
+                    //--- Verifica se ainda tem desse número para jogar e se esse número é válido.
+                    var flagNumValido: Boolean
+                    if (intQtidd > 0) {
+
+                        //--- Verifica se num válido
+                        // Determina a que Qm o número pertence
+                        //----------------------------------------------------------
+                        val intQuadMenor = determinaQm(intLinJogar, intColJogar)
+                        //----------------------------------------------------------
+
+                        //Log.d(
+                        //    cTAG, "-> linhaJogar= " + intLinJogar + " colJogar= " +
+                        //            intColJogar + " Qm = " + intQuadMenor )
+
+                        // Verifica se esse número ainda não existe no seu Qm e nem no seu QM
+                        //------------------------------------------------------------------------------
+                        flagNumValido =
+                            verifValidade(intQuadMenor, intLinJogar, intColJogar, intNum)
+                        //------------------------------------------------------------------------------
+                        if (!flagNumValido) {
+
+                            //strLog = "-> Número NÃO válido (linha, coluna ou quadro); NÃO será incluído" +
+                            //        " no Sudoku board."
+                            //Log.d(cTAG, strLog)
+
+                            strToast = "Número NÃO Ok (linha, coluna ou quadro)"
+                            //-----------------------------------------------------------------
+                            Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+                            //-----------------------------------------------------------------
+
+                        }
+                        // Verifica se esse número, nessa célula, é o mesmo do gabarito
+                        else {
+
+                            //--- Número diferente do num do gabarito
+                            if (intNum != arArIntGab[intLinJogar][intColJogar]) {
+
+                                flagNumValido = false
+
+                                //strLog = "-> Número NÃO válido (gab); NÃO será incluído" +
+                                //         " no Sudoku board."
+                                //Log.d(cTAG, strLog)
+
+                                strToast = "Número NÃO Ok (gabarito)"
+                                //-----------------------------------------------------------------
+                                Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+                                //-----------------------------------------------------------------
+
+                            }
+                            //--- Número OK qto ao gabarito
+                            else {
+
+                                //Log.d(cTAG, "-> Número válido; será incluído no Sudoku board.")
+
+                                //strToast = "Número Ok!"
+                                //----------------------------------------------------------------
+                                //Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
+                                //----------------------------------------------------------------
+
+                                //--- Atualiza o Sudoku board
+                                //----------------------------------------------------------------------
+                                pintaCelula(intLinJogar, intColJogar, pincelBranco)
+                                //----------------------------------------------------------------------
+                                escreveCelula(
+                                    intLinJogar,
+                                    intColJogar,
+                                    intNum.toString(),
+                                    pincelAzul
+                                )
+                                //----------------------------------------------------------------------
+                                desenhaSudokuBoard(false)
+                                //-----------------------------------
+                                preencheJogo()
+                                //---------------
+
+                                //--- Salva esse bitmap
+                                //--------------------------------------
+                                copiaBmpByBuffer(bmpMyImage, bmpJogo)
+                                //--------------------------------------
+
+                                //--- Atualiza a base de dados
+                                arArIntNums[intLinJogar][intColJogar] = intNum
+                                arIntNumsDisp[intNum - 1]--
+
+                                //--- Atualiza a qtidd disponível para esse número
+                                //-------------------
+                                atualizaNumDisp()
+                                //-------------------
+
+                                //--- Destaca os números iguais a esse já jogados
+                                //--------------------------
+                                mostraNumsIguais(intNum)
+                                //--------------------------
+
+                                flagJoga = false
+
+                            }
+                        }
+
+                        if (!flagNumValido) {
+                            tvErros!!.text = "${++intContaErro}"
+                        }
+
+                    }
+
+                    //--- Verifica se fim de jogo (todas as qtidds foram zeradas
+                    var flagContJogo = false
+                    for (idxVetorNumDisp in 0..8) {
+
+                        if (arIntNumsDisp[idxVetorNumDisp] > 0) flagContJogo = true
+
+                    }
+                    //--- Se já foram utilizados todos os números disponíveis, pára o cronometro
+                    if (!flagContJogo) {
+
+                        Log.d(cTAG, "-> ${crono.text} - Fim")
+
+                        crono.stop()
+                        flagJoga = false
+
+                        btnInicia.text = strInicia
+                        btnInicia.isEnabled = false
+
+                    }
+                }
+                */
+
+                }
+
+             */
+
+            false
+
+        }
+        */
+
+        //--- Image view do jogo
+        //bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board4)
+        //    .copy(Bitmap.Config.ARGB_8888, true)
+        bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
+                                                    .copy(Bitmap.Config.ARGB_8888, true)
+        ivSudokuBoardMain.setImageBitmap(bmpMyImage)
+
+        //-------------------------------------------------------
+        jogarJogo.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
+        //-------------------------------------------------------
+
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //                           Funções edição de jogos
+    //----------------------------------------------------------------------------------------------
+
+    //--- trataCelTocada
+    private fun trataCelTocada(xEvent : Int) {
+
+        val x = xEvent
+
+        //--- Coordenada X e valor da célula tocada
+        val intCol = x / intCellwidth
+        val intNum = intCol + 1
+        val intQtidd = arIntNumsDisp[intNum - 1]
+        strLog = "-> Celula tocada em NumDisp: coluna = $intCol, qtidd = $intQtidd"
+        Log.d(cTAG, strLog)
+
+    }
+
+    //--- inflateIVNumDisp
+    private fun inflateIVNumDisp() {
+
+        val layout   = findViewById<LinearLayout>(R.id.loImageViewNumDisp)
+        val inflater = LayoutInflater.from(this)
+
+        ivNumDisp = (inflater.inflate(R.layout.inflate_ivnumdisp, layout, false)
+                                                                                      as ImageView)
+        layout.addView(ivNumDisp)
+
+    }
+
+    //--- desInflateIVNumDisp
+    private fun desInflateIVNumDisp() {
+
+        val layout = findViewById<LinearLayout>(R.id.loImageViewNumDisp)
+        layout.removeAllViews()
+
+    }
+
+    //--- preparaIVNumDisp
+    private fun preparaIVNumDisp() {
+
+        //--- Inflate a Image View dos números a serem inseridos no jogo
+        //-------------------
+        inflateIVNumDisp()
+        //-------------------
+
+        //--- Preenche o array
+        arIntNumsDisp  = Array (9 ) { 9 }
+        val bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
+            .copy(Bitmap.Config.ARGB_8888, true)
+
+        //--- Pinta o bitmap
+        val canvasNumDisp = Canvas(bmpNumDisp)
+
+        //- Canto superior esquerdo do retângulo
+        var flXSupEsq = 0f
+        var flYSupEsq = 0f
+
+        //- Canto inferior direito do quadrado
+        var flXInfDir = flXSupEsq + 9 * intCellwidth.toFloat()
+        var flYInfDir = intCellheight.toFloat()
+        //---------------------------------------------------------------------------------
+        canvasNumDisp.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelVerde)
+        //---------------------------------------------------------------------------------
+
+        //--- Desenha-o
+        val pincelFino = 2.toFloat()
+        val pincelGrosso = 6.toFloat()
+        // Linha horizontal superior
+        pincelPreto.strokeWidth = pincelGrosso
+        flXSupEsq = 0f
+        flYSupEsq = 0f
+        flXInfDir = (9 * intCellwidth).toFloat()
+        flYInfDir = 0f
+        //---------------------------------------------------------------------------------
+        canvasNumDisp.drawLine( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
+        //---------------------------------------------------------------------------------
+        // Linha horizontal inferior
+        flXSupEsq = 0f
+        flYSupEsq = intCellheight.toFloat()
+        flXInfDir = (9 * intCellwidth).toFloat()
+        flYInfDir = flYSupEsq
+        //---------------------------------------------------------------------------------
+        canvasNumDisp.drawLine( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
+        //---------------------------------------------------------------------------------
+        // Linhas verticais
+        for (idxCel in 0..9)
+        {
+
+            pincelPreto.strokeWidth = if (idxCel % 3 == 0) pincelGrosso else pincelFino
+            //- Canto superior esquerdo do retângulo
+            flXSupEsq = (idxCel * intCellwidth).toFloat()
+            flYSupEsq = 0f
+            //- Canto inferior direito do quadrado
+            flXInfDir = flXSupEsq
+            flYInfDir = intCellheight.toFloat()
+            //---------------------------------------------------------------------------------
+            canvasNumDisp.drawLine(flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
+            //---------------------------------------------------------------------------------
+
+        }
+
+        //--- Escreve os números
+        pincelBranco.textSize = intTamTxt * scale
+        for (numDisp in 1..9)
+        {
+
+            val strNum = numDisp.toString()
+            val idxNum = numDisp - 1
+
+            val yCoord = intCellheight * 3 / 4
+            val xCoord = intCellwidth / 3 + idxNum * intCellwidth
+
+            //---------------------------------------------------------------------------------
+            canvasNumDisp.drawText(strNum, xCoord.toFloat(), yCoord.toFloat(), pincelBranco)
+            //---------------------------------------------------------------------------------
+
+        }
+
+        //--- Atualiza a image view
+        ivNumDisp.setImageBitmap(bmpNumDisp)
+
+    }
+
     //--- mostraCelAEditar
     private fun mostraCelAEditar(intLinha : Int, intCol : Int) {
 
@@ -238,9 +864,8 @@ class MainActivity : AppCompatActivity() {
         jogarJogo.copiaBmpByBuffer(bmpMyImageBack, bmpMyImage)
         //-------------------------------------------------------
 
-        canvasMyImage = Canvas (bmpMyImage!!)
-
         //--- Pinta de laranja a célula tocada
+        canvasMyImage = Canvas (bmpMyImage!!)
         //---------------------------------------------
         pintaCelula(intLinha, intCol, pincelLaranja)
         //---------------------------------------------
@@ -270,6 +895,47 @@ class MainActivity : AppCompatActivity() {
         //-----------------------------------
 
 
+
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //                              Funções gráficas
+    //----------------------------------------------------------------------------------------------
+    //--- inicializaObjGraf
+    private fun inicializaObjGraf() {
+
+        intTamTxt = 25
+        scale = resources.displayMetrics.density
+
+        ivSudokuBoardMain  = findViewById(R.id.ivSudokuBoardMain)
+
+        bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
+            .copy(Bitmap.Config.ARGB_8888, true)
+        bmpMyImageInic = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
+            .copy(Bitmap.Config.ARGB_8888, true)
+        bmpMyImageBack = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
+            .copy(Bitmap.Config.ARGB_8888, true)
+
+        intCellwidth  = bmpMyImage!!.width / 9
+        intCellheight = bmpMyImage!!.height / 9
+
+        canvasMyImage?.setBitmap(bmpMyImage!!)
+
+        /*
+        try {
+
+            canvasMyImage?.setBitmap(bmpMyImage!!)
+
+        } catch (exc: Exception) {
+            Log.d(cTAG, "Erro: ${exc.message}")
+        }
+         */
+
+        pincelVerde.color   = ContextCompat.getColor(this, R.color.verde)
+        pincelBranco.color  = ContextCompat.getColor(this, R.color.white)
+        pincelPreto.color   = ContextCompat.getColor(this, R.color.black)
+        pincelAzul.color    = ContextCompat.getColor(this, R.color.azul)
+        pincelLaranja.color = ContextCompat.getColor(this, R.color.laranja)
 
     }
 
@@ -349,347 +1015,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //----------------------------------------------------------------------------------------------
-    // Funções para o atendimento ao tapping nos botões (declarados no xml)
-    //----------------------------------------------------------------------------------------------
-    //--- Evento tapping no botão de geração de jogo
-    @Suppress("UNUSED_PARAMETER")
-    fun btnGeraJogoClick(view : View?) {
-
-        strLog = "-> Tap no btnGeraJogo"
-        Log.d(cTAG, strLog)
-
-        strOpcaoJogo = "JogoGerado"
-
-        sgg.txtDados = ""
-
-        //--------------------------
-        prepRBniveis(true)
-        //--------------------------
-        edtViewSubNivel.isEnabled = true
-
-        groupRBadapta.visibility = INVISIBLE
-
-        txtDadosJogo.text = ""
-        sgg.txtDados      = ""
-
-        //--- Gera um novo jogo
-        nivelJogo = when {
-
-            rbFacil.isChecked   -> {
-                strNivelJogo = "Fácil"
-                FACIL
-            }
-
-            rbMedio.isChecked   -> {
-                strNivelJogo = "Médio"
-                MEDIO
-            }
-            rbDificil.isChecked -> {
-                strNivelJogo = "Difícil"
-                DIFICIL
-            }
-
-            rbMuitoDificil.isChecked -> {
-                strNivelJogo = "Muito Difícil"
-                MUITO_DIFICIL
-            }
-
-            else -> {
-                strNivelJogo = "Muito fácil"
-                0
-            }
-
-        }
-        strLog = "   - Nível: $strNivelJogo ($nivelJogo) Subnível: ${edtViewSubNivel.text}"
-        Log.d(cTAG, strLog)
-
-        if (edtViewSubNivel.text.toString().isNotEmpty()) {
-
-            subNivelJogo   = edtViewSubNivel.text.toString().toInt()
-            nivelTotalJogo = nivelJogo + subNivelJogo
-
-            //-----------------------------------------
-            quadMaior = sgg.geraJogo(nivelTotalJogo)
-            //-----------------------------------------
-
-            // txtDadosJogo.append(sgg.txtDados)
-
-            //-------------------------------
-            preencheSudokuBoard(quadMaior)
-            //-------------------------------
-
-            // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
-
-        }
-        else Toast.makeText(this, "Não é possível gerar o jogo sem subnivel!",
-                                                                         Toast.LENGTH_SHORT).show()
-    }
-
-    //--- Evento tapping no botão de adaptação de jogo
-    @Suppress("UNUSED_PARAMETER")
-    fun btnAdaptaJogoClick(view : View?) {
-
-        strLog  = "-> Tap no btnAdaptaJogo"
-        Log.d(cTAG, strLog)
-
-        strOpcaoJogo      = "JogoAdaptado"
-        txtDadosJogo.text = ""
-        sgg.txtDados      = ""
-
-        groupRBadapta.visibility = VISIBLE
-        strLog  = "   - rbAdapta: "
-        strLog += if (rbPreset.isChecked) "Preset" else "Edição"
-        Log.d(cTAG, strLog)
-
-        //--- PRESET
-        if (rbPreset.isChecked) {
-            //--- Prepara o preset para se conseguir o gabarito do jogo
-            if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
-            txtDadosJogo.text = String.format("%s%d", "Preset #", sgg.intJogoAdaptar)
-
-            //-------------------------------------------
-            inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
-            //-------------------------------------------
-
-            sgg.quadMaiorRet = copiaArArInt(quadMaiorAdapta)
-
-            sgg.flagJogoGeradoOk = true
-            sgg.flagJogoAdaptadoOk = true
-
-            //---------------------------------------
-            quadMaior = sgg.adaptaJogoAlgoritmo2()
-            //---------------------------------------
-
-            //--- Apresenta o nível e o subnível do preset
-            nivelJogo = (sgg.intQtiZeros / 10) * 10
-            subNivelJogo = sgg.intQtiZeros % 10
-            val rbNivelJogo: RadioButton = when (nivelJogo) {
-
-                20 -> {
-                    strNivelJogo = "Fácil"
-                    rbFacil
-                }
-                30 -> {
-                    strNivelJogo = "Médio"
-                    rbMedio
-                }
-                40 -> {
-                    strNivelJogo = "Difícil"
-                    rbDificil
-                }
-                50 -> {
-                    strNivelJogo = "Muito Difícil"
-                    rbMuitoDificil
-                }
-                else -> {
-                    strNivelJogo = "Fácil"
-                    rbFacil
-                }
-
-            }
-            rbNivelJogo.isChecked = true
-
-            edtViewSubNivel.setText(subNivelJogo.toString())
-            //---------------------------
-            prepRBniveis(false)
-            //---------------------------
-            edtViewSubNivel.isEnabled = false
-
-            //-------------------------------
-            preencheSudokuBoard(quadMaior)
-            //-------------------------------
-
-        }
-
-        //--- EDIÇÃO
-        else {
-
-        }
-
-        // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
-
-    }
-
-    //--- Evento tapping no botão para jogar o jogo
-    @Suppress("UNUSED_PARAMETER")
-    fun btnJogaJogoClick(view : View?) {
-
-        strLog = "-> Tap no btnJogaJogo"
-        Log.d(cTAG, strLog)
-
-        //-------------------------------
-        //prepRBniveis(false)
-        //-------------------------------
-
-        //--- Se não tiver jogo válido, informa ao usuário
-        if ((groupRBadapta.isVisible && rbEdicao.isChecked) || (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk)) {
-
-            val strToast = "Não há jogo válido!"
-            //-----------------------------------------------------------------
-            Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
-            //-----------------------------------------------------------------
-
-            Log.d(cTAG, "-> $strToast")
-
-        }
-        else {
-
-            txtDadosJogo.text = if (strOpcaoJogo == "JogoAdaptado")
-                                       String.format("%s%d","Preset #", sgg.intJogoAdaptar) else ""
-            sgg.txtDados = ""
-
-            //--- Envia o jogo gerado para ser usado como gabarito
-            val arIntNumsGab = ArrayList<Int>()
-            for (idxLin in 0..8) {
-                for (idxCol in 0..8) {
-                    //-------------------------------------------------
-                    arIntNumsGab += sgg.quadMaiorRet[idxLin][idxCol]
-                    //-------------------------------------------------
-                }
-            }
-
-            //--- Envia o jogo preparado para ser jogado
-            val arIntNumsJogo = ArrayList<Int>()
-            for (idxLin in 0..8) {
-                for (idxCol in 0..8) {
-                    //-------------------------------------------
-                    arIntNumsJogo += quadMaior[idxLin][idxCol]
-                    //-------------------------------------------
-                }
-            }
-
-            //--- Prepara a Intent para chamar JogarActivity
-            val intent = Intent(this, JogarActivity::class.java)
-            intent.action = strOpcaoJogo
-            intent.putExtra("strNivelJogo", strNivelJogo)
-            intent.putExtra("strSubNivelJogo", edtViewSubNivel.text.toString())
-            intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
-            intent.putIntegerArrayListExtra("JogoPreparado", arIntNumsJogo)
-            //----------------------
-            startActivity(intent)
-            //----------------------
-
-        }
-    }
-
-    //----------------------------------------------------------------------------------------------
-    // Funções para o atendimento de tapping nos radioButtons de escolha de níveis de jogo
-    //----------------------------------------------------------------------------------------------
-    fun rbJogoFacil(view : View?) {
-
-        strLog  = "-> onClick rbJogoFacil"
-        Log.d(cTAG, strLog)
-
-        //-----------------------
-        verMudancaNivel(FACIL)
-        //-----------------------
-
-    }
-
-    fun rbJogoMedio(view : View?) {
-
-        strLog  = "-> onClick rbJogoMedio"
-        Log.d(cTAG, strLog)
-
-        //-----------------------
-        verMudancaNivel(MEDIO)
-        //-----------------------
-
-    }
-
-    fun rbJogoDificil(view : View?) {
-
-        strLog  = "-> onClick rbJogoDificil"
-        Log.d(cTAG, strLog)
-
-        //-------------------------
-        verMudancaNivel(DIFICIL)
-        //-------------------------
-
-    }
-
-    fun rbJogoMuitoDificil(view : View?) {
-
-        strLog  = "-> onClick rbJogoMuitoDificil"
-        Log.d(cTAG, strLog)
-
-        //-------------------------------
-        verMudancaNivel(MUITO_DIFICIL)
-        //-------------------------------
-
-    }
-
-    //----------------------------------------------------------------------------------------------
-    // Funções para o atendimento de tapping nos radioButtons de escolha da adaptação de jogo
-    //----------------------------------------------------------------------------------------------
-    fun RBpresetClick(view : View?) {
-
-        strLog  = "-> onClick rbPreset"
-        Log.d(cTAG, strLog)
-
-        if (!flagAdaptaPreset) {
-
-            //-------------------------
-            btnAdaptaJogoClick(view)
-            //-------------------------
-            flagAdaptaPreset = true
-
-        }
-
-    }
-
-    fun RBedicaoClick(view : View?) {
-
-        strLog  = "-> onClick rbEdicao"
-        Log.d(cTAG, strLog)
-
-        flagAdaptaPreset = false
-
-        txtDadosJogo.text = ""
-
-        //bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board4)
-        //    .copy(Bitmap.Config.ARGB_8888, true)
-        bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
-                                                    .copy(Bitmap.Config.ARGB_8888, true)
-        ivSudokuBoardMain.setImageBitmap(bmpMyImage)
-
-        //-------------------------------------------------------
-        jogarJogo.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
-        //-------------------------------------------------------
-
-        //------------
-        //editaJogo()
-        //------------
-
-    }
-
-    //----------------------------------------------------------------------------------------------
-    // Funções
-    //----------------------------------------------------------------------------------------------
-
-    //--- editaJogo
-    private fun editaJogo() {
-
-        txtDadosJogo.text = ""
-
-        val arArIntJogo = Array(9) { Array(9) { 0 } }
-        //---------------------------------
-        preencheSudokuBoard(arArIntJogo)
-        //---------------------------------
-
-
-
-    }
-
     //--- preencheSudokuBoard
     private fun preencheSudokuBoard(arArIntJogo : Array<Array<Int>>) {
 
         //--- Objetos gráficos
         // Paint
-        val intTamTxt  = 25
-        val scale      = resources.displayMetrics.density
-
         bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
             .copy(Bitmap.Config.ARGB_8888, true)
         //--- Escreve nas células
@@ -739,6 +1069,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //----------------------------------------------------------------------------------------------
+    //                                Funções
+    //----------------------------------------------------------------------------------------------
     //--- inicQuadMaiorAdaptacao
     private fun inicQuadMaiorAdaptacao(jogoAdaptar : Int) {
 
@@ -875,8 +1208,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //--- verMudancaNivel
-    private fun verMudancaNivel(intNivel : Int) {
+    //--- verifMudancaNivel
+    private fun verifMudancaNivel(intNivel : Int) {
 
         if (strOpcaoJogo == "JogoGerado") {
 
@@ -901,6 +1234,15 @@ class MainActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }
+    }
+
+    private fun ivNumDisp3Click (view: View?) {
+
+        Toast.makeText(
+            this, "Clicou no imageview dos NumDisps!",
+            Toast.LENGTH_SHORT
+        ).show()
+
     }
 
 }
