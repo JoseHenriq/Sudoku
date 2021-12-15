@@ -1,5 +1,6 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools ="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools  ="http://schemas.android.com/tools"
     android:layout_width ="match_parent"
     android:layout_height="match_parent"
     xmlns:app    ="http://schemas.android.com/apk/res-auto"
@@ -24,8 +25,8 @@
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:title         ="@string/app_name" />
 
-    <RelativeLayout
-        android:id="@+id/infos"
+    <RelativeLayout android:id="@+id/infos"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
@@ -122,8 +123,8 @@
 
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/ivSudokuBoard"
+    <ImageView android:id="@+id/ivSudokuBoard"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -148,7 +149,6 @@
 
         android:text="@string/legClues"
         android:textSize="15sp" />
-
     <TextView android:id="@+id/tv_Clues"
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
@@ -160,14 +160,15 @@
         android:text="@string/clues_inic"
         android:textSize="15sp" />
 
+    <!-- Números disponíveis -->
     <ImageView android:id="@+id/ivNumDisp"
 
-        android:layout_width="wrap_content"
+        android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_below="@id/ivSudokuBoard"
+        android:layout_below      ="@id/ivSudokuBoard"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop  ="100dp"
         android:contentDescription="@string/numDisp"
         android:src="@drawable/quadro_nums_disp" />
     <!-- Android 6.0.1 (S5Duos):
@@ -176,8 +177,8 @@
          2- os jpgs devem ser copiados para res/drawable /-->
 
     <!-- Buttons -->
-    <Button
-        android:id="@+id/btnReset"
+    <Button android:id="@+id/btnReset"
+
         style="?android:attr/buttonStyleSmall"
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
@@ -188,8 +189,8 @@
         android:text="@string/reset"
         android:textAllCaps="false" />
 
-    <Button
-        android:id="@+id/btnInicia"
+    <Button android:id="@+id/btnInicia"
+
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

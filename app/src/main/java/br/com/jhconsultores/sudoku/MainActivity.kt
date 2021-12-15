@@ -14,11 +14,12 @@ import android.text.TextWatcher
 import android.util.Log
 
 import android.view.View
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import android.view.MotionEvent
+import android.view.View.*
+
 
 @Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
@@ -166,6 +167,8 @@ class MainActivity : AppCompatActivity() {
 
             if (groupRBadapta.isVisible && rbEdicao.isChecked) {
 
+                Log.d(cTAG, "-> SudokuBoard:")
+
                 val x = event.x.toInt()
                 val y = event.y.toInt()
                 Log.d(cTAG, "touched x: $x")
@@ -206,17 +209,61 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        /*
         ivNumDisp.setOnTouchListener { _, event ->
 
-            val x = event.x.toInt()
-            Log.d(cTAG, "touched x: $x")
+            Log.d(cTAG, "-> ivNumDisp:")
 
-            //------------------------
-            // preencheJogoEditado (x)
-            //------------------------
+            val x = event.x.toInt()
+            Log.d(cTAG, "   touched x: $x")
+
+            //-------------------
+            editaIVNumDisp (x)
+            //-------------------
 
             false
 
+        }
+        */
+
+        // https://www.geeksforgeeks.org/add-ontouchlistener-to-imageview-to-perform-speech-to-text-in-android/
+        ivNumDisp.setOnTouchListener { view, motionEvent ->
+
+            Log.d(cTAG, "-> ivNumDisp:")
+
+            when (motionEvent.action) {
+
+                MotionEvent.ACTION_UP -> {
+
+                    /*
+                    mSpeechRecognizer.stopListening()
+                    editText.setHint(" ")
+                     */
+                    Log.d(cTAG, "   - ACTION_UP")
+
+                }
+
+                MotionEvent.ACTION_DOWN -> {
+
+                    /*
+                    mSpeechRecognizer.startListening(mSpeechRecognizerIntent)
+                    editText.setText("")
+                    editText.setHint("")
+                     */
+                    Log.d(cTAG, "   - ACTION_DOWN")
+                    val x = motionEvent.x.toInt()
+                    Log.d(cTAG, "   touched x: $x")
+
+                    //-------------------
+                    editaIVNumDisp (x)
+                    //-------------------
+
+                    false
+
+                }
+
+            }
+            false
         }
 
     }
@@ -605,43 +652,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    /*
-    //--- inflateIVNumDisp
-    @SuppressLint("ClickableViewAccessibility")
-    private fun inflateIVNumDisp() {
-
-        val layout   = findViewById<LinearLayout>(R.id.loImageViewNumDisp)
-        val inflater = LayoutInflater.from(this)
-
-        ivNumDisp = (inflater.inflate(R.layout.inflate_ivnumdisp, layout, false)
-                                                                                      as ImageView)
-        ivNumDisp.setOnTouchListener { _, event ->
-
-            val x = event.x.toInt()
-            Log.d(cTAG, "touched x: $x")
-
-            //------------------------
-            // preencheJogoEditado (x)
-            //------------------------
-
-            false
-
-        }
-        layout.addView(ivNumDisp)
-
-    }
-     */
-
-    /*
-    //--- desInflateIVNumDisp
-    private fun desInflateIVNumDisp() {
-
-        val layout = findViewById<LinearLayout>(R.id.loImageViewNumDisp)
-        layout.removeAllViews()
-
-    }
-    */
-
     //--- preparaIVNumDisp
     private fun preparaIVNumDisp() {
 
@@ -884,6 +894,18 @@ class MainActivity : AppCompatActivity() {
         //-------------------------------------------------------
 
         ivSudokuBoardMain.setImageBitmap(bmpMyImage)
+
+    }
+
+    //--- editaIVNumDisp
+    private fun editaIVNumDisp (coordX : Int) {
+
+        //--- Determina a célula e o número tocado
+        val cellX  = coordX / intCellwidth
+        val intNum = arIntNumsDisp[cellX]
+
+
+
 
     }
 
