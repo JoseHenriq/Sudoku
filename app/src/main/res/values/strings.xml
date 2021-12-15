@@ -50,8 +50,11 @@
 
     <string name="legSubnivel" >Sub Nível: </string>
     <string name="valor0"      >0</string>
-    <string name="prioridade">prioridade</string>
-    <string name="edicao">Edição</string>
-    <string name="preset">Preset</string>
+    <string name="prioridade"  >prioridade</string>
+    <string name="edicao" >Edição</string>
+    <string name="preset" >Preset</string>
+    <string name="numeros">Números:</string>
+    <string name="clues"  >Clues: </string>
+    <string name="valor81">81</string>
 
 </resources>

@@ -93,7 +93,8 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
     private var arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
     private var arArIntGab    = Array(9) { Array(9) { 0 } }
-    private var arArIntNums   = Array(9) { Array(9) { 0 } }
+
+    var arArIntNums   = Array(9) { Array(9) { 0 } }
 
     //--- Preset para teste2
     /*
@@ -310,10 +311,10 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                         //            intColJogar + " Qm = " + intQuadMenor )
 
                         // Verifica se esse número ainda não existe no seu Qm e nem no seu QM
-                        //------------------------------------------------------------------------------
+                        //--------------------------------------------------------------------------
                         flagNumValido =
-                            verifValidade(intQuadMenor, intLinJogar, intColJogar, intNum)
-                        //------------------------------------------------------------------------------
+                                       verifValidade(intQuadMenor, intLinJogar, intColJogar, intNum)
+                        //--------------------------------------------------------------------------
                         if (!flagNumValido) {
 
                             //strLog = "-> Número NÃO válido (linha, coluna ou quadro); NÃO será incluído" +
@@ -846,14 +847,15 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     }
 
     //--- Determina a qual quadrado menor uma célula pertence
-    private fun determinaQm(linQM: Int, colQM: Int): Int {
+    fun determinaQm(linQM: Int, colQM: Int): Int {
 
         // Qm = (linha-mod(linha;3))+INT(col/3)  -> Excel/Algoritmos1
-        return linQM - linQM % 3 + colQM / 3
+        return (linQM - linQM % 3 + colQM / 3)
+
     }
 
     //--- verifValidade de um número do Qm para inserção no QM
-    private fun verifValidade(quadMenor: Int, linQM: Int, colQM: Int, numero: Int): Boolean {
+    fun verifValidade(quadMenor: Int, linQM: Int, colQM: Int, numero: Int): Boolean {
         var flagNumeroOk = true
 
         //--- Calcula as linhas desse quadrado menor no QM

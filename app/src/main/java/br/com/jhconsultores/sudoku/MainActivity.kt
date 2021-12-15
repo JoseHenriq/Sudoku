@@ -20,15 +20,15 @@ import androidx.core.view.isVisible
 import android.view.MotionEvent
 import android.view.View.*
 
-
 @Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
 
     //----------------------------------------------------------------------------------------------
     //                         Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
-    private val cTAG   = "Sudoku"
-    private var strLog = ""
+    private val cTAG     = "Sudoku"
+    private var strLog   = ""
+    private var strToast = ""
 
     //--- Objetos gráficos
     private lateinit var ivSudokuBoardMain: ImageView
@@ -37,6 +37,8 @@ class MainActivity : AppCompatActivity() {
     private var bmpMyImageInic: Bitmap? = null
     private var bmpMyImageBack: Bitmap? = null
     private var bmpMyImage    : Bitmap? = null
+
+    private var bmpNumDisp    : Bitmap? = null
 
     private var intCellwidth  = 0
     private var intCellheight = 0
@@ -51,12 +53,18 @@ class MainActivity : AppCompatActivity() {
     private var scale     = 0f
 
     private var canvasMyImage: Canvas? = null
+    private var canvasNumDisp: Canvas? = null
+
+    //--- Textos
+    private lateinit var tvContaNums  : TextView
+    private lateinit var tvContaClues : TextView
 
     //--- Botões principais
     private lateinit var btnGeraJogo   : Button
     private lateinit var btnAdaptaJogo : Button
     private lateinit var btnJogaJogo   : Button
 
+    //--- Radio Buttons
     private lateinit var groupRBnivel  : RadioGroup
     private lateinit var rbFacil       : RadioButton
     private lateinit var rbMedio       : RadioButton
@@ -86,13 +94,18 @@ class MainActivity : AppCompatActivity() {
 
     private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
     private var arArIntNums     = Array(9) { Array(9) { 0 } }
-
-    private var arIntNumsDisp   = Array(9) { 9 }
+    private val arIntNumsDisp   = arrayOf ( 1, 2, 3, 4, 5, 6, 7, 8, 9 )
+    private var arIntQtiNumDisp = Array(9) { 9 }
 
     private lateinit var txtDadosJogo: TextView
 
-    private var sgg = SudokuGameGenerator()
+    private var sgg       = SudokuGameGenerator()
     private var jogarJogo = JogarActivity()
+
+    //--- Controle de jogadas
+    private var intColJogar = 0
+    private var intLinJogar = 0
+    private var flagJoga    = false
 
     // Núm     0   22               31        41          51       61     81
     // clues  81   59               50        40          30       20      0
@@ -111,6 +124,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //--- Instancializações e inicializações
+        tvContaNums   = findViewById(R.id.ContaNums)
+        tvContaClues  = findViewById(R.id.ContaClues)
+
         btnAdaptaJogo  = findViewById(R.id.btn_AdaptarJogo)
         btnJogaJogo    = findViewById(R.id.btn_JogarJogo)
         btnGeraJogo    = findViewById(R.id.btn_GerarJogo)
@@ -129,6 +145,9 @@ class MainActivity : AppCompatActivity() {
         rbPreset      = findViewById(R.id.preset)
         rbEdicao      = findViewById(R.id.edicao)
         groupRBadapta.visibility = INVISIBLE
+
+        tvContaNums.text  = "0"
+        tvContaClues.text = "81"
 
         //--- Objetos gráficos
         //--------------------
@@ -203,28 +222,16 @@ class MainActivity : AppCompatActivity() {
                 mostraCelAEditar(intLinha, intCol)
                 //-----------------------------------
 
+                //--- Salva as coordenadas da célula selecionada
+                intLinJogar = intLinha
+                intColJogar = intCol
+
+
             }
 
             false
 
         }
-
-        /*
-        ivNumDisp.setOnTouchListener { _, event ->
-
-            Log.d(cTAG, "-> ivNumDisp:")
-
-            val x = event.x.toInt()
-            Log.d(cTAG, "   touched x: $x")
-
-            //-------------------
-            editaIVNumDisp (x)
-            //-------------------
-
-            false
-
-        }
-        */
 
         // https://www.geeksforgeeks.org/add-ontouchlistener-to-imageview-to-perform-speech-to-text-in-android/
         ivNumDisp.setOnTouchListener { view, motionEvent ->
@@ -235,21 +242,12 @@ class MainActivity : AppCompatActivity() {
 
                 MotionEvent.ACTION_UP -> {
 
-                    /*
-                    mSpeechRecognizer.stopListening()
-                    editText.setHint(" ")
-                     */
                     Log.d(cTAG, "   - ACTION_UP")
 
                 }
 
                 MotionEvent.ACTION_DOWN -> {
 
-                    /*
-                    mSpeechRecognizer.startListening(mSpeechRecognizerIntent)
-                    editText.setText("")
-                    editText.setHint("")
-                     */
                     Log.d(cTAG, "   - ACTION_DOWN")
                     val x = motionEvent.x.toInt()
                     Log.d(cTAG, "   touched x: $x")
@@ -278,10 +276,10 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> Tap no btnGeraJogo"
         Log.d(cTAG, strLog)
 
-        //----------------------
-        //desInflateIVNumDisp()
-        //----------------------
-        ivNumDisp.visibility = INVISIBLE
+        //-----------------------------
+        visibilidadeViews(INVISIBLE)
+        //-----------------------------
+
         rbPreset.isChecked = true
 
         strOpcaoJogo = "JogoGerado"
@@ -357,10 +355,10 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> Tap no btnAdaptaJogo"
         Log.d(cTAG, strLog)
 
-        //----------------------
-        //desInflateIVNumDisp()
-        //----------------------
-        ivNumDisp.visibility = INVISIBLE
+        //-----------------------------
+        visibilidadeViews(INVISIBLE)
+        //-----------------------------
+
         rbPreset.isChecked = true
 
         strOpcaoJogo = "JogoAdaptado"
@@ -461,10 +459,10 @@ class MainActivity : AppCompatActivity() {
 
         } else {
 
-            //----------------------
-            //desInflateIVNumDisp()
-            //----------------------
-            ivNumDisp.visibility = INVISIBLE
+            //-----------------------------
+            visibilidadeViews(INVISIBLE)
+            //-----------------------------
+
             rbPreset.isChecked   = true
 
             txtDadosJogo.text = if (strOpcaoJogo == "JogoAdaptado")
@@ -565,10 +563,9 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> onClick rbPreset"
         Log.d(cTAG, strLog)
 
-        //----------------------
-        //desInflateIVNumDisp()
-        //----------------------
-        ivNumDisp.visibility = INVISIBLE
+        //-----------------------------
+        visibilidadeViews(INVISIBLE)
+        //-----------------------------
 
         if (!flagAdaptaPreset) {
 
@@ -589,6 +586,12 @@ class MainActivity : AppCompatActivity() {
 
         flagAdaptaPreset = false
         txtDadosJogo.text = ""
+
+        tvContaNums.setText ("0")
+        tvContaClues.setText("81")
+
+        arArIntNums     = Array(9) { Array(9) { 0 } }
+        arIntQtiNumDisp = Array(9) { 9 }
 
         //------------------------------------------------------------------------------------------
         // Image view dos números disponíveis
@@ -644,28 +647,20 @@ class MainActivity : AppCompatActivity() {
         //--------------------------------------------------------------------------------------
         ivSudokuBoardMain.setImageBitmap(bmpMyImage)
 
-        //-----------------------------------
-        desenhaSudokuBoard(false)
-        //-----------------------------------
-
-
-
     }
 
     //--- preparaIVNumDisp
     private fun preparaIVNumDisp() {
 
-        //--- Inflate a Image View dos números a serem inseridos no jogo
-        //-------------------
-        //inflateIVNumDisp()
-        //-------------------
-        ivNumDisp.visibility = VISIBLE
+        //--- Torna visíveis as images Views
+        //-----------------------------
+        visibilidadeViews(VISIBLE)
+        //-----------------------------
 
         //--- Pinta-o e preenche-o
-        arIntNumsDisp = Array(9) { 9 }
-        val bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
+        bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
             .copy(Bitmap.Config.ARGB_8888, true)
-        val canvasNumDisp = Canvas(bmpNumDisp)
+        canvasNumDisp = Canvas(bmpNumDisp!!)
 
         //- Canto superior esquerdo do retângulo
         var flXSupEsq = 0f
@@ -675,11 +670,11 @@ class MainActivity : AppCompatActivity() {
         var flXInfDir = flXSupEsq + 9 * intCellwidth.toFloat()
         var flYInfDir = intCellheight.toFloat()
         //---------------------------------------------------------------------------------
-        canvasNumDisp.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelVerde)
+        canvasNumDisp!!.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelVerde)
         //---------------------------------------------------------------------------------
 
         //--- Desenha-o
-        val pincelFino = 2.toFloat()
+        val pincelFino   = 2.toFloat()
         val pincelGrosso = 6.toFloat()
         // Linha horizontal superior
         pincelPreto.strokeWidth = pincelGrosso
@@ -688,7 +683,7 @@ class MainActivity : AppCompatActivity() {
         flXInfDir = (9 * intCellwidth).toFloat()
         flYInfDir = 0f
         //---------------------------------------------------------------------------------
-        canvasNumDisp.drawLine( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
+        canvasNumDisp!!.drawLine( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
         //---------------------------------------------------------------------------------
         // Linha horizontal inferior
         flXSupEsq = 0f
@@ -696,7 +691,7 @@ class MainActivity : AppCompatActivity() {
         flXInfDir = (9 * intCellwidth).toFloat()
         flYInfDir = flYSupEsq
         //---------------------------------------------------------------------------------
-        canvasNumDisp.drawLine( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
+        canvasNumDisp!!.drawLine( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
         //---------------------------------------------------------------------------------
         // Linhas verticais
         for (idxCel in 0..9)
@@ -710,7 +705,7 @@ class MainActivity : AppCompatActivity() {
             flXInfDir = flXSupEsq
             flYInfDir = intCellheight.toFloat()
             //---------------------------------------------------------------------------------
-            canvasNumDisp.drawLine(flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
+            canvasNumDisp!!.drawLine(flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
             //---------------------------------------------------------------------------------
 
         }
@@ -727,7 +722,7 @@ class MainActivity : AppCompatActivity() {
             val xCoord = intCellwidth / 3 + idxNum * intCellwidth
 
             //---------------------------------------------------------------------------------
-            canvasNumDisp.drawText(strNum, xCoord.toFloat(), yCoord.toFloat(), pincelBranco)
+            canvasNumDisp!!.drawText(strNum, xCoord.toFloat(), yCoord.toFloat(), pincelBranco)
             //---------------------------------------------------------------------------------
 
         }
@@ -748,7 +743,10 @@ class MainActivity : AppCompatActivity() {
 
         ivSudokuBoardMain    = findViewById(R.id.ivSudokuBoardMain)
         ivNumDisp            = findViewById(R.id.imageView3)
-        ivNumDisp.visibility = INVISIBLE
+
+        //-----------------------------
+        visibilidadeViews(INVISIBLE)
+        //-----------------------------
 
         bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
             .copy(Bitmap.Config.ARGB_8888, true)
@@ -898,19 +896,134 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- editaIVNumDisp
+    var cellX  = 0
+    var intNum = 0
     private fun editaIVNumDisp (coordX : Int) {
 
         //--- Determina a célula e o número tocado
-        val cellX  = coordX / intCellwidth
-        val intNum = arIntNumsDisp[cellX]
+        cellX      = coordX / intCellwidth
+        intNum     = arIntNumsDisp[cellX]
+        val numCel = arArIntNums[intLinJogar][intColJogar]
 
+        //--- Se tocou numa célula com número, solicita ao usuário que confirme sua sobreescrita
+        if (numCel > 0) {
 
+            androidx.appcompat.app.AlertDialog.Builder(this)
+
+                .setTitle("Sudoku - Edição")
+                .setMessage("Você selecionou uma célula já ocupada, o que fazemos?")
+
+                .setPositiveButton("Limpe-a") { _, _ ->
+                    Toast.makeText(applicationContext, "OK was pressed", Toast.LENGTH_LONG).show()
+                    //--------------
+                    zeraCelula ()
+                    //--------------
+                }
+
+                .setNegativeButton("Sobrescreva-a") { _, _ ->
+                    Toast.makeText(applicationContext, "Cancel was pressed", Toast.LENGTH_LONG).show()
+                    //---------------------
+                    editaIVNumDisp_c1 ()
+                    //---------------------
+                }
+
+                .setNeutralButton("Nada") { _, _ ->
+                    Toast.makeText(applicationContext, "Neutral was pressed", Toast.LENGTH_LONG).show()
+                }
+                .show()
+
+        }
+        else {
+
+            //---------------------
+            editaIVNumDisp_c1 ()
+            //---------------------
+
+        }
+    }
+
+    //--- zeraCelula
+    private fun zeraCelula () {
 
 
     }
 
+    //--- editaIVNumDisp_c1
+    private fun editaIVNumDisp_c1 () {
+
+        //--- Se ainda tem número desse disponível e ele é válido para o jogo, escreve-o no board
+        if (arIntQtiNumDisp[cellX] > 0)  {
+
+            //--- Verifica se válido
+            var flagNumVal = true
+
+            //--------------------------------------------------
+            jogarJogo.arArIntNums = copiaArArInt(arArIntNums)
+            //---------------------------------------------------------
+            val Qm = jogarJogo.determinaQm(intLinJogar, intColJogar)
+            //---------------------------------------------------------------------------
+            flagNumVal = jogarJogo.verifValidade(Qm, intLinJogar, intColJogar, intNum)
+            //---------------------------------------------------------------------------
+
+            //--- Se válido e ainda tem número desse disponível escreve-o no board
+            if (flagNumVal) {
+
+                arIntQtiNumDisp[cellX]--
+
+                //--- Adiciona-o ao board
+                arArIntNums[intLinJogar][intColJogar] = intNum
+                //---------------------------------
+                preencheSudokuBoard(arArIntNums)
+                //----------------------------------------------
+                val intQtiZeros = sgg.quantZeros(arArIntNums)
+                //----------------------------------------------
+                tvContaClues.text = intQtiZeros.toString()
+                tvContaNums.text  = (81 - intQtiZeros).toString()
+
+                //--- Sinaliza se já posicionou os 9 desse número
+                if (arIntQtiNumDisp[cellX] == 0) {
+
+                    //- Canto superior esquerdo do quadrado
+                    var flXSupEsq = cellX * intCellwidth.toFloat()
+                    var flYSupEsq = 0f
+
+                    //- Canto inferior direito do quadrado
+                    var flXInfDir = flXSupEsq + intCellwidth.toFloat()
+                    var flYInfDir = intCellheight.toFloat()
+                    //------------------------------------------------------------------------------
+                    canvasNumDisp!!.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir,
+                                                                                      pincelBranco)
+                    //------------------------------------------------------------------------------
+                    ivNumDisp.setImageBitmap(bmpNumDisp)
+
+                }
+            }
+            //--- Número NÃO válido
+            else {
+
+                strToast = "Número NÃO Ok (linha, coluna ou quadro)"
+                //-----------------------------------------------------------------
+                Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+                //-----------------------------------------------------------------
+
+            }
+        }
+    }
+
+    //--- visibilidadeViews
+    private fun visibilidadeViews(visibilidade : Int) {
+
+        ivNumDisp.visibility    = visibilidade
+        tvContaClues.visibility = visibilidade
+        tvContaNums.visibility  = visibilidade
+
+        findViewById<TextView>(R.id.legContaNums).visibility  = visibilidade
+        findViewById<TextView>(R.id.legContaClues).visibility = visibilidade
+
+    }
+
     //----------------------------------------------------------------------------------------------
-    //                                Funções
+    //                                        Funções
     //----------------------------------------------------------------------------------------------
     //--- inicQuadMaiorAdaptacao
     private fun inicQuadMaiorAdaptacao(jogoAdaptar : Int) {

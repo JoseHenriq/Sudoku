@@ -212,6 +212,73 @@
          'keep class android.support.v7.widget.** { *; }'
          2- os jpgs devem ser copiados para res/drawable /-->
 
+    <!-- Separador entre imageView do jogo e scrollView -->
+    <View android:id="@+id/separador_ivJogo_scroll"
+
+        android:layout_width ="match_parent"
+        android:layout_height="1dp"
+
+        android:background="@android:color/darker_gray"
+
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/ivSudokuBoardMain" />
+
+    <!-- Qtidd de números já colocados em jogo -->
+    <TextView android:id ="@+id/legContaNums"
+
+        android:layout_width ="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf ="@+id/separador_ivJogo_scroll"
+
+        android:layout_marginTop  ="10dp"
+        android:layout_marginStart="10dp"
+
+        android:textSize         ="@dimen/TamanhoTxt"
+        android:text             ="@string/numeros"/>
+    <TextView android:id ="@+id/ContaNums"
+        android:layout_width ="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toEndOf  ="@id/legContaNums"
+        app:layout_constraintTop_toBottomOf ="@+id/separador_ivJogo_scroll"
+
+        android:layout_marginStart="10dp"
+        android:layout_marginTop  ="10dp"
+
+        android:textSize ="@dimen/TamanhoTxt"
+        android:text     ="@string/valor0"/>
+
+    <!-- Qtidd de clues no jogo -->
+    <TextView android:id ="@+id/legContaClues"
+
+        android:layout_width ="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toEndOf="@id/ContaNums"
+        app:layout_constraintTop_toBottomOf ="@+id/separador_ivJogo_scroll"
+
+        android:layout_marginTop  ="10dp"
+        android:layout_marginStart="10dp"
+
+        android:textSize         ="@dimen/TamanhoTxt"
+        android:text             ="@string/clues"/>
+
+    <TextView android:id ="@+id/ContaClues"
+        android:layout_width ="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toEndOf  ="@id/legContaClues"
+        app:layout_constraintTop_toBottomOf ="@+id/separador_ivJogo_scroll"
+
+        android:layout_marginStart="10dp"
+        android:layout_marginTop  ="10dp"
+
+        android:textSize ="@dimen/TamanhoTxt"
+        android:text     ="@string/valor81"/>
+
+    <!-- Image view dos números disponíveis -->
     <ImageView android:id ="@+id/imageView3"
 
         android:layout_width ="wrap_content"
@@ -225,17 +292,6 @@
 
         android:contentDescription="@string/numDisp"
         android:src ="@drawable/quadro_nums_disp" />
-
-    <!-- Separador entre imageView do jogo e scrollView -->
-    <View android:id="@+id/separador_ivJogo_scroll"
-
-        android:layout_width ="match_parent"
-        android:layout_height="1dp"
-
-        android:background="@android:color/darker_gray"
-
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/ivSudokuBoardMain" />
 
     <!-- scrolling e seu Textview -->
     <ScrollView android:id="@+id/srcTextScrollView"

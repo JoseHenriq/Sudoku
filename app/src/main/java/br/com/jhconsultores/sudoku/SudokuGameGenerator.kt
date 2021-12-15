@@ -879,7 +879,7 @@ class SudokuGameGenerator {
     }
 
     //--- quantZeros
-    private fun quantZeros(arArIntJogo : Array <Array <Int>>) : Int{
+    fun quantZeros(arArIntJogo : Array <Array <Int>>) : Int{
 
         var intQtiZeros = 0
         for (idxLin in 0..8) {
