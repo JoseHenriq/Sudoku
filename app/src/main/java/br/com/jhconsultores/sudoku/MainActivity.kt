@@ -193,39 +193,9 @@ class MainActivity : AppCompatActivity() {
                 Log.d(cTAG, "touched x: $x")
                 Log.d(cTAG, "touched y: $y")
 
-                //--- OffSets das coordenadas na Janela (???)
-                val viewCoords = IntArray(2)
-
-                ivSudokuBoardMain.getLocationOnScreen(viewCoords)
-                Log.d(cTAG, "viewCoord x: " + viewCoords[0])
-                Log.d(cTAG, "viewCoord y: " + viewCoords[1])
-
-                //--- Coordenadas reais (???)
-                val imageX = x - viewCoords[0] // viewCoords[0] is the X coordinate
-                val imageY = y - viewCoords[1] // viewCoords[1] is the y coordinate
-                Log.d(cTAG, "Real x: $imageX")
-                Log.d(cTAG, "Real y: $imageY")
-
-                //--- Coordenadas da célula tocada
-                val intCol = x / intCellwidth
-                val intLinha = y / intCellheight
-                //-----------------------------------------------------
-                val intNum = arArIntNums[intLinha][intCol]
-                //-----------------------------------------------------
-                strLog = "-> Celula tocada: linha = " + intLinha + ", coluna = " + intCol +
-                        ", numero = " + intNum
-                Log.d(cTAG, strLog)
-
-                //--- Se a célula tocada contiver um número, "pinta" todas as células que contiverem
-                //    o mesmo número.
-                //-----------------------------------
-                mostraCelAEditar(intLinha, intCol)
-                //-----------------------------------
-
-                //--- Salva as coordenadas da célula selecionada
-                intLinJogar = intLinha
-                intColJogar = intCol
-
+                //-------------------------
+                editaIVSudokuBoard(x, y)
+                //-------------------------
 
             }
 
@@ -698,15 +668,16 @@ class MainActivity : AppCompatActivity() {
         {
 
             pincelPreto.strokeWidth = if (idxCel % 3 == 0) pincelGrosso else pincelFino
+
             //- Canto superior esquerdo do retângulo
             flXSupEsq = (idxCel * intCellwidth).toFloat()
             flYSupEsq = 0f
             //- Canto inferior direito do quadrado
             flXInfDir = flXSupEsq
             flYInfDir = intCellheight.toFloat()
-            //---------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------
             canvasNumDisp!!.drawLine(flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
-            //---------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------
 
         }
 
@@ -721,9 +692,29 @@ class MainActivity : AppCompatActivity() {
             val yCoord = intCellheight * 3 / 4
             val xCoord = intCellwidth / 3 + idxNum * intCellwidth
 
-            //---------------------------------------------------------------------------------
+            //-----------------------------------------------------------------------------------
             canvasNumDisp!!.drawText(strNum, xCoord.toFloat(), yCoord.toFloat(), pincelBranco)
-            //---------------------------------------------------------------------------------
+            //-----------------------------------------------------------------------------------
+
+        }
+
+        //--- Apaga os números que já foram utilizados
+        for (idxNumDisp in (0..8)) {
+
+            if (arIntQtiNumDisp[idxNumDisp] == 0) {
+
+                //- Canto superior esquerdo do quadrado
+                var flXSupEsq = idxNumDisp * intCellwidth.toFloat()
+                var flYSupEsq = 0f
+
+                //- Canto inferior direito do quadrado
+                var flXInfDir = flXSupEsq + intCellwidth.toFloat()
+                var flYInfDir = (intCellheight + 1).toFloat()
+                //----------------------------------------------------------------------------------
+                canvasNumDisp!!.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelBranco)
+                //----------------------------------------------------------------------------------
+
+            }
 
         }
 
@@ -768,6 +759,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //----------------------------------------------------------------------------------------------
+    // SudokuBoard
+    //----------------------------------------------------------------------------------------------
     //--- desenhaSudokuBoard
     private fun desenhaSudokuBoard(flagApaga: Boolean) {
 
@@ -895,61 +889,135 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //--- editaIVNumDisp
-    var cellX  = 0
     var intNum = 0
-    private fun editaIVNumDisp (coordX : Int) {
+    //--- editaIVSudokuBoard
+    private fun editaIVSudokuBoard(coordX : Int, coordY : Int) {
 
-        //--- Determina a célula e o número tocado
-        cellX      = coordX / intCellwidth
-        intNum     = arIntNumsDisp[cellX]
-        val numCel = arArIntNums[intLinJogar][intColJogar]
+        val x = coordX
+        val y = coordY
+
+        //--- OffSets das coordenadas na Janela (???)
+        val viewCoords = IntArray(2)
+
+        ivSudokuBoardMain.getLocationOnScreen(viewCoords)
+        Log.d(cTAG, "viewCoord x: " + viewCoords[0])
+        Log.d(cTAG, "viewCoord y: " + viewCoords[1])
+
+        //--- Coordenadas reais (???)
+        val imageX = x - viewCoords[0] // viewCoords[0] is the X coordinate
+        val imageY = y - viewCoords[1] // viewCoords[1] is the y coordinate
+        Log.d(cTAG, "Real x: $imageX")
+        Log.d(cTAG, "Real y: $imageY")
+
+        //--- Coordenadas da célula tocada
+        intColJogar = x / intCellwidth
+        intLinJogar = y / intCellheight
+        //-----------------------------------------------
+        intNum = arArIntNums[intLinJogar][intColJogar]
+        //-----------------------------------------------
+        strLog = "-> Celula tocada: linha = " + intLinJogar + ", coluna = " + intColJogar +
+                ", numero = " + intNum
+        Log.d(cTAG, strLog)
 
         //--- Se tocou numa célula com número, solicita ao usuário que confirme sua sobreescrita
-        if (numCel > 0) {
+        if (intNum > 0) {
 
             androidx.appcompat.app.AlertDialog.Builder(this)
 
                 .setTitle("Sudoku - Edição")
-                .setMessage("Você selecionou uma célula já ocupada, o que fazemos?")
+                .setMessage("Você selecionou uma célula já ocupada!")
 
                 .setPositiveButton("Limpe-a") { _, _ ->
-                    Toast.makeText(applicationContext, "OK was pressed", Toast.LENGTH_LONG).show()
-                    //--------------
-                    zeraCelula ()
-                    //--------------
+
+                    //Toast.makeText(applicationContext, "OK was pressed", Toast.LENGTH_LONG).show()
+                    Log.d(cTAG, "-> \"Limpe-a\" was pressed")
+
+                    //-------------
+                    zeraCelula()
+                    //-------------
+
                 }
 
                 .setNegativeButton("Sobrescreva-a") { _, _ ->
-                    Toast.makeText(applicationContext, "Cancel was pressed", Toast.LENGTH_LONG).show()
-                    //---------------------
-                    editaIVNumDisp_c1 ()
-                    //---------------------
+
+                    //Toast.makeText(applicationContext, "Cancel was pressed", Toast.LENGTH_LONG).show()
+                    Log.d(cTAG, "-> \"Sobrescreva-a\" was pressed")
+
+                    //-------------
+                    zeraCelula()
+                    //------------------------
+                    editaIVSudokuBoard_c1()
+                    //------------------------
+
                 }
 
-                .setNeutralButton("Nada") { _, _ ->
-                    Toast.makeText(applicationContext, "Neutral was pressed", Toast.LENGTH_LONG).show()
+                .setNeutralButton("Esqueça") { _, _ ->
+
+                    //Toast.makeText(applicationContext, "Neutral was pressed", Toast.LENGTH_LONG).show()
+                    Log.d(cTAG, "-> \"Esqueça\" was pressed")
+
+                    //--------------
+                    voltaEdicao()
+                    //--------------
+
                 }
                 .show()
-
         }
         else {
 
-            //---------------------
-            editaIVNumDisp_c1 ()
-            //---------------------
+            //---------------------------
+            editaIVSudokuBoard_c1()
+            //---------------------------
 
         }
+
+    }
+
+    //--- editaIVSudokuBoard_c1
+    private fun editaIVSudokuBoard_c1 () {
+
+        //-------------------------------------------
+        mostraCelAEditar(intLinJogar, intColJogar)
+        //-------------------------------------------
+
     }
 
     //--- zeraCelula
     private fun zeraCelula () {
 
+        arArIntNums[intLinJogar][intColJogar] = 0
+        arIntQtiNumDisp[intNum - 1] ++
+
+        //--------------
+        voltaEdicao()
+        //--------------
 
     }
 
-    //--- editaIVNumDisp_c1
-    private fun editaIVNumDisp_c1 () {
+    //--- volta à edição
+    private fun voltaEdicao () {
+
+        //--- ivSudokuBoardMain
+        //---------------------------------
+        preencheSudokuBoard(arArIntNums)
+        //---------------------------------
+
+        //--- ivNumDisp
+        //-------------------
+        preparaIVNumDisp()
+        //-------------------
+
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // NumDisp
+    //----------------------------------------------------------------------------------------------
+    //--- editaIVNumDisp
+    private fun editaIVNumDisp (coordX : Int) {
+
+        //--- Determina a célula e o número tocado
+        var cellX  = coordX / intCellwidth
+        var intNum = arIntNumsDisp[cellX]
 
         //--- Se ainda tem número desse disponível e ele é válido para o jogo, escreve-o no board
         if (arIntQtiNumDisp[cellX] > 0)  {
@@ -989,10 +1057,10 @@ class MainActivity : AppCompatActivity() {
 
                     //- Canto inferior direito do quadrado
                     var flXInfDir = flXSupEsq + intCellwidth.toFloat()
-                    var flYInfDir = intCellheight.toFloat()
+                    var flYInfDir = (intCellheight + 1).toFloat()
                     //------------------------------------------------------------------------------
                     canvasNumDisp!!.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir,
-                                                                                      pincelBranco)
+                        pincelBranco)
                     //------------------------------------------------------------------------------
                     ivNumDisp.setImageBitmap(bmpNumDisp)
 
@@ -1001,7 +1069,7 @@ class MainActivity : AppCompatActivity() {
             //--- Número NÃO válido
             else {
 
-                strToast = "Número NÃO Ok (linha, coluna ou quadro)"
+                strToast = "Número NÃO OK!\n(linha, coluna ou quadro)"
                 //-----------------------------------------------------------------
                 Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
                 //-----------------------------------------------------------------
