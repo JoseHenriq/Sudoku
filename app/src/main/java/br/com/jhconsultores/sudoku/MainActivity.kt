@@ -108,6 +108,8 @@ class MainActivity : AppCompatActivity() {
     private var intLinJogar = 0
     private var flagJoga    = false
 
+    private var flagBoardSel = false
+
     // Núm     0   22               31        41          51       61     81
     // clues  81   59               50        40          30       20      0
     //        |----|----------------|---------|-----------|--------|-------|
@@ -938,46 +940,10 @@ class MainActivity : AppCompatActivity() {
         //--- Se tocou numa célula com número, solicita ao usuário que confirme sua sobreescrita
         if (intNum > 0) {
 
-            androidx.appcompat.app.AlertDialog.Builder(this)
+            //-----------------
+            verifEdicaoCel()
+            //-----------------
 
-                .setTitle("Sudoku - Edição")
-                .setMessage("Você selecionou uma célula já ocupada!")
-
-                .setPositiveButton("Limpe-a") { _, _ ->
-
-                    //Toast.makeText(applicationContext, "OK was pressed", Toast.LENGTH_LONG).show()
-                    Log.d(cTAG, "-> \"Limpe-a\" was pressed")
-
-                    //-------------
-                    zeraCelula()
-                    //-------------
-
-                }
-
-                .setNegativeButton("Sobrescreva-a") { _, _ ->
-
-                    //Toast.makeText(applicationContext, "Cancel was pressed", Toast.LENGTH_LONG).show()
-                    Log.d(cTAG, "-> \"Sobrescreva-a\" was pressed")
-
-                    //-------------
-                    zeraCelula()
-                    //------------------------
-                    editaIVSudokuBoard_c1()
-                    //------------------------
-
-                }
-
-                .setNeutralButton("Esqueça") { _, _ ->
-
-                    //Toast.makeText(applicationContext, "Neutral was pressed", Toast.LENGTH_LONG).show()
-                    Log.d(cTAG, "-> \"Esqueça\" was pressed")
-
-                    //--------------
-                    voltaEdicao()
-                    //--------------
-
-                }
-                .show()
         }
         else {
 
@@ -989,12 +955,59 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //--- verifEdicaoCel
+    private fun verifEdicaoCel() {
+
+        androidx.appcompat.app.AlertDialog.Builder(this)
+
+            .setTitle("Sudoku - Edição")
+            .setMessage("Você selecionou uma célula já ocupada!")
+
+            .setPositiveButton("Limpe-a") { _, _ ->
+
+                //Toast.makeText(applicationContext, "OK was pressed", Toast.LENGTH_LONG).show()
+                Log.d(cTAG, "-> \"Limpe-a\" was pressed")
+
+                //-------------
+                zeraCelula()
+                //-------------
+
+            }
+
+            .setNegativeButton("Sobrescreva-a") { _, _ ->
+
+                //Toast.makeText(applicationContext, "Cancel was pressed", Toast.LENGTH_LONG).show()
+                Log.d(cTAG, "-> \"Sobrescreva-a\" was pressed")
+
+                //-------------
+                zeraCelula()
+                //------------------------
+                editaIVSudokuBoard_c1()
+                //------------------------
+
+            }
+
+            .setNeutralButton("Esqueça") { _, _ ->
+
+                //Toast.makeText(applicationContext, "Neutral was pressed", Toast.LENGTH_LONG).show()
+                Log.d(cTAG, "-> \"Esqueça\" was pressed")
+
+                //--------------
+                voltaEdicao()
+                //--------------
+
+            }
+            .show()
+
+    }
+
     //--- editaIVSudokuBoard_c1
     private fun editaIVSudokuBoard_c1 () {
 
         //-------------------------------------------
         mostraCelAEditar(intLinJogar, intColJogar)
         //-------------------------------------------
+        flagBoardSel = true
 
     }
 
@@ -1031,66 +1044,95 @@ class MainActivity : AppCompatActivity() {
     //--- editaIVNumDisp
     private fun editaIVNumDisp (coordX : Int) {
 
-        //--- Determina a célula e o número tocado
-        var cellX  = coordX / intCellwidth
-        var intNum = arIntNumsDisp[cellX]
+        //--- Se tem célula selecionada no Sudoku Board, trata a edição da célula
+        if (flagBoardSel) {
 
-        //--- Se ainda tem número desse disponível e ele é válido para o jogo, escreve-o no board
-        if (arIntQtiNumDisp[cellX] > 0)  {
+            flagBoardSel = false
 
-            //--- Verifica se válido
-            var flagNumVal = true
+            //--- Determina a célula e o número tocado
+            var cellX = coordX / intCellwidth
+            var intNum = arIntNumsDisp[cellX]
 
-            //--------------------------------------------------
-            jogarJogo.arArIntNums = copiaArArInt(arArIntNums)
-            //---------------------------------------------------------
-            val Qm = jogarJogo.determinaQm(intLinJogar, intColJogar)
-            //---------------------------------------------------------------------------
-            flagNumVal = jogarJogo.verifValidade(Qm, intLinJogar, intColJogar, intNum)
-            //---------------------------------------------------------------------------
+            //--- Se tocou numa célula já com número; solicita ao usuário que confirme sua sobreescrita.
+            if (arArIntNums[intLinJogar][intColJogar] > 0) {
 
-            //--- Se válido e ainda tem número desse disponível escreve-o no board
-            if (flagNumVal) {
+                //-----------------
+                verifEdicaoCel()
+                //-----------------
 
-                arIntQtiNumDisp[cellX]--
-
-                //--- Adiciona-o ao board
-                arArIntNums[intLinJogar][intColJogar] = intNum
-                //---------------------------------
-                preencheSudokuBoard(arArIntNums)
-                //----------------------------------------------
-                val intQtiZeros = sgg.quantZeros(arArIntNums)
-                //----------------------------------------------
-                tvContaClues.text = intQtiZeros.toString()
-                tvContaNums.text  = (81 - intQtiZeros).toString()
-
-                //--- Sinaliza se já posicionou os 9 desse número
-                if (arIntQtiNumDisp[cellX] == 0) {
-
-                    //- Canto superior esquerdo do quadrado
-                    var flXSupEsq = cellX * intCellwidth.toFloat()
-                    var flYSupEsq = 0f
-
-                    //- Canto inferior direito do quadrado
-                    var flXInfDir = flXSupEsq + intCellwidth.toFloat()
-                    var flYInfDir = (intCellheight + 1).toFloat()
-                    //------------------------------------------------------------------------------
-                    canvasNumDisp!!.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir,
-                        pincelBranco)
-                    //------------------------------------------------------------------------------
-                    ivNumDisp.setImageBitmap(bmpNumDisp)
-
-                }
             }
-            //--- Número NÃO válido
+            //--- Tocou numa célula ainda sem número
             else {
 
-                strToast = "Número NÃO OK!\n(linha, coluna ou quadro)"
-                //-----------------------------------------------------------------
-                Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
-                //-----------------------------------------------------------------
+                //--- Se ainda tem número desse disponível e ele é válido para o jogo, escreve-o no board
+                if (arIntQtiNumDisp[cellX] > 0) {
 
+                    //--- Verifica se válido
+                    var flagNumVal = true
+
+                    //--------------------------------------------------
+                    jogarJogo.arArIntNums = copiaArArInt(arArIntNums)
+                    //---------------------------------------------------------
+                    val Qm = jogarJogo.determinaQm(intLinJogar, intColJogar)
+                    //---------------------------------------------------------------------------
+                    flagNumVal = jogarJogo.verifValidade(Qm, intLinJogar, intColJogar, intNum)
+                    //---------------------------------------------------------------------------
+
+                    //--- Se válido e ainda tem número desse disponível escreve-o no board
+                    if (flagNumVal) {
+
+                        arIntQtiNumDisp[cellX]--
+
+                        //--- Adiciona-o ao board
+                        arArIntNums[intLinJogar][intColJogar] = intNum
+                        //---------------------------------
+                        preencheSudokuBoard(arArIntNums)
+                        //----------------------------------------------
+                        val intQtiZeros = sgg.quantZeros(arArIntNums)
+                        //----------------------------------------------
+                        tvContaClues.text = intQtiZeros.toString()
+                        tvContaNums.text = (81 - intQtiZeros).toString()
+
+                        //--- Sinaliza se já posicionou os 9 desse número
+                        if (arIntQtiNumDisp[cellX] == 0) {
+
+                            //- Canto superior esquerdo do quadrado
+                            var flXSupEsq = cellX * intCellwidth.toFloat()
+                            var flYSupEsq = 0f
+
+                            //- Canto inferior direito do quadrado
+                            var flXInfDir = flXSupEsq + intCellwidth.toFloat()
+                            var flYInfDir = (intCellheight + 1).toFloat()
+                            //------------------------------------------------------------------------------
+                            canvasNumDisp!!.drawRect(
+                                flXSupEsq, flYSupEsq, flXInfDir, flYInfDir,
+                                pincelBranco
+                            )
+                            //------------------------------------------------------------------------------
+                            ivNumDisp.setImageBitmap(bmpNumDisp)
+
+                        }
+                    }
+                    //--- Número NÃO válido
+                    else {
+
+                        strToast = "Número NÃO OK!\n(linha, coluna ou quadro)"
+                        //-----------------------------------------------------------------
+                        Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+                        //-----------------------------------------------------------------
+
+                    }
+                }
             }
+        }
+        //--- Não há célula selecionada no Sudoku Board
+        else {
+
+            //--------------------------------------------------------------------------------------
+            Toast.makeText(this, "Selecione uma célula no Sudoku board!",
+                                                                          Toast.LENGTH_LONG).show()
+            //--------------------------------------------------------------------------------------
+
         }
     }
 
