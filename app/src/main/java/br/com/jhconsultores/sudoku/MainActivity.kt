@@ -239,6 +239,17 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+
+        super.onResume()
+
+        if (rbEdicao.isChecked) {
+
+            txtDadosJogo.setText("")
+
+        }
+    }
+
     //----------------------------------------------------------------------------------------------
     // Funções para o atendimento ao tapping nos botões (declaradas no xml)
     //----------------------------------------------------------------------------------------------
@@ -313,12 +324,14 @@ class MainActivity : AppCompatActivity() {
 
             // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
 
-        } else Toast.makeText(
+        }
+        else {
 
-            this, "Não é possível gerar o jogo sem subnivel!",
-            Toast.LENGTH_SHORT
-
-        ).show()
+            //--------------------------------------------------------------------------------------
+            Toast.makeText( this, "Não é possível gerar o jogo sem subnivel!",
+                                                                         Toast.LENGTH_SHORT).show()
+            //--------------------------------------------------------------------------------------
+        }
     }
 
     //--- Evento tapping no botão de adaptação de jogo
@@ -328,23 +341,22 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> Tap no btnAdaptaJogo"
         Log.d(cTAG, strLog)
 
-        //-----------------------------
-        visibilidadeViews(INVISIBLE)
-        //-----------------------------
-
-        rbPreset.isChecked = true
-
         strOpcaoJogo = "JogoAdaptado"
         txtDadosJogo.text = ""
         sgg.txtDados = ""
 
-        groupRBadapta.visibility = VISIBLE
         strLog = "   - rbAdapta: "
         strLog += if (rbPreset.isChecked) "Preset" else "Edição"
         Log.d(cTAG, strLog)
 
         //--- PRESET
         if (rbPreset.isChecked) {
+
+            //-----------------------------
+            visibilidadeViews(INVISIBLE)
+            //-----------------------------
+            groupRBadapta.visibility = VISIBLE
+
             //--- Prepara o preset para se conseguir o gabarito do jogo
             if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
             txtDadosJogo.text = String.format("%s%d", "Preset #", sgg.intJogoAdaptar)
@@ -355,7 +367,7 @@ class MainActivity : AppCompatActivity() {
 
             sgg.quadMaiorRet = copiaArArInt(quadMaiorAdapta)
 
-            sgg.flagJogoGeradoOk = true
+            sgg.flagJogoGeradoOk   = true
             sgg.flagJogoAdaptadoOk = true
 
             //---------------------------------------
@@ -406,9 +418,88 @@ class MainActivity : AppCompatActivity() {
         //--- EDIÇÃO
         else {
 
+            //---------------------------
+            visibilidadeViews(VISIBLE)
+            //---------------------------
+
+            var flagEdicaoOK = false
+            val intQtiZeros  = tvContaClues.text.toString().toInt()
+
+            val intNivel    = intQtiZeros / 10
+            val intSubNivel = intQtiZeros % 10
+            //---------- ---------- ----------------------
+            // intNivel     Nivel      números / Zeros
+            //---------- ---------- ----------------------
+            //    2       fácil     de: 61 / 20  a 52 / 29
+            //    3       médio     de: 51 / 30  a 42 / 39
+            //    4       difícil   de: 41 / 40  a 32 / 49
+            //    5       muito dif de: 31 / 50  a 22 / 59
+
+            if (intQtiZeros > 59) {
+
+                strToast = "Para gerar jogo:\n- mais do que 21 números!"
+
+            }
+            else if (intQtiZeros < 20) {
+
+                strToast = "Para gerar jogo:\n- menos do que 62 números!"
+
+            }
+            else {
+
+                strNivelJogo = when (intNivel) {
+
+                    2 -> {
+                        rbFacil.isChecked = true
+                        "Fácil"
+                    }
+                    3 -> {
+                        rbMedio.isChecked = true
+                        "Médio"
+                    }
+                    4 -> {
+                        rbDificil.isChecked = true
+                        "Difícil"
+                    }
+                    else -> {
+                        rbMuitoDificil.isChecked = true
+                        "Muito Difícil"
+                    }
+
+                }
+                edtViewSubNivel.setText(intSubNivel.toString())
+                strToast = "Gera jogo:\n- nível: $strNivelJogo subnível: $intSubNivel"
+
+                flagEdicaoOK = true
+
+            }
+
+            Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
+
+            //--- Se edição OK gera o gabarito para o jogo editado
+            if (flagEdicaoOK) {
+
+                sgg.quadMaiorRet = copiaArArInt(arArIntNums)
+
+                sgg.flagJogoGeradoOk   = true
+                sgg.flagJogoAdaptadoOk = true
+
+                //---------------------------------------
+                quadMaior = sgg.adaptaJogoAlgoritmo2()
+                //---------------------------------------
+
+            }
+            else {
+
+                sgg.flagJogoGeradoOk   = false
+                sgg.flagJogoAdaptadoOk = false
+
+            }
+
         }
 
-        // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
+        // **** O array preparado (quadMaior) e o gabarito (sgg.quadMaiorRet) serão enviados
+        // **** pelo listener do botão JogaJogo.
 
     }
 
@@ -420,9 +511,11 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
 
         //--- Se não tiver jogo válido, informa ao usuário
-        if ((groupRBadapta.isVisible && rbEdicao.isChecked) ||
-            (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk)
-        ) {
+//        if ((groupRBadapta.isVisible && rbEdicao.isChecked) ||
+//            (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk) ) {
+
+        if (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk) {
+
             val strToast = "Não há jogo válido!"
             //-----------------------------------------------------------------
             Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
@@ -430,13 +523,14 @@ class MainActivity : AppCompatActivity() {
 
             Log.d(cTAG, "-> $strToast")
 
-        } else {
+        }
+        else {
 
             //-----------------------------
             visibilidadeViews(INVISIBLE)
             //-----------------------------
 
-            rbPreset.isChecked   = true
+            //rbPreset.isChecked   = true
 
             txtDadosJogo.text = if (strOpcaoJogo == "JogoAdaptado")
                 String.format("%s%d", "Preset #", sgg.intJogoAdaptar) else ""
@@ -1140,7 +1234,7 @@ class MainActivity : AppCompatActivity() {
     private fun visibilidadeViews(visibilidade : Int) {
 
         //--- DEBUG
-        ivQtiNumDisp.visibility = visibilidade
+        ivQtiNumDisp.visibility = INVISIBLE  //visibilidade
 
         ivNumDisp.visibility    = visibilidade
         tvContaClues.visibility = visibilidade
