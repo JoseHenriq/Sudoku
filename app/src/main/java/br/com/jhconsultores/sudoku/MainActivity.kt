@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     //--- Objetos gráficos
     private lateinit var ivSudokuBoardMain: ImageView
     private lateinit var ivNumDisp        : ImageView
+    private lateinit var ivQtiNumDisp     : ImageView
 
     private var bmpMyImageInic: Bitmap? = null
     private var bmpMyImageBack: Bitmap? = null
@@ -579,6 +580,11 @@ class MainActivity : AppCompatActivity() {
                                                     .copy(Bitmap.Config.ARGB_8888, true)
         ivSudokuBoardMain.setImageBitmap(bmpMyImage)
 
+        //--- DEBUG: atualiza a qtidd de númDisp
+        //-----------------------
+        atualizaIVQtiNumDisp()
+        //-----------------------
+
         //-------------------------------------------------------
         jogarJogo.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
         //-------------------------------------------------------
@@ -616,6 +622,11 @@ class MainActivity : AppCompatActivity() {
         canvasMyImage?.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPintar!! )
         //--------------------------------------------------------------------------------------
         ivSudokuBoardMain.setImageBitmap(bmpMyImage)
+
+        //--- DEBUG: atualiza a qtidd de númDisp
+        //-----------------------
+        atualizaIVQtiNumDisp()
+        //-----------------------
 
     }
 
@@ -717,7 +728,6 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-
         //--- Atualiza a image view
         ivNumDisp.setImageBitmap(bmpNumDisp)
 
@@ -734,6 +744,7 @@ class MainActivity : AppCompatActivity() {
 
         ivSudokuBoardMain    = findViewById(R.id.ivSudokuBoardMain)
         ivNumDisp            = findViewById(R.id.imageView3)
+        ivQtiNumDisp         = findViewById(R.id.imageView4)
 
         //-----------------------------
         visibilidadeViews(INVISIBLE)
@@ -886,6 +897,11 @@ class MainActivity : AppCompatActivity() {
         //-------------------------------------------------------
 
         ivSudokuBoardMain.setImageBitmap(bmpMyImage)
+
+        //--- DEBUG: atualiza a qtidd de númDisp
+        //-----------------------
+        atualizaIVQtiNumDisp()
+        //-----------------------
 
     }
 
@@ -1081,6 +1097,9 @@ class MainActivity : AppCompatActivity() {
     //--- visibilidadeViews
     private fun visibilidadeViews(visibilidade : Int) {
 
+        //--- DEBUG
+        ivQtiNumDisp.visibility = visibilidade
+
         ivNumDisp.visibility    = visibilidade
         tvContaClues.visibility = visibilidade
         tvContaNums.visibility  = visibilidade
@@ -1091,7 +1110,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //----------------------------------------------------------------------------------------------
-    //                                        Funções
+    //                                      Funções
     //----------------------------------------------------------------------------------------------
     //--- inicQuadMaiorAdaptacao
     private fun inicQuadMaiorAdaptacao(jogoAdaptar : Int) {
@@ -1257,4 +1276,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //----------------------------------------------------------------------------------------------
+    //                                      Debug
+    //----------------------------------------------------------------------------------------------
+    private fun atualizaIVQtiNumDisp () {
+
+        //--- Pinta-o e preenche-o
+        val bmpQtiNumDisp    = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
+                                                       .copy(Bitmap.Config.ARGB_8888, true)
+        val canvasQtiNumDisp = Canvas(bmpQtiNumDisp)
+
+        for (idxQtiNum in (0..8)) {
+
+            val strTxt = arIntQtiNumDisp[idxQtiNum].toString()
+
+            val yCoord = intCellheight * 3 / 4
+            val xCoord = intCellwidth / 3 + idxQtiNum * intCellwidth
+
+            pincelPreto.textSize = intTamTxt * scale
+
+            //-----------------------------------------------------------------------------------
+            canvasQtiNumDisp.drawText(strTxt, xCoord.toFloat(), yCoord.toFloat(), pincelPreto)
+            //-----------------------------------------------------------------------------------
+
+        }
+        //-------------------------------------------
+        ivQtiNumDisp.setImageBitmap(bmpQtiNumDisp)
+        //-------------------------------------------
+
+    }
 }
