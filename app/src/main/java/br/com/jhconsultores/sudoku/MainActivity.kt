@@ -1067,9 +1067,6 @@ class MainActivity : AppCompatActivity() {
     //--- editaIVSudokuBoard
     private fun editaIVSudokuBoard(coordX : Int, coordY : Int) {
 
-        val x = coordX
-        val y = coordY
-
         //--- OffSets das coordenadas na Janela (???)
         val viewCoords = IntArray(2)
 
@@ -1078,38 +1075,41 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, "viewCoord y: " + viewCoords[1])
 
         //--- Coordenadas reais (???)
-        val imageX = x - viewCoords[0] // viewCoords[0] is the X coordinate
-        val imageY = y - viewCoords[1] // viewCoords[1] is the y coordinate
+        val imageX = coordX - viewCoords[0] // viewCoords[0] is the X coordinate
+        val imageY = coordY - viewCoords[1] // viewCoords[1] is the y coordinate
         Log.d(cTAG, "Real x: $imageX")
         Log.d(cTAG, "Real y: $imageY")
 
         //--- Coordenadas da célula tocada
-        intColJogar = x / intCellwidth
-        intLinJogar = y / intCellheight
-        //-----------------------------------------------
-        intNum = arArIntNums[intLinJogar][intColJogar]
-        //-----------------------------------------------
-        strLog = "-> Celula tocada: linha = " + intLinJogar + ", coluna = " + intColJogar +
-                ", numero = " + intNum
-        Log.d(cTAG, strLog)
+        intColJogar = coordX / intCellwidth
+        intLinJogar = coordY / intCellheight
 
-        //--- Se tocou numa célula com número, solicita ao usuário que confirme sua sobreescrita
-        if (intNum > 0) {
+        if (intLinJogar < 9 && intColJogar < 9) {
 
-            //-----------------
-            verifEdicaoCel()
-            //-----------------
+            //-----------------------------------------------
+            intNum = arArIntNums[intLinJogar][intColJogar]
+            //-----------------------------------------------
+            strLog = "-> Celula tocada: linha = " + intLinJogar + ", coluna = " + intColJogar +
+                    ", numero = " + intNum
+            Log.d(cTAG, strLog)
 
+            //--- Se tocou numa célula com número, solicita ao usuário que confirme sua sobreescrita
+            if (intNum > 0) {
+
+                //-----------------
+                verifEdicaoCel()
+                //-----------------
+
+            }
+            //--- Tocou numa célula sem número
+            else {
+
+                //---------------------------
+                editaIVSudokuBoard_c1()
+                //---------------------------
+
+            }
         }
-        //--- Tocou numa célula sem número
-        else {
-
-            //---------------------------
-            editaIVSudokuBoard_c1()
-            //---------------------------
-
-        }
-
     }
 
     //--- verifEdicaoCel
@@ -1208,77 +1208,80 @@ class MainActivity : AppCompatActivity() {
             var cellX  = coordX / intCellwidth
             var intNum = arIntNumsDisp[cellX]
 
-            //--- Se tocou numa célula já com número; solicita ao usuário que confirme sua sobreescrita.
-            if (arArIntNums[intLinJogar][intColJogar] > 0) {
+            if (intLinJogar < 9 && intColJogar < 9 && cellX < 9) {
 
-                //-----------------
-                verifEdicaoCel()
-                //-----------------
+                //--- Se tocou numa célula já com número; solicita ao usuário que confirme sua sobreescrita.
+                if (arArIntNums[intLinJogar][intColJogar] > 0) {
 
-            }
-            //--- Tocou numa célula ainda sem número
-            else {
+                    //-----------------
+                    verifEdicaoCel()
+                    //-----------------
 
-                //--- Se ainda tem número desse disponível e ele é válido para o jogo, escreve-o no board
-                if (arIntQtiNumDisp[cellX] > 0) {
+                }
+                //--- Tocou numa célula ainda sem número
+                else {
 
-                    //--- Verifica se válido
-                    var flagNumVal = true
+                    //--- Se ainda tem número desse disponível e ele é válido para o jogo, escreve-o no board
+                    if (arIntQtiNumDisp[cellX] > 0) {
 
-                    //--------------------------------------------------
-                    jogarJogo.arArIntNums = copiaArArInt(arArIntNums)
-                    //---------------------------------------------------------
-                    val Qm = jogarJogo.determinaQm(intLinJogar, intColJogar)
-                    //---------------------------------------------------------------------------
-                    flagNumVal = jogarJogo.verifValidade(Qm, intLinJogar, intColJogar, intNum)
-                    //---------------------------------------------------------------------------
+                        //--- Verifica se válido
+                        var flagNumVal = true
 
-                    //--- Se válido e ainda tem número desse disponível escreve-o no board
-                    if (flagNumVal) {
+                        //--------------------------------------------------
+                        jogarJogo.arArIntNums = copiaArArInt(arArIntNums)
+                        //---------------------------------------------------------
+                        val Qm = jogarJogo.determinaQm(intLinJogar, intColJogar)
+                        //---------------------------------------------------------------------------
+                        flagNumVal = jogarJogo.verifValidade(Qm, intLinJogar, intColJogar, intNum)
+                        //---------------------------------------------------------------------------
 
-                        arIntQtiNumDisp[cellX]--
+                        //--- Se válido e ainda tem número desse disponível escreve-o no board
+                        if (flagNumVal) {
 
-                        //--- Adiciona-o ao board
-                        arArIntNums[intLinJogar][intColJogar] = intNum
-                        //---------------------------------
-                        preencheSudokuBoard(arArIntNums)
-                        //----------------------------------------------
-                        val intQtiZeros = sgg.quantZeros(arArIntNums)
-                        //----------------------------------------------
-                        tvContaClues.text = intQtiZeros.toString()
-                        tvContaNums.text = (81 - intQtiZeros).toString()
+                            arIntQtiNumDisp[cellX]--
 
-                        //--- Sinaliza se já posicionou os 9 desse número
-                        if (arIntQtiNumDisp[cellX] == 0) {
+                            //--- Adiciona-o ao board
+                            arArIntNums[intLinJogar][intColJogar] = intNum
+                            //---------------------------------
+                            preencheSudokuBoard(arArIntNums)
+                            //----------------------------------------------
+                            val intQtiZeros = sgg.quantZeros(arArIntNums)
+                            //----------------------------------------------
+                            tvContaClues.text = intQtiZeros.toString()
+                            tvContaNums.text = (81 - intQtiZeros).toString()
 
-                            //- Canto superior esquerdo do quadrado
-                            var flXSupEsq = cellX * intCellwidth.toFloat()
-                            var flYSupEsq = 0f
+                            //--- Sinaliza se já posicionou os 9 desse número
+                            if (arIntQtiNumDisp[cellX] == 0) {
 
-                            //- Canto inferior direito do quadrado
-                            var flXInfDir = flXSupEsq + intCellwidth.toFloat()
-                            var flYInfDir = (intCellheight + 1).toFloat()
-                            //------------------------------------------------------------------------------
-                            canvasNumDisp!!.drawRect(
-                                flXSupEsq, flYSupEsq, flXInfDir, flYInfDir,
-                                pincelBranco
-                            )
-                            //------------------------------------------------------------------------------
-                            ivNumDisp.setImageBitmap(bmpNumDisp)
+                                //- Canto superior esquerdo do quadrado
+                                var flXSupEsq = cellX * intCellwidth.toFloat()
+                                var flYSupEsq = 0f
+
+                                //- Canto inferior direito do quadrado
+                                var flXInfDir = flXSupEsq + intCellwidth.toFloat()
+                                var flYInfDir = (intCellheight + 1).toFloat()
+                                //------------------------------------------------------------------------------
+                                canvasNumDisp!!.drawRect(
+                                    flXSupEsq, flYSupEsq, flXInfDir, flYInfDir,
+                                    pincelBranco
+                                )
+                                //------------------------------------------------------------------------------
+                                ivNumDisp.setImageBitmap(bmpNumDisp)
+
+                            }
+
+                            flagBoardSel = false
 
                         }
+                        //--- Número NÃO válido
+                        else {
 
-                        flagBoardSel = false
+                            strToast = "Número NÃO OK!\n(linha, coluna ou quadro)"
+                            //-----------------------------------------------------------------
+                            Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+                            //-----------------------------------------------------------------
 
-                    }
-                    //--- Número NÃO válido
-                    else {
-
-                        strToast = "Número NÃO OK!\n(linha, coluna ou quadro)"
-                        //-----------------------------------------------------------------
-                        Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
-                        //-----------------------------------------------------------------
-
+                        }
                     }
                 }
             }
