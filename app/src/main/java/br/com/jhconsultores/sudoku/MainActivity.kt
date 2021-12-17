@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
@@ -22,6 +23,14 @@ import androidx.core.view.isVisible
 import android.view.MotionEvent
 import android.view.View.*
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import org.w3c.dom.Document
+import org.xml.sax.InputSource
+import java.io.File
+import java.io.StringReader
+import java.nio.file.Files
+import java.nio.file.Paths
+import javax.xml.parsers.DocumentBuilderFactory
 
 @Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
@@ -1315,11 +1324,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //--- inicQuadMaiorAdaptacao
+    lateinit var document : Document
+
+        //--- inicQuadMaiorAdaptacao
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun inicQuadMaiorAdaptacao(jogoAdaptar : Int) {
 
         var array : Array <Int>
         quadMaiorAdapta = arrayOf()
+
+        //--- Leitura do arquivo de presets(xml)
 
         //--- Simula os dados iniciais propostos
         when (jogoAdaptar) {
@@ -1509,4 +1523,18 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //--- readXml
+    private fun readXml(xmlFileName : String): Document {
+
+        val xmlFile = File( xmlFileName)   //"./input/items.xml")
+
+        val dbFactory = DocumentBuilderFactory.newInstance()
+        val dBuilder  = dbFactory.newDocumentBuilder()
+
+        val xmlInput  = InputSource(StringReader(xmlFile.readText()))
+        val doc       = dBuilder.parse(xmlInput)
+
+        return doc
+
+    }
 }

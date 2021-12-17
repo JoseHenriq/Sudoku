@@ -9,19 +9,20 @@
 
     <body>
 
-        <linha0></linha0>
-        <linha1></linha1>
-        <linha2></linha2>
-        <linha3></linha3>
-        <linha4></linha4>
-        <linha5></linha5>
-        <linha6></linha6>
-        <linha7></linha7>
-        <linha8></linha8>
+        <linha0> 6, 0, 8, 7, 4, 0, 1, 0, 2 </linha0>
+        <linha1> 3, 2, 0, 6, 8, 1, 0, 7, 5 </linha1>
+        <linha2> 7, 5, 1, 9, 0, 3, 4, 0, 8 </linha2>
+        <linha3> 9, 6, 3, 5, 0, 8, 0, 2, 0 </linha3>
+        <linha4> 0, 4, 2, 3, 7, 0, 8, 9, 1 </linha4>
+        <linha5> 1, 8, 0, 0, 9, 4, 6, 5, 3 </linha5>
+        <linha6> 2, 1, 6, 8, 3, 9, 0, 0, 7 </linha6>
+        <linha7> 0, 7, 5, 1, 6, 0, 3, 8, 9 </linha7>
+        <linha8> 8, 3, 0, 0, 5, 7, 2, 1, 6 </linha8>
 
     </body>
 
     <jogos>
+
         <id> "001" </id>
         <dataHora> </dataHora>
         <tempoJogo></tempoJogo>

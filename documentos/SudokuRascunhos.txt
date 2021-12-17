@@ -1,4 +1,43 @@
 
+
+        /*
+        val strFileName = "download/sudoku/preset.xml" //""./res/raw/preset.xml"   // "./input/preset.xml"   //"./src/main/res/raw/preset.xml"
+        try {
+            //--------------------------------------------
+            document = readXml(strFileName)
+            //--------------------------------------------
+        } catch (exc : Exception) {
+
+            Log.d(cTAG, "Erro: ${exc.message}")
+
+        }
+         */
+
+        val projectDirAbsolutePath = Paths.get("").toAbsolutePath().toString()
+        val resourcesPath = Paths.get(projectDirAbsolutePath, "/src/main/resources")            .filter { item -> item.toString().endsWith(".xml") }
+            val paths         = Files.walk(resourcesPath)
+            .filter  { item -> Files.isRegularFile(item) }
+            .forEach { item -> Log.d(cTAG, "filename: $item") }
+
+            //.filter { item -> item.toString().endsWith(".xml") }
+
+            /*
+            val dir = File( object {}.javaClass.getResource("preset.xml").file)   //"/src/main/resources").file )
+
+            dir.walk().forEach { f ->
+                if(f.isFile) {
+                    //println("file ${f.name}")
+                    Log.d(cTAG, "file ${f.name}")
+                } else {
+                    //println("dir ${f.name}")
+                    Log.d(cTAG, "Dir ${f.name}")
+                }
+            }
+*/
+
+
+
+
         OnTouchListener MyOnTouchListener = new OnTouchListener()
         {
             @Override
