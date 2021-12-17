@@ -9,6 +9,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -19,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import android.view.MotionEvent
 import android.view.View.*
+import android.view.ViewGroup
 
 @Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
@@ -76,6 +79,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rbPreset      : RadioButton
     private lateinit var rbEdicao      : RadioButton
 
+    private lateinit var progressBar   : ProgressBar
+
     private lateinit var edtViewSubNivel: EditText
     private var flagAdaptaPreset = true
 
@@ -106,7 +111,6 @@ class MainActivity : AppCompatActivity() {
     //--- Controle de jogadas
     private var intColJogar = 0
     private var intLinJogar = 0
-    private var flagJoga    = false
 
     private var flagBoardSel = false
 
@@ -150,12 +154,28 @@ class MainActivity : AppCompatActivity() {
         groupRBadapta.visibility = INVISIBLE
 
         tvContaNums.text  = "0"
-        tvContaClues.text = "81"
+        tvContaClues.text = getString(R.string.valor81)
 
         //--- Objetos gráficos
         //--------------------
         inicializaObjGraf()
         //--------------------
+
+        //------------------------------------------------------------------------------------------
+        // Progress Bar
+        //------------------------------------------------------------------------------------------
+        progressBar = ProgressBar(this)
+        progressBar.visibility = INVISIBLE
+
+        //setting height and width of progressBar
+        progressBar.layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        //accessing our relative layout where the progressBar will add up
+        val layout = findViewById<RelativeLayout>(R.id.relativeLayout)
+        // Add ProgressBar to our layout
+        layout?.addView(progressBar)
 
         //------------------------------------------------------------------------------------------
         // Listener para mudança do texto subnivel (editView)
@@ -229,8 +249,6 @@ class MainActivity : AppCompatActivity() {
                     editaIVNumDisp (x)
                     //-------------------
 
-                    false
-
                 }
 
             }
@@ -248,6 +266,7 @@ class MainActivity : AppCompatActivity() {
             txtDadosJogo.setText("")
 
         }
+
     }
 
     //----------------------------------------------------------------------------------------------
@@ -260,78 +279,104 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> Tap no btnGeraJogo"
         Log.d(cTAG, strLog)
 
-        //-----------------------------
-        visibilidadeViews(INVISIBLE)
-        //-----------------------------
+        //--- Ativa o progress bar
+        progressBar.visibility = VISIBLE
 
-        rbPreset.isChecked = true
+        txtDadosJogo.text = String.format("%s","Aguarde ...")
 
-        strOpcaoJogo = "JogoGerado"
+        //--- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
+        val waitTime = 100L  // milisegundos
+        Handler(Looper.getMainLooper()).postDelayed( {
 
-        sgg.txtDados = ""
+            //-----------------------------
+            visibilidadeViews(INVISIBLE)
+            //-----------------------------
 
-        //--------------------------
-        prepRBniveis(true)
-        //--------------------------
-        edtViewSubNivel.isEnabled = true
+            rbPreset.isChecked = true
 
-        groupRBadapta.visibility = INVISIBLE
+            strOpcaoJogo = "JogoGerado"
 
-        txtDadosJogo.text = ""
-        sgg.txtDados = ""
+            sgg.txtDados = ""
 
-        //--- Gera um novo jogo
-        nivelJogo = when {
+            //--------------------------
+            prepRBniveis(true)
+            //--------------------------
+            edtViewSubNivel.isEnabled = true
 
-            rbFacil.isChecked -> {
-                strNivelJogo = "Fácil"
-                FACIL
+            groupRBadapta.visibility = INVISIBLE
+
+            txtDadosJogo.text = ""
+            sgg.txtDados = ""
+
+            //--- Gera um novo jogo
+            nivelJogo = when {
+
+                rbFacil.isChecked -> {
+                    strNivelJogo = "Fácil"
+                    FACIL
+                }
+
+                rbMedio.isChecked -> {
+                    strNivelJogo = "Médio"
+                    MEDIO
+                }
+                rbDificil.isChecked -> {
+                    strNivelJogo = "Difícil"
+                    DIFICIL
+                }
+
+                rbMuitoDificil.isChecked -> {
+                    strNivelJogo = "Muito Difícil"
+                    MUITO_DIFICIL
+                }
+
+                else -> {
+                    strNivelJogo = "Muito fácil"
+                    0
+                }
+
+            }
+            strLog = "   - Nível: $strNivelJogo ($nivelJogo) Subnível: ${edtViewSubNivel.text}"
+            Log.d(cTAG, strLog)
+
+            if (edtViewSubNivel.text.toString().isNotEmpty()) {
+
+                subNivelJogo = edtViewSubNivel.text.toString().toInt()
+                nivelTotalJogo = nivelJogo + subNivelJogo
+
+                //-----------------------------------------
+                quadMaior = sgg.geraJogo(nivelTotalJogo)
+                //-----------------------------------------
+                preencheSudokuBoard(quadMaior)
+                //-------------------------------
+
+                txtDadosJogo.text = ""
+
+                //--- Desativa o progress bar
+                progressBar.visibility = INVISIBLE
+
+                // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
             }
 
-            rbMedio.isChecked -> {
-                strNivelJogo = "Médio"
-                MEDIO
-            }
-            rbDificil.isChecked -> {
-                strNivelJogo = "Difícil"
-                DIFICIL
-            }
+            else {
 
-            rbMuitoDificil.isChecked -> {
-                strNivelJogo = "Muito Difícil"
-                MUITO_DIFICIL
-            }
+                txtDadosJogo.text = ""
 
-            else -> {
-                strNivelJogo = "Muito fácil"
-                0
+                //--- Desativa o progress bar
+                progressBar.visibility = INVISIBLE
+
+                //--------------------------------------------------------------------------------------
+                    Toast.makeText(
+                        this, "Não é possível gerar o jogo sem subnivel!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    //--------------------------------------------------------------------------------------
             }
 
-        }
-        strLog = "   - Nível: $strNivelJogo ($nivelJogo) Subnível: ${edtViewSubNivel.text}"
-        Log.d(cTAG, strLog)
+        },
 
-        if (edtViewSubNivel.text.toString().isNotEmpty()) {
+        waitTime)  // value in milliseconds
 
-            subNivelJogo = edtViewSubNivel.text.toString().toInt()
-            nivelTotalJogo = nivelJogo + subNivelJogo
-
-            //-----------------------------------------
-            quadMaior = sgg.geraJogo(nivelTotalJogo)
-            //-----------------------------------------
-            preencheSudokuBoard(quadMaior)
-            //-------------------------------
-
-            // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
-
-        }
-        else {
-
-            //--------------------------------------------------------------------------------------
-            Toast.makeText( this, "Não é possível gerar o jogo sem subnivel!",
-                                                                         Toast.LENGTH_SHORT).show()
-            //--------------------------------------------------------------------------------------
-        }
     }
 
     //--- Evento tapping no botão de adaptação de jogo
@@ -340,6 +385,9 @@ class MainActivity : AppCompatActivity() {
 
         strLog = "-> Tap no btnAdaptaJogo"
         Log.d(cTAG, strLog)
+
+        sgg.flagJogoGeradoOk   = false
+        sgg.flagJogoAdaptadoOk = false
 
         strOpcaoJogo = "JogoAdaptado"
         txtDadosJogo.text = ""
@@ -352,66 +400,81 @@ class MainActivity : AppCompatActivity() {
         //--- PRESET
         if (rbPreset.isChecked) {
 
-            //-----------------------------
-            visibilidadeViews(INVISIBLE)
-            //-----------------------------
-            groupRBadapta.visibility = VISIBLE
+            //--- Ativa o progress bar
+            progressBar.visibility = VISIBLE
 
             //--- Prepara o preset para se conseguir o gabarito do jogo
             if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
-            txtDadosJogo.text = String.format("%s%d", "Preset #", sgg.intJogoAdaptar)
+            txtDadosJogo.text = String.format("%s%d %s","Preset #",sgg.intJogoAdaptar,"aguarde ...")
 
-            //-------------------------------------------
-            inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
-            //-------------------------------------------
+            //--- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
+            val waitTime = 100L  // milisegundos
+            Handler(Looper.getMainLooper()).postDelayed( {
 
-            sgg.quadMaiorRet = copiaArArInt(quadMaiorAdapta)
+                //-----------------------------
+                visibilidadeViews(INVISIBLE)
+                //-----------------------------
+                groupRBadapta.visibility = VISIBLE
 
-            sgg.flagJogoGeradoOk   = true
-            sgg.flagJogoAdaptadoOk = true
+                //-------------------------------------------
+                inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
+                //-------------------------------------------
 
-            //---------------------------------------
-            quadMaior = sgg.adaptaJogoAlgoritmo2()
-            //---------------------------------------
+                sgg.quadMaiorRet = copiaArArInt(quadMaiorAdapta)
 
-            //--- Apresenta o nível e o subnível do preset
-            nivelJogo = (sgg.intQtiZeros / 10) * 10
-            subNivelJogo = sgg.intQtiZeros % 10
-            val rbNivelJogo: RadioButton = when (nivelJogo) {
+                //---------------------------------------
+                quadMaior = sgg.adaptaJogoAlgoritmo2()
+                //---------------------------------------
 
-                20 -> {
-                    strNivelJogo = "Fácil"
-                    rbFacil
+                //--- Apresenta o nível e o subnível do preset
+                nivelJogo = (sgg.intQtiZeros / 10) * 10
+                subNivelJogo = sgg.intQtiZeros % 10
+                val rbNivelJogo: RadioButton = when (nivelJogo) {
+
+                    20 -> {
+                        strNivelJogo = "Fácil"
+                        rbFacil
+                    }
+                    30 -> {
+                        strNivelJogo = "Médio"
+                        rbMedio
+                    }
+                    40 -> {
+                        strNivelJogo = "Difícil"
+                        rbDificil
+                    }
+                    50 -> {
+                        strNivelJogo = "Muito Difícil"
+                        rbMuitoDificil
+                    }
+                    else -> {
+                        strNivelJogo = "Fácil"
+                        rbFacil
+                    }
+
                 }
-                30 -> {
-                    strNivelJogo = "Médio"
-                    rbMedio
-                }
-                40 -> {
-                    strNivelJogo = "Difícil"
-                    rbDificil
-                }
-                50 -> {
-                    strNivelJogo = "Muito Difícil"
-                    rbMuitoDificil
-                }
-                else -> {
-                    strNivelJogo = "Fácil"
-                    rbFacil
-                }
+                rbNivelJogo.isChecked = true
 
-            }
-            rbNivelJogo.isChecked = true
+                edtViewSubNivel.setText(subNivelJogo.toString())
+                //---------------------------
+                prepRBniveis(false)
+                //---------------------------
+                edtViewSubNivel.isEnabled = false
 
-            edtViewSubNivel.setText(subNivelJogo.toString())
-            //---------------------------
-            prepRBniveis(false)
-            //---------------------------
-            edtViewSubNivel.isEnabled = false
+                //-------------------------------
+                preencheSudokuBoard(quadMaior)
+                //-------------------------------
 
-            //-------------------------------
-            preencheSudokuBoard(quadMaior)
-            //-------------------------------
+                txtDadosJogo.text = String.format("%s%d","Preset #",sgg.intJogoAdaptar)
+
+                sgg.flagJogoAdaptadoOk = true
+
+                //--- Desativa o progress bar
+                progressBar.visibility = INVISIBLE
+
+            },
+
+            waitTime)  // value in milliseconds
 
         }
 
@@ -437,12 +500,12 @@ class MainActivity : AppCompatActivity() {
 
             if (intQtiZeros > 59) {
 
-                strToast = "Para gerar jogo:\n- mais do que 21 números!"
+                strToast = "Para gerar jogo editar mais do que 21 números!"
 
             }
             else if (intQtiZeros < 20) {
 
-                strToast = "Para gerar jogo:\n- menos do que 62 números!"
+                strToast = "Para gerar jogo editar menos do que 62 números!"
 
             }
             else {
@@ -481,18 +544,11 @@ class MainActivity : AppCompatActivity() {
 
                 sgg.quadMaiorRet = copiaArArInt(arArIntNums)
 
-                sgg.flagJogoGeradoOk   = true
-                sgg.flagJogoAdaptadoOk = true
-
                 //---------------------------------------
                 quadMaior = sgg.adaptaJogoAlgoritmo2()
                 //---------------------------------------
 
-            }
-            else {
-
-                sgg.flagJogoGeradoOk   = false
-                sgg.flagJogoAdaptadoOk = false
+                sgg.flagJogoAdaptadoOk = true
 
             }
 
@@ -630,6 +686,9 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> onClick rbPreset"
         Log.d(cTAG, strLog)
 
+        sgg.flagJogoGeradoOk   = false
+        sgg.flagJogoAdaptadoOk = false
+
         //-----------------------------
         visibilidadeViews(INVISIBLE)
         //-----------------------------
@@ -659,6 +718,9 @@ class MainActivity : AppCompatActivity() {
 
         arArIntNums     = Array(9) { Array(9) { 0 } }
         arIntQtiNumDisp = Array(9) { 9 }
+
+        sgg.flagJogoGeradoOk   = false
+        sgg.flagJogoAdaptadoOk = false
 
         //------------------------------------------------------------------------------------------
         // Image view dos números disponíveis
@@ -1039,6 +1101,7 @@ class MainActivity : AppCompatActivity() {
             //-----------------
 
         }
+        //--- Tocou numa célula sem número
         else {
 
             //---------------------------
@@ -1141,10 +1204,8 @@ class MainActivity : AppCompatActivity() {
         //--- Se tem célula selecionada no Sudoku Board, trata a edição da célula
         if (flagBoardSel) {
 
-            flagBoardSel = false
-
             //--- Determina a célula e o número tocado
-            var cellX = coordX / intCellwidth
+            var cellX  = coordX / intCellwidth
             var intNum = arIntNumsDisp[cellX]
 
             //--- Se tocou numa célula já com número; solicita ao usuário que confirme sua sobreescrita.
@@ -1206,6 +1267,9 @@ class MainActivity : AppCompatActivity() {
                             ivNumDisp.setImageBitmap(bmpNumDisp)
 
                         }
+
+                        flagBoardSel = false
+
                     }
                     //--- Número NÃO válido
                     else {
@@ -1230,6 +1294,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //----------------------------------------------------------------------------------------------
+    //                                      Funções
+    //----------------------------------------------------------------------------------------------
     //--- visibilidadeViews
     private fun visibilidadeViews(visibilidade : Int) {
 
@@ -1245,9 +1312,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //----------------------------------------------------------------------------------------------
-    //                                      Funções
-    //----------------------------------------------------------------------------------------------
     //--- inicQuadMaiorAdaptacao
     private fun inicQuadMaiorAdaptacao(jogoAdaptar : Int) {
 
@@ -1441,4 +1505,5 @@ class MainActivity : AppCompatActivity() {
         //-------------------------------------------
 
     }
+
 }
