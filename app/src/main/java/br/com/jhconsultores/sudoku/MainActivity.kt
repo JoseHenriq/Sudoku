@@ -24,12 +24,11 @@ import android.view.MotionEvent
 import android.view.View.*
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import br.com.jhconsultores.utils.Utils
 import org.w3c.dom.Document
 import org.xml.sax.InputSource
 import java.io.File
 import java.io.StringReader
-import java.nio.file.Files
-import java.nio.file.Paths
 import javax.xml.parsers.DocumentBuilderFactory
 
 @Suppress("UNUSED_PARAMETER")
@@ -116,6 +115,7 @@ class MainActivity : AppCompatActivity() {
 
     private var sgg       = SudokuGameGenerator()
     private var jogarJogo = JogarActivity()
+    private val utils     = Utils()
 
     //--- Controle de jogadas
     private var intColJogar = 0
@@ -139,9 +139,60 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //--- Obtém lista de arquivos em resource / raw
+        //-------------------------------------------------------
+        val arStrNomeArqRaw : Array <String> = utils.ListRaw()
+        //-------------------------------------------------------
+        Log.d(cTAG, "-> Arquivos raw (listRaw):")
+        for (idxFileName in 0 until arStrNomeArqRaw.size) {
+
+            Log.d(cTAG,"   $idxFileName: ${arStrNomeArqRaw[idxFileName]}")
+
+        }
+
+        //--- Leitura dos arquivos preset
+        Log.d(cTAG, "-> Arquivos preset: ")
+        //-------------------------------------------------------------------------------------------------
+        val arStrLeitArqRaw : ArrayList <String> = utils.LeituraFileRaw(this, "preset")
+        //-------------------------------------------------------------------------------------------------
+        for (idxDecl in 0 until arStrLeitArqRaw.size) {
+
+            Log.d(cTAG,"   $idxDecl: ${arStrLeitArqRaw.get(idxDecl)}")
+
+        }
+        //--- Obtém o header
+        //-------------------------------------------------------------
+        val arStrHeader = separaArq(arStrLeitArqRaw, "header")
+        //-------------------------------------------------------------
+
+        /*
+        //--- Obtem lista de arquivos em /storage/emulated/0/ + strDirName
+        val strDirName = "Download"
+
+        try {
+            //------------------------------------------------
+            arStrNomeArqRaw = utils.ListaArqDir(strDirName)
+            //------------------------------------------------
+            Log.d(cTAG, "-> Arquivos em storage/emulated/0/$strDirName:")
+            for (idxFileName in 0 until arStrNomeArqRaw.size) {
+
+                if (arStrNomeArqRaw[idxFileName].isNotEmpty()) {
+
+                    Log.d(cTAG, "   - $idxFileName: ${arStrNomeArqRaw[idxFileName]}")
+
+                }
+            }
+        }
+        catch (exc : Exception) {
+
+            Log.d(cTAG, "   - Erro: ${exc.message}")
+
+        }
+         */
+
         //--- Instancializações e inicializações
-        tvContaNums   = findViewById(R.id.ContaNums)
-        tvContaClues  = findViewById(R.id.ContaClues)
+        tvContaNums  = findViewById(R.id.ContaNums)
+        tvContaClues = findViewById(R.id.ContaClues)
 
         btnAdaptaJogo  = findViewById(R.id.btn_AdaptarJogo)
         btnJogaJogo    = findViewById(R.id.btn_JogarJogo)
@@ -389,6 +440,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- Evento tapping no botão de adaptação de jogo
+    @RequiresApi(Build.VERSION_CODES.O)
     @Suppress("UNUSED_PARAMETER")
     fun btnAdaptaJogoClick(view: View?) {
 
@@ -690,6 +742,7 @@ class MainActivity : AppCompatActivity() {
     // Funções para o atendimento de tapping nos radioButtons de escolha da adaptação de jogo
     //----------------------------------------------------------------------------------------------
     //--- RBpresetClick
+    @RequiresApi(Build.VERSION_CODES.O)
     fun RBpresetClick(view: View?) {
 
         strLog = "-> onClick rbPreset"
@@ -882,7 +935,7 @@ class MainActivity : AppCompatActivity() {
             if (arIntQtiNumDisp[idxNumDisp] == 0) {
 
                 //- Canto superior esquerdo do quadrado
-                var flXSupEsq = idxNumDisp * intCellwidth.toFloat()
+                var flXSupEsq: Float = idxNumDisp * intCellwidth.toFloat()
                 var flYSupEsq = 0f
 
                 //- Canto inferior direito do quadrado
@@ -1537,4 +1590,40 @@ class MainActivity : AppCompatActivity() {
         return doc
 
     }
+
+    //--- separaArq
+    private fun separaArq(arStrLeit : ArrayList<String>, strTag : String) : ArrayList<String> {
+
+        lateinit var arLst : ArrayList <String>
+
+        val strTagInic = "<$strTag>"
+        val strTagFim  = "</$strTag>"
+        var flagInic : Boolean = false
+        var flagFim  : Boolean = false
+
+        for (idxCampo in 0 until arStrLeit.size ) {
+
+            val strCampo = arStrLeit.get(idxCampo)
+
+            if (!flagInic) {
+
+                if (strCampo.contains(strTagInic, true)) { flagInic = true }
+
+            }
+            else {
+
+                if (strCampo.contains(strTagFim, true)) { flagFim = true }
+                else arLst.add(strCampo)
+
+            }
+
+            if (flagFim) break
+
+        }
+
+        return arLst
+
+    }
+
+
 }
