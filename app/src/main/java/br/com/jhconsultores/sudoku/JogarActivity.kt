@@ -479,33 +479,51 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                 strLog = "-> Tap no btn \"Reset\" "
                 Log.d(cTAG, strLog)
 
-                tvNivel!!.text = ""
-                tvSubNivel!!.text = ""
+                androidx.appcompat.app.AlertDialog.Builder(this)
 
-                intContaErro = 0
-                tvErros!!.text = "$intContaErro"
+                    .setTitle("Sudoku - Jogo")
+                    .setMessage("Tem certeza que quer recomeçar o jogo atual?")
 
-                Log.d(cTAG, "-> ${crono.text} - Reset")
-                timeStopped = 0
-                //-------------
-                crono.stop()
-                //-------------
-                crono.text = strCronoInic
+                    .setPositiveButton("Sim") { _, _ ->
 
-                //-----------------------------------------
-                arArIntNums = copiaArArInt(arArIntCopia)
-                //-----------------------------------------
+                        Log.d(cTAG, "-> \"Sim\" was pressed")
 
-                arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-                //-------------
-                iniciaJogo()
-                //-------------
+                        tvNivel!!.text    = ""
+                        tvSubNivel!!.text = ""
 
-                iViewSudokuBoard!!.isEnabled = false
-                iViewNumsDisps!!.isEnabled = false
+                        intContaErro = 0
+                        tvErros!!.text = "$intContaErro"
 
-                btnInicia.isEnabled = true
-                btnInicia.text = resources.getString(R.string.inicia)
+                        Log.d(cTAG, "-> ${crono.text} - Reset")
+                        timeStopped = 0
+                        //-------------
+                        crono.stop()
+                        //-------------
+                        crono.text = strCronoInic
+
+                        //-----------------------------------------
+                        arArIntNums = copiaArArInt(arArIntCopia)
+                        //-----------------------------------------
+
+                        arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+                        //-------------
+                        iniciaJogo()
+                        //-------------
+
+                        iViewSudokuBoard!!.isEnabled = false
+                        iViewNumsDisps!!.isEnabled = false
+
+                        btnInicia.isEnabled = true
+                        btnInicia.text = resources.getString(R.string.inicia)
+
+                    }
+
+                    .setNegativeButton("Não") { _, _ ->
+
+                        Log.d(cTAG, "-> \"Não\" was pressed")
+
+                    }
+                    .show()
 
             }
 

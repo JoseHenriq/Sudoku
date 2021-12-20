@@ -2,9 +2,9 @@
 <presets>
 
     <header>
-        <id>       "00001" </id>
-        <nivel>    "Fácil" </nivel>
-        <subnivel> "0"     </subnivel>
+        <id>       00001 </id>
+        <nivel>    Fácil </nivel>
+        <subnivel>     0 </subnivel>
     </header>
 
     <body>
@@ -23,9 +23,10 @@
 
     <jogos>
 
-        <id> "001" </id>
-        <dataHora> </dataHora>
-        <tempoJogo></tempoJogo>
+        <id>        001 </id>
+        <dataHora>      </dataHora>
+        <tempoJogo>     </tempoJogo>
+        <erro>          </erro>
 
     </jogos>
 

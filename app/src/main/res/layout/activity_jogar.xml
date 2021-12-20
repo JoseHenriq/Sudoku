@@ -162,14 +162,15 @@
         android:textSize="15sp" />
 
     <!-- Números disponíveis -->
-    <ImageView android:id="@+id/ivNumDisp"
+    <ImageView
+        android:id="@+id/ivNumDisp"
 
-        android:layout_width ="wrap_content"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_below      ="@id/ivSudokuBoard"
+        android:layout_below="@id/ivSudokuBoard"
         android:layout_marginStart="10dp"
-        android:layout_marginTop  ="100dp"
+        android:layout_marginTop  ="70dp"
         android:contentDescription="@string/numDisp"
         android:src="@drawable/quadro_nums_disp" />
     <!-- Android 6.0.1 (S5Duos):
@@ -184,6 +185,8 @@
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
+        android:layout_marginTop        ="30dp"
+        android:layout_alignBottom      ="@id/ivNumDisp"
         android:layout_alignParentEnd   ="true"
         android:layout_alignParentBottom="true"
 
@@ -193,11 +196,13 @@
     <Button android:id="@+id/btnInicia"
 
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
+        android:layout_marginTop        ="30dp"
+        android:layout_alignBottom      ="@id/ivNumDisp"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@id/btnReset"
+        android:layout_toStartOf        ="@id/btnReset"
 
         android:text="@string/inicia"
         android:textAllCaps="false" />

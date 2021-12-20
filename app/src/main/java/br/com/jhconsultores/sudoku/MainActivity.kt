@@ -1,7 +1,6 @@
 package br.com.jhconsultores.sudoku
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
@@ -16,7 +15,6 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.util.TypedValue
 
 import android.view.View
 import android.widget.*
@@ -34,6 +32,8 @@ import org.xml.sax.InputSource
 import java.io.File
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
+import android.content.Context
+import android.util.TypedValue
 */
 
 @Suppress("UNUSED_PARAMETER")
@@ -106,6 +106,12 @@ class MainActivity : AppCompatActivity() {
     private var subNivelJogo   = 0
     private var nivelTotalJogo = 0
 
+    // Núm     0   22               31        41          51       61     81
+    // clues  81   59               50        40          30       20      0
+    //        |----|----------------|---------|-----------|--------|-------|
+    //        |xxxx|  MUITO DIFÍCIL | DIFÍCIL |   MÉDIO   |  FÁCIL |xxxxxxx|
+    //        |----|----------------|---------|-----------|--------|-------|
+
     private val FACIL = 20
     private val MEDIO = 30
     private val DIFICIL       = 40
@@ -128,11 +134,9 @@ class MainActivity : AppCompatActivity() {
 
     private var flagBoardSel = false
 
-    // Núm     0   22               31        41          51       61     81
-    // clues  81   59               50        40          30       20      0
-    //        |----|----------------|---------|-----------|--------|-------|
-    //        |xxxx|  MUITO DIFÍCIL | DIFÍCIL |   MÉDIO   |  FÁCIL |xxxxxxx|
-    //        |----|----------------|---------|-----------|--------|-------|
+    //--- Arquivos jogos
+    private var arStrTags   = Array(3) { "" }
+    private var arArStrTags = Array(3) { Array(9) { "" } }
 
     //----------------------------------------------------------------------------------------------
     // Eventos e listeners da MainActivity
@@ -180,7 +184,7 @@ class MainActivity : AppCompatActivity() {
 
         }
         //--- Leitura de arquivo
-        var strNomeArq = arStrNomeArqRaw[0]
+        val strNomeArq = arStrNomeArqRaw[0]
         Log.d(cTAG, "-> Arquivo $strNomeArq:")
         //-----------------------------------------------------------------------------------------
         val arStrLeitArqRaw : ArrayList <String> = utils.LeituraFileRaw(this, strNomeArq)
@@ -190,14 +194,65 @@ class MainActivity : AppCompatActivity() {
             Log.d(cTAG,"   $idxDecl: ${arStrLeitArqRaw[idxDecl]}")
 
         }
-        //--- Obtém o header
-        var strTAG = "header"
-        Log.d(cTAG, "-> Obtém o $strTAG")
-        //-------------------------------------------------------------
-        val strCampo = separaArq(arStrLeitArqRaw, strTAG)
-        //-------------------------------------------------------------
-        if (strHeader == "") Log.d(cTAG, "Esse arquivo não contém o tag \"$strTAG\"")
-        else Log.d(cTAG, strCampo)
+        //--- Prepara os arrays com os tags e subtags
+        arStrTags      = arrayOf ( "header", "body",   "jogos" )
+        arArStrTags[0] = arrayOf ( "id"    , "nivel",  "subnivel", "", "", "", "", "", "")
+        arArStrTags[1] = arrayOf ( "linha0", "linha1", "linha2", "linha3", "linha4", "linha5",
+                                                                      "linha6", "linha7", "linha8")
+        arArStrTags[2] = arrayOf ( "id"    , "dataHora", "datahora", "tempoJogo", "erros",
+                                                                                    "", "", "", "")
+        //--- Obtém os campos entre os tags principais
+        for (idxTag in arStrTags.indices) {
+
+            var strTAG = arStrTags[idxTag]
+            Log.d(cTAG, "-> Obtém o $strTAG")
+            //-------------------------------------------------------------
+            val strCampo = separaArq(arStrLeitArqRaw, strTAG)
+            //-------------------------------------------------------------
+            if (strCampo == "") Log.d(cTAG, "Esse arquivo não contém o tag \"$strTAG\"")
+            else {
+
+                Log.d(cTAG, strCampo)
+
+                when (idxTag) {
+
+                    0 -> { // "home"
+                        Log.d(cTAG, "-> Tag: ${arStrTags[idxTag]}")
+                        for (idxSubTag in 0 until 3) {
+
+                            strTAG = arArStrTags[0][idxSubTag]
+                            Log.d(cTAG, "   - subTag: $strTAG")
+
+                        }
+                    }
+
+                    1 -> { // "body"
+
+                        Log.d(cTAG, "-> Tag: ${arStrTags[idxTag]}")
+                        for (idxSubTag in 0 until 9) {
+
+                            strTAG = arArStrTags[1][idxSubTag]
+                            Log.d(cTAG, "   - subTag: $strTAG")
+
+                        }
+                    }
+
+                    2 -> { // "jogos"
+
+                        Log.d(cTAG, "-> Tag: ${arStrTags[idxTag]}")
+                        for (idxSubTag in 0 until 4) {
+
+                            strTAG = arArStrTags[2][idxSubTag]
+                            Log.d(cTAG, "   - subTag: $strTAG")
+
+                        }
+                    }
+
+                    else -> {}
+
+                }
+            }
+        }
 
         //--- Instancializações e inicializações
         tvContaNums  = findViewById(R.id.ContaNums)
@@ -1612,88 +1667,34 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    /*
-    //--- readXml
-    private fun readXml(xmlFileName : String): Document {
-
-        val xmlFile = File( xmlFileName)   //"./input/items.xml")
-
-        val dbFactory = DocumentBuilderFactory.newInstance()
-        val dBuilder  = dbFactory.newDocumentBuilder()
-
-        val xmlInput  = InputSource(StringReader(xmlFile.readText()))
-        val doc       = dBuilder.parse(xmlInput)
-
-        return doc
-
-    }
-     */
-
     //--- separaArq
-    //private fun separaArq(arStrLeit : ArrayList<String>, strTag : String) : ArrayList<String> {
     private fun separaArq(arStrLeit : ArrayList<String>, strTag : String) : String {
 
-        //lateinit var arLst : ArrayList <String>
         var strTmp    = ""
         var strReturn = ""
 
         val strTagInic = "<$strTag>"
         val strTagFim  = "</$strTag>"
 
-        //var flagInic : Boolean = false
-        //var flagFim  : Boolean = false
-
-        /*
-        for (idxCampo in 0 until arStrLeit.size ) {
-
-            val strCampo = arStrLeit[idxCampo]
-
-            if (!flagInic) {
-
-                if (strCampo.contains(strTagInic, true)) { flagInic = true }
-
-            }
-            else {
-
-                if (strCampo.contains(strTagFim, true)) { flagFim = true }
-                else arLst.add(strCampo)
-
-            }
-
-            if (flagFim) break
-
-        }
-         */
-
-        for (idxCampo in arStrLeit.indices) {
-
-            strTmp += arStrLeit[idxCampo]
-
-        }
+        for (idxCampo in arStrLeit.indices) { strTmp += arStrLeit[idxCampo] }
 
         val intIdxInic = strTmp.indexOf(strTagInic)
         val intIdxFim  = strTmp.indexOf(strTagFim) + strTagFim.length
 
         if (intIdxInic > -1 && intIdxFim > -1 && intIdxFim > intIdxInic) {
 
-//            for (idxData in intIdxInic..intIdxFim) {
-
-                strReturn += strTmp.substring(intIdxInic, intIdxFim)    //arStrLeit[idxData]
-
-//            }
+            strReturn += strTmp.substring(intIdxInic, intIdxFim)
 
         }
 
-        //return arLst
         return strReturn
 
     }
 
     //--- Converte um valor em dp para pixels (px)
+
     // [002] - pag240
     //private fun toPx (dip : Float) : Float { return(dip * scale + 0.5f) }
-
-    private fun toPx (dip : Float) : Float { return (dip) }              // (dip * scale + 0.5f) }
 
     /*
     private fun toPx (dip: Float) : Float {
@@ -1706,6 +1707,8 @@ class MainActivity : AppCompatActivity() {
 
     }
      */
+
+    private fun toPx (dip : Float) : Float { return (dip) }
 
 }
 
