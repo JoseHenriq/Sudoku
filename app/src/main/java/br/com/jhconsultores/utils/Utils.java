@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -59,6 +60,8 @@ import java.nio.charset.StandardCharsets;
 */
 
 import static android.os.Environment.DIRECTORY_DOWNLOADS;
+
+import static java.security.AccessController.getContext;
 
 import br.com.jhconsultores.sudoku.R;
 
@@ -1119,6 +1122,19 @@ public class Utils {
     //--------------------------------------------------------------------------
     public  float convertSpToPixels(float sp, Context context) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, context.getResources().getDisplayMetrics());
+    }
+
+    //--- Converte um valor em dp para pixels (px)
+    // [002] - pag240
+    public float toPixels (Context context, float dip) {
+
+        Resources r     = context.getResources();
+        float densidade = r.getDisplayMetrics().density;
+
+        int px = (int) (dip * densidade + 0.5f);
+
+        return dip;
+
     }
 
 }

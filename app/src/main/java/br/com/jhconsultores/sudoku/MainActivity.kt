@@ -1,6 +1,7 @@
 package br.com.jhconsultores.sudoku
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
@@ -15,6 +16,7 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.TypedValue
 
 import android.view.View
 import android.widget.*
@@ -25,11 +27,14 @@ import android.view.View.*
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import br.com.jhconsultores.utils.Utils
+
+/*
 import org.w3c.dom.Document
 import org.xml.sax.InputSource
 import java.io.File
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
+*/
 
 @Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
@@ -139,34 +144,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //--- Obtém lista de arquivos em resource / raw
-        //-------------------------------------------------------
-        val arStrNomeArqRaw : Array <String> = utils.ListRaw()
-        //-------------------------------------------------------
-        Log.d(cTAG, "-> Arquivos raw (listRaw):")
-        for (idxFileName in 0 until arStrNomeArqRaw.size) {
-
-            Log.d(cTAG,"   $idxFileName: ${arStrNomeArqRaw[idxFileName]}")
-
-        }
-
-        //--- Leitura dos arquivos preset
-        Log.d(cTAG, "-> Arquivos preset: ")
-        //-------------------------------------------------------------------------------------------------
-        val arStrLeitArqRaw : ArrayList <String> = utils.LeituraFileRaw(this, "preset")
-        //-------------------------------------------------------------------------------------------------
-        for (idxDecl in 0 until arStrLeitArqRaw.size) {
-
-            Log.d(cTAG,"   $idxDecl: ${arStrLeitArqRaw.get(idxDecl)}")
-
-        }
-        //--- Obtém o header
-        //-------------------------------------------------------------
-        val arStrHeader = separaArq(arStrLeitArqRaw, "header")
-        //-------------------------------------------------------------
-
         /*
-        //--- Obtem lista de arquivos em /storage/emulated/0/ + strDirName
+        //--- Obtém lista de arquivos em /storage/emulated/0/ + strDirName
         val strDirName = "Download"
 
         try {
@@ -189,6 +168,36 @@ class MainActivity : AppCompatActivity() {
 
         }
          */
+
+        //--- Obtém lista de arquivos em resource / raw
+        //-------------------------------------------------------
+        val arStrNomeArqRaw : Array <String> = utils.ListRaw()
+        //-------------------------------------------------------
+        Log.d(cTAG, "-> Arquivos raw (listRaw):")
+        for (idxFileName in arStrNomeArqRaw.indices) {
+
+            Log.d(cTAG,"   $idxFileName: ${arStrNomeArqRaw[idxFileName]}")
+
+        }
+        //--- Leitura de arquivo
+        var strNomeArq = arStrNomeArqRaw[0]
+        Log.d(cTAG, "-> Arquivo $strNomeArq:")
+        //-----------------------------------------------------------------------------------------
+        val arStrLeitArqRaw : ArrayList <String> = utils.LeituraFileRaw(this, strNomeArq)
+        //-----------------------------------------------------------------------------------------
+        for (idxDecl in 0 until arStrLeitArqRaw.size) {
+
+            Log.d(cTAG,"   $idxDecl: ${arStrLeitArqRaw[idxDecl]}")
+
+        }
+        //--- Obtém o header
+        var strTAG = "header"
+        Log.d(cTAG, "-> Obtém o $strTAG")
+        //-------------------------------------------------------------
+        val strCampo = separaArq(arStrLeitArqRaw, strTAG)
+        //-------------------------------------------------------------
+        if (strHeader == "") Log.d(cTAG, "Esse arquivo não contém o tag \"$strTAG\"")
+        else Log.d(cTAG, strCampo)
 
         //--- Instancializações e inicializações
         tvContaNums  = findViewById(R.id.ContaNums)
@@ -287,7 +296,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // https://www.geeksforgeeks.org/add-ontouchlistener-to-imageview-to-perform-speech-to-text-in-android/
-        ivNumDisp.setOnTouchListener { view, motionEvent ->
+        ivNumDisp.setOnTouchListener { _, motionEvent ->
 
             Log.d(cTAG, "-> ivNumDisp:")
 
@@ -323,7 +332,7 @@ class MainActivity : AppCompatActivity() {
 
         if (rbEdicao.isChecked) {
 
-            txtDadosJogo.setText("")
+            txtDadosJogo.text = ""
 
         }
 
@@ -559,43 +568,45 @@ class MainActivity : AppCompatActivity() {
             //    4       difícil   de: 41 / 40  a 32 / 49
             //    5       muito dif de: 31 / 50  a 22 / 59
 
-            if (intQtiZeros > 59) {
+            when {
+                intQtiZeros > 59 -> {
 
-                strToast = "Para gerar jogo editar mais do que 21 números!"
-
-            }
-            else if (intQtiZeros < 20) {
-
-                strToast = "Para gerar jogo editar menos do que 62 números!"
-
-            }
-            else {
-
-                strNivelJogo = when (intNivel) {
-
-                    2 -> {
-                        rbFacil.isChecked = true
-                        "Fácil"
-                    }
-                    3 -> {
-                        rbMedio.isChecked = true
-                        "Médio"
-                    }
-                    4 -> {
-                        rbDificil.isChecked = true
-                        "Difícil"
-                    }
-                    else -> {
-                        rbMuitoDificil.isChecked = true
-                        "Muito Difícil"
-                    }
+                    strToast = "Para gerar jogo editar mais do que 21 números!"
 
                 }
-                edtViewSubNivel.setText(intSubNivel.toString())
-                strToast = "Gera jogo:\n- nível: $strNivelJogo subnível: $intSubNivel"
+                intQtiZeros < 20 -> {
 
-                flagEdicaoOK = true
+                    strToast = "Para gerar jogo editar menos do que 62 números!"
 
+                }
+                else -> {
+
+                    strNivelJogo = when (intNivel) {
+
+                        2 -> {
+                            rbFacil.isChecked = true
+                            "Fácil"
+                        }
+                        3 -> {
+                            rbMedio.isChecked = true
+                            "Médio"
+                        }
+                        4 -> {
+                            rbDificil.isChecked = true
+                            "Difícil"
+                        }
+                        else -> {
+                            rbMuitoDificil.isChecked = true
+                            "Muito Difícil"
+                        }
+
+                    }
+                    edtViewSubNivel.setText(intSubNivel.toString())
+                    strToast = "Gera jogo:\n- nível: $strNivelJogo subnível: $intSubNivel"
+
+                    flagEdicaoOK = true
+
+                }
             }
 
             Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
@@ -775,8 +786,8 @@ class MainActivity : AppCompatActivity() {
         flagAdaptaPreset = false
         txtDadosJogo.text = ""
 
-        tvContaNums.setText ("0")
-        tvContaClues.setText("81")
+        tvContaNums.text  = "0"
+        tvContaClues.text = resources.getString(R.string.valor81)
 
         arArIntNums     = Array(9) { Array(9) { 0 } }
         arIntQtiNumDisp = Array(9) { 9 }
@@ -838,9 +849,10 @@ class MainActivity : AppCompatActivity() {
         //- Canto inferior direito do quadrado
         val flXInfDir = flXSupEsq + intCellwidth.toFloat()
         val flYInfDir = flYSupEsq + intCellheight.toFloat()
-        //--------------------------------------------------------------------------------------
-        canvasMyImage?.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPintar!! )
-        //--------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------
+        canvasMyImage?.drawRect(toPx(flXSupEsq), toPx(flYSupEsq), toPx(flXInfDir), toPx(flYInfDir),
+                                                                                    pincelPintar!! )
+        //------------------------------------------------------------------------------------------
         ivSudokuBoardMain.setImageBitmap(bmpMyImage)
 
         //--- DEBUG: atualiza a qtidd de númDisp
@@ -853,6 +865,13 @@ class MainActivity : AppCompatActivity() {
     //--- preparaIVNumDisp
     private fun preparaIVNumDisp() {
 
+        //--- Instancializações e inicializações
+        var flXSupEsq : Float //  = 0f
+        var flYSupEsq : Float //  = 0f
+
+        var flXInfDir : Float //  = 0f
+        var flYInfDir : Float //  = 0f
+
         //--- Torna visíveis as images Views
         //-----------------------------
         visibilidadeViews(VISIBLE)
@@ -864,15 +883,16 @@ class MainActivity : AppCompatActivity() {
         canvasNumDisp = Canvas(bmpNumDisp!!)
 
         //- Canto superior esquerdo do retângulo
-        var flXSupEsq = 0f
-        var flYSupEsq = 0f
+        flXSupEsq = 0f
+        flYSupEsq = 0f
 
         //- Canto inferior direito do quadrado
-        var flXInfDir = flXSupEsq + 9 * intCellwidth.toFloat()
-        var flYInfDir = intCellheight.toFloat()
-        //---------------------------------------------------------------------------------
-        canvasNumDisp!!.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelVerde)
-        //---------------------------------------------------------------------------------
+        flXInfDir = flXSupEsq + 9 * intCellwidth.toFloat()
+        flYInfDir = intCellheight.toFloat()
+        //------------------------------------------------------------------------------------------
+        canvasNumDisp!!.drawRect( toPx(flXSupEsq), toPx(flYSupEsq), toPx(flXInfDir),
+                                                                      toPx(flYInfDir), pincelVerde)
+        //------------------------------------------------------------------------------------------
 
         //--- Desenha-o
         val pincelFino   = 2.toFloat()
@@ -883,17 +903,19 @@ class MainActivity : AppCompatActivity() {
         flYSupEsq = 0f
         flXInfDir = (9 * intCellwidth).toFloat()
         flYInfDir = 0f
-        //---------------------------------------------------------------------------------
-        canvasNumDisp!!.drawLine( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
-        //---------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------
+        canvasNumDisp!!.drawLine( toPx(flXSupEsq), toPx(flYSupEsq), toPx(flXInfDir),
+                                                                      toPx(flYInfDir), pincelPreto)
+        //------------------------------------------------------------------------------------------
         // Linha horizontal inferior
         flXSupEsq = 0f
         flYSupEsq = intCellheight.toFloat()
         flXInfDir = (9 * intCellwidth).toFloat()
         flYInfDir = flYSupEsq
-        //---------------------------------------------------------------------------------
-        canvasNumDisp!!.drawLine( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
-        //---------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------
+        canvasNumDisp!!.drawLine( toPx(flXSupEsq), toPx(flYSupEsq), toPx(flXInfDir),
+                                                                      toPx(flYInfDir), pincelPreto)
+        //------------------------------------------------------------------------------------------
         // Linhas verticais
         for (idxCel in 0..9)
         {
@@ -906,9 +928,10 @@ class MainActivity : AppCompatActivity() {
             //- Canto inferior direito do quadrado
             flXInfDir = flXSupEsq
             flYInfDir = intCellheight.toFloat()
-            //----------------------------------------------------------------------------------
-            canvasNumDisp!!.drawLine(flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelPreto)
-            //----------------------------------------------------------------------------------
+            //--------------------------------------------------------------------------------------
+            canvasNumDisp!!.drawLine( toPx(flXSupEsq), toPx(flYSupEsq), toPx(flXInfDir),
+                                                                      toPx(flYInfDir), pincelPreto)
+            //--------------------------------------------------------------------------------------
 
         }
 
@@ -923,9 +946,10 @@ class MainActivity : AppCompatActivity() {
             val yCoord = intCellheight * 3 / 4
             val xCoord = intCellwidth / 3 + idxNum * intCellwidth
 
-            //-----------------------------------------------------------------------------------
-            canvasNumDisp!!.drawText(strNum, xCoord.toFloat(), yCoord.toFloat(), pincelBranco)
-            //-----------------------------------------------------------------------------------
+            //--------------------------------------------------------------------------------------
+            canvasNumDisp!!.drawText(strNum, toPx(xCoord.toFloat()), toPx(yCoord.toFloat()),
+                                                                                      pincelBranco)
+            //--------------------------------------------------------------------------------------
 
         }
 
@@ -935,14 +959,15 @@ class MainActivity : AppCompatActivity() {
             if (arIntQtiNumDisp[idxNumDisp] == 0) {
 
                 //- Canto superior esquerdo do quadrado
-                var flXSupEsq: Float = idxNumDisp * intCellwidth.toFloat()
-                var flYSupEsq = 0f
+                flXSupEsq = idxNumDisp * intCellwidth.toFloat()
+                flYSupEsq = 0f
 
                 //- Canto inferior direito do quadrado
-                var flXInfDir = flXSupEsq + intCellwidth.toFloat()
-                var flYInfDir = (intCellheight + 1).toFloat()
+                flXInfDir = flXSupEsq + intCellwidth.toFloat()
+                flYInfDir = (intCellheight + 1).toFloat()
                 //----------------------------------------------------------------------------------
-                canvasNumDisp!!.drawRect( flXSupEsq, flYSupEsq, flXInfDir, flYInfDir, pincelBranco)
+                canvasNumDisp!!.drawRect( toPx(flXSupEsq), toPx(flYSupEsq), toPx(flXInfDir),
+                                                                     toPx(flYInfDir), pincelBranco)
                 //----------------------------------------------------------------------------------
 
             }
@@ -1016,8 +1041,8 @@ class MainActivity : AppCompatActivity() {
                     canvasMyImage?.drawRect(
                         0f,
                         0f,
-                        it1,
-                        it,
+                        toPx(it1),
+                        toPx(it),
                         pincelBranco
                     )
                 }
@@ -1041,8 +1066,8 @@ class MainActivity : AppCompatActivity() {
             }
             pincelDesenhar.strokeWidth = flLargPincel
             //--------------------------------------------------------------------------------------
-            canvasMyImage?.drawLine(
-                flCoordXInic, flCoordYInic, flCoordXFim, flCoordYFim, pincelDesenhar )
+            canvasMyImage?.drawLine( toPx(flCoordXInic), toPx(flCoordYInic), toPx(flCoordXFim),
+                                                                toPx(flCoordYFim), pincelDesenhar )
             //--------------------------------------------------------------------------------------
         }
         //--- Desenha as linhas verticais
@@ -1060,10 +1085,8 @@ class MainActivity : AppCompatActivity() {
 
             pincelDesenhar.strokeWidth = flLargPincel
             //--------------------------------------------------------------------------------------
-            canvasMyImage?.drawLine(
-                flCoordXInic, flCoordYInic, flCoordXFim, flCoordYFim,
-                pincelDesenhar
-            )
+            canvasMyImage?.drawLine( toPx(flCoordXInic), toPx(flCoordYInic), toPx(flCoordXFim),
+                                                                toPx(flCoordYFim), pincelDesenhar )
             //--------------------------------------------------------------------------------------
         }
 
@@ -1076,9 +1099,13 @@ class MainActivity : AppCompatActivity() {
         // Paint
         bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
             .copy(Bitmap.Config.ARGB_8888, true)
+
         //--- Escreve nas células
         intCellwidth  = bmpMyImage!!.width  / 9
         intCellheight = bmpMyImage!!.height / 9
+
+        //intCellwidth  = toPx((bmpMyImage!!.width).toFloat()).toInt()  / 9
+        //intCellheight = toPx((bmpMyImage!!.height).toFloat()).toInt() / 9
 
         val canvasMyImage = Canvas(bmpMyImage!!)
 
@@ -1106,9 +1133,14 @@ class MainActivity : AppCompatActivity() {
                     //------------------------------------------------------
 
                     //------------------------------------------------------------------------------
-                    canvasMyImage.drawText(strTexto, xCoord.toFloat(), yCoord.toFloat(), pincelAzul)
+                    canvasMyImage.drawText(strTexto, toPx(xCoord.toFloat()), toPx(yCoord.toFloat()),
+                                                                                         pincelAzul)
                     //------------------------------------------------------------------------------
 
+                    //------------------------------------------------------------------------------
+                    //canvasMyImage.drawText(strTexto, xCoord.toFloat(), yCoord.toFloat(),
+                    //    pincelAzul)
+                    //------------------------------------------------------------------------------
                 }
             }
         }
@@ -1125,7 +1157,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    var intNum = 0
+    private var intNum = 0
     //--- editaIVSudokuBoard
     private fun editaIVSudokuBoard(coordX : Int, coordY : Int) {
 
@@ -1263,12 +1295,18 @@ class MainActivity : AppCompatActivity() {
     //--- editaIVNumDisp
     private fun editaIVNumDisp (coordX : Int) {
 
+        //--- Inicializações e inicializações
+        val flXSupEsq : Float
+        val flYSupEsq : Float
+        val flXInfDir : Float
+        val flYInfDir : Float
+
         //--- Se tem célula selecionada no Sudoku Board, trata a edição da célula
         if (flagBoardSel) {
 
             //--- Determina a célula e o número tocado
-            var cellX  = coordX / intCellwidth
-            var intNum = arIntNumsDisp[cellX]
+            val cellX  = coordX / intCellwidth
+            val intNum = arIntNumsDisp[cellX]
 
             if (intLinJogar < 9 && intColJogar < 9 && cellX < 9) {
 
@@ -1287,14 +1325,12 @@ class MainActivity : AppCompatActivity() {
                     if (arIntQtiNumDisp[cellX] > 0) {
 
                         //--- Verifica se válido
-                        var flagNumVal = true
-
                         //--------------------------------------------------
                         jogarJogo.arArIntNums = copiaArArInt(arArIntNums)
                         //---------------------------------------------------------
                         val Qm = jogarJogo.determinaQm(intLinJogar, intColJogar)
                         //---------------------------------------------------------------------------
-                        flagNumVal = jogarJogo.verifValidade(Qm, intLinJogar, intColJogar, intNum)
+                        val flagNumVal = jogarJogo.verifValidade(Qm, intLinJogar, intColJogar, intNum)
                         //---------------------------------------------------------------------------
 
                         //--- Se válido e ainda tem número desse disponível escreve-o no board
@@ -1316,18 +1352,17 @@ class MainActivity : AppCompatActivity() {
                             if (arIntQtiNumDisp[cellX] == 0) {
 
                                 //- Canto superior esquerdo do quadrado
-                                var flXSupEsq = cellX * intCellwidth.toFloat()
-                                var flYSupEsq = 0f
+                                flXSupEsq = cellX * intCellwidth.toFloat()
+                                flYSupEsq = 0f
 
                                 //- Canto inferior direito do quadrado
-                                var flXInfDir = flXSupEsq + intCellwidth.toFloat()
-                                var flYInfDir = (intCellheight + 1).toFloat()
-                                //------------------------------------------------------------------------------
+                                flXInfDir = flXSupEsq + intCellwidth.toFloat()
+                                flYInfDir = (intCellheight + 1).toFloat()
+                                //------------------------------------------------------------------
                                 canvasNumDisp!!.drawRect(
-                                    flXSupEsq, flYSupEsq, flXInfDir, flYInfDir,
-                                    pincelBranco
-                                )
-                                //------------------------------------------------------------------------------
+                                    toPx(flXSupEsq), toPx(flYSupEsq), toPx(flXInfDir),
+                                                                    toPx(flYInfDir), pincelBranco )
+                                //------------------------------------------------------------------
                                 ivNumDisp.setImageBitmap(bmpNumDisp)
 
                             }
@@ -1377,7 +1412,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    lateinit var document : Document
+    //lateinit var document : Document
 
         //--- inicQuadMaiorAdaptacao
     @RequiresApi(Build.VERSION_CODES.O)
@@ -1565,9 +1600,10 @@ class MainActivity : AppCompatActivity() {
 
             pincelPreto.textSize = intTamTxt * scale
 
-            //-----------------------------------------------------------------------------------
-            canvasQtiNumDisp.drawText(strTxt, xCoord.toFloat(), yCoord.toFloat(), pincelPreto)
-            //-----------------------------------------------------------------------------------
+            //--------------------------------------------------------------------------------------
+            canvasQtiNumDisp.drawText(strTxt, toPx(xCoord.toFloat()), toPx(yCoord.toFloat()),
+                                                                                        pincelPreto)
+            //--------------------------------------------------------------------------------------
 
         }
         //-------------------------------------------
@@ -1576,6 +1612,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /*
     //--- readXml
     private fun readXml(xmlFileName : String): Document {
 
@@ -1590,20 +1627,26 @@ class MainActivity : AppCompatActivity() {
         return doc
 
     }
+     */
 
     //--- separaArq
-    private fun separaArq(arStrLeit : ArrayList<String>, strTag : String) : ArrayList<String> {
+    //private fun separaArq(arStrLeit : ArrayList<String>, strTag : String) : ArrayList<String> {
+    private fun separaArq(arStrLeit : ArrayList<String>, strTag : String) : String {
 
-        lateinit var arLst : ArrayList <String>
+        //lateinit var arLst : ArrayList <String>
+        var strTmp    = ""
+        var strReturn = ""
 
         val strTagInic = "<$strTag>"
         val strTagFim  = "</$strTag>"
-        var flagInic : Boolean = false
-        var flagFim  : Boolean = false
 
+        //var flagInic : Boolean = false
+        //var flagFim  : Boolean = false
+
+        /*
         for (idxCampo in 0 until arStrLeit.size ) {
 
-            val strCampo = arStrLeit.get(idxCampo)
+            val strCampo = arStrLeit[idxCampo]
 
             if (!flagInic) {
 
@@ -1620,10 +1663,50 @@ class MainActivity : AppCompatActivity() {
             if (flagFim) break
 
         }
+         */
 
-        return arLst
+        for (idxCampo in arStrLeit.indices) {
+
+            strTmp += arStrLeit[idxCampo]
+
+        }
+
+        val intIdxInic = strTmp.indexOf(strTagInic)
+        val intIdxFim  = strTmp.indexOf(strTagFim) + strTagFim.length
+
+        if (intIdxInic > -1 && intIdxFim > -1 && intIdxFim > intIdxInic) {
+
+//            for (idxData in intIdxInic..intIdxFim) {
+
+                strReturn += strTmp.substring(intIdxInic, intIdxFim)    //arStrLeit[idxData]
+
+//            }
+
+        }
+
+        //return arLst
+        return strReturn
 
     }
 
+    //--- Converte um valor em dp para pixels (px)
+    // [002] - pag240
+    //private fun toPx (dip : Float) : Float { return(dip * scale + 0.5f) }
+
+    private fun toPx (dip : Float) : Float { return (dip) }              // (dip * scale + 0.5f) }
+
+    /*
+    private fun toPx (dip: Float) : Float {
+
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP,
+            dip,
+            this.resources.displayMetrics
+        )
+
+    }
+     */
 
 }
+
+
