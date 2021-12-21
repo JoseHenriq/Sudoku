@@ -121,10 +121,13 @@ public class Utils {
     //--------------------------------------------------------------------------
     public  boolean VerificaPermissoes(Activity activity) {
 
-        String[] permissoes = new String[]{ Manifest.permission.RECORD_AUDIO,         // 11/01/21
+        String[] permissoes = new String[]{ //Manifest.permission.RECORD_AUDIO,         // 11/01/21
+
                                             Manifest.permission.INTERNET,
+
                                             Manifest.permission.READ_EXTERNAL_STORAGE,
                                             Manifest.permission.WRITE_EXTERNAL_STORAGE };
+
         //String[] permissoes = new String[]{Manifest.permission.INTERNET};
 
         //--------------------------------------------------------------------------
