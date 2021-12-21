@@ -448,7 +448,7 @@ class MainActivity : AppCompatActivity() {
             progressBar.visibility = VISIBLE
 
             //--- Prepara o preset para se conseguir o gabarito do jogo
-            if (++sgg.intJogoAdaptar > 5) sgg.intJogoAdaptar = 1
+            if (++sgg.intJogoAdaptar > 6) sgg.intJogoAdaptar = 1
             txtDadosJogo.text = String.format("%s%d %s","Preset #",sgg.intJogoAdaptar,"aguarde ...")
 
             //--- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
@@ -460,6 +460,7 @@ class MainActivity : AppCompatActivity() {
                 //-----------------------------
                 groupRBadapta.visibility = VISIBLE
 
+                /*
                 if (sgg.intJogoAdaptar < 5) {
 
                     //-------------------------------------------
@@ -476,6 +477,17 @@ class MainActivity : AppCompatActivity() {
                     //--------------------------------------------
 
                 }
+                 */
+
+                when {
+
+                    sgg.intJogoAdaptar < 5 -> inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
+
+                    sgg.intJogoAdaptar < 7 -> quadMaiorAdapta =
+                                                    leituraPreset(sgg.intJogoAdaptar - 4)
+                    else -> {}
+
+                }
 
                 sgg.quadMaiorRet = copiaArArInt(quadMaiorAdapta)
 
@@ -484,7 +496,7 @@ class MainActivity : AppCompatActivity() {
                 //---------------------------------------
 
                 //--- Apresenta o nível e o subnível do preset
-                nivelJogo = (sgg.intQtiZeros / 10) * 10
+                nivelJogo    = (sgg.intQtiZeros / 10) * 10
                 subNivelJogo = sgg.intQtiZeros % 10
                 val rbNivelJogo: RadioButton = when (nivelJogo) {
 
@@ -1770,9 +1782,12 @@ class MainActivity : AppCompatActivity() {
                                 Log.d(cTAG, strLog)
 
                                 var array = arrayOf<Int>()
-                                strSubCampo.forEach {
 
-                                    array += it.digitToInt()
+                                val lstChNum : List<String> = strSubCampo.split(",")
+
+                                lstChNum.forEach () {
+
+                                   array += (it.trim()).toInt()
 
                                 }
                                 arArIntJogoAdaptar += array

@@ -258,7 +258,9 @@ class SudokuGameGenerator {
         for (linha in 0..8) {
 
             var array = arrayOf<Int>()
+
             for (coluna in 0..8) { array += 0 }
+
             quadMaiorRet += array
 
         }
