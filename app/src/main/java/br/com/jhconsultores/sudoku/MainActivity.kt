@@ -1,5 +1,6 @@
 package br.com.jhconsultores.sudoku
 
+import android.R.attr
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -25,6 +26,12 @@ import android.view.View.*
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import br.com.jhconsultores.utils.Utils
+import android.content.res.AssetManager
+import java.io.InputStream
+import android.R.attr.path
+import java.io.IOException
+import java.nio.charset.Charset
+
 
 /*
 import org.w3c.dom.Document
@@ -172,6 +179,92 @@ class MainActivity : AppCompatActivity() {
 
         }
          */
+
+        /*
+        // https://www.codexpedia.com/android/show-files-in-a-directory-in-assets-folder-in-android/
+        // list files in a folder in asset
+        val assetManager = assets
+        try {
+            val files = assetManager.list("images")
+            for (i in files!!.indices) { Log.d(cTAG, files!![i]) }
+
+        } catch (exc: Exception) {
+
+            Log.d(cTAG, "Erro: $exc.message")
+
+        }
+         */
+
+        /*
+        val list: Array<String>?
+        try {
+            list = assets.list("")
+            if (list!!.isNotEmpty()) {
+
+                // This is a folder
+                for (file in list) {
+
+                    /*
+                    if (!listAssetFiles(path.toString() + "/" + file)) return false else {
+                        // This is a file
+                        // TODO: add file name to an array list
+                    }
+                    */
+                    Log.d(cTAG, "FileName: $file")
+
+                }
+            }
+
+        } catch (exc: Exception) {
+            //return false
+            Log.d(cTAG, "Erro: ${exc.message}")
+        }
+         */
+
+        /*
+        var strLeit = ""
+        var inputStream : InputStream? = null
+
+        try {
+
+            // inputStream   = getAssets().open("preset_1")
+
+            val size      = inputStream.available()
+
+            val buffer = ByteArray (size)
+
+            inputStream.read(buffer)
+
+            strLeit = buffer.toString()
+         */
+
+        /*
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
+
+        /*
+        } catch (exc: Exception) {
+
+            Log.d(cTAG, "Erro: $exc.message")
+
+        }
+         */
+
+        val assetManager: AssetManager = this.assets
+
+        val inStream : InputStream
+        //var bitmap: Bitmap? = null
+        var strArq = ""
+        try {
+
+            inStream = assetManager.open("preset_1")
+            strArq = inStream.readBytes().toString(Charset.defaultCharset())
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
 
         //--- Instancializações e inicializações
         tvContaNums  = findViewById(R.id.ContaNums)
