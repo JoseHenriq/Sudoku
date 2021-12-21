@@ -173,116 +173,6 @@ class MainActivity : AppCompatActivity() {
         }
          */
 
-        //--- Obtém lista de arquivos em resource / raw
-        //-------------------------------------------------------
-        val arStrNomeArqRaw : Array <String> = utils.ListRaw()
-        //-------------------------------------------------------
-        Log.d(cTAG, "-> Arquivos raw (listRaw):")
-        for (idxFileName in arStrNomeArqRaw.indices) {
-
-            Log.d(cTAG,"   $idxFileName: ${arStrNomeArqRaw[idxFileName]}")
-
-        }
-        //--- Leitura de arquivo
-        val strNomeArq = arStrNomeArqRaw[0]
-        Log.d(cTAG, "-> Arquivo $strNomeArq:")
-        //-----------------------------------------------------------------------------------------
-        val arStrLeitArqRaw : ArrayList <String> = utils.LeituraFileRaw(this, strNomeArq)
-        //-----------------------------------------------------------------------------------------
-        for (idxDecl in 0 until arStrLeitArqRaw.size) {
-
-            Log.d(cTAG,"   $idxDecl: ${arStrLeitArqRaw[idxDecl]}")
-
-        }
-        //--- Prepara os arrays com os tags e subtags
-        arStrTags      = arrayOf ( "header", "body",   "jogos" )
-        arArStrTags[0] = arrayOf ( "id"    , "nivel",  "subnivel")  //, "", "", "", "", "", "")
-        arArStrTags[1] = arrayOf ( "linha0", "linha1", "linha2", "linha3", "linha4", "linha5",
-                                                                      "linha6", "linha7", "linha8")
-        arArStrTags[2] = arrayOf ( "id"    , "dataHora", "tempoJogo", "erros", "status")   //, "", "", "")
-        //--- Obtém os campos entre os tags principais
-        for (idxTag in arStrTags.indices) {
-
-            var strTAG = arStrTags[idxTag]
-
-            /*
-            strLog  = "-> Obtém "
-            strLog += if (strTAG == "jogos") "os " else "o "
-            strLog += "$strTAG"
-            Log.d(cTAG, strLog)
-             */
-
-            //--------------------------------------------------
-            val strCampo = separaArq(arStrLeitArqRaw, strTAG)
-            //--------------------------------------------------
-            if (strCampo == "") Log.d(cTAG, "Esse arquivo não contém o tag \"$strTAG\"")
-            else {
-
-                //Log.d(cTAG, strCampo)
-
-                when (idxTag) {
-
-                    0 -> { // "home"
-
-                        Log.d(cTAG, "-> Tag: ${arStrTags[idxTag]}")
-
-                        for (idxSubTag in 0 until 3) {
-
-                            strTAG = arArStrTags[0][idxSubTag]
-                            strLog = "   - subTag: $strTAG  conteúdo: "
-
-                            //------------------------------------------------
-                            val strSubCampo = separaCampo(strCampo, strTAG)
-                            //------------------------------------------------
-
-                            strLog += strSubCampo
-                            Log.d(cTAG, strLog)
-
-                        }
-                    }
-
-                    1 -> { // "body"
-
-                        Log.d(cTAG, "-> Tag: ${arStrTags[idxTag]}")
-                        for (idxSubTag in 0 until 9) {
-
-                            strTAG = arArStrTags[1][idxSubTag]
-                            strLog = "   - subTag: $strTAG  conteúdo: "
-
-                            //------------------------------------------------
-                            val strSubCampo = separaCampo(strCampo, strTAG)
-                            //------------------------------------------------
-
-                            strLog += strSubCampo
-                            Log.d(cTAG, strLog)
-
-                        }
-                    }
-
-                    2 -> { // "jogos"
-
-                        Log.d(cTAG, "-> Tag: ${arStrTags[idxTag]}")
-                        for (idxSubTag in 0 until 5) {
-
-                            strTAG = arArStrTags[2][idxSubTag]
-                            strLog = "   - subTag: $strTAG  conteúdo: "
-
-                            //------------------------------------------------
-                            val strSubCampo = separaCampo(strCampo, strTAG)
-                            //------------------------------------------------
-
-                            strLog += strSubCampo
-                            Log.d(cTAG, strLog)
-
-                        }
-                    }
-
-                    else -> {}
-
-                }
-            }
-        }
-
         //--- Instancializações e inicializações
         tvContaNums  = findViewById(R.id.ContaNums)
         tvContaClues = findViewById(R.id.ContaClues)
@@ -315,7 +205,7 @@ class MainActivity : AppCompatActivity() {
         //--------------------
 
         //------------------------------------------------------------------------------------------
-        // Progress Bar
+        // Implementa o Progress Bar
         //------------------------------------------------------------------------------------------
         progressBar = ProgressBar(this)
         progressBar.visibility = INVISIBLE
@@ -558,21 +448,34 @@ class MainActivity : AppCompatActivity() {
             progressBar.visibility = VISIBLE
 
             //--- Prepara o preset para se conseguir o gabarito do jogo
-            if (++sgg.intJogoAdaptar > 4) sgg.intJogoAdaptar = 1
+            if (++sgg.intJogoAdaptar > 5) sgg.intJogoAdaptar = 1
             txtDadosJogo.text = String.format("%s%d %s","Preset #",sgg.intJogoAdaptar,"aguarde ...")
 
             //--- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
             val waitTime = 100L  // milisegundos
-            Handler(Looper.getMainLooper()).postDelayed( {
+            Handler(Looper.getMainLooper()).postDelayed({
 
                 //-----------------------------
                 visibilidadeViews(INVISIBLE)
                 //-----------------------------
                 groupRBadapta.visibility = VISIBLE
 
-                //-------------------------------------------
-                inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
-                //-------------------------------------------
+                if (sgg.intJogoAdaptar < 5) {
+
+                    //-------------------------------------------
+                    inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
+                    //-------------------------------------------
+
+                }
+
+                // 5
+                else {
+
+                    //--------------------------------------------
+                    quadMaiorAdapta = leituraPreset(1)
+                    //--------------------------------------------
+
+                }
 
                 sgg.quadMaiorRet = copiaArArInt(quadMaiorAdapta)
 
@@ -610,9 +513,11 @@ class MainActivity : AppCompatActivity() {
                 rbNivelJogo.isChecked = true
 
                 edtViewSubNivel.setText(subNivelJogo.toString())
+
                 //---------------------------
                 prepRBniveis(false)
                 //---------------------------
+
                 edtViewSubNivel.isEnabled = false
 
                 //-------------------------------
@@ -627,7 +532,6 @@ class MainActivity : AppCompatActivity() {
                 progressBar.visibility = INVISIBLE
 
             },
-
             waitTime)  // value in milliseconds
 
         }
@@ -1505,8 +1409,6 @@ class MainActivity : AppCompatActivity() {
         var array : Array <Int>
         quadMaiorAdapta = arrayOf()
 
-        //--- Leitura do arquivo de presets(xml)
-
         //--- Simula os dados iniciais propostos
         when (jogoAdaptar) {
 
@@ -1581,7 +1483,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             // Nível: muito difícil  Subnível: 9 (nívelTotal: 59)
-            // 4
+            // 4 -> run {
             else -> run {
 
                 for (linha in 0..8) {
@@ -1601,6 +1503,7 @@ class MainActivity : AppCompatActivity() {
 
                     }
                     quadMaiorAdapta += array
+
                 }
             }
         }
@@ -1761,6 +1664,150 @@ class MainActivity : AppCompatActivity() {
      */
 
     private fun toPx (dip : Float) : Float { return (dip) }
+
+    //--- leituraPreset
+    private fun leituraPreset(numPreset : Int) : Array < Array <Int> > {
+
+        var arArIntJogoAdaptar = arrayOf < Array <Int>> ()  //= Array(9) { Array(9) { 0 } }
+
+        var flagLeituraParcialOk = false
+        var flagLeituraPresetOk  = false
+        val strNomeArq = "preset_$numPreset"
+
+        //--- Obtém lista de arquivos em resource / raw
+        //-------------------------------------------------------
+        val arStrNomeArqRaw: Array<String> = utils.ListRaw()
+        //-------------------------------------------------------
+        Log.d(cTAG, "-> Arquivos raw (listRaw):")
+        for (idxFileName in arStrNomeArqRaw.indices) {
+
+            val strFileNameDir = arStrNomeArqRaw[idxFileName]
+            Log.d(cTAG, "$idxFileName: $strFileNameDir")
+
+            flagLeituraParcialOk = (strFileNameDir == strNomeArq)
+            if (flagLeituraParcialOk) break
+
+        }
+
+        //--- Leitura de arquivo
+        if (!flagLeituraParcialOk) return (Array(9) { Array(9) { 0 } })
+        else {
+
+            Log.d(cTAG, "-> Arquivo $strNomeArq:")
+            //--------------------------------------------------------------------------------------
+            val arStrLeitArqRaw: ArrayList<String> = utils.LeituraFileRaw(this, strNomeArq)
+            //--------------------------------------------------------------------------------------
+            for (idxDecl in 0 until arStrLeitArqRaw.size) {
+
+                Log.d(cTAG, "   $idxDecl: ${arStrLeitArqRaw[idxDecl]}")
+
+            }
+
+            //--- Prepara os arrays com os tags e subtags
+            arStrTags = arrayOf("header", "body", "jogos")
+            arArStrTags[0] = arrayOf("id", "nivel", "subnivel")  //, "", "", "", "", "", "")
+            arArStrTags[1] = arrayOf(
+                "linha0", "linha1", "linha2", "linha3", "linha4", "linha5",
+                "linha6", "linha7", "linha8"
+            )
+            arArStrTags[2] =
+                arrayOf("id", "dataHora", "tempoJogo", "erros", "status")   //, "", "", "")
+
+            //--- Obtém os campos entre os tags principais
+            for (idxTag in arStrTags.indices) {
+
+                var strTAG = arStrTags[idxTag]
+
+                /*
+                strLog  = "-> Obtém "
+                strLog += if (strTAG == "jogos") "os " else "o "
+                strLog += "$strTAG"
+                Log.d(cTAG, strLog)
+                 */
+
+                //--------------------------------------------------
+                val strCampo = separaArq(arStrLeitArqRaw, strTAG)
+                //--------------------------------------------------
+                if (strCampo == "") Log.d(cTAG, "Esse arquivo não contém o tag \"$strTAG\"")
+                else {
+
+                    //Log.d(cTAG, strCampo)
+
+                    when (idxTag) {
+
+                        0 -> { // "home"
+
+                            Log.d(cTAG, "-> Tag: ${arStrTags[idxTag]}")
+
+                            for (idxSubTag in 0 until 3) {
+
+                                strTAG = arArStrTags[0][idxSubTag]
+                                strLog = "   - subTag: $strTAG  conteúdo: "
+
+                                //------------------------------------------------
+                                val strSubCampo = separaCampo(strCampo, strTAG)
+                                //------------------------------------------------
+
+                                strLog += strSubCampo
+                                Log.d(cTAG, strLog)
+
+                            }
+                        }
+
+                        1 -> { // "body"
+
+                            Log.d(cTAG, "-> Tag: ${arStrTags[idxTag]}")
+                            for (idxSubTag in 0 until 9) {
+
+                                strTAG = arArStrTags[1][idxSubTag]
+                                strLog = "   - subTag: $strTAG  conteúdo: "
+
+                                //------------------------------------------------
+                                val strSubCampo = separaCampo(strCampo, strTAG)
+                                //------------------------------------------------
+
+                                strLog += strSubCampo
+                                Log.d(cTAG, strLog)
+
+                                var array = arrayOf<Int>()
+                                strSubCampo.forEach {
+
+                                    array += it.digitToInt()
+
+                                }
+                                arArIntJogoAdaptar += array
+
+                            }
+                        }
+
+                        2 -> { // "jogos"
+
+                            Log.d(cTAG, "-> Tag: ${arStrTags[idxTag]}")
+                            for (idxSubTag in 0 until 5) {
+
+                                strTAG = arArStrTags[2][idxSubTag]
+                                strLog = "   - subTag: $strTAG  conteúdo: "
+
+                                //------------------------------------------------
+                                val strSubCampo = separaCampo(strCampo, strTAG)
+                                //------------------------------------------------
+
+                                strLog += strSubCampo
+                                Log.d(cTAG, strLog)
+
+                            }
+                        }
+
+                        else -> {
+                        }
+
+                    }
+                }
+            }
+
+        }
+        return arArIntJogoAdaptar
+    }
 
 }
 
