@@ -196,32 +196,47 @@ class MainActivity : AppCompatActivity() {
         }
         //--- Prepara os arrays com os tags e subtags
         arStrTags      = arrayOf ( "header", "body",   "jogos" )
-        arArStrTags[0] = arrayOf ( "id"    , "nivel",  "subnivel", "", "", "", "", "", "")
+        arArStrTags[0] = arrayOf ( "id"    , "nivel",  "subnivel")  //, "", "", "", "", "", "")
         arArStrTags[1] = arrayOf ( "linha0", "linha1", "linha2", "linha3", "linha4", "linha5",
                                                                       "linha6", "linha7", "linha8")
-        arArStrTags[2] = arrayOf ( "id"    , "dataHora", "datahora", "tempoJogo", "erros",
-                                                                                    "", "", "", "")
+        arArStrTags[2] = arrayOf ( "id"    , "dataHora", "tempoJogo", "erros", "status")   //, "", "", "")
         //--- Obtém os campos entre os tags principais
         for (idxTag in arStrTags.indices) {
 
             var strTAG = arStrTags[idxTag]
-            Log.d(cTAG, "-> Obtém o $strTAG")
-            //-------------------------------------------------------------
+
+            /*
+            strLog  = "-> Obtém "
+            strLog += if (strTAG == "jogos") "os " else "o "
+            strLog += "$strTAG"
+            Log.d(cTAG, strLog)
+             */
+
+            //--------------------------------------------------
             val strCampo = separaArq(arStrLeitArqRaw, strTAG)
-            //-------------------------------------------------------------
+            //--------------------------------------------------
             if (strCampo == "") Log.d(cTAG, "Esse arquivo não contém o tag \"$strTAG\"")
             else {
 
-                Log.d(cTAG, strCampo)
+                //Log.d(cTAG, strCampo)
 
                 when (idxTag) {
 
                     0 -> { // "home"
+
                         Log.d(cTAG, "-> Tag: ${arStrTags[idxTag]}")
+
                         for (idxSubTag in 0 until 3) {
 
                             strTAG = arArStrTags[0][idxSubTag]
-                            Log.d(cTAG, "   - subTag: $strTAG")
+                            strLog = "   - subTag: $strTAG  conteúdo: "
+
+                            //------------------------------------------------
+                            val strSubCampo = separaCampo(strCampo, strTAG)
+                            //------------------------------------------------
+
+                            strLog += strSubCampo
+                            Log.d(cTAG, strLog)
 
                         }
                     }
@@ -232,7 +247,14 @@ class MainActivity : AppCompatActivity() {
                         for (idxSubTag in 0 until 9) {
 
                             strTAG = arArStrTags[1][idxSubTag]
-                            Log.d(cTAG, "   - subTag: $strTAG")
+                            strLog = "   - subTag: $strTAG  conteúdo: "
+
+                            //------------------------------------------------
+                            val strSubCampo = separaCampo(strCampo, strTAG)
+                            //------------------------------------------------
+
+                            strLog += strSubCampo
+                            Log.d(cTAG, strLog)
 
                         }
                     }
@@ -240,10 +262,17 @@ class MainActivity : AppCompatActivity() {
                     2 -> { // "jogos"
 
                         Log.d(cTAG, "-> Tag: ${arStrTags[idxTag]}")
-                        for (idxSubTag in 0 until 4) {
+                        for (idxSubTag in 0 until 5) {
 
                             strTAG = arArStrTags[2][idxSubTag]
-                            Log.d(cTAG, "   - subTag: $strTAG")
+                            strLog = "   - subTag: $strTAG  conteúdo: "
+
+                            //------------------------------------------------
+                            val strSubCampo = separaCampo(strCampo, strTAG)
+                            //------------------------------------------------
+
+                            strLog += strSubCampo
+                            Log.d(cTAG, strLog)
 
                         }
                     }
@@ -1684,6 +1713,29 @@ class MainActivity : AppCompatActivity() {
         if (intIdxInic > -1 && intIdxFim > -1 && intIdxFim > intIdxInic) {
 
             strReturn += strTmp.substring(intIdxInic, intIdxFim)
+
+        }
+
+        return strReturn
+
+    }
+
+    //--- separaCampo
+    private fun separaCampo(strCampo : String, strSubTag : String) : String {
+
+        var strTmp    = ""
+        var strReturn = ""
+
+        val strSubTagInic = "<$strSubTag>"
+        val strSubTagFim  = "</$strSubTag>"
+
+        val intIdxInic = strCampo.indexOf(strSubTagInic) + strSubTagInic.length
+        val intIdxFim  = strCampo.indexOf(strSubTagFim)
+
+        if (intIdxInic > -1 && intIdxFim > -1 && intIdxFim > intIdxInic) {
+
+            strTmp    = strCampo.substring(intIdxInic, intIdxFim)
+            strReturn = strTmp.trimStart()
 
         }
 
