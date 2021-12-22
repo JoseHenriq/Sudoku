@@ -2,8 +2,106 @@
 --------------------------------------------------------------------------------
 
 ================================================================================
-Commit89 - arquivos - 10 - escrita do jogo - 2
+Commit90 - arquivos - 11 - escrita do jogo - 3 px
 ================================================================================
+
+
+================================================================================
+Commit89 - arquivos - 10 - escrita do jogo - 2 - OK!
+================================================================================
+2021-12-22 18:42:55.442 D: -> Tap no btn "Salvar" 
+--------------------------------------------------------------------------------
+2021-12-22 18:42:57.326 D: -> "Sim" was pressed
+--------------------------------------------------------------------------------
+2021-12-22 18:42:57.334 D: -> modelo arq Sudoku xml
+2021-12-22 18:42:57.334 D: <?xml version="1.0" encoding="utf-8"?><presets><header><id></id><nivel></nivel><subnivel></subnivel></header><body><linha0></linha0><linha1></linha1><linha2></linha2><linha3></linha3><linha4></linha4><linha5></linha5><linha6></linha6><linha7></linha7><linha8></linha8></body><jogos><id></id><dataHora></dataHora><tempoJogo></tempoJogo><erros></erros><status></status></jogos></presets>
+2021-12-22 18:42:57.477 D: -> Quantidade de Zeros: 43
+--------------------------------------------------------------------------------
+2021-12-22 18:42:57.477 D: -> Conteudo: <?xml version="1.0" encoding="utf-8"?><presets><header><id>3</id><nivel>Difícil</nivel><subnivel>3</subnivel></header><body><linha0>0, 0, 3, 5, 0, 0, 4, 9, 0</linha0><linha1>7, 6, 0, 0, 0, 0, 5, 0, 1</linha1><linha2>0, 5, 4, 0, 7, 3, 6, 0, 8</linha2><linha3>0, 1, 0, 0, 0, 0, 3, 0, 0</linha3><linha4>0, 0, 7, 2, 6, 1, 0, 0, 0</linha4><linha5>2, 0, 6, 0, 9, 0, 0, 1, 4</linha5><linha6>6, 3, 2, 8, 5, 0, 0, 0, 0</linha6><linha7>4, 0, 0, 0, 0, 2, 8, 0, 6</linha7><linha8>8, 0, 5, 0, 0, 7, 2, 0, 0</linha8></body><jogos><id>1</id><dataHora>22/12/2021 18:42:57</dataHora><tempoJogo>00:00</tempoJogo><erros>0</erros><status>ativo</status></jogos></presets
+2021-12-22 18:42:57.515 D: -> Escrita arquivo storage/emulated/0/Download/sudoku/jogos/jogo_4.xml OK!
+================================================================================
+2021-12-22 17:22:54.638 D: -> Tap no btn "Salvar" 
+--------------------------------------------------------------------------------
+2021-12-22 17:22:56.867 D: -> "Sim" was pressed
+--------------------------------------------------------------------------------
+2021-12-22 17:22:56.886 D: -> modelo arq Sudoku xml
+2021-12-22 17:22:56.887 D: <?xml version="1.0" encoding="utf-8"?><presets><header><id></id><nivel></nivel><subnivel></subnivel></header><body><linha0></linha0><linha1></linha1><linha2></linha2><linha3></linha3><linha4></linha4><linha5></linha5><linha6></linha6><linha7></linha7><linha8></linha8></body><jogos><id></id><dataHora></dataHora><tempoJogo></tempoJogo><erros></erros><status></status></jogos></presets>
+2021-12-22 17:23:30.726 D: -> Quantidade de Zeros: 20
+
+2021-12-22 17:23:38.881 D: -> Conteudo: 
+<?xml version="1.0" encoding="utf-8"?>
+
+<presets>
+
+<header>
+<id>3</id>
+<nivel>Fácil</nivel>
+<subnivel>0</subnivel>
+</header>
+
+<body>
+<linha0>6, 0, 8, 7, 4, 0, 1, 0, 2</linha0>
+<linha1>3, 2, 0, 6, 8, 1, 0, 7, 5</linha1>
+<linha2>7, 5, 1, 9, 0, 3, 4, 0, 8</linha2>
+<linha3>9, 6, 3, 5, 0, 8, 0, 2, 0</linha3>
+<linha4>0, 4, 2, 3, 7, 0, 8, 9, 1</linha4>
+<linha5>1, 8, 0, 0, 9, 4, 6, 5, 3</linha5>
+<linha6>2, 1, 6, 8, 3, 9, 0, 0, 7</linha6>
+<linha7>0, 7, 5, 1, 6, 0, 3, 8, 9</linha7>
+<linha8>8, 3, 0, 0, 5, 7, 2, 1, 6</linha8>
+</body>
+
+<jogos>
+<id>1</id>
+<dataHora>22/12/2021 17:23:08</dataHora>
+<tempoJogo>00:00</tempoJogo>
+<erros>0</erros>
+<status>ativo</status>
+</jogos>
+
+</presets
+================================================================================
+
+================================================================================
+2021-12-22 16:51:12.641 D: -> Tap no btn "Salvar" 
+--------------------------------------------------------------------------------
+2021-12-22 16:51:14.382 D: -> "Sim" was pressed
+--------------------------------------------------------------------------------
+2021-12-22 16:51:14.392 D: -> modelo arq Sudoku xml
+2021-12-22 16:51:14.392 D: <?xml version="1.0" encoding="utf-8"?><presets><header><id></id><nivel></nivel><subnivel></subnivel></header><body><linha0></linha0><linha1></linha1><linha2></linha2><linha3></linha3><linha4></linha4><linha5></linha5><linha6></linha6><linha7></linha7><linha8></linha8></body><jogos><id></id><dataHora></dataHora><tempoJogo></tempoJogo><erros></erros><status></status></jogos></presets>
+
+2021-12-22 16:51:14.394 D: -> Conteudo: 
+<?xml version="1.0" encoding="utf-8"?>
+
+<presets>
+
+<header>
+<id>3</id>
+<nivel>Fácil</nivel>
+<subnivel>0</subnivel>
+</header>
+
+<body>
+
+<linha0>6, 0, 8, 7, 4, 0, 1, 0, 2, </linha0>
+<linha1>3, 2, 0, 6, 8, 1, 0, 7, 5, </linha1>
+<linha2>7, 5, 1, 9, 0, 3, 4, 0, 8, </linha2>
+<linha3>9, 6, 3, 5, 0, 8, 0, 2, 0, </linha3>
+<linha4>0, 4, 2, 3, 7, 0, 8, 9, 1, </linha4>
+<linha5>1, 8, 0, 0, 9, 4, 6, 5, 3, </linha5>
+<linha6>2, 1, 6, 8, 3, 9, 0, 0, 7, </linha6>
+<linha7>0, 7, 5, 1, 6, 0, 3, 8, 9, </linha7>
+<linha8>8, 3, 0, 0, 5, 7, 2, 1, 6, </linha8>
+
+</body>
+
+
+
+
+2021-12-22 15:35:59.716 D: -> Tap no btn "Salvar" 
+2021-12-22 15:36:06.534 D: -> "Sim" was pressed
+2021-12-22 15:36:06.543 D: -> modelo arq Sudoku xml
+2021-12-22 15:36:06.543 D: <?xml version="1.0" encoding="utf-8"?><presets><header><id></id><nivel></nivel><subnivel></subnivel></header><body><linha0></linha0><linha1></linha1><linha2></linha2><linha3></linha3><linha4></linha4><linha5></linha5><linha6></linha6><linha7></linha7><linha8></linha8></body><jogos><id></id><dataHora></dataHora><tempoJogo></tempoJogo><erros></erros><status></status></jogos></presets>
 
 ================================================================================
 Commit88 - arquivos - 9 - escrita do jogo - 2 -parc

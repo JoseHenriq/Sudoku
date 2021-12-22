@@ -886,9 +886,11 @@ public class Utils {
     //--------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     // Lê data e hora do sistema e retorna os dados formatados conf. espec.
+    // SDK <  Oreo (8.0.0) simpleDataFormat
+    // SDK >= Oreo (8.0.0) "dd/MM/yyyy HH:mm:ss" ou "yyMMdd HHmmss"
     //-------------------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public  String LeDataHora (String strFormatDataHora) {
+    public String LeDataHora (String strFormatDataHora) {
 
         String agoraFormatado = null;
 

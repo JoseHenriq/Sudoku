@@ -25,6 +25,7 @@ import java.lang.Exception
 import java.nio.IntBuffer
 
 import br.com.jhconsultores.utils.Utils
+import java.io.File
 
 class JogarActivity : AppCompatActivity() {   //Activity() {
 
@@ -1258,99 +1259,158 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     }
 
     //--- salvaJogo
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun salvaJogo() {
 
+        var strConteudo = ""
+
         //--- Prepara o conteúdo
-        /*
-            <?xml version="1.0" encoding="utf-8"?>
-            <presets>
-                <header>
-                    <id> 1 </id>
-                    <nivel> Fácil </nivel>
-                    <subnivel> 0 </subnivel>
-                </header>
-                <body>
-                    <linha0> 7, 5, 0, 0, 2, 1, 0, 6, 0 </linha0>
-                    <linha1> 0, 1, 6, 4, 0, 5, 2, 3, 7 </linha1>
-                    <linha2> 0, 2, 3, 9, 7, 0, 8, 5, 1 </linha2>
-                    <linha3> 3, 8, 1, 0, 9, 7, 6, 2, 0 </linha3>
-                    <linha4> 6, 4, 2, 0, 3, 8, 9, 7, 5 </linha4>
-                    <linha5> 0, 7, 0, 6, 4, 2, 3, 0, 8 </linha5>
-                    <linha6> 2, 9, 4, 7, 5, 3, 0, 8, 6 </linha6>
-                    <linha7> 8, 6, 5, 2, 1, 0, 7, 0, 3 </linha7>
-                    <linha8> 0, 0, 7, 0, 6, 4, 5, 9, 2 </linha8>
-                </body>
-                <jogos>
-                    <id> 1 </id>
-                    <dataHora>      </dataHora>
-                    <tempoJogo>     </tempoJogo>
-                    <erro>          </erro>
-                    <status>        </status>
-                </jogos>
-            </presets>
-         */
-
-        /*
-        var strConteudo = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-        strConteudo    += "\n<presets>"
-
-        strConteudo    += "\n\t<header>"
-        strConteudo    += "\n\t\t<id>"
-        strConteudo    += "\n\t\t</id>"
-        strConteudo    += "\n\t\t<nivel>"
-        strConteudo    += "\n\t\t</nivel>"
-        strConteudo    += "\n\t\t<subnivel>"
-        strConteudo    += "\n\t\t</subnivel>"
-        strConteudo    += "\n\t</header>"
-
-        strConteudo    += "\n\t<body>"
-        strConteudo    += "\n\t\t<linha0>"
-        strConteudo    += "\n\t\t</linha0>"
-        strConteudo    += "\n\t\t<linha1>"
-        strConteudo    += "\n\t\t</linha1>"
-        strConteudo    += "\n\t\t<linha2>"
-        strConteudo    += "\n\t\t</linha2>"
-        strConteudo    += "\n\t\t<linha3>"
-        strConteudo    += "\n\t\t</linha3>"
-        strConteudo    += "\n\t\t<linha4>"
-        strConteudo    += "\n\t\t</linha4>"
-        strConteudo    += "\n\t\t<linha5>"
-        strConteudo    += "\n\t\t</linha5>"
-        strConteudo    += "\n\t\t<linha6>"
-        strConteudo    += "\n\t\t</linha6>"
-        strConteudo    += "\n\t\t<linha7>"
-        strConteudo    += "\n\t\t</linha7>"
-        strConteudo    += "\n\t\t<linha8>"
-        strConteudo    += "\n\t\t</linha8>"
-        strConteudo    += "\n\t</body>"
-
-        strConteudo    += "\n\t<jogos>"
-        strConteudo    += "\n\t\t<id>"
-        strConteudo    += "\n\t\t</id>"
-        strConteudo    += "\n\t\t<dataHora>"
-        strConteudo    += "\n\t\t</dataHora>"
-        strConteudo    += "\n\t\t<tempoJogo>"
-        strConteudo    += "\n\t\t</tempoJogo>"
-        strConteudo    += "\n\t\t<erros>"
-        strConteudo    += "\n\t\t</erros>"
-        strConteudo    += "\n\t\t<status>"
-        strConteudo    += "\n\t\t</status>"
-        strConteudo    += "\n\t</jogos>"
-
-        strConteudo    += "\n</presets>"
-
-        Log.d(cTAG, "-> Conteúdo:\n$strConteudo")
-         */
-
-        val strNomeComPath = "sudoku/docs/modeloArqXmlSudoku.txt"
+        //-- Lê o modelo
+        val strNomeComPath = "sudoku/docs/modeloArqXmlSudoku1.txt"
         //----------------------------------------------------------------------------
         val arStrLeitArq: ArrayList<String> = utils.leitExtMemTextFile(strNomeComPath)
         //----------------------------------------------------------------------------
-
+        //-- Converte o modelo de ArrayList para String
+        var strModelo = ""
         Log.d(cTAG, "-> modelo arq Sudoku xml")
-        for (idxDecl in 0 until arStrLeitArq.size) {
+        for (idxDecl in 0 until arStrLeitArq.size) { strModelo += arStrLeitArq[idxDecl] }
+        Log.d(cTAG, strModelo)
 
-            Log.d(cTAG, "   $idxDecl: ${arStrLeitArq[idxDecl]}")
+        //-- Preenche os campos
+        try {
+
+            //- header / id
+            var strTag = "<id>"
+            var intIdxInic = strModelo.indexOf(strTag, 0, false)
+            var intIdxFim = intIdxInic + strTag.length
+            strConteudo = strModelo.substring(0, intIdxFim)
+            strConteudo += "3"
+
+            //- header / nivel
+            strTag = "<nivel>"
+            intIdxInic = intIdxFim
+            intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
+            intIdxFim += strTag.length
+            strConteudo += strModelo.substring(intIdxInic, intIdxFim)
+            strConteudo += strNivelJogo
+
+            //- header / subnivel
+            strTag = "<subnivel>"
+            intIdxInic = intIdxFim
+            intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
+            intIdxFim += strTag.length
+            strConteudo += strModelo.substring(intIdxInic, intIdxFim)
+            strConteudo += strSubNivelJogo
+
+            //- body / linha0 até linha8
+            for (idxLinha in 0 until 9) {
+
+                strTag = "<linha$idxLinha>"
+                intIdxInic = intIdxFim
+                intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
+                intIdxFim += strTag.length
+                strConteudo += strModelo.substring(intIdxInic, intIdxFim)
+
+                for (idxCol in 0 until 9) {
+
+                    strConteudo += arArIntCopia[idxLinha][idxCol].toString()
+                    if (idxCol < 8) strConteudo += ", "
+
+                }
+
+            }
+            //- jogos / id
+            strTag = "<id>"
+            intIdxInic = intIdxFim
+            intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
+            intIdxFim += strTag.length
+            strConteudo += strModelo.substring(intIdxInic, intIdxFim)
+            strConteudo += "1"
+
+            //- jogos / datahora
+            strTag = "<dataHora>"
+            intIdxInic = intIdxFim
+            intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
+            intIdxFim += strTag.length
+            strConteudo += strModelo.substring(intIdxInic, intIdxFim)
+            strConteudo += utils.LeDataHora("dd/MM/yyyy HH:mm:ss")
+
+            //- jogos / tempoJogo
+            strTag = "<tempoJogo>"
+            intIdxInic = intIdxFim
+            intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
+            intIdxFim += strTag.length
+            strConteudo += strModelo.substring(intIdxInic, intIdxFim)
+            strConteudo += crono.text
+
+            //- jogos / erros
+            strTag = "<erros>"
+            intIdxInic = intIdxFim
+            intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
+            intIdxFim += strTag.length
+            strConteudo += strModelo.substring(intIdxInic, intIdxFim)
+            strConteudo += tvErros!!.text
+
+            //- jogos / status
+            strTag = "<status>"
+            intIdxInic = intIdxFim
+            intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
+            intIdxFim += strTag.length
+            strConteudo += strModelo.substring(intIdxInic, intIdxFim)
+            strConteudo += if (quantZeros(arArIntNums) == 0) "finalizado" else "ativo"
+
+            //- Finaliza a preparação do conteúdo
+            strConteudo += strModelo.substring(intIdxFim, strModelo.length - 1)
+
+        }
+        catch (exc : Exception) {
+
+            Toast.makeText(this, "Erro: ${exc.message}",Toast.LENGTH_LONG).show()
+            strConteudo = ""
+
+        }
+
+        Log.d(cTAG, "-> Conteudo: $strConteudo")
+
+        if (strConteudo.isNotEmpty()) {
+
+            //--- Define um nome para o arquivo
+            var intNumArq = 0
+            val arStrArqsNames : Array <String>
+            arStrArqsNames = utils.listaExtMemArqDir("/Download/sudoku/Jogos")
+            if (arStrArqsNames.isNotEmpty()) {
+
+                for (strArqName in arStrArqsNames) {
+
+                    if (strArqName.contains("jogo_")) {
+
+                        var intNumJogo = 0
+                        try {
+                            intNumJogo = strArqName.substring( 5,
+                                                              strArqName.indexOf('.')).toInt()
+                            if (intNumJogo > intNumArq) intNumArq = intNumJogo
+
+                        }
+                        catch (exc : Exception) {}
+                    }
+
+                }
+
+            }
+            intNumArq++
+            val strArqJogo = "jogo_$intNumArq.xml"
+            val strArqName = "/sudoku/jogos/$strArqJogo"
+
+            //--- Salva o arquivo
+            val flagEscrita = utils.escExtMemTextFile(strArqName, strConteudo)
+
+            strToast  = "Escrita arquivo $strArqJogo "
+            strToast += if (flagEscrita) "OK!" else "NÃO ok!"
+            Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
+
+            strLog  = "-> Escrita arquivo storage/emulated/0/Download$strArqName "
+            strLog += if (flagEscrita) "OK!" else "NÃO ok!"
+            Log.d(cTAG, strLog)
 
         }
 
