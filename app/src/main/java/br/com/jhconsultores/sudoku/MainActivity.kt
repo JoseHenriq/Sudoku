@@ -1841,7 +1841,7 @@ class MainActivity : AppCompatActivity() {
     }
     */
 
-    //--- leExtMem:  Download/sudoku/preset_1 do smartfone
+    //--- leExtMem:  Download/sudoku/ do smartfone
     private fun leExtMemDownload (numPreset : Int) : Array <Array<Int>> {
 
         var arArIntJogoAdaptar = arrayOf < Array <Int>> ()  //= Array(9) { Array(9) { 0 } }
@@ -1853,7 +1853,7 @@ class MainActivity : AppCompatActivity() {
         //--- Obtém lista de arquivos em Download
         val strPath = "Download/sudoku"
         //-------------------------------------------------------------
-        val arStrNomeArq: Array<String> = utils.ListaArqDir(strPath)
+        val arStrNomeArq: Array<String> = utils.listaExtMemArqDir(strPath)
         //-------------------------------------------------------------
         Log.d(cTAG, "-> Arquivos Sudoku :")
         for (idxFileName in arStrNomeArq.indices) {
@@ -1873,7 +1873,7 @@ class MainActivity : AppCompatActivity() {
             Log.d(cTAG, "-> Arquivo $strNomeArq:")
             val strNameComPath = "sudoku/$strNomeArq"
             //----------------------------------------------------------------------------
-            val arStrLeitArq: ArrayList<String> = utils.LeituraTextFile(strNameComPath)
+            val arStrLeitArq: ArrayList<String> = utils.leitExtMemTextFile(strNameComPath)
             //----------------------------------------------------------------------------
             for (idxDecl in 0 until arStrLeitArq.size) {
 

@@ -34,6 +34,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
+
+//=============================================================================
+//                           Biblioteca Java
+//=============================================================================
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,22 +57,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-/*
-import android.content.Intent;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-*/
-
-import static android.os.Environment.DIRECTORY_DOWNLOADS;
-
-import static java.security.AccessController.getContext;
-
+//=============================================================================
+//                           Biblioteca JH
+//=============================================================================
 import br.com.jhconsultores.sudoku.R;
-
-//=============================================================================
-//                           Biblioteca Java
-//=============================================================================
 
 /*==============================================================================
  * Sistemas de permissão do Android 6.0
@@ -78,10 +71,10 @@ public class Utils {
 
     //--- Intancializações e inicializações
     private final String TAG_Utils = "Utils";
-     String strLog           = "";
+    String strLog = "";
 
     //--------------------------------------------------------------------------
-    //
+    //                             Inner class
     //--------------------------------------------------------------------------
     public enum EnumStorage {
 
@@ -113,13 +106,13 @@ public class Utils {
     }
 
     //--------------------------------------------------------------------------
-    //                            Permissions
+    //                             Permissions
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
     // Verifica as permissões declaradas no AndroidManifest.xml
     // Livro: Google Android - pag 892 - cap 33
     //--------------------------------------------------------------------------
-    public  boolean VerificaPermissoes(Activity activity) {
+    public boolean VerificaPermissoes(Activity activity) {
 
         String[] permissoes = new String[]{ //Manifest.permission.RECORD_AUDIO,         // 11/01/21
 
@@ -179,461 +172,12 @@ public class Utils {
     }
 
     //--------------------------------------------------------------------------
-    //                            Generics
+    //            ExtMem files métodos (/storage/emulated/0/Download)
     //--------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-    // Verifica se os arquivos necessários para o App existem no raw.
-    //-------------------------------------------------------------------------
-    boolean VerificaExistArqsNecRaw(String [] strArNomeArqNeces) {
-
-        //--- Instancializações e inicializações
-        boolean flagExistem = false;
-        String strMsgUI = "";
-        String strMsg   = "";
-
-        //--- Lista os arquivos existentes em raw
-        //----------------------------------------
-        String [] strArNomeArqExis = ListRaw();
-        //----------------------------------------
-
-        //--- Determina se falta algum dos arquivos
-        try {
-
-            ArrayList<String> strArLstArqNaoExistente = new ArrayList<>();
-
-            int intIndx = 0;
-            for (; intIndx < strArNomeArqNeces.length; intIndx++) {
-
-                if (indexOf(strArNomeArqNeces[intIndx], strArNomeArqExis) == -1) {
-                    strArLstArqNaoExistente.add(strArNomeArqNeces[intIndx]);
-                }
-            }
-
-            if (strArLstArqNaoExistente.size() > 0) {
-
-                for (String strArqNaoExist : strArLstArqNaoExistente) {
-                    strMsg += "\n-" + strArqNaoExist;
-                }
-                strMsgUI = "\nOs arquivos abaixo NÃO existem no res.raw:" + strMsg;
-
-            } else {
-                flagExistem = true;
-                strMsgUI    = "\nTodos os arquivos necessários existem no res.raw";
-            }
-        } catch (Exception exc) {
-
-            Log.d(TAG_Utils, "Erro: " + exc.getMessage());
-
-        }
-        Log.d(TAG_Utils, strMsgUI);
-
-        return flagExistem;
-    }
-
-    //-------------------------------------------------------------------------
-    // Verifica se existem os diretórios e arquivos necessários para o App.
-    // Caso negativo, tenta providenciá-los.
-    //-------------------------------------------------------------------------
-    public  int VerificaInfra(Context context) {
-
-        //--- Instancializações e inicializações
-        String TAG_Utils   = "MAIN_LOG";
-        int intInfraOk    = 0;
-        String strNomeArq = new String();
-
-        boolean flagDirExiste  = true;
-        boolean flagCriado     = false;
-        boolean flagFileExiste = true;
-        File folder;
-        File file;
-
-        File envPath = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
-        Log.d(TAG_Utils, "- path: " + envPath.getName());
-        //----------------------------------------------------------------------
-        // A1- Diretório "Relatorios"
-        //----------------------------------------------------------------------
-        folder = new File(envPath + File.separator + "Relatorios");
-        if (!folder.exists()) {
-            Log.d(TAG_Utils, "- O diretório 'Relatorios' NÃO existe. Cria-o");
-            //---------------------------------
-            flagDirExiste = folder.mkdirs();
-            //---------------------------------
-            if (flagDirExiste) {
-                Log.d(TAG_Utils, "- OK!");
-                flagCriado = true;
-            } else {
-                Log.d(TAG_Utils, "Não OK!");
-                intInfraOk = -1;
-            }
-
-        } else {
-            Log.d(TAG_Utils, "- O diretório 'Relatorios' existe.");
-        }
-
-        //----------------------------------------------------------------------
-        // A2- Diretório "Apache"
-        //----------------------------------------------------------------------
-        if (intInfraOk != -1) {
-
-            folder = new File(envPath + File.separator + "Apache");
-            if (!folder.exists()) {
-
-                Log.d(TAG_Utils, "- O diretório 'Apache' NÃO existe. Cria-o");
-                //---------------------------------
-                flagDirExiste = folder.mkdirs();
-                //---------------------------------
-                if (flagDirExiste) {
-                    flagCriado = true;
-                    Log.d(TAG_Utils, "- OK! Pendências.");
-                    intInfraOk = 10;    // Pendência: preparar o arquivo com as cidades e estados
-                } else {
-                    flagCriado = false;
-                    Log.d(TAG_Utils, "Não OK!");
-                    intInfraOk = -1;
-                }
-            }
-            //--- O diretório Apache já existe, verifica se o arquivo de dados já existe também.
-            else {
-                Log.d(TAG_Utils, "- O diretório 'Apache' existe.");
-            }
-        }
-
-        //----------------------------------------------------------------------
-        // A3- Arquivos do diretório "Apache"
-        //----------------------------------------------------------------------
-        if (intInfraOk != -1 && !flagCriado) {
-
-            strNomeArq = "EstadosEcidadesDoBrasil.txt";
-            file = new File(envPath + File.separator + "Apache" +
-                                                                File.separator + strNomeArq);
-            if (!file.exists()) {
-                Log.d(TAG_Utils, "- OK!");
-                intInfraOk = 10;    // Pendência: preparar o arquivo com as cidades e estados
-            } else {
-                Log.d(TAG_Utils, "- O arquivo existe.");
-            }
-        }
-
-        //----------------------------------------------------------------------
-        // A4- Diretorio "Teste_OffLine"
-        //----------------------------------------------------------------------
-        if (intInfraOk != -1) {
-
-            folder = new File(envPath + File.separator + "Teste_OffLine");
-            if (!folder.exists()) {
-
-                Log.d(TAG_Utils, "- O diretório 'Teste_OffLine' NÃO existe. Cria-o");
-                //---------------------------------
-                flagDirExiste = folder.mkdirs();
-                //---------------------------------
-                if (flagDirExiste) {
-                    flagCriado = true;
-                    Log.d(TAG_Utils, "- OK! Pendências.");
-                    intInfraOk++;    // Pendência: preparar os arquivos para INIT e Href
-
-                } else {
-                    flagCriado = false;
-                    Log.d(TAG_Utils, "Não OK!");
-                    intInfraOk = -1;
-                }
-            }
-            else {
-                Log.d(TAG_Utils, "- O diretório 'Teste_OffLine' existe.");
-            }
-
-            //----------------------------------------------------------------------
-            // A5- Arquivos do diretório "Teste_OffLine"
-            //----------------------------------------------------------------------
-            if (intInfraOk != -1 && !flagCriado) {
-
-                //--- O diretório Teste_OffLine já existe, verifica se os arquivos INIT e Href já existem também.
-                //- Verifica arquivo Init 1
-                String strNomeArqInit = "ApacheInit_Sorocaba_SP_p0001.txt";
-                file = new File(envPath + File.separator + "Teste_OffLine" +
-                                                     File.separator + strNomeArqInit);
-                if (!file.exists()) {
-                    Log.d(TAG_Utils, "- OK! Pendências.");
-                    if ((intInfraOk % 10) == 0)
-                        intInfraOk++;    // Pendência: preparar o arquivo com as cidades e estados
-                } else {
-                    Log.d(TAG_Utils, "- O arquivo Init 1 existe.");
-                }
-                //- Verifica arquivo Init 2
-                if (file.exists()) {
-                    strNomeArqInit = "ApacheInit_Sorocaba_SP_p0002.txt";
-                    file = new File(envPath + File.separator + "Teste_OffLine" +
-                                                         File.separator + strNomeArqInit);
-                    if (!file.exists()) {
-                        Log.d(TAG_Utils, "- OK! Pendências.");
-                        if ((intInfraOk % 10) == 0)
-                            intInfraOk++;    // Pendência: preparar o arquivo com as cidades e estados
-                    } else {
-                        Log.d(TAG_Utils, "- O arquivo Init 2 existe.");
-                    }
-                }
-                //- Verifica arquivo Href pag0001
-                if (file.exists()) {
-                    strNomeArqInit = "ApacheHref_Sorocaba_SP_p0001.txt";
-                    file = new File(envPath + File.separator + "Teste_OffLine" +
-                            File.separator + strNomeArqInit);
-                    if (!file.exists()) {
-                        Log.d(TAG_Utils, "- OK! Pendências.");
-                        if ((intInfraOk % 10) == 0)
-                            intInfraOk++;    // Pendência: preparar o arquivo com as cidades e estados
-                    } else {
-                        Log.d(TAG_Utils, "- O arquivo Href pag0001 existe.");
-                    }
-                }
-                //- Verifica arquivos Href
-                if (file.exists()) {
-                    int intIdx = 1;
-                    for (; intIdx <= 20; intIdx++) {
-                        String strNomeArqHref = String.format("ApacheHref_Sorocaba_SP_r%02d.txt", intIdx);
-                        file = new File(envPath + File.separator  + "Teste_OffLine" +
-                                                              File.separator + strNomeArqHref);
-                        if (!file.exists()) {
-                            Log.d(TAG_Utils, "- OK! Pendências.");
-                            if ((intInfraOk % 10) == 0)
-                                intInfraOk++;    // Pendência: preparar o arquivo com as cidades e estados
-                            break;
-                        }
-                    }
-                    if (intIdx > 20) {
-                        Log.d(TAG_Utils, "- Os arquivos Href existem.");
-                    }
-                }
-            }
-        }
-
-        //--- Prepara o retorno e retorna
-        String strResp = (intInfraOk == -1) ? "- Não ok!" : ((intInfraOk == 0) ? "Ok!" : "Com pendências!");
-        Log.d(TAG_Utils, "- Ret = " + String.valueOf(intInfraOk) + "   " + strResp);
-
-        return (intInfraOk);
-    }
-
-    //--------------------------------------------------------------------------
-    //                            Tools
-    //--------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-    // Lê data e hora do sistema e retorna os dados formatados conf. espec.
-    //-------------------------------------------------------------------------
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public  String LeDataHora (String strFormatDataHora) {
-
-        String agoraFormatado = null;
-
-        // https://dicasdejava.com.br/java-8-como-formatar-localdate-e-localdatetime/
-        //--- Funções válidas para API O (Oreo - 8.0.0) ou superior
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDateTime agora         = null;
-            DateTimeFormatter formatter = null;
-
-            agora         = LocalDateTime.now();
-            formatter     = DateTimeFormatter.ofPattern(strFormatDataHora);
-            agoraFormatado= agora.format(formatter);
-        }
-        else {
-
-            //agoraFormatado = (strFormatDataHora.equals("dd/MM/yyyy HH:mm:ss")) ? "01/01/2020 12:00:00" :
-            //        ((strFormatDataHora.equals("yyMMdd HHmmss") ? "200101 120000" : "800101 120000"));
-
-            Date date           = Calendar.getInstance().getTime();
-            SimpleDateFormat df = new SimpleDateFormat(strFormatDataHora);
-            agoraFormatado      = df.format(date);
-        }
-        return (agoraFormatado);
-    }
-
-    //--------------------------------------------------------------------------
-    //                            Files
-    //--------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-    // Método para escrita de um arquivo na área pública do SD externo
-    //-------------------------------------------------------------------------
-    public  boolean EscritaTextFile(String strFileName, String strConteudo) {
-
-        boolean flagEsc = false;
-        File fpath      = null;
-        File myFile     = null;
-
-        //https://stackoverflow.com/questions/19853401/saving-to-sd-card-as-text-file
-        try {
-            fpath = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
-
-            myFile = new File(fpath, strFileName);
-            myFile.createNewFile();
-
-            FileOutputStream fOut          = new FileOutputStream(myFile);
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut, Charset.forName("UTF-8"));
-
-            myOutWriter.append(strConteudo);
-            myOutWriter.close();
-            fOut.close();
-
-            flagEsc = true;
-
-        } catch (Exception exc) {}
-
-        return  flagEsc;
-    }
-
-    //-------------------------------------------------------------------------
-    // Método para leitura de um arquivo na área pública do SD externo
-    //-------------------------------------------------------------------------
-    //public ArrayList <String> LeituraTextFile(String enuModulo, String strFileName) {
-    public  ArrayList <String> LeituraTextFile (String strFileName) {
-
-        //--- Instancializações e inicializações
-        ArrayList<String> strArLstLeit = new ArrayList<>();
-        File fpath         = null;
-        File file          = null;
-        FileInputStream in = null;
-
-        //--- Leitura do arquivo
-        boolean flagLogLocal = false;
-        try {
-
-            fpath = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
-            file = new File(fpath, strFileName);
-
-            // https://stackoverflow.com/questions/12421814/how-can-i-read-a-text-file-in-android - comentários: Sandip
-            in                      = new FileInputStream(file);
-            BufferedReader myReader = new BufferedReader(new InputStreamReader(in, Charset.forName("UTF-8")));
-
-            if (myReader.toString().length() < 1) {
-
-                strLog = "Erro na leitura de: " + strFileName;
-                Log.d(TAG_Utils, strLog);
-                strArLstLeit = new ArrayList<>();
-
-            } else {
-
-                String aDataRow = "";
-                while ((aDataRow = myReader.readLine()) != null) { strArLstLeit.add(aDataRow); }
-                myReader.close();
-                in.close();
-
-            }
-
-        } catch (Exception exc) {
-
-            strArLstLeit = new ArrayList<>();
-            Log.d(TAG_Utils, "Erro na leitura de: " + strFileName);
-            Log.d(TAG_Utils, "Exc: " + exc.getMessage());
-
-        }
-
-        //--- Retorna
-        return (strArLstLeit);
-    }
-
-    //------------------------------------------------------------------------------------
-    // Método para deletar todos os arquivos e o diretório (obs: o delete é definitivo)
-    //------------------------------------------------------------------------------------
-    public  boolean myDeleteDir(String strDirName) {
-
-        Log.d(TAG_Utils, "--> Deleta Diretório " + strDirName);
-        boolean flagDelOk = true;
-        String rootDirName = Environment.getExternalStorageDirectory().toString() + strDirName;
-        File Dir = new File(rootDirName);
-        try {
-
-            if (Dir.isDirectory()) {
-                String[] children = Dir.list();
-                for (int i = 0; i < children.length && flagDelOk; i++) {
-                    flagDelOk = new File(Dir, children[i]).delete();
-                }
-            }
-
-            if (flagDelOk) { flagDelOk = Dir.delete(); }
-
-        } catch (Exception exc) {
-
-            Log.d(TAG_Utils, "--> Erro: " + exc.getMessage());
-            flagDelOk = false;
-        }
-
-        return flagDelOk;
-
-    }
-
-    //--------------------------------------------------------------------------------------
-    // Método para deletar TODOS os arquivos de um diretório com nomes conforme RegEx.
-    //--------------------------------------------------------------------------------------
-    public  boolean myDeleteAllFiles (String strDirName, String [] strArRegEx) {
-
-        Log.d(TAG_Utils, "--> Deleta Arquivos no Diretório " + strDirName);
-        boolean flagDelOk = true;
-        String rootDirName = Environment.getExternalStorageDirectory().toString() + strDirName;
-        File Dir = new File(rootDirName);
-        try {
-
-            if (Dir.isDirectory()) {
-                String[] children = Dir.list();
-                for (int i = 0; i < children.length && flagDelOk; i++) {
-
-                    boolean flagDelete = true;
-                    for (int r = 0; r <  strArRegEx.length && flagDelete; r++) {
-
-                        if (!children[i].contains(strArRegEx[r])) {
-
-                            flagDelete = false;
-                        }
-                    }
-                    if (flagDelete) {
-
-                        flagDelOk = new File(Dir, children[i]).delete();
-
-                    }
-                }
-            }
-
-        } catch (Exception exc) {
-
-            Log.d(TAG_Utils, "--> Erro: " + exc.getMessage());
-            flagDelOk = false;
-        }
-
-        return flagDelOk;
-
-    }
-
-    //--------------------------------------------------------------------------------------
-    // Método para deletar o arquivo cujo nome é recebido.
-    //--------------------------------------------------------------------------------------
-    public  boolean myDeleteFile (String strDirName, String strFileName) {
-
-        Log.d(TAG_Utils, "--> Deleta Arquivo do Diretório " + strDirName);
-        boolean flagDelOk  = false;
-        String rootDirName = Environment.getExternalStorageDirectory().toString() + strDirName;
-        File Dir  = new File(rootDirName);
-        File file = new File(rootDirName + strFileName);
-        try {
-
-            if (Dir.isDirectory()) {
-                String[] children = Dir.list();
-                int i = 0;
-                for ( ; i < children.length; i++ ) {
-                    if (children[i].equals(strFileName)) break;
-                }
-                if (i < children.length) {
-                    flagDelOk = file.delete();
-                }
-            }
-
-        } catch (Exception exc) {
-
-            Log.d(TAG_Utils, "--> Erro: " + exc.getMessage());
-            flagDelOk = false;
-        }
-        return flagDelOk;
-    }
-
     //--------------------------------------------------------------------------
     // Método para listar arquivos em um diretório
     //--------------------------------------------------------------------------
-    public String[] ListaArqDir (String strDirName) {
+    public String[] listaExtMemArqDir(String strDirName) {
 
         Log.d(TAG_Utils, "--> Lista arquivos do diretorio");
         String[] children   = new String[] {""};
@@ -716,6 +260,266 @@ public class Utils {
 
     }
 
+    //--------------------------------------------------------------------------
+    // Método para escrita de um arquivo
+    //--------------------------------------------------------------------------
+    public boolean escExtMemTextFile(String strFileName, String strConteudo) {
+
+        boolean flagEsc = false;
+        File fpath      = null;
+        File myFile     = null;
+
+        //https://stackoverflow.com/questions/19853401/saving-to-sd-card-as-text-file
+        try {
+            fpath = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
+
+            myFile = new File(fpath, strFileName);
+            myFile.createNewFile();
+
+            FileOutputStream fOut          = new FileOutputStream(myFile);
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut, Charset.forName("UTF-8"));
+
+            myOutWriter.append(strConteudo);
+            myOutWriter.close();
+            fOut.close();
+
+            flagEsc = true;
+
+        } catch (Exception exc) {}
+
+        return  flagEsc;
+    }
+
+    //--------------------------------------------------------------------------
+    // Método para leitura de um arquivo
+    //--------------------------------------------------------------------------
+    //public ArrayList <String> LeituraTextFile(String enuModulo, String strFileName) {
+    public ArrayList <String> leitExtMemTextFile(String strFileName) {
+
+        //--- Instancializações e inicializações
+        ArrayList<String> strArLstLeit = new ArrayList<>();
+        File fpath         = null;
+        File file          = null;
+        FileInputStream in = null;
+
+        //--- Leitura do arquivo
+        boolean flagLogLocal = false;
+        try {
+
+            fpath = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
+            file = new File(fpath, strFileName);
+
+            // https://stackoverflow.com/questions/12421814/how-can-i-read-a-text-file-in-android - comentários: Sandip
+            in                      = new FileInputStream(file);
+            BufferedReader myReader = new BufferedReader(new InputStreamReader(in, Charset.forName("UTF-8")));
+
+            if (myReader.toString().length() < 1) {
+
+                strLog = "Erro na leitura de: " + strFileName;
+                Log.d(TAG_Utils, strLog);
+                strArLstLeit = new ArrayList<>();
+
+            } else {
+
+                String aDataRow = "";
+                while ((aDataRow = myReader.readLine()) != null) { strArLstLeit.add(aDataRow); }
+                myReader.close();
+                in.close();
+
+            }
+
+        } catch (Exception exc) {
+
+            strArLstLeit = new ArrayList<>();
+            Log.d(TAG_Utils, "Erro na leitura de: " + strFileName);
+            Log.d(TAG_Utils, "Exc: " + exc.getMessage());
+
+        }
+
+        //--- Retorna
+        return (strArLstLeit);
+    }
+
+    //--------------------------------------------------------------------------
+    // Método para deletar o arquivo em um diretorio cujos nomes são recebidos.
+    //--------------------------------------------------------------------------
+    public boolean delExtMemFile(String strDirName, String strFileName) {
+
+        Log.d(TAG_Utils, "--> Deleta Arquivo do Diretório " + strDirName);
+        boolean flagDelOk  = false;
+        String rootDirName = Environment.getExternalStorageDirectory().toString() + strDirName;
+        File Dir  = new File(rootDirName);
+        File file = new File(rootDirName + strFileName);
+        try {
+
+            if (Dir.isDirectory()) {
+                String[] children = Dir.list();
+                int i = 0;
+                for ( ; i < children.length; i++ ) {
+                    if (children[i].equals(strFileName)) break;
+                }
+                if (i < children.length) {
+                    flagDelOk = file.delete();
+                }
+            }
+
+        } catch (Exception exc) {
+
+            Log.d(TAG_Utils, "--> Erro: " + exc.getMessage());
+            flagDelOk = false;
+        }
+        return flagDelOk;
+    }
+
+    //--------------------------------------------------------------------------
+    // Método para deletar TODOS os arquivos de um diretório com nomes RegEx.
+    //--------------------------------------------------------------------------
+    public boolean delExtMemAllFiles(String strDirName, String [] strArRegEx) {
+
+        Log.d(TAG_Utils, "--> Deleta Arquivos no Diretório " + strDirName);
+        boolean flagDelOk = true;
+        String rootDirName = Environment.getExternalStorageDirectory().toString() + strDirName;
+        File Dir = new File(rootDirName);
+        try {
+
+            if (Dir.isDirectory()) {
+                String[] children = Dir.list();
+                for (int i = 0; i < children.length && flagDelOk; i++) {
+
+                    boolean flagDelete = true;
+                    for (int r = 0; r <  strArRegEx.length && flagDelete; r++) {
+
+                        if (!children[i].contains(strArRegEx[r])) {
+
+                            flagDelete = false;
+                        }
+                    }
+                    if (flagDelete) {
+
+                        flagDelOk = new File(Dir, children[i]).delete();
+
+                    }
+                }
+            }
+
+        } catch (Exception exc) {
+
+            Log.d(TAG_Utils, "--> Erro: " + exc.getMessage());
+            flagDelOk = false;
+        }
+
+        return flagDelOk;
+
+    }
+
+    //--------------------------------------------------------------------------
+    // Método para deletar TODOS os arq e o Diretório (o delete é definitivo!)
+    //--------------------------------------------------------------------------
+    public boolean delExtMemDir(String strDirName) {
+
+        Log.d(TAG_Utils, "--> Deleta Diretório " + strDirName);
+        boolean flagDelOk = true;
+        String rootDirName = Environment.getExternalStorageDirectory().toString() + strDirName;
+        File Dir = new File(rootDirName);
+        try {
+
+            if (Dir.isDirectory()) {
+                String[] children = Dir.list();
+                for (int i = 0; i < children.length && flagDelOk; i++) {
+                    flagDelOk = new File(Dir, children[i]).delete();
+                }
+            }
+
+            if (flagDelOk) { flagDelOk = Dir.delete(); }
+
+        } catch (Exception exc) {
+
+            Log.d(TAG_Utils, "--> Erro: " + exc.getMessage());
+            flagDelOk = false;
+        }
+
+        return flagDelOk;
+
+    }
+
+    //--------------------------------------------------------------------------
+    //                     src/main/res/raw/ files métodos
+    //--------------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    // Lista os arquivos existentes em: File1\app\src\main\res\raw
+    //https://stackoverflow.com/questions/25178715/how-can-i-list-the-items-in-the-raw-folder-in-android/25179438
+    //---------------------------------------------------------------------
+    public String [] ListRaw() {
+
+        String strMsg = "- Arquivos Raw: ";
+
+        Field fields[] = R.raw.class.getDeclaredFields();
+        String[] names = new String[fields.length] ;
+
+        try {
+            for( int i = 0; i < fields.length; i++ ) {
+                Field f  = fields[i];
+                names[i] = f.getName();
+                strMsg  += "\n" + names[i];
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Log.i(TAG_Utils, strMsg);
+
+        return (names);
+    }
+
+    //-------------------------------------------------------------------------
+    // Verifica se os arquivos necessários para o App existem no raw.
+    //-------------------------------------------------------------------------
+    boolean VerificaExistArqsNecRaw(String [] strArNomeArqNeces) {
+
+        //--- Instancializações e inicializações
+        boolean flagExistem = false;
+        String strMsgUI = "";
+        String strMsg   = "";
+
+        //--- Lista os arquivos existentes em raw
+        //----------------------------------------
+        String [] strArNomeArqExis = ListRaw();
+        //----------------------------------------
+
+        //--- Determina se falta algum dos arquivos
+        try {
+
+            ArrayList<String> strArLstArqNaoExistente = new ArrayList<>();
+
+            int intIndx = 0;
+            for (; intIndx < strArNomeArqNeces.length; intIndx++) {
+
+                if (indexOf(strArNomeArqNeces[intIndx], strArNomeArqExis) == -1) {
+                    strArLstArqNaoExistente.add(strArNomeArqNeces[intIndx]);
+                }
+            }
+
+            if (strArLstArqNaoExistente.size() > 0) {
+
+                for (String strArqNaoExist : strArLstArqNaoExistente) {
+                    strMsg += "\n-" + strArqNaoExist;
+                }
+                strMsgUI = "\nOs arquivos abaixo NÃO existem no res.raw:" + strMsg;
+
+            } else {
+                flagExistem = true;
+                strMsgUI    = "\nTodos os arquivos necessários existem no res.raw";
+            }
+        } catch (Exception exc) {
+
+            Log.d(TAG_Utils, "Erro: " + exc.getMessage());
+
+        }
+        Log.d(TAG_Utils, strMsgUI);
+
+        return flagExistem;
+    }
+
     //-------------------------------------------------------------------------
     // Método para leitura de um arquivo em src/main/res/raw/.
     //-------------------------------------------------------------------------
@@ -756,32 +560,9 @@ public class Utils {
         return (strArLstArq);
     }
 
-    //---------------------------------------------------------------------
-    // Lista os arquivos existentes em: File1\app\src\main\res\raw
-    //https://stackoverflow.com/questions/25178715/how-can-i-list-the-items-in-the-raw-folder-in-android/25179438
-    //---------------------------------------------------------------------
-    public String [] ListRaw() {
-
-        String strMsg = "- Arquivos Raw: ";
-
-        Field fields[] = R.raw.class.getDeclaredFields();
-        String[] names = new String[fields.length] ;
-
-        try {
-            for( int i = 0; i < fields.length; i++ ) {
-                Field f  = fields[i];
-                names[i] = f.getName();
-                strMsg  += "\n" + names[i];
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Log.i(TAG_Utils, strMsg);
-
-        return (names);
-    }
-
+    //--------------------------------------------------------------------------
+    //                         Métodos auxiliares
+    //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
     //--- Obtém Uris granted para compartilhamento de arquivos externamente
     //--------------------------------------------------------------------------
@@ -1101,7 +882,40 @@ public class Utils {
     }
 
     //--------------------------------------------------------------------------
-    //                              Teclado
+    //                               Tools
+    //--------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    // Lê data e hora do sistema e retorna os dados formatados conf. espec.
+    //-------------------------------------------------------------------------
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public  String LeDataHora (String strFormatDataHora) {
+
+        String agoraFormatado = null;
+
+        // https://dicasdejava.com.br/java-8-como-formatar-localdate-e-localdatetime/
+        //--- Funções válidas para API O (Oreo - 8.0.0) ou superior
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDateTime agora         = null;
+            DateTimeFormatter formatter = null;
+
+            agora         = LocalDateTime.now();
+            formatter     = DateTimeFormatter.ofPattern(strFormatDataHora);
+            agoraFormatado= agora.format(formatter);
+        }
+        else {
+
+            //agoraFormatado = (strFormatDataHora.equals("dd/MM/yyyy HH:mm:ss")) ? "01/01/2020 12:00:00" :
+            //        ((strFormatDataHora.equals("yyMMdd HHmmss") ? "200101 120000" : "800101 120000"));
+
+            Date date           = Calendar.getInstance().getTime();
+            SimpleDateFormat df = new SimpleDateFormat(strFormatDataHora);
+            agoraFormatado      = df.format(date);
+        }
+        return (agoraFormatado);
+    }
+
+    //--------------------------------------------------------------------------
+    // Esconde o teclado
     //--------------------------------------------------------------------------
     public void EscondeTeclado(Activity activity) {
 
@@ -1121,7 +935,7 @@ public class Utils {
     }
 
     //--------------------------------------------------------------------------
-    //                              Drawing
+    // Drawing
     //--------------------------------------------------------------------------
     public  float convertSpToPixels(float sp, Context context) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, context.getResources().getDisplayMetrics());
@@ -1138,6 +952,191 @@ public class Utils {
 
         return dip;
 
+    }
+
+    //--------------------------------------------------------------------------
+    //                            Apache
+    //--------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    // Verifica se existem os diretórios e arquivos necessários para o App.
+    // Caso negativo, tenta providenciá-los.
+    //-------------------------------------------------------------------------
+    public int apache_VerifInfra(Context context) {
+
+        //--- Instancializações e inicializações
+        String TAG_Utils   = "MAIN_LOG";
+        int intInfraOk    = 0;
+        String strNomeArq = new String();
+
+        boolean flagDirExiste  = true;
+        boolean flagCriado     = false;
+        boolean flagFileExiste = true;
+        File folder;
+        File file;
+
+        File envPath = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
+        Log.d(TAG_Utils, "- path: " + envPath.getName());
+        //----------------------------------------------------------------------
+        // A1- Diretório "Relatorios"
+        //----------------------------------------------------------------------
+        folder = new File(envPath + File.separator + "Relatorios");
+        if (!folder.exists()) {
+            Log.d(TAG_Utils, "- O diretório 'Relatorios' NÃO existe. Cria-o");
+            //---------------------------------
+            flagDirExiste = folder.mkdirs();
+            //---------------------------------
+            if (flagDirExiste) {
+                Log.d(TAG_Utils, "- OK!");
+                flagCriado = true;
+            } else {
+                Log.d(TAG_Utils, "Não OK!");
+                intInfraOk = -1;
+            }
+
+        } else {
+            Log.d(TAG_Utils, "- O diretório 'Relatorios' existe.");
+        }
+
+        //----------------------------------------------------------------------
+        // A2- Diretório "Apache"
+        //----------------------------------------------------------------------
+        if (intInfraOk != -1) {
+
+            folder = new File(envPath + File.separator + "Apache");
+            if (!folder.exists()) {
+
+                Log.d(TAG_Utils, "- O diretório 'Apache' NÃO existe. Cria-o");
+                //---------------------------------
+                flagDirExiste = folder.mkdirs();
+                //---------------------------------
+                if (flagDirExiste) {
+                    flagCriado = true;
+                    Log.d(TAG_Utils, "- OK! Pendências.");
+                    intInfraOk = 10;    // Pendência: preparar o arquivo com as cidades e estados
+                } else {
+                    flagCriado = false;
+                    Log.d(TAG_Utils, "Não OK!");
+                    intInfraOk = -1;
+                }
+            }
+            //--- O diretório Apache já existe, verifica se o arquivo de dados já existe também.
+            else {
+                Log.d(TAG_Utils, "- O diretório 'Apache' existe.");
+            }
+        }
+
+        //----------------------------------------------------------------------
+        // A3- Arquivos do diretório "Apache"
+        //----------------------------------------------------------------------
+        if (intInfraOk != -1 && !flagCriado) {
+
+            strNomeArq = "EstadosEcidadesDoBrasil.txt";
+            file = new File(envPath + File.separator + "Apache" +
+                    File.separator + strNomeArq);
+            if (!file.exists()) {
+                Log.d(TAG_Utils, "- OK!");
+                intInfraOk = 10;    // Pendência: preparar o arquivo com as cidades e estados
+            } else {
+                Log.d(TAG_Utils, "- O arquivo existe.");
+            }
+        }
+
+        //----------------------------------------------------------------------
+        // A4- Diretorio "Teste_OffLine"
+        //----------------------------------------------------------------------
+        if (intInfraOk != -1) {
+
+            folder = new File(envPath + File.separator + "Teste_OffLine");
+            if (!folder.exists()) {
+
+                Log.d(TAG_Utils, "- O diretório 'Teste_OffLine' NÃO existe. Cria-o");
+                //---------------------------------
+                flagDirExiste = folder.mkdirs();
+                //---------------------------------
+                if (flagDirExiste) {
+                    flagCriado = true;
+                    Log.d(TAG_Utils, "- OK! Pendências.");
+                    intInfraOk++;    // Pendência: preparar os arquivos para INIT e Href
+
+                } else {
+                    flagCriado = false;
+                    Log.d(TAG_Utils, "Não OK!");
+                    intInfraOk = -1;
+                }
+            }
+            else {
+                Log.d(TAG_Utils, "- O diretório 'Teste_OffLine' existe.");
+            }
+
+            //----------------------------------------------------------------------
+            // A5- Arquivos do diretório "Teste_OffLine"
+            //----------------------------------------------------------------------
+            if (intInfraOk != -1 && !flagCriado) {
+
+                //--- O diretório Teste_OffLine já existe, verifica se os arquivos INIT e Href já existem também.
+                //- Verifica arquivo Init 1
+                String strNomeArqInit = "ApacheInit_Sorocaba_SP_p0001.txt";
+                file = new File(envPath + File.separator + "Teste_OffLine" +
+                        File.separator + strNomeArqInit);
+                if (!file.exists()) {
+                    Log.d(TAG_Utils, "- OK! Pendências.");
+                    if ((intInfraOk % 10) == 0)
+                        intInfraOk++;    // Pendência: preparar o arquivo com as cidades e estados
+                } else {
+                    Log.d(TAG_Utils, "- O arquivo Init 1 existe.");
+                }
+                //- Verifica arquivo Init 2
+                if (file.exists()) {
+                    strNomeArqInit = "ApacheInit_Sorocaba_SP_p0002.txt";
+                    file = new File(envPath + File.separator + "Teste_OffLine" +
+                            File.separator + strNomeArqInit);
+                    if (!file.exists()) {
+                        Log.d(TAG_Utils, "- OK! Pendências.");
+                        if ((intInfraOk % 10) == 0)
+                            intInfraOk++;    // Pendência: preparar o arquivo com as cidades e estados
+                    } else {
+                        Log.d(TAG_Utils, "- O arquivo Init 2 existe.");
+                    }
+                }
+                //- Verifica arquivo Href pag0001
+                if (file.exists()) {
+                    strNomeArqInit = "ApacheHref_Sorocaba_SP_p0001.txt";
+                    file = new File(envPath + File.separator + "Teste_OffLine" +
+                            File.separator + strNomeArqInit);
+                    if (!file.exists()) {
+                        Log.d(TAG_Utils, "- OK! Pendências.");
+                        if ((intInfraOk % 10) == 0)
+                            intInfraOk++;    // Pendência: preparar o arquivo com as cidades e estados
+                    } else {
+                        Log.d(TAG_Utils, "- O arquivo Href pag0001 existe.");
+                    }
+                }
+                //- Verifica arquivos Href
+                if (file.exists()) {
+                    int intIdx = 1;
+                    for (; intIdx <= 20; intIdx++) {
+                        String strNomeArqHref = String.format("ApacheHref_Sorocaba_SP_r%02d.txt", intIdx);
+                        file = new File(envPath + File.separator  + "Teste_OffLine" +
+                                File.separator + strNomeArqHref);
+                        if (!file.exists()) {
+                            Log.d(TAG_Utils, "- OK! Pendências.");
+                            if ((intInfraOk % 10) == 0)
+                                intInfraOk++;    // Pendência: preparar o arquivo com as cidades e estados
+                            break;
+                        }
+                    }
+                    if (intIdx > 20) {
+                        Log.d(TAG_Utils, "- Os arquivos Href existem.");
+                    }
+                }
+            }
+        }
+
+        //--- Prepara o retorno e retorna
+        String strResp = (intInfraOk == -1) ? "- Não ok!" : ((intInfraOk == 0) ? "Ok!" : "Com pendências!");
+        Log.d(TAG_Utils, "- Ret = " + String.valueOf(intInfraOk) + "   " + strResp);
+
+        return (intInfraOk);
     }
 
 }
