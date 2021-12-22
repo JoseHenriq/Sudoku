@@ -56,5 +56,6 @@
     <string name="numeros">Números:</string>
     <string name="clues"  >Clues: </string>
     <string name="valor81">81</string>
+    <string name="salvar">Salvar</string>
 
 </resources>

@@ -21,18 +21,16 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
-//import androidx.appcompat.widget.Toolbar
-//import com.google.android.material.appbar.MaterialToolbar
-//import androidx.appcompat.app.AppCompatActivity
-
 import java.lang.Exception
 import java.nio.IntBuffer
 
+import br.com.jhconsultores.utils.Utils
+
 class JogarActivity : AppCompatActivity() {   //Activity() {
 
-    //----------------------------------------------------------------------------------------------
-    //                        Instancializações e inicializações
-    //----------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    //                    Instancializações e inicializações
+    //--------------------------------------------------------------------------
     private var cTAG     = "Sudoku"
     private var strLog   = ""
     private var strToast = ""
@@ -94,30 +92,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     private var arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
     private var arArIntGab    = Array(9) { Array(9) { 0 } }
 
-    var arArIntNums   = Array(9) { Array(9) { 0 } }
-
-    //--- Preset para teste2
-    /*
-    val cinema = arrayOf(
-        arrayOf(0, 0, 0, 0, 1),
-        arrayOf(0, 0, 0, 1, 1),
-        arrayOf(0, 0, 1, 1, 1),
-        arrayOf(0, 0, 0, 1, 1),
-        arrayOf(0, 0, 0, 0, 1))
-     */
-
-    /*
-    private var arArIntTst = arrayOf (
-        arrayOf ( 1, 6, 7, 9, 4, 3, 2, 5, 8 ),
-        arrayOf ( 8, 9, 5, 2, 1, 6, 3, 7, 4 ),
-        arrayOf ( 2, 4, 3, 7, 8, 5, 1, 9, 6 ),
-        arrayOf ( 4, 1, 8, 6, 2, 9, 5, 3, 7 ),
-        arrayOf ( 5, 3, 9, 8, 7, 4, 6, 1, 2 ),
-        arrayOf ( 7, 2, 6, 5, 3, 1, 4, 8, 9 ),
-        arrayOf ( 9, 7, 1, 4, 5, 2, 8, 6, 3 ),
-        arrayOf ( 3, 8, 4, 1, 6, 7, 9, 2, 5 ),
-        arrayOf ( 6, 5, 2, 3, 9, 8, 7, 4, 1 ))
-    */
+    var arArIntNums = Array(9) { Array(9) { 0 } }
 
     private var arArIntCopia  = Array(9) { Array(9) { 0 } }
 
@@ -136,9 +111,11 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     private var strPause    = ""
     private var strReInicia = ""
 
-    //----------------------------------------------------------------------------------------------
-    //                                     Eventos
-    //----------------------------------------------------------------------------------------------
+    private val utils = Utils()
+
+    //--------------------------------------------------------------------------
+    //                                Eventos
+    //--------------------------------------------------------------------------
     //--- onCreate MainActivity
     @RequiresApi(Build.VERSION_CODES.R)
     @SuppressLint("ClickableViewAccessibility")
@@ -161,6 +138,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
             val btnReset  = findViewById<View>(R.id.btnReset)  as Button
             val btnInicia = findViewById<View>(R.id.btnInicia) as Button
+            val btnSalvar = findViewById<View>(R.id.btnSalvar) as Button
             btnInicia.isEnabled = true
 
             //--- Cronômetro
@@ -224,9 +202,9 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
             } // Fim de gabarito recebido via intent ok
 
-            //------------------------------------------------------------------------------------------
+            //------------------------------------------------------------------
             // Listeners para o evento onTouch dos ImageViews
-            //------------------------------------------------------------------------------------------
+            //------------------------------------------------------------------
             // SudokuBoard
             iViewSudokuBoard!!.setOnTouchListener { _, event -> //--- Coordenadas tocadas
 
@@ -424,19 +402,19 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                 false
             }
 
-            //------------------------------------------------------------------------------------------
+            //------------------------------------------------------------------
             // Listeners para o evento onClick dos buttons
-            //------------------------------------------------------------------------------------------
-            // Texto / Bit Map
+            //------------------------------------------------------------------
+            //--- btnInicia
             btnInicia.setOnClickListener {
 
                 strInicia = resources.getString(R.string.inicia)
                 strPause = resources.getString(R.string.pause)
                 strReInicia = resources.getString(R.string.reinicia)
 
-                //--------------------------------------------------------------------------------------
+                //--------------------------------------------------------------
                 // Legenda do botão: Inicia ou ReInicia
-                //--------------------------------------------------------------------------------------
+                //--------------------------------------------------------------
                 if (btnInicia.text == strInicia || btnInicia.text == strReInicia) {
 
                     strLog = if (btnInicia.text == strInicia) strInicia else strReInicia
@@ -473,7 +451,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                 }
             }
 
-            // Reset
+            //--- Botão de Reset
             btnReset.setOnClickListener {
 
                 strLog = "-> Tap no btn \"Reset\" "
@@ -515,6 +493,36 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
                         btnInicia.isEnabled = true
                         btnInicia.text = resources.getString(R.string.inicia)
+
+                    }
+
+                    .setNegativeButton("Não") { _, _ ->
+
+                        Log.d(cTAG, "-> \"Não\" was pressed")
+
+                    }
+                    .show()
+
+            }
+
+            //--- Botão de Salvar o jogo
+            btnSalvar.setOnClickListener {
+
+                strLog = "-> Tap no btn \"Salvar\" "
+                Log.d(cTAG, strLog)
+
+                androidx.appcompat.app.AlertDialog.Builder(this)
+
+                    .setTitle("Sudoku - Jogo")
+                    .setMessage("Tem certeza que quer salvar o jogo?")
+
+                    .setPositiveButton("Sim") { _, _ ->
+
+                        Log.d(cTAG, "-> \"Sim\" was pressed")
+
+                        //------------
+                        salvaJogo()
+                        //------------
 
                     }
 
@@ -791,9 +799,6 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
     }
 
-    //----------------------------------------------------------------------------------------------
-    // Outras
-    //----------------------------------------------------------------------------------------------
     //--- inicializaObjGraficos
     @RequiresApi(Build.VERSION_CODES.R)
     private fun inicializaObjGraficos() {
@@ -864,12 +869,95 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         //-----------------------------
     }
 
+    //--- apresentaGrandezasGraficas
+    @RequiresApi(Build.VERSION_CODES.R)
+    private fun determinaGrandezasGraficas() {
+
+        //--- Apresenta as principais grandezas gráficas
+        //2021-11-29 17:03:42.169 D: -> Display: Largura: 720 pixels, Altura  : 1280 pixels
+        //2021-11-29 17:03:42.171 D: -> Margens: Acima  :  20 pixels, Esquerda:    0 pixels
+        //2021-11-29 17:03:42.172 D: -> Image  : Largura: 720 pixels, Altura  :  630 pixels
+        //2021-11-29 17:03:42.172 D: -> Célula : Largura:  80 pixels, Altura  :   70 pixels
+        try {
+
+            //--- Dimensões do display do Samsung SM-G570M
+            /* Código deprecated no Android 30 (R)
+			Display display = getWindowManager().getDefaultDisplay();
+			Point m_size    = new Point();
+			display.getSize(m_size);
+			int int_dyWidth  = m_size.x;
+			int int_dyHeight = m_size.y; */
+
+            //Log.d(cTAG, "-> Grandezas gráficas:")
+            //val displayMetrics = this.resources.displayMetrics
+            //val intDyWidth     = displayMetrics.heightPixels
+            //val intDyHeight    = displayMetrics.widthPixels
+            //strLog = "   -Display: Largura: " + intDyWidth  + " pixels, Altura  : " +
+            //                                                               intDyHeight + " pixels"
+            //Log.d(cTAG, strLog)
+
+            //--- Margens do board
+            intmargTopDp = resources.getDimension(R.dimen.MargemAcima).toInt()
+            intMargleftdp = resources.getDimension(R.dimen.MargemEsquerda).toInt()
+            intMargtoppx = toPixels2(this, intmargTopDp.toFloat())
+            intMargleftpx = toPixels2(this, intMargleftdp.toFloat())
+            //strLog = "   -Margens: Acima  :  " + intMargtoppx + " pixels, Esquerda:    " +
+            //        intMargleftpx + " pixels"
+            //Log.d(cTAG, strLog)
+
+            //--- Imagem Sudoku board
+            intImgwidth  = bmpSudokuBoard!!.width
+            intImgheight = bmpSudokuBoard!!.height
+            //strLog = "   -Image  : Largura: " + intImgwidth + " pixels, Altura  :  " +
+            //        intImgheight + " pixels"
+            //Log.d(cTAG, strLog)
+
+            //--- Células
+            intCellwidth = intImgwidth / 9
+            intCellheight = intImgheight / 9
+            //strLog = "   -Célula : Largura:  " + intCellwidth + " pixels, Altura  :   " +
+            //        intCellheight + " pixels"
+            //Log.d(cTAG, strLog)
+
+        } catch (exc: Exception) {
+            val strErro = "Erro: " + exc.message
+            Log.d(cTAG, strErro)
+        }
+    }
+
+    //--- Converte um valor em dp para pixels
+    // https://stackoverflow.com/questions/29664993/how-to-convert-dp-px-sp-among-each-other-especially-dp-and-sp/42108115#42108115
+    private fun toPixels2(context: Context, dip: Float): Int {
+        val r = context.resources
+        val metrics = r.displayMetrics
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, metrics).toInt()
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // Funções para o jogo
+    //----------------------------------------------------------------------------------------------
     //--- Determina a qual quadrado menor uma célula pertence
     fun determinaQm(linQM: Int, colQM: Int): Int {
 
         // Qm = (linha-mod(linha;3))+INT(col/3)  -> Excel/Algoritmos1
         return (linQM - linQM % 3 + colQM / 3)
 
+    }
+
+    //--- Calcula as linhas do QM para um Qm
+    private fun calcLinsQM(quadMenor: Int): IntArray {
+
+        // INT(EXT.TEXTO(F17;2;1)/3)*3
+        val linInicQM = quadMenor / 3 * 3
+        return intArrayOf(linInicQM, linInicQM + 1, linInicQM + 2)
+    }
+
+    //--- Calcula as colunas do QM para um Qm
+    private fun calcColsQM(quadMenor: Int): IntArray {
+
+        // EXT.TEXTO(F17;2;1)*3-INT(EXT.TEXTO(F17;2;1)/3)*9
+        val colInicQM = quadMenor * 3 - quadMenor / 3 * 9
+        return intArrayOf(colInicQM, colInicQM + 1, colInicQM + 2)
     }
 
     //--- verifValidade de um número do Qm para inserção no QM
@@ -968,121 +1056,6 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             }
         }
         return flagExiste
-    }
-
-    //--- Calcula as linhas do QM para um Qm
-    private fun calcLinsQM(quadMenor: Int): IntArray {
-
-        // INT(EXT.TEXTO(F17;2;1)/3)*3
-        val linInicQM = quadMenor / 3 * 3
-        return intArrayOf(linInicQM, linInicQM + 1, linInicQM + 2)
-    }
-
-    //--- Calcula as colunas do QM para um Qm
-    private fun calcColsQM(quadMenor: Int): IntArray {
-
-        // EXT.TEXTO(F17;2;1)*3-INT(EXT.TEXTO(F17;2;1)/3)*9
-        val colInicQM = quadMenor * 3 - quadMenor / 3 * 9
-        return intArrayOf(colInicQM, colInicQM + 1, colInicQM + 2)
-    }
-
-    //--- copiaBmpByBuffer
-    fun copiaBmpByBuffer(bmpSrc: Bitmap?, bmpDest: Bitmap?) {
-        val buffBase = IntBuffer.allocate(bmpSrc!!.width * bmpSrc.height)
-        //--------------------------------------
-        bmpSrc.copyPixelsToBuffer(buffBase)
-        //--------------------------------------
-        buffBase.rewind()
-        //----------------------------------------
-        bmpDest!!.copyPixelsFromBuffer(buffBase)
-        //----------------------------------------
-    }
-
-    //--- copiaArArInt
-    private fun copiaArArInt(arArIntPreset: Array<Array<Int>>): Array<Array<Int>> {
-
-        /* https://stackoverflow.com/questions/45199704/kotlin-2d-array-initialization
-            // A 6x5 array of Int, all set to 0.
-            var m = Array(6) {Array(5) {0} }
-         */
-
-        //-------------------------------------------------------
-        val arArIntTmp = Array(9) { Array(9) { 0 } }
-        //-------------------------------------------------------
-
-        for (intLin in 0..8) {
-            for (intCol in 0..8) {
-                arArIntTmp[intLin][intCol] = arArIntPreset[intLin][intCol]
-                arArIntCopia[intLin][intCol] = arArIntPreset[intLin][intCol]
-            }
-        }
-
-        return arArIntTmp
-
-    }
-
-    //--- apresentaGrandezasGraficas
-    @RequiresApi(Build.VERSION_CODES.R)
-    private fun determinaGrandezasGraficas() {
-
-        //--- Apresenta as principais grandezas gráficas
-        //2021-11-29 17:03:42.169 D: -> Display: Largura: 720 pixels, Altura  : 1280 pixels
-        //2021-11-29 17:03:42.171 D: -> Margens: Acima  :  20 pixels, Esquerda:    0 pixels
-        //2021-11-29 17:03:42.172 D: -> Image  : Largura: 720 pixels, Altura  :  630 pixels
-        //2021-11-29 17:03:42.172 D: -> Célula : Largura:  80 pixels, Altura  :   70 pixels
-        try {
-
-            //--- Dimensões do display do Samsung SM-G570M
-            /* Código deprecated no Android 30 (R)
-			Display display = getWindowManager().getDefaultDisplay();
-			Point m_size    = new Point();
-			display.getSize(m_size);
-			int int_dyWidth  = m_size.x;
-			int int_dyHeight = m_size.y; */
-
-            //Log.d(cTAG, "-> Grandezas gráficas:")
-            //val displayMetrics = this.resources.displayMetrics
-            //val intDyWidth     = displayMetrics.heightPixels
-            //val intDyHeight    = displayMetrics.widthPixels
-            //strLog = "   -Display: Largura: " + intDyWidth  + " pixels, Altura  : " +
-            //                                                               intDyHeight + " pixels"
-            //Log.d(cTAG, strLog)
-
-            //--- Margens do board
-            intmargTopDp = resources.getDimension(R.dimen.MargemAcima).toInt()
-            intMargleftdp = resources.getDimension(R.dimen.MargemEsquerda).toInt()
-            intMargtoppx = toPixels2(this, intmargTopDp.toFloat())
-            intMargleftpx = toPixels2(this, intMargleftdp.toFloat())
-            //strLog = "   -Margens: Acima  :  " + intMargtoppx + " pixels, Esquerda:    " +
-            //        intMargleftpx + " pixels"
-            //Log.d(cTAG, strLog)
-
-            //--- Imagem Sudoku board
-            intImgwidth  = bmpSudokuBoard!!.width
-            intImgheight = bmpSudokuBoard!!.height
-            //strLog = "   -Image  : Largura: " + intImgwidth + " pixels, Altura  :  " +
-            //        intImgheight + " pixels"
-            //Log.d(cTAG, strLog)
-
-            //--- Células
-            intCellwidth = intImgwidth / 9
-            intCellheight = intImgheight / 9
-            //strLog = "   -Célula : Largura:  " + intCellwidth + " pixels, Altura  :   " +
-            //        intCellheight + " pixels"
-            //Log.d(cTAG, strLog)
-
-        } catch (exc: Exception) {
-            val strErro = "Erro: " + exc.message
-            Log.d(cTAG, strErro)
-        }
-    }
-
-    //--- Converte um valor em dp para pixels
-    // https://stackoverflow.com/questions/29664993/how-to-convert-dp-px-sp-among-each-other-especially-dp-and-sp/42108115#42108115
-    private fun toPixels2(context: Context, dip: Float): Int {
-        val r = context.resources
-        val metrics = r.displayMetrics
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, metrics).toInt()
     }
 
     //--- listarQM
@@ -1234,6 +1207,41 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
     }
 
+    //--- copiaBmpByBuffer
+    fun copiaBmpByBuffer(bmpSrc: Bitmap?, bmpDest: Bitmap?) {
+        val buffBase = IntBuffer.allocate(bmpSrc!!.width * bmpSrc.height)
+        //--------------------------------------
+        bmpSrc.copyPixelsToBuffer(buffBase)
+        //--------------------------------------
+        buffBase.rewind()
+        //----------------------------------------
+        bmpDest!!.copyPixelsFromBuffer(buffBase)
+        //----------------------------------------
+    }
+
+    //--- copiaArArInt
+    private fun copiaArArInt(arArIntPreset: Array<Array<Int>>): Array<Array<Int>> {
+
+        /* https://stackoverflow.com/questions/45199704/kotlin-2d-array-initialization
+            // A 6x5 array of Int, all set to 0.
+            var m = Array(6) {Array(5) {0} }
+         */
+
+        //-------------------------------------------------------
+        val arArIntTmp = Array(9) { Array(9) { 0 } }
+        //-------------------------------------------------------
+
+        for (intLin in 0..8) {
+            for (intCol in 0..8) {
+                arArIntTmp[intLin][intCol] = arArIntPreset[intLin][intCol]
+                arArIntCopia[intLin][intCol] = arArIntPreset[intLin][intCol]
+            }
+        }
+
+        return arArIntTmp
+
+    }
+
     //--- quantZeros
     private fun quantZeros(arArIntJogo : Array <Array <Int>>) : Int{
 
@@ -1248,4 +1256,104 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         return intQtiZeros
 
     }
+
+    //--- salvaJogo
+    private fun salvaJogo() {
+
+        //--- Prepara o conteúdo
+        /*
+            <?xml version="1.0" encoding="utf-8"?>
+            <presets>
+                <header>
+                    <id> 1 </id>
+                    <nivel> Fácil </nivel>
+                    <subnivel> 0 </subnivel>
+                </header>
+                <body>
+                    <linha0> 7, 5, 0, 0, 2, 1, 0, 6, 0 </linha0>
+                    <linha1> 0, 1, 6, 4, 0, 5, 2, 3, 7 </linha1>
+                    <linha2> 0, 2, 3, 9, 7, 0, 8, 5, 1 </linha2>
+                    <linha3> 3, 8, 1, 0, 9, 7, 6, 2, 0 </linha3>
+                    <linha4> 6, 4, 2, 0, 3, 8, 9, 7, 5 </linha4>
+                    <linha5> 0, 7, 0, 6, 4, 2, 3, 0, 8 </linha5>
+                    <linha6> 2, 9, 4, 7, 5, 3, 0, 8, 6 </linha6>
+                    <linha7> 8, 6, 5, 2, 1, 0, 7, 0, 3 </linha7>
+                    <linha8> 0, 0, 7, 0, 6, 4, 5, 9, 2 </linha8>
+                </body>
+                <jogos>
+                    <id> 1 </id>
+                    <dataHora>      </dataHora>
+                    <tempoJogo>     </tempoJogo>
+                    <erro>          </erro>
+                    <status>        </status>
+                </jogos>
+            </presets>
+         */
+
+        /*
+        var strConteudo = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+        strConteudo    += "\n<presets>"
+
+        strConteudo    += "\n\t<header>"
+        strConteudo    += "\n\t\t<id>"
+        strConteudo    += "\n\t\t</id>"
+        strConteudo    += "\n\t\t<nivel>"
+        strConteudo    += "\n\t\t</nivel>"
+        strConteudo    += "\n\t\t<subnivel>"
+        strConteudo    += "\n\t\t</subnivel>"
+        strConteudo    += "\n\t</header>"
+
+        strConteudo    += "\n\t<body>"
+        strConteudo    += "\n\t\t<linha0>"
+        strConteudo    += "\n\t\t</linha0>"
+        strConteudo    += "\n\t\t<linha1>"
+        strConteudo    += "\n\t\t</linha1>"
+        strConteudo    += "\n\t\t<linha2>"
+        strConteudo    += "\n\t\t</linha2>"
+        strConteudo    += "\n\t\t<linha3>"
+        strConteudo    += "\n\t\t</linha3>"
+        strConteudo    += "\n\t\t<linha4>"
+        strConteudo    += "\n\t\t</linha4>"
+        strConteudo    += "\n\t\t<linha5>"
+        strConteudo    += "\n\t\t</linha5>"
+        strConteudo    += "\n\t\t<linha6>"
+        strConteudo    += "\n\t\t</linha6>"
+        strConteudo    += "\n\t\t<linha7>"
+        strConteudo    += "\n\t\t</linha7>"
+        strConteudo    += "\n\t\t<linha8>"
+        strConteudo    += "\n\t\t</linha8>"
+        strConteudo    += "\n\t</body>"
+
+        strConteudo    += "\n\t<jogos>"
+        strConteudo    += "\n\t\t<id>"
+        strConteudo    += "\n\t\t</id>"
+        strConteudo    += "\n\t\t<dataHora>"
+        strConteudo    += "\n\t\t</dataHora>"
+        strConteudo    += "\n\t\t<tempoJogo>"
+        strConteudo    += "\n\t\t</tempoJogo>"
+        strConteudo    += "\n\t\t<erros>"
+        strConteudo    += "\n\t\t</erros>"
+        strConteudo    += "\n\t\t<status>"
+        strConteudo    += "\n\t\t</status>"
+        strConteudo    += "\n\t</jogos>"
+
+        strConteudo    += "\n</presets>"
+
+        Log.d(cTAG, "-> Conteúdo:\n$strConteudo")
+         */
+
+        val strNomeComPath = "sudoku/docs/modeloArqXmlSudoku.txt"
+        //----------------------------------------------------------------------------
+        val arStrLeitArq: ArrayList<String> = utils.leitExtMemTextFile(strNomeComPath)
+        //----------------------------------------------------------------------------
+
+        Log.d(cTAG, "-> modelo arq Sudoku xml")
+        for (idxDecl in 0 until arStrLeitArq.size) {
+
+            Log.d(cTAG, "   $idxDecl: ${arStrLeitArq[idxDecl]}")
+
+        }
+
+    }
+
 }

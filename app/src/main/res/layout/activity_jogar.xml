@@ -8,7 +8,7 @@
 
     <!-- include layout="@layout/toolbar"/-->
 
-    <!--com.google.android.material.appbar.MaterialToolbar-->
+    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
 
         android:id="@+id/toolbar2"
@@ -25,10 +25,10 @@
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:title         ="@string/app_name" />
 
-    <RelativeLayout
-        android:id="@+id/infos"
+    <!-- Infos do jogo -->
+    <RelativeLayout android:id="@+id/infos"
 
-        android:layout_width="match_parent"
+        android:layout_width ="match_parent"
         android:layout_height="wrap_content"
 
         android:layout_marginTop="60dp"
@@ -124,6 +124,7 @@
 
     </RelativeLayout>
 
+    <!-- Board -->
     <ImageView android:id="@+id/ivSudokuBoard"
 
         android:layout_width="wrap_content"
@@ -162,10 +163,9 @@
         android:textSize="15sp" />
 
     <!-- Números disponíveis -->
-    <ImageView
-        android:id="@+id/ivNumDisp"
+    <ImageView android:id="@+id/ivNumDisp"
 
-        android:layout_width="wrap_content"
+        android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
         android:layout_below="@id/ivSudokuBoard"
@@ -179,6 +179,20 @@
          2- os jpgs devem ser copiados para res/drawable /-->
 
     <!-- Buttons -->
+    <Button android:id="@+id/btnInicia"
+
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width ="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop        ="30dp"
+        android:layout_alignBottom      ="@id/ivNumDisp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf        ="@id/btnReset"
+
+        android:text="@string/inicia"
+        android:textAllCaps="false" />
+
     <Button android:id="@+id/btnReset"
 
         style="?android:attr/buttonStyleSmall"
@@ -193,7 +207,7 @@
         android:text="@string/reset"
         android:textAllCaps="false" />
 
-    <Button android:id="@+id/btnInicia"
+    <Button android:id="@+id/btnSalvar"
 
         style="?android:attr/buttonStyleSmall"
         android:layout_width ="wrap_content"
@@ -202,9 +216,9 @@
         android:layout_marginTop        ="30dp"
         android:layout_alignBottom      ="@id/ivNumDisp"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf        ="@id/btnReset"
+        android:layout_alignParentStart ="true"
 
-        android:text="@string/inicia"
+        android:text="@string/salvar"
         android:textAllCaps="false" />
 
 </RelativeLayout>

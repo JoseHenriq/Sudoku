@@ -26,16 +26,6 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import br.com.jhconsultores.utils.Utils
 
-/*
-import org.w3c.dom.Document
-import org.xml.sax.InputSource
-import java.io.File
-import java.io.StringReader
-import javax.xml.parsers.DocumentBuilderFactory
-import android.content.Context
-import android.util.TypedValue
-*/
-
 @Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
 
@@ -1851,10 +1841,10 @@ class MainActivity : AppCompatActivity() {
         val strNomeArq = "preset_$numPreset"
 
         //--- Obtém lista de arquivos em Download
-        val strPath = "Download/sudoku"
-        //-------------------------------------------------------------
+        val strPath = "Download/sudoku/jogos"
+        //-------------------------------------------------------------------
         val arStrNomeArq: Array<String> = utils.listaExtMemArqDir(strPath)
-        //-------------------------------------------------------------
+        //-------------------------------------------------------------------
         Log.d(cTAG, "-> Arquivos Sudoku :")
         for (idxFileName in arStrNomeArq.indices) {
 
@@ -1871,9 +1861,9 @@ class MainActivity : AppCompatActivity() {
         else {
 
             Log.d(cTAG, "-> Arquivo $strNomeArq:")
-            val strNameComPath = "sudoku/$strNomeArq"
+            val strNomeComPath = "sudoku/jogos/$strNomeArq"
             //----------------------------------------------------------------------------
-            val arStrLeitArq: ArrayList<String> = utils.leitExtMemTextFile(strNameComPath)
+            val arStrLeitArq: ArrayList<String> = utils.leitExtMemTextFile(strNomeComPath)
             //----------------------------------------------------------------------------
             for (idxDecl in 0 until arStrLeitArq.size) {
 
