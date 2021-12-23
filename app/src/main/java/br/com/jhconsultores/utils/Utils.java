@@ -880,14 +880,15 @@ public class Utils {
         if (view != null) {
 
             // This will force the keyboard to be hidden in all situations.
-            // InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            // imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            InputMethodManager imm = (InputMethodManager) activity.
+                                                    getSystemService(activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
             // In some cases you will want to pass in InputMethodManager. HIDE_IMPLICIT_ONLY as
             // the second parameter to ensure you only hide the keyboard when the user didn't
             // explicitly force it to appear (by holding down menu).
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(activity.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            //InputMethodManager imm = (InputMethodManager) activity.getSystemService(activity.INPUT_METHOD_SERVICE);
+            //imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         }
     }
 

@@ -2,16 +2,13 @@ package br.com.jhconsultores.sudoku
 
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.os.Build
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -25,6 +22,7 @@ import android.view.View.*
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import br.com.jhconsultores.utils.Utils
+import com.google.android.material.internal.ContextUtils.getActivity
 
 @Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
@@ -206,7 +204,7 @@ class MainActivity : AppCompatActivity() {
             ViewGroup.LayoutParams.WRAP_CONTENT)
 
         //accessing our relative layout where the progressBar will add up
-        val layout = findViewById<RelativeLayout>(R.id.relativeLayout)
+        val layout = findViewById<RelativeLayout>(R.id.relLayoutProgBar)
         // Add ProgressBar to our layout
         layout?.addView(progressBar)
 
@@ -298,18 +296,32 @@ class MainActivity : AppCompatActivity() {
         val flagInstalacao_Ok = VerificaPermissoesAcessoAPI()
         //------------------------------------------------------
 
-
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onResume() {
 
         super.onResume()
 
-        if (rbEdicao.isChecked) {
+        if (rbEdicao.isChecked) { txtDadosJogo.text = "" }
 
-            txtDadosJogo.text = ""
+        //--- Ativa o progress bar
+        progressBar.visibility = VISIBLE
 
-        }
+        //--- Aguarda o teclado ser mostrado
+        val waitTime = 3000L  // milisegundos
+        Handler(Looper.getMainLooper()).postDelayed( {
+
+            //--- Desativa o progress bar
+            progressBar.visibility = INVISIBLE
+
+            //--- Esconde o teclado
+            //----------------------------------
+            utils.EscondeTeclado(this)
+            //----------------------------------
+
+        },
+        waitTime)  // value in milliseconds
 
     }
 
@@ -2009,8 +2021,6 @@ class MainActivity : AppCompatActivity() {
         return flagPermissoesOk
 
     }
-
-
 
 }
 

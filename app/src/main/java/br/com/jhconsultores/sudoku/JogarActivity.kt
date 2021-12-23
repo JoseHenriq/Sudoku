@@ -1371,109 +1371,89 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //-------------------------------------------------------------
 
             //- header / nivel
-            /*
-            strTag = "<nivel>"
-            intIdxInic   = intIdxFim
-            intIdxFim    = strModelo.indexOf(strTag, intIdxInic, false)
-            intIdxFim   += strTag.length
-            strConteudo += strModelo.substring(intIdxInic, intIdxFim)
-            strConteudo += strNivelJogo
-             */
-
             //---------------------------------------------------------------
             strConteudo += preencheConteudo("<nivel>", strNivelJogo)
             //---------------------------------------------------------------
 
             //- header / subnivel
-            /*
-            strTag = "<subnivel>"
-            intIdxInic = intIdxFim
-            intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
-            intIdxFim += strTag.length
-            strConteudo += strModelo.substring(intIdxInic, intIdxFim)
-            strConteudo += strSubNivelJogo
-             */
             //---------------------------------------------------------------------
             strConteudo += preencheConteudo("<subnivel>", strSubNivelJogo)
             //---------------------------------------------------------------------
 
-            //- body / linha0 até linha8
+            //- body / linha0 até linha8 : jogo preparado
             for (idxLinha in 0 until 9) {
 
-                var strConteudoTmp : String
-
-                /*
-                strTag     = "<linha$idxLinha>"
-                intIdxInic = intIdxFim
-                intIdxFim  = strModelo.indexOf(strTag, intIdxInic, false)
-                intIdxFim   += strTag.length
-                strConteudo += strModelo.substring(intIdxInic, intIdxFim)
+                var strConteudoTmp = ""
 
                 for (idxCol in 0 until 9) {
 
-                    strConteudo += arArIntCopia[idxLinha][idxCol].toString()
-                    if (idxCol < 8) strConteudo += ", "
-
-                }
-                 */
-
-                for (idxCol in 0 until 9) {
-
-                    strConteudoTmp = arArIntCopia[idxLinha][idxCol].toString()
+                    strConteudoTmp += arArIntCopia[idxLinha][idxCol].toString()
                     if (idxCol < 8) strConteudoTmp += ", "
 
-                    //--------------------------------------------------------------------------
-                    strConteudo += preencheConteudo("<linha$idxLinha>", strConteudoTmp)
-                    //--------------------------------------------------------------------------
-
                 }
+
+                //--------------------------------------------------------------------------
+                strConteudo += preencheConteudo("<linha$idxLinha>", strConteudoTmp)
+                //--------------------------------------------------------------------------
 
             }
 
             //- jogos / id
-            strTag = "<id>"
-            intIdxInic = intIdxFim
-            intIdxFim  = strModelo.indexOf(strTag, intIdxInic, false)
-            intIdxFim   += strTag.length
-            strConteudo += strModelo.substring(intIdxInic, intIdxFim)
-            strConteudo += "1"
+            //----------------------------------------------------------------
+            strConteudo += preencheConteudo("<id>", "1")
+            //----------------------------------------------------------------
 
             //- jogos / dataHora
-            strTag = "<dataHora>"
-            intIdxInic = intIdxFim
-            intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
-            intIdxFim += strTag.length
-            strConteudo += strModelo.substring(intIdxInic, intIdxFim)
-            //----------------------------------------------------------------------
-            strConteudo += utils.LeDataHora("dd/MM/yyyy HH:mm:ss")
-            //----------------------------------------------------------------------
+            //-------------------------------------------------------------------------
+            val strDataHora = utils.LeDataHora("dd/MM/yyyy HH:mm:ss")
+            //-------------------------------------------------------------------------
+            //------------------------------------------------------------------
+            strConteudo += preencheConteudo("<dataHora>", strDataHora)
+            //------------------------------------------------------------------
+
             //- jogos / tempoJogo
-            strTag = "<tempoJogo>"
-            intIdxInic = intIdxFim
-            intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
-            intIdxFim += strTag.length
-            strConteudo += strModelo.substring(intIdxInic, intIdxFim)
-            strConteudo += crono.text
+            //--------------------------------------------------------------------------
+            strConteudo += preencheConteudo("<tempoJogo>", crono.text.toString())
+            //--------------------------------------------------------------------------
 
             //- jogos / erros
-            strTag = "<erros>"
-            intIdxInic = intIdxFim
-            intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
-            intIdxFim += strTag.length
-            strConteudo += strModelo.substring(intIdxInic, intIdxFim)
-            strConteudo += tvErros!!.text
+            //----------------------------------------------------------------------------
+            strConteudo += preencheConteudo("<erros>", tvErros!!.text.toString())
+            //----------------------------------------------------------------------------
 
             //- jogos / status
-            strTag = "<status>"
-            intIdxInic = intIdxFim
-            intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
-            intIdxFim += strTag.length
-            strConteudo += strModelo.substring(intIdxInic, intIdxFim)
-            strConteudo += if (quantZeros(arArIntNums) == 0) "finalizado" else "ativo"
+            val strStatus = if (quantZeros(arArIntNums) == 0) "finalizado" else "ativo"
+            //-------------------------------------------------------------
+            strConteudo += preencheConteudo("<status>", strStatus)
+            //-------------------------------------------------------------
 
-            //- Finaliza a preparação do conteúdo
-            strConteudo += strModelo.substring(intIdxFim, strModelo.length)
+            //- body2 / linha0 até linha8 : jogo no momento do salvamento se ainda ativo
+            if (strStatus == "ativo") {
 
+                strConteudo += "</status></jogos><body2>"
+                var strConteudoTmp = ""
+                for (idxLinha in 0 until 9) {
+
+                    strConteudoTmp += "<linha$idxLinha>"
+                    for (idxCol in 0 until 9) {
+
+                        strConteudoTmp += arArIntNums[idxLinha][idxCol].toString()
+                        if (idxCol < 8) strConteudoTmp += ", "
+
+                    }
+                    strConteudoTmp += "</linha$idxLinha>"
+                }
+                strConteudo += strConteudoTmp
+                strConteudo += "</body2></presets>"
+
+            }
+
+            else {
+
+                //-- Finaliza a preparação do conteúdo
+                strConteudo += strModelo.substring(intIdxFim, strModelo.length)
+
+            }
         }
         catch (exc : Exception)
         {
@@ -1493,22 +1473,6 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     private fun preencheConteudo(strTag : String, strConteudoTag : String) : String {
 
         var strConteudoPreenchido = ""
-
-        /*
-        if (intIdxInic == 0) {
-
-            intIdxInic = strModelo.indexOf(strTag, 0, false)
-        }
-        else {
-
-            intIdxInic = intIdxFim
-            intIdxFim  = strModelo.indexOf(strTag, 0, false)
-
-        }
-        intIdxFim              = intIdxInic + strTag.length
-        strConteudoPreenchido  = strModelo.substring(0, intIdxFim)
-        strConteudoPreenchido += strConteudo
-         */
 
         intIdxInic = intIdxFim
         intIdxFim  = strModelo.indexOf(strTag, intIdxInic, false)
