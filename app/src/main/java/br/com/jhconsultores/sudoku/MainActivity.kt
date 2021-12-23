@@ -22,7 +22,6 @@ import android.view.View.*
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import br.com.jhconsultores.utils.Utils
-import com.google.android.material.internal.ContextUtils.getActivity
 
 @Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
@@ -293,8 +292,10 @@ class MainActivity : AppCompatActivity() {
         // Verifica as solicitações de acesso aos recursos do Android (AndroidManifest.xml).
         //-------------------------------------------------------------------------------------
         //------------------------------------------------------
-        val flagInstalacao_Ok = VerificaPermissoesAcessoAPI()
+        //val flagInstalacao_Ok = VerificaPermissoesAcessoAPI()
         //------------------------------------------------------
+        VerificaPermissoesAcessoAPI()
+        //------------------------------
 
     }
 
@@ -1036,6 +1037,7 @@ class MainActivity : AppCompatActivity() {
     // SudokuBoard
     //----------------------------------------------------------------------------------------------
     //--- desenhaSudokuBoard
+    /*
     private fun desenhaSudokuBoard(flagApaga: Boolean) {
 
         var flCoordXInic: Float
@@ -1108,6 +1110,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+    */
 
     //--- preencheSudokuBoard
     private fun preencheSudokuBoard(arArIntJogo : Array<Array<Int>>) {
@@ -1655,7 +1658,7 @@ class MainActivity : AppCompatActivity() {
     //--- separaCampo
     private fun separaCampo(strCampo : String, strSubTag : String) : String {
 
-        var strTmp    = ""
+        val strTmp : String
         var strReturn = ""
 
         val strSubTagInic = "<$strSubTag>"
@@ -1843,13 +1846,13 @@ class MainActivity : AppCompatActivity() {
     }
     */
 
-    //--- leExtMem:  Download/sudoku/ do smartfone
+    //--- leExtMem:  Download/sudoku/ do smartphone
     private fun leExtMemDownload (numPreset : Int) : Array <Array<Int>> {
 
         var arArIntJogoAdaptar = arrayOf < Array <Int>> ()  //= Array(9) { Array(9) { 0 } }
 
         var flagLeituraParcialOk = false
-        var flagLeituraPresetOk  = false
+        //var flagLeituraPresetOk  = false
         val strNomeArq = "preset_$numPreset"
 
         //--- Obtém lista de arquivos em Download
@@ -1953,7 +1956,7 @@ class MainActivity : AppCompatActivity() {
 
                                 val lstChNum : List<String> = strSubCampo.split(",")
 
-                                lstChNum.forEach () {
+                                lstChNum.forEach {
 
                                     array += (it.trim()).toInt()
 
@@ -2002,16 +2005,14 @@ class MainActivity : AppCompatActivity() {
     //---------------------------------------------------------------------
     private fun VerificaPermissoesAcessoAPI(): Boolean {
 
-        var flagPermissoesOk = false
-
         var strMsgDebug = "--> main "
         strMsgDebug    += "Verifica permissões"
 
         Log.d(cTAG, strMsgDebug)
 
-        //---------------------------------------------------------
-        flagPermissoesOk = utils.VerificaPermissoes(this)
-        //---------------------------------------------------------
+        //-----------------------------------------------------------------------
+        val flagPermissoesOk : Boolean = utils.VerificaPermissoes(this)
+        //-----------------------------------------------------------------------
         strMsgDebug = if (flagPermissoesOk) "Permission Granted!" else "Permission unGranted"
 
         Toast.makeText(this, strMsgDebug, Toast.LENGTH_SHORT).show()
