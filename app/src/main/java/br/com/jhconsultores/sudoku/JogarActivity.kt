@@ -25,60 +25,59 @@ import java.lang.Exception
 import java.nio.IntBuffer
 
 import br.com.jhconsultores.utils.Utils
-import java.io.File
 
 class JogarActivity : AppCompatActivity() {   //Activity() {
 
     //--------------------------------------------------------------------------
     //                    Instancializações e inicializações
     //--------------------------------------------------------------------------
-    private var cTAG     = "Sudoku"
-    private var strLog   = ""
+    private var cTAG = "Sudoku"
+    private var strLog = ""
     private var strToast = ""
 
     private var intImageResource = 0
     private var bmpInic: Bitmap? = null // Board vazio Lido a partir do resource/drawable
     private var bmpJogo: Bitmap? = null // Preset ou jogo gerado ANTES dos novos números
 
-    private var bmpMyImage    : Bitmap? = null             // Preset ou jogo gerado e novos números
+    private var bmpMyImage: Bitmap? = null             // Preset ou jogo gerado e novos números
 
-    private var bmpNumDisp    : Bitmap? = null             // Números disponíveis
+    private var bmpNumDisp: Bitmap? = null             // Números disponíveis
     private var bmpSudokuBoard: Bitmap? = null             // Jogo
 
-    private var canvasMyImage    : Canvas? = null
-    private var canvasNumDisp    : Canvas? = null
+    private var canvasMyImage: Canvas? = null
+    private var canvasNumDisp: Canvas? = null
     private var canvasSudokuBoard: Canvas? = null
 
     private var iViewSudokuBoard: ImageView? = null
-    private var iViewNumsDisps  : ImageView? = null
+    private var iViewNumsDisps: ImageView? = null
 
-    private var tvNivel   : TextView? = null
+    private var tvNivel: TextView? = null
     private var tvSubNivel: TextView? = null
-    private var tvErros   : TextView? = null
-    private var tvClues   : TextView? = null
+    private var tvErros: TextView? = null
+    private var tvClues: TextView? = null
     private var intContaErro = 0
 
-    private lateinit var toolBar : androidx.appcompat.widget.Toolbar
+    private lateinit var toolBar: androidx.appcompat.widget.Toolbar
 
     private var intTamTxt = 25 // 50 // 200 //
-    private var scale     = 0f
+    private var scale = 0f
 
-    private var pincelVerde   = Paint()
-    private var pincelBranco  = Paint()
-    private var pincelPreto   = Paint()
-    private var pincelAzul    = Paint()
+    private var pincelVerde = Paint()
+    private var pincelBranco = Paint()
+    private var pincelPreto = Paint()
+    private var pincelAzul = Paint()
     private var pincelLaranja = Paint()
     private var pincelPurple200 = Paint()
 
     //--- Medidas
     //- Células do board
-    private var intCellwidth  = 0
+    private var intCellwidth = 0
     private var intCellheight = 0
 
     //- Margens do board
-    private var intmargTopDp  = 0
+    private var intmargTopDp = 0
     private var intMargleftdp = 0
-    private var intMargtoppx  = 0
+    private var intMargtoppx = 0
     private var intMargleftpx = 0
 
     //- Imagem Sudoku board
@@ -88,28 +87,28 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     //--- Controle de jogadas
     private var intColJogar = 0
     private var intLinJogar = 0
-    private var flagJoga    = false
+    private var flagJoga = false
 
     private var arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-    private var arArIntGab    = Array(9) { Array(9) { 0 } }
+    private var arArIntGab = Array(9) { Array(9) { 0 } }
 
     var arArIntNums = Array(9) { Array(9) { 0 } }
 
-    private var arArIntCopia  = Array(9) { Array(9) { 0 } }
+    private var arArIntCopia = Array(9) { Array(9) { 0 } }
 
-    private var arIntNumsGab  = ArrayList<Int>()   // Gabarito
+    private var arIntNumsGab = ArrayList<Int>()   // Gabarito
     private var arIntNumsJogo = ArrayList<Int>()   // Jogo
 
-    private var action          = "JogoGerado"
-    private var strNivelJogo    = "Fácil"
+    private var action = "JogoGerado"
+    private var strNivelJogo = "Fácil"
     private var strSubNivelJogo = "0"
 
-    private lateinit var crono : Chronometer
-    private var strCronoInic   = ""
-    private var timeStopped : Long = 0L
+    private lateinit var crono: Chronometer
+    private var strCronoInic = ""
+    private var timeStopped: Long = 0L
 
-    private var strInicia   = ""
-    private var strPause    = ""
+    private var strInicia = ""
+    private var strPause = ""
     private var strReInicia = ""
 
     private val utils = Utils()
@@ -128,16 +127,16 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             setContentView(R.layout.activity_jogar)
 
             //--- Instancia objetos locais para os objetos XML
-            tvNivel    = findViewById(R.id.tv_Nivel)
+            tvNivel = findViewById(R.id.tv_Nivel)
             tvSubNivel = findViewById(R.id.tv_Subnivel)
-            tvErros    = findViewById(R.id.tv_Erros)
-            tvClues    = findViewById(R.id.tv_Clues)
+            tvErros = findViewById(R.id.tv_Erros)
+            tvClues = findViewById(R.id.tv_Clues)
 
             toolBar = findViewById(R.id.toolbar2)
             setSupportActionBar(toolBar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-            val btnReset  = findViewById<View>(R.id.btnReset)  as Button
+            val btnReset = findViewById<View>(R.id.btnReset) as Button
             val btnInicia = findViewById<View>(R.id.btnInicia) as Button
             val btnSalvar = findViewById<View>(R.id.btnSalvar) as Button
             btnInicia.isEnabled = true
@@ -164,12 +163,12 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
             //--- Recupera os dados recebidos via intent
             action = intent.action.toString()
-            strNivelJogo    = intent.getStringExtra("strNivelJogo") as String
+            strNivelJogo = intent.getStringExtra("strNivelJogo") as String
             strSubNivelJogo = intent.getStringExtra("strSubNivelJogo") as String
 
             // Armazena o gabarito em um array<int>
             arIntNumsGab = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
-            arIntNumsJogo= intent.getIntegerArrayListExtra("JogoPreparado")  as ArrayList<Int>
+            arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as ArrayList<Int>
 
             // Gabarito e/ou jogo inválidos
             if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
@@ -185,7 +184,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                     for (intCol in 0..8) {
 
                         arArIntNums[intLinha][intCol] = arIntNumsJogo[intLinha * 9 + intCol] // Jogo
-                        arArIntGab[intLinha][intCol]  =
+                        arArIntGab[intLinha][intCol] =
                             arIntNumsGab[intLinha * 9 + intCol] // Gabarito
 
                     }
@@ -292,7 +291,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                         // Verifica se esse número ainda não existe no seu Qm e nem no seu QM
                         //--------------------------------------------------------------------------
                         flagNumValido =
-                                       verifValidade(intQuadMenor, intLinJogar, intColJogar, intNum)
+                            verifValidade(intQuadMenor, intLinJogar, intColJogar, intNum)
                         //--------------------------------------------------------------------------
                         if (!flagNumValido) {
 
@@ -467,7 +466,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
                         Log.d(cTAG, "-> \"Sim\" was pressed")
 
-                        tvNivel!!.text    = ""
+                        tvNivel!!.text = ""
                         tvSubNivel!!.text = ""
 
                         intContaErro = 0
@@ -525,6 +524,24 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                         salvaJogo()
                         //------------
 
+                        Log.d(cTAG, "-> Jogos salvos: ")
+                        //--------------------------------------------------------------------------
+                        val arStrArqsNames = utils
+                            .listaExtMemArqDir("/Download/sudoku/Jogos")
+                        //--------------------------------------------------------------------------
+                        if (arStrArqsNames.isNotEmpty()) {
+
+                            for (strArqName in arStrArqsNames) {
+                                Log.d(cTAG, "   - $strArqName")
+                            }
+
+                        } else {
+
+                            strLog = "   - Não há arquivos de jogos no dir /Download/sudoku/Jogos"
+                            Log.d(cTAG, strLog)
+
+                        }
+
                     }
 
                     .setNegativeButton("Não") { _, _ ->
@@ -536,7 +553,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
             }
 
-        } catch (exc : Exception) {
+        } catch (exc: Exception) {
 
             Log.d(cTAG, "Erro: ${exc.message}")
 
@@ -555,13 +572,13 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
         var flCoordXInic: Float
         var flCoordYInic: Float
-        var flCoordXFim : Float
-        var flCoordYFim : Float
-        val flPincelFino   = 2.toFloat()
+        var flCoordXFim: Float
+        var flCoordYFim: Float
+        val flPincelFino = 2.toFloat()
         val flPincelGrosso = 6.toFloat()
         val pincelDesenhar = pincelPreto
 
-        val flagApagaBoard : Boolean = flagApaga
+        val flagApagaBoard: Boolean = flagApaga
 
         //--- Redesenha o board a partir do zero
         //flagApagaBoard = true
@@ -590,12 +607,13 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             if (intLinha % 3 == 0) {
                 flLargPincel = flPincelGrosso
                 if (flCoordYInic > 0) flCoordYInic--
-                if (flCoordYFim > 0)  flCoordYFim--
+                if (flCoordYFim > 0) flCoordYFim--
             }
             pincelDesenhar.strokeWidth = flLargPincel
             //--------------------------------------------------------------------------------------
             canvasMyImage!!.drawLine(
-                flCoordXInic, flCoordYInic, flCoordXFim, flCoordYFim, pincelDesenhar )
+                flCoordXInic, flCoordYInic, flCoordXFim, flCoordYFim, pincelDesenhar
+            )
             //--------------------------------------------------------------------------------------
         }
         //--- Desenha as linhas verticais
@@ -693,7 +711,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //- Canto superior esquerdo do quadrado
             val intXSupEsq = intIdxCel * intCellwidth + intOffSet
             //- Canto inferior direito do quadrado
-            val intXInfDir = intXSupEsq    + intCellwidth - intOffSet
+            val intXInfDir = intXSupEsq + intCellwidth - intOffSet
             val intYInfDir = intCellheight - intOffSet
             //----------------------------------------
             val intQtidd = arIntNumsDisp[intIdxCel]
@@ -754,7 +772,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     private fun pintaCelula(intLinha: Int, intCol: Int, pincelPintar: Paint?) {
 
         //- Canto superior esquerdo do quadrado
-        val intXSupEsq = intCol   * intCellwidth
+        val intXSupEsq = intCol * intCellwidth
         val intYSupEsq = intLinha * intCellheight
         //- Canto inferior direito do quadrado
         val intXInfDir = intXSupEsq + intCellwidth
@@ -863,7 +881,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         // Images Views
         //------------------------------------------------------------------------------------------
         iViewSudokuBoard = findViewById<View>(R.id.ivSudokuBoard) as ImageView
-        iViewNumsDisps   = findViewById<View>(R.id.ivNumDisp) as ImageView
+        iViewNumsDisps = findViewById<View>(R.id.ivNumDisp) as ImageView
 
         //-----------------------------
         determinaGrandezasGraficas()
@@ -907,7 +925,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //Log.d(cTAG, strLog)
 
             //--- Imagem Sudoku board
-            intImgwidth  = bmpSudokuBoard!!.width
+            intImgwidth = bmpSudokuBoard!!.width
             intImgheight = bmpSudokuBoard!!.height
             //strLog = "   -Image  : Largura: " + intImgwidth + " pixels, Altura  :  " +
             //        intImgheight + " pixels"
@@ -1115,7 +1133,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         iViewSudokuBoard!!.isEnabled = false
 
         //--- Apresenta os números disponíveis
-        iViewNumsDisps!!.isEnabled   = false
+        iViewNumsDisps!!.isEnabled = false
 
         Log.d(cTAG, "-> Array qtidd de jogos disponível por número:")
         for (intIdxNum in 0..8) {
@@ -1130,12 +1148,12 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         //------------------
 
         //--- Inicializa variáveis locais
-        tvNivel!!.text    = strNivelJogo
+        tvNivel!!.text = strNivelJogo
         tvSubNivel!!.text = strSubNivelJogo
-        tvClues!!.text    = quantZeros(arArIntNums).toString()
+        tvClues!!.text = quantZeros(arArIntNums).toString()
 
         //--- Verifica se fim de jogo
-        var flagContJogo  = false
+        var flagContJogo = false
         for (idxVetorNumDisp in 0..8) {
 
             if (arIntNumsDisp[idxVetorNumDisp] > 0) flagContJogo = true
@@ -1181,14 +1199,14 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         copiaBmpByBuffer(bmpMyImage, bmpJogo)
         //------------------------------------
 
-     }
+    }
 
     //--- preparaCrono
-    private fun preparaCrono(crono : Chronometer) {
+    private fun preparaCrono(crono: Chronometer) {
 
         // set color and size of the text
         crono.setTextColor(Color.BLUE)
-        crono.setTextSize(TypedValue.COMPLEX_UNIT_IN,0.15f)
+        crono.setTextSize(TypedValue.COMPLEX_UNIT_IN, 0.15f)
 
         // Adiciona o cronometro no layout
         val layoutParams = LinearLayout.LayoutParams(
@@ -1244,7 +1262,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     }
 
     //--- quantZeros
-    private fun quantZeros(arArIntJogo : Array <Array <Int>>) : Int{
+    private fun quantZeros(arArIntJogo: Array<Array<Int>>): Int {
 
         var intQtiZeros = 0
         for (idxLin in 0..8) {
@@ -1262,53 +1280,133 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun salvaJogo() {
 
-        var strConteudo = ""
+        //----------------------------------------------------------------------
+        // Prepara o conteúdo
+        //----------------------------------------------------------------------
+        //------------------------------------
+        val strConteudo = preparaConteudo()
+        //------------------------------------
 
-        //--- Prepara o conteúdo
+        //----------------------------------------------------------------------
+        // Define um nome para o arquivo
+        //----------------------------------------------------------------------
+        if (strConteudo.isNotEmpty()) {
+
+            var intNumArq = 0
+            //--------------------------------------------------------------------------------
+            val arStrArqsNames = utils.listaExtMemArqDir("/Download/sudoku/Jogos")
+            //--------------------------------------------------------------------------------
+            if (arStrArqsNames.isNotEmpty()) {
+
+                for (strArqName in arStrArqsNames) {
+
+                    if (strArqName.contains("jogo_")) {
+
+                        var intNumJogo: Int
+                        try {
+                            intNumJogo = strArqName.substring(
+                                5,
+                                strArqName.indexOf('.')
+                            ).toInt()
+                            if (intNumJogo > intNumArq) intNumArq = intNumJogo
+
+                        } catch (exc: Exception) {
+                        }
+                    }
+
+                }
+
+            }
+            intNumArq++
+            val strArqJogo = "jogo_$intNumArq.xml"
+            val strArqName = "/sudoku/jogos/$strArqJogo"
+
+            //------------------------------------------------------------------
+            // Salva o arquivo
+            //------------------------------------------------------------------
+            //------------------------------------------------------------------
+            val flagEscrita = utils.escExtMemTextFile(strArqName, strConteudo)
+            //------------------------------------------------------------------
+
+            strToast = "Escrita arquivo $strArqJogo "
+            strToast += if (flagEscrita) "OK!" else "NÃO ok!"
+            Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
+
+            strLog = "-> Escrita arquivo storage/emulated/0/Download$strArqName "
+            strLog += if (flagEscrita) "OK!" else "NÃO ok!"
+            Log.d(cTAG, strLog)
+
+        }
+
+    }
+
+    //--- preparaConteudo
+    var strModelo  : String = ""
+    var strTag     : String = ""
+    var intIdxInic : Int = 0
+    var intIdxFim  : Int = 0
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun preparaConteudo() : String {
+
+        var strConteudo : String
+
         //-- Lê o modelo
         val strNomeComPath = "sudoku/docs/modeloArqXmlSudoku1.txt"
-        //----------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------
         val arStrLeitArq: ArrayList<String> = utils.leitExtMemTextFile(strNomeComPath)
-        //----------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------
+
         //-- Converte o modelo de ArrayList para String
-        var strModelo = ""
         Log.d(cTAG, "-> modelo arq Sudoku xml")
         for (idxDecl in 0 until arStrLeitArq.size) { strModelo += arStrLeitArq[idxDecl] }
         Log.d(cTAG, strModelo)
 
         //-- Preenche os campos
-        try {
-
+        try
+        {
             //- header / id
-            var strTag = "<id>"
-            var intIdxInic = strModelo.indexOf(strTag, 0, false)
-            var intIdxFim = intIdxInic + strTag.length
-            strConteudo = strModelo.substring(0, intIdxFim)
-            strConteudo += "3"
+            //-------------------------------------------------------------
+            strConteudo = preencheConteudo("<id>", "3")
+            //-------------------------------------------------------------
 
             //- header / nivel
+            /*
             strTag = "<nivel>"
-            intIdxInic = intIdxFim
-            intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
-            intIdxFim += strTag.length
+            intIdxInic   = intIdxFim
+            intIdxFim    = strModelo.indexOf(strTag, intIdxInic, false)
+            intIdxFim   += strTag.length
             strConteudo += strModelo.substring(intIdxInic, intIdxFim)
             strConteudo += strNivelJogo
+             */
+
+            //---------------------------------------------------------------
+            strConteudo += preencheConteudo("<nivel>", strNivelJogo)
+            //---------------------------------------------------------------
 
             //- header / subnivel
+            /*
             strTag = "<subnivel>"
             intIdxInic = intIdxFim
             intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
             intIdxFim += strTag.length
             strConteudo += strModelo.substring(intIdxInic, intIdxFim)
             strConteudo += strSubNivelJogo
+             */
+            //---------------------------------------------------------------------
+            strConteudo += preencheConteudo("<subnivel>", strSubNivelJogo)
+            //---------------------------------------------------------------------
 
             //- body / linha0 até linha8
             for (idxLinha in 0 until 9) {
 
-                strTag = "<linha$idxLinha>"
+                var strConteudoTmp : String
+
+                /*
+                strTag     = "<linha$idxLinha>"
                 intIdxInic = intIdxFim
-                intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
-                intIdxFim += strTag.length
+                intIdxFim  = strModelo.indexOf(strTag, intIdxInic, false)
+                intIdxFim   += strTag.length
                 strConteudo += strModelo.substring(intIdxInic, intIdxFim)
 
                 for (idxCol in 0 until 9) {
@@ -1317,24 +1415,38 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                     if (idxCol < 8) strConteudo += ", "
 
                 }
+                 */
+
+                for (idxCol in 0 until 9) {
+
+                    strConteudoTmp = arArIntCopia[idxLinha][idxCol].toString()
+                    if (idxCol < 8) strConteudoTmp += ", "
+
+                    //--------------------------------------------------------------------------
+                    strConteudo += preencheConteudo("<linha$idxLinha>", strConteudoTmp)
+                    //--------------------------------------------------------------------------
+
+                }
 
             }
+
             //- jogos / id
             strTag = "<id>"
             intIdxInic = intIdxFim
-            intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
-            intIdxFim += strTag.length
+            intIdxFim  = strModelo.indexOf(strTag, intIdxInic, false)
+            intIdxFim   += strTag.length
             strConteudo += strModelo.substring(intIdxInic, intIdxFim)
             strConteudo += "1"
 
-            //- jogos / datahora
+            //- jogos / dataHora
             strTag = "<dataHora>"
             intIdxInic = intIdxFim
             intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
             intIdxFim += strTag.length
             strConteudo += strModelo.substring(intIdxInic, intIdxFim)
+            //----------------------------------------------------------------------
             strConteudo += utils.LeDataHora("dd/MM/yyyy HH:mm:ss")
-
+            //----------------------------------------------------------------------
             //- jogos / tempoJogo
             strTag = "<tempoJogo>"
             intIdxInic = intIdxFim
@@ -1360,60 +1472,52 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             strConteudo += if (quantZeros(arArIntNums) == 0) "finalizado" else "ativo"
 
             //- Finaliza a preparação do conteúdo
-            strConteudo += strModelo.substring(intIdxFim, strModelo.length - 1)
+            strConteudo += strModelo.substring(intIdxFim, strModelo.length)
 
         }
-        catch (exc : Exception) {
+        catch (exc : Exception)
+        {
 
-            Toast.makeText(this, "Erro: ${exc.message}",Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Erro: ${exc.message}", Toast.LENGTH_LONG).show()
             strConteudo = ""
 
         }
 
         Log.d(cTAG, "-> Conteudo: $strConteudo")
 
-        if (strConteudo.isNotEmpty()) {
-
-            //--- Define um nome para o arquivo
-            var intNumArq = 0
-            val arStrArqsNames : Array <String>
-            arStrArqsNames = utils.listaExtMemArqDir("/Download/sudoku/Jogos")
-            if (arStrArqsNames.isNotEmpty()) {
-
-                for (strArqName in arStrArqsNames) {
-
-                    if (strArqName.contains("jogo_")) {
-
-                        var intNumJogo = 0
-                        try {
-                            intNumJogo = strArqName.substring( 5,
-                                                              strArqName.indexOf('.')).toInt()
-                            if (intNumJogo > intNumArq) intNumArq = intNumJogo
-
-                        }
-                        catch (exc : Exception) {}
-                    }
-
-                }
-
-            }
-            intNumArq++
-            val strArqJogo = "jogo_$intNumArq.xml"
-            val strArqName = "/sudoku/jogos/$strArqJogo"
-
-            //--- Salva o arquivo
-            val flagEscrita = utils.escExtMemTextFile(strArqName, strConteudo)
-
-            strToast  = "Escrita arquivo $strArqJogo "
-            strToast += if (flagEscrita) "OK!" else "NÃO ok!"
-            Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
-
-            strLog  = "-> Escrita arquivo storage/emulated/0/Download$strArqName "
-            strLog += if (flagEscrita) "OK!" else "NÃO ok!"
-            Log.d(cTAG, strLog)
-
-        }
+        return strConteudo
 
     }
 
+    //--- preencheConteudo
+    private fun preencheConteudo(strTag : String, strConteudoTag : String) : String {
+
+        var strConteudoPreenchido = ""
+
+        /*
+        if (intIdxInic == 0) {
+
+            intIdxInic = strModelo.indexOf(strTag, 0, false)
+        }
+        else {
+
+            intIdxInic = intIdxFim
+            intIdxFim  = strModelo.indexOf(strTag, 0, false)
+
+        }
+        intIdxFim              = intIdxInic + strTag.length
+        strConteudoPreenchido  = strModelo.substring(0, intIdxFim)
+        strConteudoPreenchido += strConteudo
+         */
+
+        intIdxInic = intIdxFim
+        intIdxFim  = strModelo.indexOf(strTag, intIdxInic, false)
+        intIdxFim += strTag.length
+
+        strConteudoPreenchido += strModelo.substring(intIdxInic, intIdxFim)
+        strConteudoPreenchido += strConteudoTag
+
+        return strConteudoPreenchido
+
+    }
 }

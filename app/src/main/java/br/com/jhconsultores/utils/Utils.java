@@ -451,17 +451,24 @@ public class Utils {
     //---------------------------------------------------------------------
     public String [] ListRaw() {
 
-        String strMsg = "- Arquivos Raw: ";
-
-        Field fields[] = R.raw.class.getDeclaredFields();
-        String[] names = new String[fields.length] ;
+        String strMsg  = "- Arquivos Raw: ";
+        String[] names = new String[1];
 
         try {
-            for( int i = 0; i < fields.length; i++ ) {
-                Field f  = fields[i];
-                names[i] = f.getName();
-                strMsg  += "\n" + names[i];
+
+            Field fields[] = R.raw.class.getDeclaredFields();
+            names = new String[fields.length];
+
+            if (names.length > 0) {
+
+                for (int i = 0; i < fields.length; i++) {
+                    Field f  = fields[i];
+                    names[i] = f.getName();
+                    strMsg  += "\n" + names[i];
+                }
             }
+            else return (new String[]{"", ""});
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -471,58 +478,6 @@ public class Utils {
         return (names);
     }
 
-    //-------------------------------------------------------------------------
-    // Verifica se os arquivos necessários para o App existem no raw.
-    //-------------------------------------------------------------------------
-    boolean VerificaExistArqsNecRaw(String [] strArNomeArqNeces) {
-
-        //--- Instancializações e inicializações
-        boolean flagExistem = false;
-        String strMsgUI = "";
-        String strMsg   = "";
-
-        //--- Lista os arquivos existentes em raw
-        //----------------------------------------
-        String [] strArNomeArqExis = ListRaw();
-        //----------------------------------------
-
-        //--- Determina se falta algum dos arquivos
-        try {
-
-            ArrayList<String> strArLstArqNaoExistente = new ArrayList<>();
-
-            int intIndx = 0;
-            for (; intIndx < strArNomeArqNeces.length; intIndx++) {
-
-                if (indexOf(strArNomeArqNeces[intIndx], strArNomeArqExis) == -1) {
-                    strArLstArqNaoExistente.add(strArNomeArqNeces[intIndx]);
-                }
-            }
-
-            if (strArLstArqNaoExistente.size() > 0) {
-
-                for (String strArqNaoExist : strArLstArqNaoExistente) {
-                    strMsg += "\n-" + strArqNaoExist;
-                }
-                strMsgUI = "\nOs arquivos abaixo NÃO existem no res.raw:" + strMsg;
-
-            } else {
-                flagExistem = true;
-                strMsgUI    = "\nTodos os arquivos necessários existem no res.raw";
-            }
-        } catch (Exception exc) {
-
-            Log.d(TAG_Utils, "Erro: " + exc.getMessage());
-
-        }
-        Log.d(TAG_Utils, strMsgUI);
-
-        return flagExistem;
-    }
-
-    //-------------------------------------------------------------------------
-    // Método para leitura de um arquivo em src/main/res/raw/.
-    //-------------------------------------------------------------------------
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public ArrayList <String> LeituraFileRaw(Context context, String strFileName) {
 
@@ -959,6 +914,60 @@ public class Utils {
     //--------------------------------------------------------------------------
     //                            Apache
     //--------------------------------------------------------------------------
+
+    //-------------------------------------------------------------------------
+    // Verifica se os arquivos necessários para o App existem no raw.
+    //-------------------------------------------------------------------------
+    boolean VerificaExistArqsNecRaw(String [] strArNomeArqNeces) {
+
+        //--- Instancializações e inicializações
+        boolean flagExistem = false;
+        String strMsgUI = "";
+        String strMsg   = "";
+
+        //--- Lista os arquivos existentes em raw
+        //----------------------------------------
+        String [] strArNomeArqExis = ListRaw();
+        //----------------------------------------
+
+        //--- Determina se falta algum dos arquivos
+        try {
+
+            ArrayList<String> strArLstArqNaoExistente = new ArrayList<>();
+
+            int intIndx = 0;
+            for (; intIndx < strArNomeArqNeces.length; intIndx++) {
+
+                if (indexOf(strArNomeArqNeces[intIndx], strArNomeArqExis) == -1) {
+                    strArLstArqNaoExistente.add(strArNomeArqNeces[intIndx]);
+                }
+            }
+
+            if (strArLstArqNaoExistente.size() > 0) {
+
+                for (String strArqNaoExist : strArLstArqNaoExistente) {
+                    strMsg += "\n-" + strArqNaoExist;
+                }
+                strMsgUI = "\nOs arquivos abaixo NÃO existem no res.raw:" + strMsg;
+
+            } else {
+                flagExistem = true;
+                strMsgUI    = "\nTodos os arquivos necessários existem no res.raw";
+            }
+        } catch (Exception exc) {
+
+            Log.d(TAG_Utils, "Erro: " + exc.getMessage());
+
+        }
+        Log.d(TAG_Utils, strMsgUI);
+
+        return flagExistem;
+    }
+
+    //-------------------------------------------------------------------------
+    // Método para leitura de um arquivo em src/main/res/raw/.
+    //-------------------------------------------------------------------------
+
     //--------------------------------------------------------------------------
     // Verifica se existem os diretórios e arquivos necessários para o App.
     // Caso negativo, tenta providenciá-los.
