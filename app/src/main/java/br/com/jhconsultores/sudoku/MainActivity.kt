@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnGeraJogo   : Button
     private lateinit var btnAdaptaJogo : Button
     private lateinit var btnJogaJogo   : Button
+    private lateinit var btnTestaRV    : Button
 
     //--- Radio Buttons
     private lateinit var groupRBnivel  : RadioGroup
@@ -167,6 +168,7 @@ class MainActivity : AppCompatActivity() {
         btnAdaptaJogo  = findViewById(R.id.btn_AdaptarJogo)
         btnJogaJogo    = findViewById(R.id.btn_JogarJogo)
         btnGeraJogo    = findViewById(R.id.btn_GerarJogo)
+        btnTestaRV     = findViewById(R.id.btn_TesteRV)
 
         groupRBnivel   = findViewById(R.id.radioGrpNivel)
         rbFacil        = findViewById(R.id.nivelFacil)
@@ -329,6 +331,28 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     // Funções para o atendimento ao tapping nos botões (declaradas no xml)
     //----------------------------------------------------------------------------------------------
+    //--- Evento tapping no botão de teste do recyclerView dos jogos salvos
+    fun btnTesteRVClick(view: View?) {
+
+        strLog = "-> Tap no btnTesteRV"
+        Log.d(cTAG, strLog)
+
+        //--- Prepara a Intent para chamar JogarActivity
+        val intent = Intent(this, AdaptarActivity::class.java)
+        intent.action = "ApresentaRVJogosSalvos"
+        /*
+        intent.putExtra("strNivelJogo", strNivelJogo)
+        intent.putExtra("strSubNivelJogo", edtViewSubNivel.text.toString())
+        intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
+        intent.putIntegerArrayListExtra("JogoPreparado", arIntNumsJogo)
+         */
+
+        //----------------------
+        startActivity(intent)
+        //----------------------
+
+    }
+
     //--- Evento tapping no botão de geração de jogo
     @Suppress("UNUSED_PARAMETER")
     fun btnGeraJogoClick(view: View?) {

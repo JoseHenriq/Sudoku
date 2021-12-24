@@ -41,26 +41,26 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
     private var bmpMyImage: Bitmap? = null             // Preset ou jogo gerado e novos números
 
-    private var bmpNumDisp: Bitmap? = null             // Números disponíveis
+    private var bmpNumDisp    : Bitmap? = null             // Números disponíveis
     private var bmpSudokuBoard: Bitmap? = null             // Jogo
 
-    private var canvasMyImage: Canvas? = null
-    private var canvasNumDisp: Canvas? = null
+    private var canvasMyImage    : Canvas? = null
+    private var canvasNumDisp    : Canvas? = null
     private var canvasSudokuBoard: Canvas? = null
 
     private var iViewSudokuBoard: ImageView? = null
-    private var iViewNumsDisps: ImageView? = null
+    private var iViewNumsDisps  : ImageView? = null
 
-    private var tvNivel: TextView? = null
+    private var tvNivel   : TextView? = null
     private var tvSubNivel: TextView? = null
-    private var tvErros: TextView? = null
-    private var tvClues: TextView? = null
+    private var tvErros   : TextView? = null
+    private var tvClues   : TextView? = null
     private var intContaErro = 0
 
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
 
     private var intTamTxt = 25 // 50 // 200 //
-    private var scale = 0f
+    private var scale     = 0f
 
     private var pincelVerde = Paint()
     private var pincelBranco = Paint()
@@ -127,19 +127,20 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             setContentView(R.layout.activity_jogar)
 
             //--- Instancia objetos locais para os objetos XML
-            tvNivel = findViewById(R.id.tv_Nivel)
+            tvNivel    = findViewById(R.id.tv_Nivel)
             tvSubNivel = findViewById(R.id.tv_Subnivel)
-            tvErros = findViewById(R.id.tv_Erros)
-            tvClues = findViewById(R.id.tv_Clues)
+            tvErros    = findViewById(R.id.tv_Erros)
+            tvClues    = findViewById(R.id.tv_Clues)
 
-            toolBar = findViewById(R.id.toolbar2)
-            setSupportActionBar(toolBar)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-            val btnReset = findViewById<View>(R.id.btnReset) as Button
+            val btnReset  = findViewById<View>(R.id.btnReset) as Button
             val btnInicia = findViewById<View>(R.id.btnInicia) as Button
             val btnSalvar = findViewById<View>(R.id.btnSalvar) as Button
             btnInicia.isEnabled = true
+
+            //--- Ativa o actionBar
+            toolBar = findViewById(R.id.toolbar2)
+            setSupportActionBar(toolBar)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
             //--- Cronômetro
             strCronoInic = resources.getString(R.string.crono_inic)

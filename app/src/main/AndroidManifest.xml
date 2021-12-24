@@ -31,6 +31,9 @@
         <activity android:name=".JogarActivity"
             android:parentActivityName=".MainActivity" />
 
+        <activity android:name=".AdaptarActivity"
+            android:parentActivityName=".MainActivity" />
+
         <!-- FileProvider a ContentProvider for making the file securely available to the other end-->
         <provider
             android:name               ="androidx.core.content.FileProvider"
