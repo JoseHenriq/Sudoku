@@ -1,31 +1,27 @@
 package br.com.jhconsultores.sudoku.adapter
 
-import android.annotation.SuppressLint
-import android.database.Cursor
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 import br.com.jhconsultores.sudoku.R
 
-//class NotasAdapter(private val listener: NotaClickedListener): RecyclerView.Adapter<NotasViewHolder>() {
 class JogoAdapter(private val itemsListArq  : ArrayList<String>,
-                  private val itemsListJogo : ArrayList<String> ) :
+                  private val itemsListJogo : ArrayList<String>,
+                  private val listener      : JogoClickedListener) :
                                                           RecyclerView.Adapter<JogosViewHolder>() {
 
-    //----------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // Instancializações e inicializações
-    //----------------------------------------------------------------------------------------------
-    //private var mCursor: Cursor? = null
+    //--------------------------------------------------------------------------
     private val cTAG = "Sudoku"
 
-    //----------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // Eventos
-    //----------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JogosViewHolder {
 
         val view = LayoutInflater.from(parent.context)
@@ -37,37 +33,34 @@ class JogoAdapter(private val itemsListArq  : ArrayList<String>,
 
     override fun onBindViewHolder(holder: JogosViewHolder, position: Int) {
 
-        /*
-        mCursor?.moveToPosition(position)
-
-        holder.tituloTxt.text = mCursor?.getString(mCursor?.getColumnIndex(TITLE_NOTAS) as Int)
-        holder.notaTxt.text   = mCursor?.getString(mCursor?.getColumnIndex(DESCRIPTION_NOTAS) as Int)
-        */
-
         holder.arqTxt.text  = itemsListArq [position]
         holder.jogoTxt.text = itemsListJogo[position]
 
+        val strDado    = itemsListArq [position]
+        val intIdxInic = strDado.indexOf("Status: ") + 8
+        val strStatus  = strDado.substring(intIdxInic)
+
+        if (strStatus.contains("ativo")) {
+
+        }
+
         //--- Listeners
-        /*
-        holder.excluirBtn.setOnClickListener {
+        holder.arqTxt.setOnClickListener {
 
-            mCursor?.moveToPosition(position)
-            listener.notaRemoveItem(mCursor as Cursor)
-            //notifyDataSetChanged()
-            notifyItemChanged(position)
+            Log.d(cTAG, "JogoAdapter - posição: $position")
 
-        }
-
-        holder.itemView.setOnClickListener {
-
-            listener.notaClickeItem(mCursor as Cursor)
+            //----------------------------
+            listener.infoItem(position)
+            //----------------------------
 
         }
-        */
 
-        holder.adaptarBtn.setOnClickListener {
+        holder.jogoTxt.setOnClickListener {
 
-            Log.d(cTAG, "-> tapped no RV ítem!")
+            //----------------------------
+            listener.jogoItem(position)
+            //----------------------------
+
         }
 
     }
@@ -75,18 +68,14 @@ class JogoAdapter(private val itemsListArq  : ArrayList<String>,
     //----------------------------------------------------------------------------------------------
     // Funções
     //----------------------------------------------------------------------------------------------
-    //override fun getItemCount(): Int = if(mCursor != null) mCursor?.count as Int else 0
-    override fun getItemCount(): Int = if(itemsListArq.isNullOrEmpty()) 0 else itemsListArq.size
+    // override fun getItemCount(): Int = if(itemsListArq.isNullOrEmpty()) 0 else itemsListArq.size
+    override fun getItemCount(): Int {
 
-    /*
-    @SuppressLint("NotifyDataSetChanged")
-    fun setCursor(novoCursor: Cursor?){
+        Log.d(cTAG, "getItemCount: ${itemsListArq.size}")
 
-        notifyDataSetChanged()
+        return itemsListArq.size
 
     }
-     */
-
 }
 
 //------------------------------------------------------------------------------
@@ -94,8 +83,7 @@ class JogoAdapter(private val itemsListArq  : ArrayList<String>,
 //------------------------------------------------------------------------------
 class JogosViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
-    val arqTxt     = itemView.findViewById<TextView>(R.id.card_Arq_txt)    // !!
-    val jogoTxt    = itemView.findViewById<TextView>(R.id.card_Jogo_txt)   // !!
-    val adaptarBtn = itemView.findViewById<Button>(R.id.card_adaptar_btn)  // !!
+    val arqTxt  : TextView = itemView.findViewById(R.id.card_Arq_txt)    // !!
+    val jogoTxt : TextView = itemView.findViewById(R.id.card_Jogo_txt)   // !!
 
 }

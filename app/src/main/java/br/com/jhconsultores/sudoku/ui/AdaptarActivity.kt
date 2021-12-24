@@ -1,18 +1,17 @@
 package br.com.jhconsultores.sudoku.ui
 
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
+
+import android.widget.Toast
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import br.com.jhconsultores.sudoku.R
 import br.com.jhconsultores.sudoku.adapter.JogoAdapter
+import br.com.jhconsultores.sudoku.adapter.JogoClickedListener
 
 import br.com.jhconsultores.utils.Utils
 
@@ -21,11 +20,12 @@ class AdaptarActivity : AppCompatActivity() {
     //--------------------------------------------------------------------------
     //                    Instancializações e inicializações
     //--------------------------------------------------------------------------
-    private var cTAG   = "Sudoku"
-    private var strLog = ""
+    private var cTAG     = "Sudoku"
+    private var strLog   = ""
+    private var strToast = ""
 
-    private lateinit var toolBar     : androidx.appcompat.widget.Toolbar
-    private lateinit var progressBar : ProgressBar
+    //private lateinit var toolBar     : androidx.appcompat.widget.Toolbar
+    //private lateinit var progressBar : ProgressBar
 
     private val itemsListArq  = ArrayList<String>()
     private val itemsListJogo = ArrayList<String>()
@@ -45,6 +45,7 @@ class AdaptarActivity : AppCompatActivity() {
         //------------------------------------------------------------------------------------------
         // Implementa o Progress Bar
         //------------------------------------------------------------------------------------------
+        /*
         progressBar = ProgressBar(this)
 
         //setting height and width of progressBar
@@ -59,13 +60,16 @@ class AdaptarActivity : AppCompatActivity() {
 
         //--- Ativa o progressBar
         progressBar.visibility = View.VISIBLE
+        */
 
         //------------------------------------------------------------------------------------------
         // Implementa o actionBar
         //------------------------------------------------------------------------------------------
+        /*
         toolBar = findViewById(R.id.toolbar)
         setSupportActionBar(toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        */
 
         //------------------------------------------------------------------------------------------
         // Implementa o recycler view
@@ -87,15 +91,22 @@ class AdaptarActivity : AppCompatActivity() {
         //---------------------------------------------------------------------------------
         if (arStrArqsNames.isNotEmpty()) {
 
+            //val qtiMaxItens   = 8
+            //var intContaItens = 0
             for (strArqName in arStrArqsNames) {
 
-                Log.d(cTAG, "   - $strArqName")
+                //if (++intContaItens <= qtiMaxItens) {
 
-                //---------------------------------------------------
-                itemsListArq.add(preparaItemInfoArq(strArqName))
-                //---------------------------------------------------
-                itemsListJogo.add(preparaItemInfoJogo(strArqName))
-                //---------------------------------------------------
+                    Log.d(cTAG, "   - $strArqName")
+
+                    //-----------------------------------------------------
+                    itemsListArq.add(preparaItensInfosArq(strArqName))
+                    //-----------------------------------------------------
+                    itemsListJogo.add(preparaItensInfosJogo(strArqName))
+                    //-----------------------------------------------------
+
+                //}
+                //else break
 
             }
 
@@ -106,14 +117,45 @@ class AdaptarActivity : AppCompatActivity() {
 
         }
 
-        //--------------------------------------------------------
-        customAdapter = JogoAdapter(itemsListArq, itemsListJogo)
-        //--------------------------------------------------------
+        // 4- Listeners para clique em um dos jogos
+        //--------------------------------------------------------------------------------------
+        customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
+        //--------------------------------------------------------------------------------------
+
+            //--- Listener para click em um dos jogos
+            override fun infoItem (posicao : Int) {
+
+                val itemListArq = itemsListArq[posicao]
+                val intIdxInic  = itemListArq.indexOf("Arq: ") + 5
+                val intIdxFim   = itemListArq.indexOf(" Data:")
+                val strfileName = itemListArq.substring(intIdxInic, intIdxFim)
+
+                strLog = "-> Tapped no infoItem $posicao: $strfileName!"
+                Log.d(cTAG, strLog)
+
+                strToast = "Tapped $posicao: $strfileName!"
+                Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+            }
+
+            override fun jogoItem(posicao : Int) {
+
+                strLog = "-> Tapped no jogoItem do jogo $posicao!"
+                Log.d(cTAG, strLog)
+
+                strToast = "Tapped jogoItem $posicao!"
+                Toast.makeText(baseContext, strToast, Toast.LENGTH_LONG).show()
+
+            }
+
+        })
+
+        customAdapter.setHasStableIds(true)
+
         recyclerView.adapter = customAdapter
 
-
         //--- Desativa o progressbar
-        progressBar.visibility = View.INVISIBLE
+        // progressBar.visibility = View.INVISIBLE
 
     }
 
@@ -121,68 +163,90 @@ class AdaptarActivity : AppCompatActivity() {
     //                                Funções
     //--------------------------------------------------------------------------
     //--- preparaItemInfoArq
-    private fun preparaItemInfoArq(strArqName : String) : String {
+    private fun preparaItensInfosArq(strArqName : String) : String {
 
-        //--- Leitura do Arquivo
-        //-------------------------------------
-        val strLeitArq = leitArq(strArqName)
-        //-------------------------------------
+        var strPrepInfoArq = ""
 
-        //--- Nome do arquivo
-        var strPrepInfoArq = "Arq: $strArqName"
+        try {
 
-        //--- DataHora
-        strPrepInfoArq += "  Data: "
-        var strTag      = "<dataHora>"
-        var intIdxInic  = strLeitArq.indexOf(strTag) + strTag.length
-        var intIdxFim   = strLeitArq.indexOf("</dataHora>")
-        strPrepInfoArq += strLeitArq.substring(intIdxInic, intIdxFim)
+            //--- Leitura do Arquivo
+            //-------------------------------------
+            val strLeitArq = leitArq(strArqName)
+            //-------------------------------------
 
-        strPrepInfoArq += "  Status: "
-        strTag          = "<status>"
-        intIdxInic      = strLeitArq.indexOf(strTag) + strTag.length
-        intIdxFim       = strLeitArq.indexOf("</status>")
-        strPrepInfoArq += strLeitArq.substring(intIdxInic, intIdxFim)
+            //--- Nome do arquivo
+            strPrepInfoArq = "Arq: $strArqName"
+
+            //--- DataHora
+            strPrepInfoArq += "  Data: "
+            var strTag      = "<dataHora>"
+            var intIdxInic  = strLeitArq.indexOf(strTag) + strTag.length
+            var intIdxFim   = strLeitArq.indexOf("</dataHora>")
+            strPrepInfoArq += strLeitArq.substring(intIdxInic, intIdxFim)
+
+            strPrepInfoArq += "  Status: "
+            strTag          = "<status>"
+            intIdxInic      = strLeitArq.indexOf(strTag) + strTag.length
+            intIdxFim       = strLeitArq.indexOf("</status>")
+            strPrepInfoArq += strLeitArq.substring(intIdxInic, intIdxFim)
+
+        }
+        catch (exc : Exception) {
+
+            Log.d(cTAG, "Erro: ${exc.message}")
+
+        }
 
         return strPrepInfoArq
 
     }
 
     //--- preparaItemInfoJogo
-    private fun preparaItemInfoJogo(strArqName : String) : String {
+    private fun preparaItensInfosJogo(strArqName : String) : String {
 
-        //--- Leitura do Arquivo
-        //-------------------------------------
-        val strLeitArq = leitArq(strArqName)
-        //-------------------------------------
+        var strPrepInfoJogo = ""
 
-        //--- Nivel
-        var strPrepInfoJogo = "Nivel: "
-        var strTag          = "<nivel>"
-        var intIdxInic      = strLeitArq.indexOf(strTag) + strTag.length
-        var intIdxFim       = strLeitArq.indexOf("</nivel>")
-        strPrepInfoJogo    += strLeitArq.substring(intIdxInic, intIdxFim)
+        try {
 
-        //--- SubNivel
-        strPrepInfoJogo += "  sub: "
-        strTag           = "<subnivel>"
-        intIdxInic       = strLeitArq.indexOf(strTag) + strTag.length
-        intIdxFim        = strLeitArq.indexOf("</nivel>")
-        strPrepInfoJogo += strLeitArq.substring(intIdxInic, intIdxFim)
+            //--- Leitura do Arquivo
+            //-------------------------------------
+            val strLeitArq = leitArq(strArqName)
+            //-------------------------------------
 
-        //--- Erros
-        strPrepInfoJogo  = "  Erros: "
-        strTag           = "<erros>"
-        intIdxInic       = strLeitArq.indexOf(strTag) + strTag.length
-        intIdxFim        = strLeitArq.indexOf("</erros>")
-        strPrepInfoJogo += strLeitArq.substring(intIdxInic, intIdxFim)
+            //--- Nivel
+            strPrepInfoJogo  = "Nivel: "
+            var strTag       = "<nivel>"
+            var intIdxInic   = strLeitArq.indexOf(strTag) + strTag.length
+            var intIdxFim    = strLeitArq.indexOf("</nivel>")
+            strPrepInfoJogo += strLeitArq.substring(intIdxInic, intIdxFim)
 
-        //--- tempo de jogo
-        strPrepInfoJogo  = "  tempo: "
-        strTag           = "<tempoJogo>"
-        intIdxInic       = strLeitArq.indexOf(strTag) + strTag.length
-        intIdxFim        = strLeitArq.indexOf("</tempoJogo>")
-        strPrepInfoJogo += strLeitArq.substring(intIdxInic, intIdxFim)
+            //--- SubNivel
+            strPrepInfoJogo += "  sub: "
+            strTag           = "<subnivel>"
+            intIdxInic       = strLeitArq.indexOf(strTag) + strTag.length
+            intIdxFim        = strLeitArq.indexOf("</subnivel>")
+            strPrepInfoJogo += strLeitArq.substring(intIdxInic, intIdxFim)
+
+            //--- Erros
+            strPrepInfoJogo += "  Erros: "
+            strTag           = "<erros>"
+            intIdxInic       = strLeitArq.indexOf(strTag) + strTag.length
+            intIdxFim        = strLeitArq.indexOf("</erros>")
+            strPrepInfoJogo += strLeitArq.substring(intIdxInic, intIdxFim)
+
+            //--- tempo de jogo
+            strPrepInfoJogo  += "  tempo: "
+            strTag           = "<tempoJogo>"
+            intIdxInic       = strLeitArq.indexOf(strTag) + strTag.length
+            intIdxFim        = strLeitArq.indexOf("</tempoJogo>")
+            strPrepInfoJogo += strLeitArq.substring(intIdxInic, intIdxFim)
+        }
+
+        catch (exc : Exception) {
+
+            Log.d(cTAG, "Erro: ${exc.message}")
+
+        }
 
         return strPrepInfoJogo
 
@@ -203,7 +267,7 @@ class AdaptarActivity : AppCompatActivity() {
         for (strLidaArq in arStrsLeitArq) { strLeitArq += strLidaArq }
 
         //--- Retorna
-        return strLeitArq
+        return strLeitArq.trimStart()
 
     }
 

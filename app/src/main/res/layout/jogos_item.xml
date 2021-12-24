@@ -46,7 +46,7 @@
 
         </LinearLayout>
 
-        <Button android:id="@+id/card_adaptar_btn"
+        <!--Button android:id="@+id/card_adaptar_btn"
 
             android:layout_width ="wrap_content"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             android:layout_margin="8dp"
             android:textColor    ="@color/black"
             android:textAllCaps  ="false"
-            android:text         ="Adaptar" />
+            android:text         ="Adaptar" /-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

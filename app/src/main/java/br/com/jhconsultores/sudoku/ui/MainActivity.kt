@@ -138,31 +138,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        /*
-        //--- Obtém lista de arquivos em /storage/emulated/0/ + strDirName
-        val strDirName = "Download"
-
-        try {
-            //------------------------------------------------
-            arStrNomeArqRaw = utils.ListaArqDir(strDirName)
-            //------------------------------------------------
-            Log.d(cTAG, "-> Arquivos em storage/emulated/0/$strDirName:")
-            for (idxFileName in 0 until arStrNomeArqRaw.size) {
-
-                if (arStrNomeArqRaw[idxFileName].isNotEmpty()) {
-
-                    Log.d(cTAG, "   - $idxFileName: ${arStrNomeArqRaw[idxFileName]}")
-
-                }
-            }
-        }
-        catch (exc : Exception) {
-
-            Log.d(cTAG, "   - Erro: ${exc.message}")
-
-        }
-         */
-
         //--- Instancializações e inicializações
         tvContaNums  = findViewById(R.id.ContaNums)
         tvContaClues = findViewById(R.id.ContaClues)
@@ -195,9 +170,9 @@ class MainActivity : AppCompatActivity() {
         inicializaObjGraf()
         //--------------------
 
-        //------------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------
         // Implementa o Progress Bar
-        //------------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------
         progressBar = ProgressBar(this)
         progressBar.visibility = INVISIBLE
 
@@ -211,9 +186,9 @@ class MainActivity : AppCompatActivity() {
         // Add ProgressBar to our layout
         layout?.addView(progressBar)
 
-        //------------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------
         // Listener para mudança do texto subnivel (editView)
-        //------------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------
         //https://www.tutorialkart.com/kotlin-android/android-edittext-on-text-change/
         edtViewSubNivel.addTextChangedListener(object : TextWatcher {
 
