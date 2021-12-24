@@ -1,8 +1,8 @@
-package br.com.jhconsultores.sudoku
+package br.com.jhconsultores.sudoku.jogo
 
 import android.annotation.SuppressLint
 import android.util.Log
-import br.com.jhconsultores.sudoku.SudokuBackTracking.intNumBackTracking
+import br.com.jhconsultores.sudoku.jogo.SudokuBackTracking.intNumBackTracking
 
 class SudokuGameGenerator {
 

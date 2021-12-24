@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
+
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app    ="http://schemas.android.com/apk/res-auto"
     xmlns:tools  ="http://schemas.android.com/tools"
@@ -7,7 +8,23 @@
     android:layout_width ="match_parent"
     android:layout_height="match_parent"
 
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
+
+    <!-- Progress Bar -->
+    <RelativeLayout android:id="@+id/layoutProgBar"
+
+        android:layout_width ="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal|center_vertical"
+
+        android:orientation="vertical"
+
+        app:layout_constraintEnd_toEndOf    ="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </RelativeLayout>
 
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar"
@@ -24,6 +41,7 @@
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         app:title         ="@string/app_name" />
 
+    <!-- RV -->
     <androidx.recyclerview.widget.RecyclerView android:id="@+id/rv_jogos"
 
         android:layout_width ="match_parent"

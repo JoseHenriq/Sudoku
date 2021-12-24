@@ -1,4 +1,4 @@
-package br.com.jhconsultores.sudoku
+package br.com.jhconsultores.sudoku.ui
 
 import android.os.Bundle
 
@@ -20,6 +20,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import br.com.jhconsultores.sudoku.R
 
 import java.lang.Exception
 import java.nio.IntBuffer

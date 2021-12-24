@@ -1,4 +1,4 @@
-package br.com.jhconsultores.sudoku
+package br.com.jhconsultores.sudoku.jogo
 
 import kotlin.math.sqrt
 

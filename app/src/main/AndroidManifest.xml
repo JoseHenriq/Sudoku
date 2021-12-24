@@ -20,7 +20,7 @@
         android:theme      ="@style/Theme.Sudoku">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action   android:name="android.intent.action.MAIN" />
@@ -28,11 +28,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".JogarActivity"
-            android:parentActivityName=".MainActivity" />
+        <activity android:name=".ui.JogarActivity"
+            android:parentActivityName=".ui.MainActivity" />
 
-        <activity android:name=".AdaptarActivity"
-            android:parentActivityName=".MainActivity" />
+        <activity android:name=".ui.AdaptarActivity"
+            android:parentActivityName=".ui.MainActivity" />
 
         <!-- FileProvider a ContentProvider for making the file securely available to the other end-->
         <provider

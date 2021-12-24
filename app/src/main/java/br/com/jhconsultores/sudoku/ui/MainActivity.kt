@@ -1,4 +1,4 @@
-package br.com.jhconsultores.sudoku
+package br.com.jhconsultores.sudoku.ui
 
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +21,8 @@ import android.view.MotionEvent
 import android.view.View.*
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import br.com.jhconsultores.sudoku.R
+import br.com.jhconsultores.sudoku.jogo.SudokuGameGenerator
 import br.com.jhconsultores.utils.Utils
 
 @Suppress("UNUSED_PARAMETER")
