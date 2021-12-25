@@ -130,21 +130,21 @@ class AdaptarActivity : AppCompatActivity() {
                 val intIdxFim   = itemListArq.indexOf(" Data:")
                 val strfileName = itemListArq.substring(intIdxInic, intIdxFim)
 
-                strLog = "-> Tapped no infoItem $posicao: $strfileName!"
-                Log.d(cTAG, strLog)
-
                 strToast = "Tapped $posicao: $strfileName!"
                 Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+                strLog   = "   - $strToast"
+                Log.d(cTAG, strLog)
 
             }
 
             override fun jogoItem(posicao : Int) {
 
-                strLog = "-> Tapped no jogoItem do jogo $posicao!"
-                Log.d(cTAG, strLog)
-
                 strToast = "Tapped jogoItem $posicao!"
                 Toast.makeText(baseContext, strToast, Toast.LENGTH_LONG).show()
+
+                strLog   = "   - $strToast"
+                Log.d(cTAG, strLog)
 
             }
 

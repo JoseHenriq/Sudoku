@@ -26,7 +26,6 @@ class JogoAdapter(private val itemsListArq  : ArrayList<String>,
 
         val view = LayoutInflater.from(parent.context)
                                             .inflate(R.layout.jogos_item, parent, false)
-
         return JogosViewHolder(view)
 
     }
@@ -47,7 +46,7 @@ class JogoAdapter(private val itemsListArq  : ArrayList<String>,
         //--- Listeners
         holder.arqTxt.setOnClickListener {
 
-            Log.d(cTAG, "JogoAdapter - posição: $position")
+            Log.d(cTAG, "-> arqTxt - posição: $position")
 
             //----------------------------
             listener.infoItem(position)
@@ -56,6 +55,8 @@ class JogoAdapter(private val itemsListArq  : ArrayList<String>,
         }
 
         holder.jogoTxt.setOnClickListener {
+
+            Log.d(cTAG, "-> jogoTxt - posição: $position")
 
             //----------------------------
             listener.jogoItem(position)
