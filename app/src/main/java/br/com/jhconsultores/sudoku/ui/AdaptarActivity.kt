@@ -82,9 +82,7 @@ class AdaptarActivity : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
 
         // 3- referencia o ArrayList ao ViewHolder
-
         Log.d(cTAG, "-> Jogos salvos: ")
-
         //- Prepara os arrays list das infos para o RV
         //---------------------------------------------------------------------------------
         val arStrArqsNames = utils.listaExtMemArqDir("/Download/sudoku/Jogos")

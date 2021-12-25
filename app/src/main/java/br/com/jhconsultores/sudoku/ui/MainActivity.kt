@@ -1,13 +1,17 @@
 package br.com.jhconsultores.sudoku.ui
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.net.wifi.WifiManager
 import android.os.*
 import android.text.Editable
 import android.text.TextWatcher
@@ -128,6 +132,16 @@ class MainActivity : AppCompatActivity() {
     private var arStrTags   = Array(3) { "" }
     private var arArStrTags = Array(3) { Array(9) { "" } }
 
+    //--- Broadcast
+    private var mIntentFilter: IntentFilter? = null
+    private var strJogoSelec = ""
+
+    companion object {
+
+        const val strSelJogo = "SelecionaJogo"
+
+    }
+
     //----------------------------------------------------------------------------------------------
     // Eventos e listeners da MainActivity
     //----------------------------------------------------------------------------------------------
@@ -160,6 +174,8 @@ class MainActivity : AppCompatActivity() {
         groupRBadapta = findViewById(R.id.radioGrpAdapta)
         rbPreset      = findViewById(R.id.preset)
         rbEdicao      = findViewById(R.id.edicao)
+        txtDadosJogo  = findViewById(R.id.txtJogos)
+
         groupRBadapta.visibility = INVISIBLE
 
         tvContaNums.text  = "0"
@@ -208,8 +224,6 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-
-        txtDadosJogo = findViewById(R.id.txtJogos)
 
         //------------------------------------------------------------------------------------------
         // Listener para os eventos onTouch dos ImageViews (só utilizados na edição).
@@ -270,9 +284,7 @@ class MainActivity : AppCompatActivity() {
         //-------------------------------------------------------------------------------------
         // Verifica as solicitações de acesso aos recursos do Android (AndroidManifest.xml).
         //-------------------------------------------------------------------------------------
-        //------------------------------------------------------
-        //val flagInstalacao_Ok = VerificaPermissoesAcessoAPI()
-        //------------------------------------------------------
+        //------------------------------
         VerificaPermissoesAcessoAPI()
         //------------------------------
 
@@ -303,6 +315,32 @@ class MainActivity : AppCompatActivity() {
         },
         waitTime)  // value in milliseconds
 
+        //--- Broadcast receiver
+        mIntentFilter = IntentFilter()
+        mIntentFilter!!.addAction(strSelJogo)
+        //-------------------------------------------
+        registerReceiver(mReceiver, mIntentFilter)
+        //-------------------------------------------
+
+    }
+
+    //---------------------------------------------------------------------
+    //                      Broadcast Receiver
+    //---------------------------------------------------------------------
+    private val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+
+            if (intent.action == strSelJogo) {
+
+                strJogoSelec = intent.getStringExtra("jogoSelecionado").toString()
+
+                //-------------------------------
+                preparaJogoSelec(strJogoSelec)
+                //-------------------------------
+
+            }
+        }
     }
 
     //----------------------------------------------------------------------------------------------
@@ -462,10 +500,14 @@ class MainActivity : AppCompatActivity() {
             //--- Ativa o progress bar
             progressBar.visibility = VISIBLE
 
+            /* --- O código abaixo não será mais necessário;
+            // >>>>>> resolver sgg.intJogoAdaptar <<<<<<<
             //--- Prepara o preset para se conseguir o gabarito do jogo
             if (++sgg.intJogoAdaptar > 6) sgg.intJogoAdaptar = 1
             txtDadosJogo.text = String.format("%s%d %s","Preset #",sgg.intJogoAdaptar,"aguarde ...")
+            */
 
+            /* --- O código abaixo será ativado pelo broadcast receiver
             //--- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
             val waitTime = 100L  // milisegundos
             Handler(Looper.getMainLooper()).postDelayed({
@@ -564,6 +606,12 @@ class MainActivity : AppCompatActivity() {
 
             },
             waitTime)  // value in milliseconds
+            */
+
+            //--- Prepara o preset para se conseguir o gabarito do jogo
+            //----------------------
+            btnTesteRVClick(view)
+            //----------------------
 
         }
 
@@ -1435,7 +1483,7 @@ class MainActivity : AppCompatActivity() {
 
     //lateinit var document : Document
 
-        //--- inicQuadMaiorAdaptacao
+    //--- inicQuadMaiorAdaptacao
     @RequiresApi(Build.VERSION_CODES.O)
     private fun inicQuadMaiorAdaptacao(jogoAdaptar : Int) {
 
@@ -2021,6 +2069,92 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strMsgDebug)
 
         return flagPermissoesOk
+
+    }
+
+    //--- preparaJogoSelec
+    private fun preparaJogoSelec(strJogoSelec : String) {
+
+        //--- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
+        val waitTime = 100L  // milisegundos
+        Handler(Looper.getMainLooper()).postDelayed({
+
+            //-----------------------------
+            visibilidadeViews(INVISIBLE)
+            //-----------------------------
+            groupRBadapta.visibility = VISIBLE
+
+            //----------------------------------------------
+            quadMaiorAdapta = extraeQMSelec(strJogoSelec)
+            //----------------------------------------------
+
+            sgg.quadMaiorRet = copiaArArInt(quadMaiorAdapta)
+
+            //---------------------------------------
+            quadMaior = sgg.adaptaJogoAlgoritmo2()
+            //---------------------------------------
+
+            //--- Apresenta o nível e o subnível do preset
+            nivelJogo    = (sgg.intQtiZeros / 10) * 10
+            subNivelJogo = sgg.intQtiZeros % 10
+            val rbNivelJogo: RadioButton = when (nivelJogo) {
+
+                20 -> {
+                    strNivelJogo = "Fácil"
+                    rbFacil
+                }
+                30 -> {
+                    strNivelJogo = "Médio"
+                    rbMedio
+                }
+                40 -> {
+                    strNivelJogo = "Difícil"
+                    rbDificil
+                }
+                50 -> {
+                    strNivelJogo = "Muito Difícil"
+                    rbMuitoDificil
+                }
+                else -> {
+                    strNivelJogo = "Fácil"
+                    rbFacil
+                }
+
+            }
+            rbNivelJogo.isChecked = true
+
+            edtViewSubNivel.setText(subNivelJogo.toString())
+
+            //---------------------------
+            prepRBniveis(false)
+            //---------------------------
+
+            edtViewSubNivel.isEnabled = false
+
+            //-------------------------------
+            preencheSudokuBoard(quadMaior)
+            //-------------------------------
+
+            txtDadosJogo.text = String.format("%s%d","Preset #",sgg.intJogoAdaptar)
+
+            sgg.flagJogoAdaptadoOk = true
+
+            //--- Desativa o progress bar
+            progressBar.visibility = INVISIBLE
+
+        },
+        waitTime)  // value in milliseconds
+
+    }
+
+    //--- extraeQMSelec
+    private fun extraeQMSelec(strJogoSelec : String) : Array < Array <Int>> {
+
+        var arArJogoSelec = Array(9) { Array(9) { 0 } }
+
+
+
+        return arArJogoSelec
 
     }
 
