@@ -1,5 +1,6 @@
 package br.com.jhconsultores.sudoku.adapter
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 import br.com.jhconsultores.sudoku.R
+import br.com.jhconsultores.sudoku.R.color
 
 class JogoAdapter(private val itemsListArq  : ArrayList<String>,
                   private val itemsListJogo : ArrayList<String>,
@@ -30,6 +32,7 @@ class JogoAdapter(private val itemsListArq  : ArrayList<String>,
 
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: JogosViewHolder, position: Int) {
 
         holder.arqTxt.text  = itemsListArq [position]
@@ -39,9 +42,12 @@ class JogoAdapter(private val itemsListArq  : ArrayList<String>,
         val intIdxInic = strDado.indexOf("Status: ") + 8
         val strStatus  = strDado.substring(intIdxInic)
 
-        if (strStatus.contains("ativo")) {
+        val cardColor : Long = if (strStatus.contains("ativo")) 0xFFA5F55C else 0xFF3D91E4
 
-        }
+        //holder.itemView.setBackgroundColor(cardColor.toInt())
+
+        holder.arqTxt.setBackgroundColor  (cardColor.toInt())
+        holder.jogoTxt.setBackgroundColor (cardColor.toInt())
 
         //--- Listeners
         holder.arqTxt.setOnClickListener {
@@ -72,7 +78,7 @@ class JogoAdapter(private val itemsListArq  : ArrayList<String>,
     // override fun getItemCount(): Int = if(itemsListArq.isNullOrEmpty()) 0 else itemsListArq.size
     override fun getItemCount(): Int {
 
-        Log.d(cTAG, "getItemCount: ${itemsListArq.size}")
+        //Log.d(cTAG, "getItemCount: ${itemsListArq.size}")
 
         return itemsListArq.size
 

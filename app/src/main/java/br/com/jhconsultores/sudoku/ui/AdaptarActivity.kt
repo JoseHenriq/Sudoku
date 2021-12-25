@@ -140,12 +140,24 @@ class AdaptarActivity : AppCompatActivity() {
 
             override fun jogoItem(posicao : Int) {
 
+                /*
                 strToast = "Tapped jogoItem $posicao!"
                 Toast.makeText(baseContext, strToast, Toast.LENGTH_LONG).show()
 
                 strLog   = "   - $strToast"
                 Log.d(cTAG, strLog)
+                */
 
+                val itemListJogo= itemsListJogo[posicao]
+                val intIdxInic  = itemListJogo.indexOf("Nivel: ") + 7
+                val intIdxFim   = itemListJogo.indexOf(" sub:")
+                val strNivel    = itemListJogo.substring(intIdxInic, intIdxFim)
+
+                strToast = "Tapped $posicao: $strNivel!"
+                Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+                strLog   = "   - $strToast"
+                Log.d(cTAG, strLog)
             }
 
         })
