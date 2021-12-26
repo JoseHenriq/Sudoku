@@ -236,7 +236,7 @@
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf    ="parent"
-        app:layout_constraintBottom_toTopOf ="@id/separador_subnivel_ivJogo" >
+        app:layout_constraintTop_toBottomOf ="@id/separador_ivJogo_scroll" >
 
     </RelativeLayout>
 
@@ -298,13 +298,14 @@
     <!-- DEBUG -->
     <Button android:id="@+id/btn_TesteRV"
 
-        android:layout_width ="@dimen/WidthBotao"
+        android:layout_width ="wrap_content"
         android:layout_height="40dp"
 
         app:layout_constraintStart_toEndOf  ="@id/ContaClues"
         app:layout_constraintTop_toBottomOf ="@id/separador_ivJogo_scroll"
 
-        android:layout_marginStart="@dimen/MargemEsquerda"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="10dp"
 
         android:textColor ="@android:color/white"
 

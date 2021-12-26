@@ -30,6 +30,7 @@ class AdaptarActivity : AppCompatActivity() {
     private val itemsListArq  = ArrayList<String>()
     private val itemsListJogo = ArrayList<String>()
 
+    private lateinit var layoutManager: LinearLayoutManager
     private lateinit var customAdapter: JogoAdapter
     private val utils = Utils()
 
@@ -78,7 +79,7 @@ class AdaptarActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.rv_jogos)
 
         // 2- RV assume o controle do layout
-        val layoutManager          = LinearLayoutManager(applicationContext)
+        layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
 
         // 3- referencia o ArrayList ao ViewHolder
@@ -89,22 +90,15 @@ class AdaptarActivity : AppCompatActivity() {
         //---------------------------------------------------------------------------------
         if (arStrArqsNames.isNotEmpty()) {
 
-            //val qtiMaxItens   = 8
-            //var intContaItens = 0
             for (strArqName in arStrArqsNames) {
 
-                //if (++intContaItens <= qtiMaxItens) {
+                Log.d(cTAG, "   - $strArqName")
 
-                    Log.d(cTAG, "   - $strArqName")
-
-                    //-----------------------------------------------------
-                    itemsListArq.add(preparaItensInfosArq(strArqName))
-                    //-----------------------------------------------------
-                    itemsListJogo.add(preparaItensInfosJogo(strArqName))
-                    //-----------------------------------------------------
-
-                //}
-                //else break
+                //-----------------------------------------------------
+                itemsListArq.add(preparaItensInfosArq(strArqName))
+                //-----------------------------------------------------
+                itemsListJogo.add(preparaItensInfosJogo(strArqName))
+                //-----------------------------------------------------
 
             }
 
@@ -120,13 +114,12 @@ class AdaptarActivity : AppCompatActivity() {
         customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
         //--------------------------------------------------------------------------------------
 
-            //--- Listener para click em um dos jogos
+            //--- Listener para click na info do arquivo de um dos jogos
             override fun infoItem (posicao : Int) {
 
-                val itemListArq = itemsListArq[posicao]
-                val intIdxInic  = itemListArq.indexOf("Arq: ") + 5
-                val intIdxFim   = itemListArq.indexOf(" Data:")
-                val strfileName = itemListArq.substring(intIdxInic, intIdxFim)
+                //---------------------------------------------------------------------------------
+                val strfileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
+                //---------------------------------------------------------------------------------
 
                 strToast = "Tapped $posicao: $strfileName!"
                 Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
@@ -136,20 +129,12 @@ class AdaptarActivity : AppCompatActivity() {
 
             }
 
+            //--- Listener para click na info de um dos jogos
             override fun jogoItem(posicao : Int) {
 
-                /*
-                strToast = "Tapped jogoItem $posicao!"
-                Toast.makeText(baseContext, strToast, Toast.LENGTH_LONG).show()
-
-                strLog   = "   - $strToast"
-                Log.d(cTAG, strLog)
-                */
-
-                val itemListJogo= itemsListJogo[posicao]
-                val intIdxInic  = itemListJogo.indexOf("Nivel: ") + 7
-                val intIdxFim   = itemListJogo.indexOf(" sub:")
-                val strNivel    = itemListJogo.substring(intIdxInic, intIdxFim)
+                //---------------------------------------------------------------------------------
+                val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
+                //---------------------------------------------------------------------------------
 
                 strToast = "Tapped $posicao: $strNivel!"
                 Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
@@ -278,6 +263,16 @@ class AdaptarActivity : AppCompatActivity() {
 
         //--- Retorna
         return strLeitArq.trimStart()
+
+    }
+
+    //--- leCampo
+    private fun leCampo(itemList : String, tagInic : String, tagFim : String) : String {
+
+        val intIdxInic  = itemList.indexOf(tagInic) + tagInic.length
+        val intIdxFim   = itemList.indexOf(tagFim)
+
+        return itemList.substring(intIdxInic, intIdxFim)
 
     }
 

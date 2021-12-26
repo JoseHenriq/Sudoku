@@ -44,12 +44,10 @@ class JogoAdapter(private val itemsListArq  : ArrayList<String>,
 
         val cardColor : Long = if (strStatus.contains("ativo")) 0xFFA5F55C else 0xFF3D91E4
 
-        //holder.itemView.setBackgroundColor(cardColor.toInt())
-
         holder.arqTxt.setBackgroundColor  (cardColor.toInt())
         holder.jogoTxt.setBackgroundColor (cardColor.toInt())
 
-        //--- Listeners
+        //--- Atende o tap num ítem e chama o respectivo listener
         holder.arqTxt.setOnClickListener {
 
             Log.d(cTAG, "-> arqTxt - posição: $position")
@@ -60,6 +58,7 @@ class JogoAdapter(private val itemsListArq  : ArrayList<String>,
 
         }
 
+        //--- Atende o tap num ítem e chama o respectivo listener
         holder.jogoTxt.setOnClickListener {
 
             Log.d(cTAG, "-> jogoTxt - posição: $position")
@@ -75,14 +74,8 @@ class JogoAdapter(private val itemsListArq  : ArrayList<String>,
     //----------------------------------------------------------------------------------------------
     // Funções
     //----------------------------------------------------------------------------------------------
-    // override fun getItemCount(): Int = if(itemsListArq.isNullOrEmpty()) 0 else itemsListArq.size
-    override fun getItemCount(): Int {
+    override fun getItemCount(): Int { return itemsListArq.size }
 
-        //Log.d(cTAG, "getItemCount: ${itemsListArq.size}")
-
-        return itemsListArq.size
-
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -90,7 +83,7 @@ class JogoAdapter(private val itemsListArq  : ArrayList<String>,
 //------------------------------------------------------------------------------
 class JogosViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
-    val arqTxt  : TextView = itemView.findViewById(R.id.card_Arq_txt)    // !!
-    val jogoTxt : TextView = itemView.findViewById(R.id.card_Jogo_txt)   // !!
+    val arqTxt  : TextView = itemView.findViewById(R.id.card_Arq_txt)
+    val jogoTxt : TextView = itemView.findViewById(R.id.card_Jogo_txt)
 
 }
