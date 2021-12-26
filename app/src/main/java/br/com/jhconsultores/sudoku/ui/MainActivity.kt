@@ -2072,6 +2072,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //----------------------------------------------------------------------------------------------
+    //                                 Funções Jogo selecionado
+    //----------------------------------------------------------------------------------------------
     //--- preparaJogoSelec
     private fun preparaJogoSelec(strJogoSelec : String) {
 

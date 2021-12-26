@@ -118,14 +118,19 @@ class AdaptarActivity : AppCompatActivity() {
             override fun infoItem (posicao : Int) {
 
                 //---------------------------------------------------------------------------------
-                val strfileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
+                val strFileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
                 //---------------------------------------------------------------------------------
 
-                strToast = "Tapped $posicao: $strfileName!"
+                strToast = "Tapped $posicao: $strFileName!"
                 Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
 
                 strLog   = "   - $strToast"
                 Log.d(cTAG, strLog)
+
+                //--- Adapta jogo e passa o Jogar o jogo
+                //-------------------------
+                adaptaEjogaJogo(posicao)
+                //-------------------------
 
             }
 
@@ -141,6 +146,18 @@ class AdaptarActivity : AppCompatActivity() {
 
                 strLog   = "   - $strToast"
                 Log.d(cTAG, strLog)
+
+                //---------------------------------------------------------------------------
+                val strTempo = leCampo(itemsListJogo[posicao], "tempo: ", "")
+                //---------------------------------------------------------------------------
+                strToast = "   - tempo: $strTempo"
+                Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+                //--- Adapta jogo e passa o Jogar o jogo
+                //-------------------------
+                adaptaEjogaJogo(posicao)
+                //-------------------------
+
             }
 
         })
@@ -251,7 +268,7 @@ class AdaptarActivity : AppCompatActivity() {
     private fun leitArq(strArqName : String) : String {
 
         //--- Lê o arquivo
-        //--------------------------------------------------
+        //------------------------------------------------
         val strNomeComPath = "sudoku/Jogos/$strArqName"
         //--------------------------------------------------------------------------------
         val arStrsLeitArq: ArrayList<String> = utils.leitExtMemTextFile(strNomeComPath)
@@ -270,9 +287,25 @@ class AdaptarActivity : AppCompatActivity() {
     private fun leCampo(itemList : String, tagInic : String, tagFim : String) : String {
 
         val intIdxInic  = itemList.indexOf(tagInic) + tagInic.length
-        val intIdxFim   = itemList.indexOf(tagFim)
+        val intIdxFim   = if (tagFim.isEmpty()) itemList.length else itemList.indexOf(tagFim)
 
         return itemList.substring(intIdxInic, intIdxFim)
+
+    }
+
+    //--- Adapta jogo e passa o Jogar o jogo
+    private fun adaptaEjogaJogo(idxItemView : Int) {
+
+        //-------------------------------------------------------------------------------------
+        val strFileName = leCampo(itemsListArq[idxItemView], "Arq: ", " Data:")
+        //-------------------------------------------------------------------------------------
+
+        //-----------------------------------
+        val strJogo = leitArq(strFileName)
+        //-----------------------------------
+
+        
+
 
     }
 
