@@ -1,5 +1,243 @@
 
 
+//--------------------------------------------------------------------------
+27/12/21 07:00:00
+//--------------------------------------------------------------------------
+
+package br.com.jhconsultores.sudoku.adapter
+
+import android.annotation.SuppressLint
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+
+import br.com.jhconsultores.sudoku.R
+
+class JogoAdapter(private val arStrItemsListArq  : ArrayList<String>,
+                  private val arStrItemsListJogo : ArrayList<String>,
+                  private val listener : JogoClickedListener) :
+                                                          RecyclerView.Adapter<JogosViewHolder>() {
+
+//class JogoAdapter(private val listener : JogoClickedListener) : RecyclerView.Adapter<JogosViewHolder>() {
+
+    //--------------------------------------------------------------------------
+    // Instancializações e inicializações
+    //--------------------------------------------------------------------------
+    private val cTAG = "Sudoku"
+
+//    lateinit var arStrItemsListArq  : ArrayList<String>
+//    lateinit var arStrItemsListJogo : ArrayList<String>
+
+    //--------------------------------------------------------------------------
+    // Eventos
+    //--------------------------------------------------------------------------
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JogosViewHolder {
+
+        val view = LayoutInflater.from(parent.context)
+                                            .inflate(R.layout.jogos_item, parent, false)
+        return JogosViewHolder(view)
+
+    }
+
+    @SuppressLint("ResourceAsColor")
+    override fun onBindViewHolder(holder: JogosViewHolder, position: Int) {
+
+        holder.arqTxt.text  = arStrItemsListArq [position]
+        holder.jogoTxt.text = arStrItemsListJogo[position]
+
+        val strDado    = arStrItemsListArq [position]
+        val intIdxInic = strDado.indexOf("Status: ") + 8
+        val strStatus  = strDado.substring(intIdxInic)
+
+        val cardColor : Long = if (strStatus.contains("ativo")) 0xFFA5F55C else 0xFF3D91E4
+
+        holder.arqTxt.setBackgroundColor  (cardColor.toInt())
+        holder.jogoTxt.setBackgroundColor (cardColor.toInt())
+
+
+        //--- Atende o tap num ítem e chama o respectivo listener
+        holder.arqTxt.setOnClickListener {
+
+            Log.d(cTAG, "-> arqTxt - posição: $position")
+
+            //----------------------------
+            listener.infoItem(position)
+            //----------------------------
+
+        }
+
+        //--- Atende o tap num ítem e chama o respectivo listener
+        holder.jogoTxt.setOnClickListener {
+
+            Log.d(cTAG, "-> jogoTxt - posição: $position")
+
+            //----------------------------
+            listener.jogoItem(position)
+            //----------------------------
+
+        }
+
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // Funções
+    //----------------------------------------------------------------------------------------------
+    override fun getItemCount(): Int {
+
+        Log.d(cTAG, "   - ítemsJogo = ${arStrItemsListArq.size}")
+        return (arStrItemsListArq.size)
+
+    }
+
+}
+
+//------------------------------------------------------------------------------
+// Classe interna
+//------------------------------------------------------------------------------
+class JogosViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+
+    val arqTxt  : TextView = itemView.findViewById(R.id.card_Arq_txt)
+    val jogoTxt : TextView = itemView.findViewById(R.id.card_Jogo_txt)
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+package br.com.jhconsultores.sudoku.adapter
+
+import android.annotation.SuppressLint
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+
+import br.com.jhconsultores.sudoku.R
+
+class JogoAdapter (private val listener : JogoClickedListener) :
+                                             RecyclerView.Adapter<JogoAdapter.JogosViewHolder>()  {
+
+    //--------------------------------------------------------------------------
+    // Instancializações e inicializações
+    //--------------------------------------------------------------------------
+    private val cTAG = "Sudoku"
+
+    lateinit var arStrItemsListArq  : ArrayList<String>
+    lateinit var arStrItemsListJogo : ArrayList<String>
+
+    //------------------------------------------------------------------------------
+    // Métodos da Classe JogoAdapter
+    //------------------------------------------------------------------------------
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JogosViewHolder {
+
+//        val inflatedView = parent.inflate(R.layout.jogos_item, false)
+//        return JogosViewHolder(inflatedView)
+
+        val view = LayoutInflater.from(parent.context)
+                                            .inflate(R.layout.jogos_item, parent, false)
+        return JogosViewHolder(view)
+
+    }
+
+    override fun onBindViewHolder(holder: JogosViewHolder, position: Int) {
+
+        holder.arqTxt.text  = arStrItemsListArq [position]
+        holder.jogoTxt.text = arStrItemsListJogo[position]
+
+        val strDado    = arStrItemsListArq [position]
+        val intIdxInic = strDado.indexOf("Status: ") + 8
+        val strStatus  = strDado.substring(intIdxInic)
+
+        val cardColor : Long = if (strStatus.contains("ativo")) 0xFFA5F55C else 0xFF3D91E4
+
+        holder.arqTxt.setBackgroundColor  (cardColor.toInt())
+        holder.jogoTxt.setBackgroundColor (cardColor.toInt())
+
+        //--- Atende o tap num ítem e chama o respectivo listener
+        holder.arqTxt.setOnClickListener {
+
+            Log.d(cTAG, "-> arqTxt - posição: $position")
+
+            //----------------------------
+            listener.infoItem(position)
+            //----------------------------
+
+        }
+
+        //--- Atende o tap num ítem e chama o respectivo listener
+        holder.jogoTxt.setOnClickListener {
+
+            Log.d(cTAG, "-> jogoTxt - posição: $position")
+
+            //----------------------------
+            listener.jogoItem(position)
+            //----------------------------
+
+        }
+
+    }
+
+    override fun getItemCount() = arStrItemsListArq.size
+
+    //------------------------------------------------------------------------------
+    // Classe interna
+    //------------------------------------------------------------------------------
+    /*
+    class JogosViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener {
+
+        private var view: View    = itemView
+        private var jogo: String? = null
+
+        //3
+        init {
+
+            itemView.setOnClickListener(this)
+
+        }
+
+        //4
+        override fun onClick(v: View) {
+
+            Log.d("cTAG", "CLICK!")
+
+        }
+
+        companion object {
+            //5
+            private val JOGO_KEY = "JOGO"
+        }
+
+        val arqTxt  : TextView = itemView.findViewById(R.id.card_Arq_txt)
+        val jogoTxt : TextView = itemView.findViewById(R.id.card_Jogo_txt)
+
+    }
+    */
+}
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+
         /*
         val strFileName = "download/sudoku/preset.xml" //""./res/raw/preset.xml"   // "./input/preset.xml"   //"./src/main/res/raw/preset.xml"
         try {

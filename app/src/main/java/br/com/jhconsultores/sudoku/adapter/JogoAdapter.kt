@@ -1,6 +1,5 @@
 package br.com.jhconsultores.sudoku.adapter
 
-import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,81 +8,77 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 import br.com.jhconsultores.sudoku.R
-import br.com.jhconsultores.sudoku.R.color
 
-class JogoAdapter(private val itemsListArq  : ArrayList<String>,
-                  private val itemsListJogo : ArrayList<String>,
-                  private val listener      : JogoClickedListener) :
-                                                          RecyclerView.Adapter<JogosViewHolder>() {
+// https://developer.android.com/guide/topics/ui/layout/recyclerview
 
-    //--------------------------------------------------------------------------
-    // Instancializações e inicializações
-    //--------------------------------------------------------------------------
-    private val cTAG = "Sudoku"
+class JogoAdapter(private val arLstArq:  ArrayList<String>,
+                  private val arLstJogo: ArrayList<String>) :
+                                                RecyclerView.Adapter<JogoAdapter.ViewHolder>() {
+    companion object {
 
-    //--------------------------------------------------------------------------
-    // Eventos
-    //--------------------------------------------------------------------------
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JogosViewHolder {
-
-        val view = LayoutInflater.from(parent.context)
-                                            .inflate(R.layout.jogos_item, parent, false)
-        return JogosViewHolder(view)
+        const val cTAG = "Sudoku"
 
     }
 
-    @SuppressLint("ResourceAsColor")
-    override fun onBindViewHolder(holder: JogosViewHolder, position: Int) {
+    /**
+     * Provide a reference to the type of views that you are using (custom ViewHolder).
+     */
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        holder.arqTxt.text  = itemsListArq [position]
-        holder.jogoTxt.text = itemsListJogo[position]
+        val arqTxt  : TextView
+        val jogoTxt : TextView
 
-        val strDado    = itemsListArq [position]
+        init {
+
+            arqTxt  = view.findViewById(R.id.card_Arq_txt)
+            jogoTxt = view.findViewById(R.id.card_Jogo_txt)
+
+        }
+
+    }
+
+    // Create new views (invoked by the layout manager)
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
+
+        // Create a new view, which defines the UI of the list item
+        val view = LayoutInflater.from(viewGroup.context)
+                                        .inflate(R.layout.jogos_item, viewGroup, false)
+        return ViewHolder(view)
+
+    }
+
+    // Replace the contents of a view (invoked by the layout manager)
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+
+        // Get element from your dataset at this position and replace the
+        // contents of the view with that element
+        viewHolder.arqTxt.text  = arLstArq[position]
+        viewHolder.jogoTxt.text = arLstJogo[position]
+
+        viewHolder.arqTxt.setOnClickListener {
+
+            Log.d(cTAG, "-> arqTxt $position" )
+
+        }
+
+        viewHolder.jogoTxt.setOnClickListener {
+
+            Log.d(cTAG, "-> jogoTxt $position")
+
+        }
+
+        val strDado    = arLstArq [position]
         val intIdxInic = strDado.indexOf("Status: ") + 8
         val strStatus  = strDado.substring(intIdxInic)
 
         val cardColor : Long = if (strStatus.contains("ativo")) 0xFFA5F55C else 0xFF3D91E4
-
-        holder.arqTxt.setBackgroundColor  (cardColor.toInt())
-        holder.jogoTxt.setBackgroundColor (cardColor.toInt())
-
-        //--- Atende o tap num ítem e chama o respectivo listener
-        holder.arqTxt.setOnClickListener {
-
-            Log.d(cTAG, "-> arqTxt - posição: $position")
-
-            //----------------------------
-            listener.infoItem(position)
-            //----------------------------
-
-        }
-
-        //--- Atende o tap num ítem e chama o respectivo listener
-        holder.jogoTxt.setOnClickListener {
-
-            Log.d(cTAG, "-> jogoTxt - posição: $position")
-
-            //----------------------------
-            listener.jogoItem(position)
-            //----------------------------
-
-        }
+        viewHolder.arqTxt.setBackgroundColor  (cardColor.toInt())
+        viewHolder.jogoTxt.setBackgroundColor (cardColor.toInt())
 
     }
 
-    //----------------------------------------------------------------------------------------------
-    // Funções
-    //----------------------------------------------------------------------------------------------
-    override fun getItemCount(): Int { return itemsListArq.size }
+    // Return the size of your dataset (invoked by the layout manager)
+    override fun getItemCount() = arLstArq.size
 
 }
 
-//------------------------------------------------------------------------------
-// Classe interna
-//------------------------------------------------------------------------------
-class JogosViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-
-    val arqTxt  : TextView = itemView.findViewById(R.id.card_Arq_txt)
-    val jogoTxt : TextView = itemView.findViewById(R.id.card_Jogo_txt)
-
-}

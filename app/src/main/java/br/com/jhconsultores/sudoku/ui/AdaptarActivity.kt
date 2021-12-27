@@ -109,62 +109,14 @@ class AdaptarActivity : AppCompatActivity() {
 
         }
 
-        // 4- Listeners para clique em um dos jogos
-        //--------------------------------------------------------------------------------------
-        customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
-        //--------------------------------------------------------------------------------------
-
-            //--- Listener para click na info do arquivo de um dos jogos
-            override fun infoItem (posicao : Int) {
-
-                //---------------------------------------------------------------------------------
-                val strFileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
-                //---------------------------------------------------------------------------------
-
-                strToast = "Tapped $posicao: $strFileName!"
-                Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
-
-                strLog   = "   - $strToast"
-                Log.d(cTAG, strLog)
-
-                //--- Adapta jogo e passa o Jogar o jogo
-                //-------------------------
-                adaptaEjogaJogo(posicao)
-                //-------------------------
-
-            }
-
-            //--- Listener para click na info de um dos jogos
-            override fun jogoItem(posicao : Int) {
-
-                //---------------------------------------------------------------------------------
-                val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
-                //---------------------------------------------------------------------------------
-
-                strToast = "Tapped $posicao: $strNivel!"
-                Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
-
-                strLog   = "   - $strToast"
-                Log.d(cTAG, strLog)
-
-                //---------------------------------------------------------------------------
-                val strTempo = leCampo(itemsListJogo[posicao], "tempo: ", "")
-                //---------------------------------------------------------------------------
-                strToast = "   - tempo: $strTempo"
-                Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
-
-                //--- Adapta jogo e passa o Jogar o jogo
-                //-------------------------
-                adaptaEjogaJogo(posicao)
-                //-------------------------
-
-            }
-
-        })
-
-        customAdapter.setHasStableIds(true)
-
+        //---------------------------------------------------------
+        customAdapter = JogoAdapter(itemsListArq, itemsListJogo)
+        //---------------------------------------------------------
         recyclerView.adapter = customAdapter
+
+        // 4- "Listeners" para clique em um dos jogos
+
+
 
         //--- Desativa o progressbar
         // progressBar.visibility = View.INVISIBLE
@@ -283,29 +235,46 @@ class AdaptarActivity : AppCompatActivity() {
 
     }
 
-    //--- leCampo
-    private fun leCampo(itemList : String, tagInic : String, tagFim : String) : String {
+    //--- Adapta jogo e passa a Jogar o jogo
+    private fun adaptaEjogaJogo(idxItemView : Int) {
 
-        val intIdxInic  = itemList.indexOf(tagInic) + tagInic.length
-        val intIdxFim   = if (tagFim.isEmpty()) itemList.length else itemList.indexOf(tagFim)
+        val strTmp = "${itemsListArq[idxItemView]}  ${itemsListJogo[idxItemView]}"
+        var strTextViews = strTmp.trim()
+        Log.d(cTAG, "   - item textViews:\n$strTextViews")
 
-        return itemList.substring(intIdxInic, intIdxFim)
+        //----------------------------------------------------------------------
+        val strFileName = leCampo(strTextViews, "Arq:", "Data:")
+        //----------------------------------------------------------------------
+        val strJogo = leitArq(strFileName)
+        //-----------------------------------
+        Log.d(cTAG, "   - dados do jogo salvo:\n$strJogo")
+
+        //---------------------------------------------------------------------------
+        val strStatus = leCampo(strTextViews, "Status:", "Nivel:")
+        //---------------------------------------------------------------------------
+        //--- Jogo NÃO finalizado: verifica se reseta o jogo
+        if (strStatus.trim() == "ativo") {
+
+            Log.d(cTAG, "   - jogo NÃO finalizado")
+
+        }
+
+        //--- Jogo finalizado: carrega
+        else {
+
+            Log.d(cTAG, "   - jogo finalizado")
+
+        }
 
     }
 
-    //--- Adapta jogo e passa o Jogar o jogo
-    private fun adaptaEjogaJogo(idxItemView : Int) {
+    //--- leCampo
+    private fun leCampo(itemList : String, tagInic : String, tagFim : String) : String {
 
-        //-------------------------------------------------------------------------------------
-        val strFileName = leCampo(itemsListArq[idxItemView], "Arq: ", " Data:")
-        //-------------------------------------------------------------------------------------
+        val intIdxInic = itemList.indexOf(tagInic) + tagInic.length
+        val intIdxFim  = if (tagFim.isEmpty()) itemList.length else itemList.indexOf(tagFim)
 
-        //-----------------------------------
-        val strJogo = leitArq(strFileName)
-        //-----------------------------------
-
-        
-
+        return itemList.substring(intIdxInic, intIdxFim)
 
     }
 
