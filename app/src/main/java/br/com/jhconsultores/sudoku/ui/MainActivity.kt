@@ -354,14 +354,7 @@ class MainActivity : AppCompatActivity() {
 
         //--- Prepara a Intent para chamar JogarActivity
         val intent = Intent(this, AdaptarActivity::class.java)
-        intent.action = "ApresentaRVJogosSalvos"
-        /*
-        intent.putExtra("strNivelJogo", strNivelJogo)
-        intent.putExtra("strSubNivelJogo", edtViewSubNivel.text.toString())
-        intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
-        intent.putIntegerArrayListExtra("JogoPreparado", arIntNumsJogo)
-         */
-
+        intent.action = "InstanciaRVJogosSalvos"
         //----------------------
         startActivity(intent)
         //----------------------

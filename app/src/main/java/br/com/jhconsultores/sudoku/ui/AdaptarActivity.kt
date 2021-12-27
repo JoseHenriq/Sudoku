@@ -1,8 +1,15 @@
 package br.com.jhconsultores.sudoku.ui
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 
 import android.widget.Toast
 
@@ -33,6 +40,18 @@ class AdaptarActivity : AppCompatActivity() {
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var customAdapter: JogoAdapter
     private val utils = Utils()
+
+    /*
+    //--- Broadcast
+    private var mIntentFilter: IntentFilter? = null
+    private var strJogoSelec = ""
+
+    companion object {
+
+        const val strSelJogo = "SelecionaJogo"
+
+    }
+    */
 
     //--------------------------------------------------------------------------
     //                                Eventos
@@ -94,7 +113,7 @@ class AdaptarActivity : AppCompatActivity() {
 
                 Log.d(cTAG, "   - $strArqName")
 
-                //-----------------------------------------------------
+                //                //-----------------------------------------------------
                 itemsListArq.add(preparaItensInfosArq(strArqName))
                 //-----------------------------------------------------
                 itemsListJogo.add(preparaItensInfosJogo(strArqName))
@@ -110,22 +129,117 @@ class AdaptarActivity : AppCompatActivity() {
         }
 
         //---------------------------------------------------------
-        customAdapter = JogoAdapter(itemsListArq, itemsListJogo)
+        customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
+
+            //--- Listener para click na info do arquivo de um dos jogos
+            override fun infoItem (posicao : Int) {
+
+                //---------------------------------------------------------------------------------
+                val strfileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
+                //---------------------------------------------------------------------------------
+
+                strToast = "Tapped $posicao: $strfileName!"
+                Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+            }
+
+            //--- Listener para click na info de um dos jogos
+            override fun jogoItem(posicao : Int) {
+
+                //---------------------------------------------------------------------------------
+                val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
+                //---------------------------------------------------------------------------------
+
+                strToast = "Tapped $posicao: $strNivel!"
+                Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+            }
+
+        })
+
         //---------------------------------------------------------
         recyclerView.adapter = customAdapter
-
-        // 4- "Listeners" para clique em um dos jogos
-
-
 
         //--- Desativa o progressbar
         // progressBar.visibility = View.INVISIBLE
 
     }
 
+    /*
+    override fun onResume() {
+
+        super.onResume()
+
+        //--- Broadcast receiver
+        mIntentFilter = IntentFilter()
+        mIntentFilter!!.addAction(MainActivity.strSelJogo)
+        //-------------------------------------------
+        registerReceiver(mReceiver, mIntentFilter)
+        //-------------------------------------------
+
+    }
+
+    //---------------------------------------------------------------------
+    //                      Broadcast Receiver
+    //---------------------------------------------------------------------
+    private val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+
+            if (intent.action == strSelJogo) {
+
+                strJogoSelec = intent.getStringExtra("jogoSelecionado").toString()
+
+                //-------------------------------
+                //preparaJogoSelec(strJogoSelec)
+                //-------------------------------
+
+                //----------------------------------------------------------------------------------
+                Toast.makeText(baseContext, "Jogo selecionado: $strJogoSelec",
+                                                                          Toast.LENGTH_SHORT).show()
+                //----------------------------------------------------------------------------------
+
+            }
+        }
+    }
+    */
+
     //--------------------------------------------------------------------------
     //                                Funções
     //--------------------------------------------------------------------------
+    //--- Adapta jogo e passa a Jogar o jogo
+    fun adaptaEjogaJogo(idxItemView : Int) {
+
+        val strTmp = "${itemsListArq[idxItemView]}  ${itemsListJogo[idxItemView]}"
+        var strTextViews = strTmp.trim()
+        Log.d(cTAG, "   - item textViews:\n$strTextViews")
+
+        //----------------------------------------------------------------------
+        val strFileName = leCampo(strTextViews, "Arq:", "Data:")
+        //----------------------------------------------------------------------
+        val strJogo = leitArq(strFileName)
+        //-----------------------------------
+        Log.d(cTAG, "   - dados do jogo salvo:\n$strJogo")
+
+        //---------------------------------------------------------------------------
+        val strStatus = leCampo(strTextViews, "Status:", "Nivel:")
+        //---------------------------------------------------------------------------
+        //--- Jogo NÃO finalizado: verifica se reseta o jogo
+        if (strStatus.trim() == "ativo") {
+
+            Log.d(cTAG, "   - jogo NÃO finalizado")
+
+        }
+
+        //--- Jogo finalizado: carrega
+        else {
+
+            Log.d(cTAG, "   - jogo finalizado")
+
+        }
+
+    }
+
     //--- preparaItemInfoArq
     private fun preparaItensInfosArq(strArqName : String) : String {
 
@@ -232,39 +346,6 @@ class AdaptarActivity : AppCompatActivity() {
 
         //--- Retorna
         return strLeitArq.trimStart()
-
-    }
-
-    //--- Adapta jogo e passa a Jogar o jogo
-    private fun adaptaEjogaJogo(idxItemView : Int) {
-
-        val strTmp = "${itemsListArq[idxItemView]}  ${itemsListJogo[idxItemView]}"
-        var strTextViews = strTmp.trim()
-        Log.d(cTAG, "   - item textViews:\n$strTextViews")
-
-        //----------------------------------------------------------------------
-        val strFileName = leCampo(strTextViews, "Arq:", "Data:")
-        //----------------------------------------------------------------------
-        val strJogo = leitArq(strFileName)
-        //-----------------------------------
-        Log.d(cTAG, "   - dados do jogo salvo:\n$strJogo")
-
-        //---------------------------------------------------------------------------
-        val strStatus = leCampo(strTextViews, "Status:", "Nivel:")
-        //---------------------------------------------------------------------------
-        //--- Jogo NÃO finalizado: verifica se reseta o jogo
-        if (strStatus.trim() == "ativo") {
-
-            Log.d(cTAG, "   - jogo NÃO finalizado")
-
-        }
-
-        //--- Jogo finalizado: carrega
-        else {
-
-            Log.d(cTAG, "   - jogo finalizado")
-
-        }
 
     }
 
