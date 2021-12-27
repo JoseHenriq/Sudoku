@@ -10,8 +10,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 import br.com.jhconsultores.sudoku.R
-import br.com.jhconsultores.sudoku.ui.AdaptarActivity
-//import br.com.jhconsultores.sudoku.ui.AdaptarActivity.Companion.strSelJogo
 
 // https://developer.android.com/guide/topics/ui/layout/recyclerview
 
@@ -19,8 +17,6 @@ class JogoAdapter(private val arLstArq:  ArrayList<String>,
                   private val arLstJogo: ArrayList<String>,
                   private val listener: JogoClickedListener) :
                                                 RecyclerView.Adapter<JogoAdapter.ViewHolder>() {
-
-    //val adaptarJogo = AdaptarActivity()
 
     companion object {
 
@@ -76,10 +72,6 @@ class JogoAdapter(private val arLstArq:  ArrayList<String>,
 
             Log.d(cTAG, "-> arqTxt $position" )
 
-            //--------------------------------------
-            //adaptarJogo.adaptaEjogaJogo(position)
-            //--------------------------------------
-
             //----------------------------
             listener.infoItem(position)
             //----------------------------
@@ -89,10 +81,6 @@ class JogoAdapter(private val arLstArq:  ArrayList<String>,
         viewHolder.jogoTxt.setOnClickListener {
 
             Log.d(cTAG, "-> jogoTxt $position")
-
-            //--------------------------------------
-            //adaptarJogo.adaptaEjogaJogo(position)
-            //--------------------------------------
 
             //----------------------------
             listener.jogoItem(position)
@@ -105,21 +93,5 @@ class JogoAdapter(private val arLstArq:  ArrayList<String>,
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = arLstArq.size
 
-    /*
-    private fun SendBroadcast() {
-
-        Intent().also { intent ->
-
-            intent.setAction(strSelJogo)
-            intent.putExtra("jogoSelecionado", position)
-            intent.putExtra("strDadosJogo",
-                "${arLstArq[position]} ${arLstJogo[position]}")
-            //----------------------------------------
-//            JogoAdapter.context.sendBroadcast(intent)
-            //----------------------------------------
-        }
-
-    }
-     */
-}
+ }
 

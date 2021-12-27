@@ -1,17 +1,13 @@
 package br.com.jhconsultores.sudoku.ui
 
 import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 
 import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.net.wifi.WifiManager
 import android.os.*
 import android.text.Editable
 import android.text.TextWatcher
@@ -27,7 +23,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import br.com.jhconsultores.sudoku.R
 import br.com.jhconsultores.sudoku.jogo.SudokuGameGenerator
-import br.com.jhconsultores.utils.Utils
+import br.com.jhconsultores.utils.*
 
 @Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
@@ -120,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
     private var sgg       = SudokuGameGenerator()
     private var jogarJogo = JogarActivity()
-    private val utils     = Utils()
+    private val utils     = Utils ()
 
     //--- Controle de jogadas
     private var intColJogar = 0
@@ -131,16 +127,6 @@ class MainActivity : AppCompatActivity() {
     //--- Arquivos jogos
     private var arStrTags   = Array(3) { "" }
     private var arArStrTags = Array(3) { Array(9) { "" } }
-
-    //--- Broadcast
-    private var mIntentFilter: IntentFilter? = null
-    private var strJogoSelec = ""
-
-    companion object {
-
-        const val strSelJogo = "SelecionaJogo"
-
-    }
 
     //----------------------------------------------------------------------------------------------
     // Eventos e listeners da MainActivity
@@ -159,7 +145,7 @@ class MainActivity : AppCompatActivity() {
         btnAdaptaJogo  = findViewById(R.id.btn_AdaptarJogo)
         btnJogaJogo    = findViewById(R.id.btn_JogarJogo)
         btnGeraJogo    = findViewById(R.id.btn_GerarJogo)
-        btnTestaRV     = findViewById(R.id.btn_TesteRV)
+        //btnTestaRV     = findViewById(R.id.btn_TesteRV)
 
         groupRBnivel   = findViewById(R.id.radioGrpNivel)
         rbFacil        = findViewById(R.id.nivelFacil)
@@ -202,9 +188,9 @@ class MainActivity : AppCompatActivity() {
         // Add ProgressBar to our layout
         layout?.addView(progressBar)
 
-        //----------------------------------------------------------------------
-        // Listener para mudança do texto subnivel (editView)
-        //----------------------------------------------------------------------
+        //------------------------------------------------
+        // Listener para mudança do subnivel (editView)
+        //------------------------------------------------
         //https://www.tutorialkart.com/kotlin-android/android-edittext-on-text-change/
         edtViewSubNivel.addTextChangedListener(object : TextWatcher {
 
@@ -279,12 +265,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         //--- Trata as permissões para uso dos recursos do Android
-        //---------------------------------------------------
-
         //-------------------------------------------------------------------------------------
         // Verifica as solicitações de acesso aos recursos do Android (AndroidManifest.xml).
         //-------------------------------------------------------------------------------------
-        //------------------------------
         VerificaPermissoesAcessoAPI()
         //------------------------------
 
@@ -315,52 +298,11 @@ class MainActivity : AppCompatActivity() {
         },
         waitTime)  // value in milliseconds
 
-        //--- Broadcast receiver
-        mIntentFilter = IntentFilter()
-        mIntentFilter!!.addAction(strSelJogo)
-        //-------------------------------------------
-        registerReceiver(mReceiver, mIntentFilter)
-        //-------------------------------------------
-
-    }
-
-    //---------------------------------------------------------------------
-    //                      Broadcast Receiver
-    //---------------------------------------------------------------------
-    private val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-
-        override fun onReceive(context: Context, intent: Intent) {
-
-            if (intent.action == strSelJogo) {
-
-                strJogoSelec = intent.getStringExtra("jogoSelecionado").toString()
-
-                //-------------------------------
-                preparaJogoSelec(strJogoSelec)
-                //-------------------------------
-
-            }
-        }
     }
 
     //----------------------------------------------------------------------------------------------
     // Funções para o atendimento ao tapping nos botões (declaradas no xml)
     //----------------------------------------------------------------------------------------------
-    //--- Evento tapping no botão de teste do recyclerView dos jogos salvos
-    fun btnTesteRVClick(view: View?) {
-
-        strLog = "-> Tap no btnTesteRV"
-        Log.d(cTAG, strLog)
-
-        //--- Prepara a Intent para chamar JogarActivity
-        val intent = Intent(this, AdaptarActivity::class.java)
-        intent.action = "InstanciaRVJogosSalvos"
-        //----------------------
-        startActivity(intent)
-        //----------------------
-
-    }
-
     //--- Evento tapping no botão de geração de jogo
     @Suppress("UNUSED_PARAMETER")
     fun btnGeraJogoClick(view: View?) {
@@ -479,9 +421,9 @@ class MainActivity : AppCompatActivity() {
         sgg.flagJogoGeradoOk   = false
         sgg.flagJogoAdaptadoOk = false
 
-        strOpcaoJogo = "JogoAdaptado"
+        strOpcaoJogo      = "JogoAdaptado"
         txtDadosJogo.text = ""
-        sgg.txtDados = ""
+        sgg.txtDados      = ""
 
         strLog = "   - rbAdapta: "
         strLog += if (rbPreset.isChecked) "Preset" else "Edição"
@@ -511,6 +453,7 @@ class MainActivity : AppCompatActivity() {
                 groupRBadapta.visibility = VISIBLE
 
                 /*
+                //--- < 5: preset em variável definida; matriz bidimensinal
                 if (sgg.intJogoAdaptar < 5) {
 
                     //-------------------------------------------
@@ -519,7 +462,7 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
-                // 5
+                //--- = 5: preset 1 em /res/raw
                 else {
 
                     //--------------------------------------------
@@ -531,8 +474,10 @@ class MainActivity : AppCompatActivity() {
 
                 when {
 
+                    //--- < 5: preset em variável definida; matriz bidimensinal
                     sgg.intJogoAdaptar < 5 -> inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
 
+                    //--- < 7: preset 1 e 2 em /res/raw
                     sgg.intJogoAdaptar < 7 -> quadMaiorAdapta =
                                                   //------------------------------------------------
                                                   //leResRawPreset(sgg.intJogoAdaptar - 4)
@@ -602,8 +547,14 @@ class MainActivity : AppCompatActivity() {
             */
 
             //--- Prepara o preset para se conseguir o gabarito do jogo
+            strLog = "-> Presset is checked"
+            Log.d(cTAG, strLog)
+
+            //--- Prepara a Intent para chamar AdaptarActivity
+            val intent    = Intent(this, AdaptarActivity::class.java)
+            intent.action = "InstanciaRVJogosSalvos"
             //----------------------
-            btnTesteRVClick(view)
+            startActivity(intent)
             //----------------------
 
         }
@@ -699,9 +650,6 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
 
         //--- Se não tiver jogo válido, informa ao usuário
-//        if ((groupRBadapta.isVisible && rbEdicao.isChecked) ||
-//            (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk) ) {
-
         if (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk) {
 
             val strToast = "Não há jogo válido!"
@@ -712,17 +660,16 @@ class MainActivity : AppCompatActivity() {
             Log.d(cTAG, "-> $strToast")
 
         }
+        //--- Se tiver jogo válido, finaliza a preparação do jogo
         else {
 
             //-----------------------------
             visibilidadeViews(INVISIBLE)
             //-----------------------------
 
-            //rbPreset.isChecked   = true
-
-            txtDadosJogo.text = if (strOpcaoJogo == "JogoAdaptado")
-                String.format("%s%d", "Preset #", sgg.intJogoAdaptar) else ""
-            sgg.txtDados = ""
+            //txtDadosJogo.text = if (strOpcaoJogo == "JogoAdaptado")
+            //    String.format("%s%d", "Preset #", sgg.intJogoAdaptar) else ""
+            //sgg.txtDados = ""
 
             //--- Envia o jogo gerado para ser usado como gabarito
             val arIntNumsGab = ArrayList<Int>()
@@ -1049,7 +996,7 @@ class MainActivity : AppCompatActivity() {
 
         ivSudokuBoardMain    = findViewById(R.id.ivSudokuBoardMain)
         ivNumDisp            = findViewById(R.id.imageView3)
-        ivQtiNumDisp         = findViewById(R.id.imageView4)
+        //ivQtiNumDisp         = findViewById(R.id.imageView4)
 
         //-----------------------------
         visibilidadeViews(INVISIBLE)
@@ -1463,7 +1410,7 @@ class MainActivity : AppCompatActivity() {
     private fun visibilidadeViews(visibilidade : Int) {
 
         //--- DEBUG
-        ivQtiNumDisp.visibility = INVISIBLE  //visibilidade
+        //ivQtiNumDisp.visibility = INVISIBLE  //visibilidade
 
         ivNumDisp.visibility    = visibilidade
         tvContaClues.visibility = visibilidade

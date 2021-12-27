@@ -296,7 +296,7 @@
 
     <!-- Teste RV -->
     <!-- DEBUG -->
-    <Button android:id="@+id/btn_TesteRV"
+    <!-- Button android:id="@+id/btn_TesteRV"
 
         android:layout_width ="wrap_content"
         android:layout_height="40dp"
@@ -314,7 +314,7 @@
         android:textSize     ="@dimen/TamanhoTxt"
         android:text         ="Testa RV"
 
-        android:onClick      ="btnTesteRVClick" />
+        android:onClick      ="btnTesteRVClick" /-->
 
     <!-- Image view dos números disponíveis -->
     <ImageView android:id ="@+id/imageView3"
@@ -333,7 +333,7 @@
 
     <!-- Image view das qtidds dos números disponíveis -->
     <!-- DEBUG -->
-    <ImageView android:id ="@+id/imageView4"
+    <!--ImageView android:id ="@+id/imageView4"
 
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
@@ -345,7 +345,7 @@
         android:layout_marginTop  ="0dp"
 
         android:contentDescription="@string/numDisp"
-        android:src ="@drawable/quadro_nums_disp" />
+        android:src ="@drawable/quadro_nums_disp" /-->
 
     <!-- scrolling e seu Textview -->
     <ScrollView android:id="@+id/srcTextScrollView"

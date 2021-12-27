@@ -20,20 +20,20 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+
 import br.com.jhconsultores.sudoku.R
+import br.com.jhconsultores.utils.*
 
 import java.lang.Exception
 import java.nio.IntBuffer
-
-import br.com.jhconsultores.utils.Utils
 
 class JogarActivity : AppCompatActivity() {   //Activity() {
 
     //--------------------------------------------------------------------------
     //                    Instancializações e inicializações
     //--------------------------------------------------------------------------
-    private var cTAG = "Sudoku"
-    private var strLog = ""
+    private var cTAG     = "Sudoku"
+    private var strLog   = ""
     private var strToast = ""
 
     private var intImageResource = 0
@@ -143,14 +143,6 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             setSupportActionBar(toolBar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-            //--- Cronômetro
-            strCronoInic = resources.getString(R.string.crono_inic)
-            //---------------------------------
-            crono = Chronometer(this)
-            //---------------------------------
-            preparaCrono(crono)
-            //--------------------
-
             //--------------------------------------------------------------------------------------
             // Objetos gráficos
             //--------------------------------------------------------------------------------------
@@ -162,15 +154,19 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //--------------------------------------------------------------------------------------
             // Inicializa dados para deixar o jogo pronto
             //--------------------------------------------------------------------------------------
+            //--- Ação à ser executada
+            action          = intent.action.toString()
 
             //--- Recupera os dados recebidos via intent
-            action = intent.action.toString()
-            strNivelJogo = intent.getStringExtra("strNivelJogo") as String
+            strNivelJogo    = intent.getStringExtra("strNivelJogo") as String
             strSubNivelJogo = intent.getStringExtra("strSubNivelJogo") as String
 
+            strCronoInic    = intent.getStringExtra("strCronoConta") as String
+            intContaErro    = (intent.getStringExtra("strErro") as String).toInt()
+
             // Armazena o gabarito em um array<int>
-            arIntNumsGab = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
-            arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as ArrayList<Int>
+            arIntNumsGab  = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
+            arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as  ArrayList<Int>
 
             // Gabarito e/ou jogo inválidos
             if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
@@ -203,6 +199,14 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                 //-------------
 
             } // Fim de gabarito recebido via intent ok
+
+            //--- Cronômetro
+            strCronoInic = resources.getString(R.string.crono_inic)
+            //---------------------------------
+            crono = Chronometer(this)
+            //---------------------------------
+            preparaCrono(crono)
+            //--------------------
 
             //------------------------------------------------------------------
             // Listeners para o evento onTouch dos ImageViews
@@ -449,7 +453,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                     Log.d(cTAG, "-> ${crono.text} - $strLog")
 
                     iViewSudokuBoard!!.isEnabled = true
-                    iViewNumsDisps!!.isEnabled = true
+                    iViewNumsDisps!!.isEnabled   = true
 
                     crono.base = SystemClock.elapsedRealtime() + timeStopped
                     //--------------

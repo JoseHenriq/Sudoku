@@ -1,17 +1,13 @@
 package br.com.jhconsultores.sudoku.ui
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
-import android.view.View
 
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.text.isDigitsOnly
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.jhconsultores.sudoku.R
 import br.com.jhconsultores.sudoku.adapter.JogoAdapter
 import br.com.jhconsultores.sudoku.adapter.JogoClickedListener
+import br.com.jhconsultores.sudoku.jogo.SudokuGameGenerator
 
 import br.com.jhconsultores.utils.Utils
+import br.com.jhconsultores.utils.UtilsKt
 
 class AdaptarActivity : AppCompatActivity() {
 
@@ -34,24 +32,20 @@ class AdaptarActivity : AppCompatActivity() {
     //private lateinit var toolBar     : androidx.appcompat.widget.Toolbar
     //private lateinit var progressBar : ProgressBar
 
+    private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var customAdapter: JogoAdapter
+
     private val itemsListArq  = ArrayList<String>()
     private val itemsListJogo = ArrayList<String>()
 
-    private lateinit var layoutManager: LinearLayoutManager
-    private lateinit var customAdapter: JogoAdapter
-    private val utils = Utils()
+    private var strOpcaoJogo = "JogoAdaptado"
 
-    /*
-    //--- Broadcast
-    private var mIntentFilter: IntentFilter? = null
-    private var strJogoSelec = ""
+    private var strNivelJogo = "Fácil"
+    private var subNivelJogo = 0
 
-    companion object {
-
-        const val strSelJogo = "SelecionaJogo"
-
-    }
-    */
+    private val utils   = Utils ()
+    private val utilsKt = UtilsKt ()
+    private var sgg     = SudokuGameGenerator()
 
     //--------------------------------------------------------------------------
     //                                Eventos
@@ -113,7 +107,7 @@ class AdaptarActivity : AppCompatActivity() {
 
                 Log.d(cTAG, "   - $strArqName")
 
-                //                //-----------------------------------------------------
+                //-----------------------------------------------------
                 itemsListArq.add(preparaItensInfosArq(strArqName))
                 //-----------------------------------------------------
                 itemsListJogo.add(preparaItensInfosJogo(strArqName))
@@ -128,8 +122,9 @@ class AdaptarActivity : AppCompatActivity() {
 
         }
 
-        //---------------------------------------------------------
+        //---------------------------------------------------------------------------------------
         customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
+        //---------------------------------------------------------------------------------------
 
             //--- Listener para click na info do arquivo de um dos jogos
             override fun infoItem (posicao : Int) {
@@ -140,6 +135,10 @@ class AdaptarActivity : AppCompatActivity() {
 
                 strToast = "Tapped $posicao: $strfileName!"
                 Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+                //-------------------------
+                adaptaEjogaJogo(posicao)
+                //-------------------------
 
             }
 
@@ -153,11 +152,14 @@ class AdaptarActivity : AppCompatActivity() {
                 strToast = "Tapped $posicao: $strNivel!"
                 Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
 
+                //-------------------------
+                adaptaEjogaJogo(posicao)
+                //-------------------------
+
             }
 
         })
 
-        //---------------------------------------------------------
         recyclerView.adapter = customAdapter
 
         //--- Desativa o progressbar
@@ -165,78 +167,190 @@ class AdaptarActivity : AppCompatActivity() {
 
     }
 
-    /*
-    override fun onResume() {
-
-        super.onResume()
-
-        //--- Broadcast receiver
-        mIntentFilter = IntentFilter()
-        mIntentFilter!!.addAction(MainActivity.strSelJogo)
-        //-------------------------------------------
-        registerReceiver(mReceiver, mIntentFilter)
-        //-------------------------------------------
-
-    }
-
-    //---------------------------------------------------------------------
-    //                      Broadcast Receiver
-    //---------------------------------------------------------------------
-    private val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-
-        override fun onReceive(context: Context, intent: Intent) {
-
-            if (intent.action == strSelJogo) {
-
-                strJogoSelec = intent.getStringExtra("jogoSelecionado").toString()
-
-                //-------------------------------
-                //preparaJogoSelec(strJogoSelec)
-                //-------------------------------
-
-                //----------------------------------------------------------------------------------
-                Toast.makeText(baseContext, "Jogo selecionado: $strJogoSelec",
-                                                                          Toast.LENGTH_SHORT).show()
-                //----------------------------------------------------------------------------------
-
-            }
-        }
-    }
-    */
-
     //--------------------------------------------------------------------------
     //                                Funções
     //--------------------------------------------------------------------------
-    //--- Adapta jogo e passa a Jogar o jogo
+    //--- Adapta jogo selecionado no RV e passa a Jogar o jogo
+    var strTextViews  = ""
+    var strFileName   = ""
+    var strJogo       = ""
+    var strStatus     = ""
+    var strErro       = "0"
+    var strCronoConta = "00:00:00"
+
     fun adaptaEjogaJogo(idxItemView : Int) {
 
-        val strTmp = "${itemsListArq[idxItemView]}  ${itemsListJogo[idxItemView]}"
-        var strTextViews = strTmp.trim()
-        Log.d(cTAG, "   - item textViews:\n$strTextViews")
-
-        //----------------------------------------------------------------------
-        val strFileName = leCampo(strTextViews, "Arq:", "Data:")
-        //----------------------------------------------------------------------
-        val strJogo = leitArq(strFileName)
-        //-----------------------------------
-        Log.d(cTAG, "   - dados do jogo salvo:\n$strJogo")
+        strTextViews = ("${itemsListArq[idxItemView]}  ${itemsListJogo[idxItemView]}").trim()
+        Log.d(cTAG, "-> item textViews:\n$strTextViews")
 
         //---------------------------------------------------------------------------
-        val strStatus = leCampo(strTextViews, "Status:", "Nivel:")
+        strFileName = (leCampo(strTextViews, "Arq:", "Data:")).trim()
         //---------------------------------------------------------------------------
+        Log.d(cTAG, "-> nome do arquivo: $strFileName")
+
+        //--- Lê o arquivo selecionado
+        //-------------------------------
+        strJogo = leitArq(strFileName)
+        //-------------------------------
+        Log.d(cTAG, "-> dados do jogo salvo:\n$strJogo")
+
+        //---------------------------------------------------------------------------------
+        strStatus = (leCampo(strTextViews, "Status:", "Nivel:")).trim()
+        //---------------------------------------------------------------------------------
         //--- Jogo NÃO finalizado: verifica se reseta o jogo
-        if (strStatus.trim() == "ativo") {
+        strLog  = "-> status: "
+        strLog += if (strStatus == "ativo") "NÃO" else ""
+        strLog += " finalizado"
+        Log.d(cTAG, strLog)
 
-            Log.d(cTAG, "   - jogo NÃO finalizado")
+        if (strStatus == "ativo") {
+
+            AlertDialog.Builder(this)
+
+                .setTitle("Sudoku - Jogo")
+                .setMessage("Jogo não finalizado.\nResseta ou continua o jogo?")
+
+                .setPositiveButton("Resseta") { _, _ ->
+
+                    Log.d(cTAG, "-> \"Resseta\" was pressed")
+
+                    //---------------------
+                    prepJogoRessetado ()
+                    //---------------------
+
+                }
+
+                .setNegativeButton("Continua") { _, _ ->
+
+                    Log.d(cTAG, "-> \"Continua\" was pressed")
+
+                    //----------------------
+                    prepJogoAContinuar ()
+                    //----------------------
+
+                }
+
+                .setNeutralButton("Cancela") { _, _ ->
+
+                    Log.d(cTAG, "-> \"Cancela\" was pressed")
+
+                }
+                .show()
 
         }
+    }
 
-        //--- Jogo finalizado: carrega
-        else {
+    // strOpcaoJogo ok!
 
-            Log.d(cTAG, "   - jogo finalizado")
+
+    //arIntNumsGab
+    //arIntNumsJogo
+
+    //strNivelJogo
+    //strSubNivelJogo   // edtViewSubNivel.text.toString()
+
+    //--- prepJogoRessetado
+    private fun prepJogoRessetado () {
+
+        strErro       = "0"
+        strCronoConta = "00:00"
+        //--------------------------
+        finalizaPrepEIniciaJogo()
+        //--------------------------
+
+    }
+    //--- prepJogoAContinuar
+    private fun prepJogoAContinuar () {
+
+        // <erros>1</erros><tempoJogo>00:43</tempoJogo>
+        //---------------------------------------------------------------
+        strErro = leCampo(strJogo, "<erros>", "</erros>")
+        //----------------------------------------------------------------------------
+        strCronoConta = leCampo(strJogo, "<tempoJogo>", "</tempoJogo>")
+        //----------------------------------------------------------------------------
+
+        //--------------------------
+        finalizaPrepEIniciaJogo()
+        //--------------------------
+
+    }
+
+    //--- finalizaPrepEIniciaJogo
+    private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
+    private var quadMaior       = Array(9) { Array(9) { 0 } }
+    private var strSubNivelJogo = "0"
+
+    private fun finalizaPrepEIniciaJogo() {
+
+        //--- Leitura da matriz bidimensional-proposta de jogo
+        //-----------------------------------------------------------------
+        var strLeit = leCampo(strJogo, "<body>", "</body>")
+        //-----------------------------------------------------------------
+
+        for (idxLin in 0..8) {
+            //--------------------------------------------------------------------------------------
+            val strLinhaQM   = leCampo(strLeit, "<linha$idxLin>", "</linha$idxLin>")
+            //--------------------------------------------------------------------------------------
+            val arStrLinhaQM = strLinhaQM.split(", ",",")
+
+            for (idxCol in 0..8) {
+                val strDado = arStrLinhaQM[idxCol].trim()
+                if (strDado.isDigitsOnly()) {
+                    quadMaiorAdapta[idxLin][idxCol] = strDado.toInt()
+                }
+            }
+        }
+
+        //--- Envia o jogo gerado para ser usado como gabarito
+        //---------------------------------------------------------
+        sgg.quadMaiorRet = utilsKt.copiaArArInt(quadMaiorAdapta)
+        //---------------------------------------------------------
+        //--- Gera o gabarito! em um array unidimensional
+        //---------------------------------------
+        quadMaior = sgg.adaptaJogoAlgoritmo2()
+        //---------------------------------------
+        val arIntNumsGab = ArrayList<Int>()
+        for (idxLin in 0..8) {
+            for (idxCol in 0..8) {
+                //-------------------------------------------------
+                arIntNumsGab += sgg.quadMaiorRet[idxLin][idxCol]
+                //-------------------------------------------------
+            }
+        }
+
+        //--- Prepara o jogo preparado para ser jogado em um array unidimensional
+        val arIntNumsJogo = ArrayList<Int>()
+        for (idxLin in 0..8) {
+            for (idxCol in 0..8) {
+                //-------------------------------------------
+                arIntNumsJogo += quadMaior[idxLin][idxCol]
+                //-------------------------------------------
+            }
+        }
+        val intQtiZeros = utilsKt.quantZeros(quadMaior)
+        strNivelJogo = when {
+
+            intQtiZeros < 30 -> "Fácil"
+            intQtiZeros < 40 -> "Médio"
+            intQtiZeros < 50 -> "Difícil"
+            intQtiZeros < 60 -> "Muito difícil"
+            else -> ""
 
         }
+        strSubNivelJogo = (intQtiZeros % 10).toString()
+
+        //--- Prepara a Intent para chamar JogarActivity
+        val intent = Intent(this, JogarActivity::class.java)
+        intent.action = strOpcaoJogo
+        intent.putExtra("strNivelJogo",    strNivelJogo)
+        intent.putExtra("strSubNivelJogo", strSubNivelJogo)
+        intent.putExtra("strCronoConta", strCronoConta)
+        intent.putExtra("strErro", strErro)
+        intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
+        intent.putIntegerArrayListExtra("JogoPreparado" , arIntNumsJogo)
+        //----------------------
+        startActivity(intent)
+        //----------------------
 
     }
 

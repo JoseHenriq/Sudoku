@@ -2,8 +2,40 @@
 --------------------------------------------------------------------------------
 
 ================================================================================
-Commit103 - implementa RecyclerView tutorial DevLab - 2 px
+Commit104 - integra RecyclerView - 1 px
 ================================================================================
+
+================================================================================
+Commit103 - implementa RecyclerView tutorial DevLab - 2
+================================================================================
+2021-12-27 14:31:31.343 D: --> main Verifica permissões
+2021-12-27 14:31:31.428 D: Permission Granted!
+2021-12-27 14:31:39.118 D: -> Tap no btnAdaptaJogo
+2021-12-27 14:31:39.123 D:    - rbAdapta: Preset
+2021-12-27 14:31:39.128 D: -> Tap no btnTesteRV
+2021-12-27 14:31:39.441 D: -> Jogos salvos: 
+2021-12-27 14:31:39.452 D:    - jogo_14.xml
+2021-12-27 14:31:39.481 D:    - jogo_13.xml
+2021-12-27 14:31:39.499 D:    - jogo_12.xml
+2021-12-27 14:31:39.515 D:    - jogo_11.xml
+2021-12-27 14:31:39.528 D:    - jogo_10.xml
+2021-12-27 14:31:39.539 D:    - jogo_9.xml
+2021-12-27 14:31:39.550 D:    - preset_1
+2021-12-27 14:31:39.563 D:    - preset_2
+2021-12-27 14:31:39.577 D:    - jogo_8.xml
+2021-12-27 14:31:39.591 D:    - jogo_7.xml
+2021-12-27 14:31:39.601 D:    - jogo_6.xml
+2021-12-27 14:31:39.612 D:    - jogo_5.xml
+2021-12-27 14:31:39.621 D:    - jogo_4.xml
+2021-12-27 14:31:39.631 D:    - jogo_3.xml
+2021-12-27 14:31:39.641 D:    - jogo_2.xml
+2021-12-27 14:31:39.651 D:    - jogo_1.xml
+2021-12-27 14:31:44.023 D: -> arqTxt 11
+2021-12-27 14:31:44.073 D:    - item textViews:
+    Arq: jogo_5.xml  Data: 23/12/2021 12:02:46  Status: ativo  Nivel: Muito Difícil  sub: 9  Erros: 1  tempo: 00:43
+2021-12-27 14:31:44.078 D:    - dados do jogo salvo:
+    <?xml version="1.0" encoding="utf-8"?><presets><header><id>3</id><nivel>Muito Difícil</nivel><subnivel>9</subnivel></header><body><linha0>0, 0, 0, 0, 0, 0, 0, 0, 0</linha0><linha1>0, 0, 0, 0, 0, 0, 0, 8, 9</linha1><linha2>0, 0, 0, 0, 0, 8, 1, 6, 2</linha2><linha3>0, 0, 0, 0, 0, 0, 0, 0, 0</linha3><linha4>0, 0, 0, 0, 3, 0, 6, 0, 0</linha4><linha5>0, 6, 0, 8, 0, 0, 0, 1, 0</linha5><linha6>0, 0, 0, 0, 6, 1, 0, 3, 0</linha6><linha7>0, 0, 1, 4, 8, 5, 0, 0, 0</linha7><linha8>8, 0, 0, 0, 7, 3, 0, 5, 0</linha8></body><jogos><id>1</id><dataHora>23/12/2021 12:02:46</dataHora><tempoJogo>00:43</tempoJogo><erros>1</erros><status>ativo</status></jogos></presets>
+2021-12-27 14:31:44.078 D:    - jogo NÃO finalizado
 
 ================================================================================
 Commit102 - implementa RecyclerView tutorial DevLab - 1
