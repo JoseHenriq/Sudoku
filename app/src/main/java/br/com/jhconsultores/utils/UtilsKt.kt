@@ -1,6 +1,23 @@
 package br.com.jhconsultores.utils
 
+import android.graphics.Bitmap
+import java.nio.IntBuffer
+
 class UtilsKt {
+
+    //--- copiaBmpByBuffer
+    fun copiaBmpByBuffer(bmpSrc: Bitmap?, bmpDest: Bitmap?) {
+
+        val buffBase = IntBuffer.allocate(bmpSrc!!.width * bmpSrc.height)
+        //--------------------------------------
+        bmpSrc.copyPixelsToBuffer(buffBase)
+        //--------------------------------------
+        buffBase.rewind()
+        //----------------------------------------
+        bmpDest!!.copyPixelsFromBuffer(buffBase)
+        //----------------------------------------
+
+    }
 
     //--- copiaArArInt
     fun copiaArArInt(arArIntPreset: Array<Array<Int>>) : Array<Array<Int>> {
@@ -34,6 +51,5 @@ class UtilsKt {
         return intQtiZeros
 
     }
-
 
 }

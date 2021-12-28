@@ -25,7 +25,6 @@ import br.com.jhconsultores.sudoku.R
 import br.com.jhconsultores.utils.*
 
 import java.lang.Exception
-import java.nio.IntBuffer
 
 class JogarActivity : AppCompatActivity() {   //Activity() {
 
@@ -112,7 +111,8 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     private var strPause = ""
     private var strReInicia = ""
 
-    private val utils = Utils()
+    private val utils   = Utils()
+    private val utilsKt = UtilsKt()
 
     //--------------------------------------------------------------------------
     //                                Eventos
@@ -127,10 +127,21 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         try {
             setContentView(R.layout.activity_jogar)
 
+            //--- Cronômetro
+            strCronoInic = resources.getString(R.string.crono_inic)
+            //---------------------------------
+            crono = Chronometer(this)
+            //---------------------------------
+            preparaCrono(crono)
+            //--------------------
+
+            //--- Erros
+            tvErros = findViewById(R.id.tv_Erros)
+            tvErros!!.text = "0"
+
             //--- Instancia objetos locais para os objetos XML
             tvNivel    = findViewById(R.id.tv_Nivel)
             tvSubNivel = findViewById(R.id.tv_Subnivel)
-            tvErros    = findViewById(R.id.tv_Erros)
             tvClues    = findViewById(R.id.tv_Clues)
 
             val btnReset  = findViewById<View>(R.id.btnReset) as Button
@@ -177,6 +188,14 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             // Gabarito e jogo válido
             else {
 
+                crono.text      = strCronoInic
+                val intMin      = strCronoInic.substring(0, 2).toLong()
+                val intSec      = strCronoInic.substring(3, 5).toLong()
+                val tempoJogado = ((intMin * 60 + intSec) * 1000)
+                crono.base      = SystemClock.elapsedRealtime() - tempoJogado
+
+                tvErros!!.text = intContaErro.toString()
+
                 // Armazena o gabarito em um Array<Array<Int>> para processamento local
                 for (intLinha in 0..8) {
                     for (intCol in 0..8) {
@@ -188,9 +207,9 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                     }
                 }
 
-                //-----------------------------------------
-                arArIntCopia = copiaArArInt(arArIntNums)
-                //-----------------------------------------
+                //-------------------------------------------------
+                arArIntCopia = utilsKt.copiaArArInt(arArIntNums)
+                //-------------------------------------------------
 
                 arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
 
@@ -199,14 +218,6 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                 //-------------
 
             } // Fim de gabarito recebido via intent ok
-
-            //--- Cronômetro
-            strCronoInic = resources.getString(R.string.crono_inic)
-            //---------------------------------
-            crono = Chronometer(this)
-            //---------------------------------
-            preparaCrono(crono)
-            //--------------------
 
             //------------------------------------------------------------------
             // Listeners para o evento onTouch dos ImageViews
@@ -370,9 +381,9 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                                     //---------------
 
                                     //--- Salva esse bitmap
-                                    //--------------------------------------
-                                    copiaBmpByBuffer(bmpMyImage, bmpJogo)
-                                    //--------------------------------------
+                                    //----------------------------------------------
+                                    utilsKt.copiaBmpByBuffer(bmpMyImage, bmpJogo)
+                                    //----------------------------------------------
 
                                     //--- Atualiza a base de dados
                                     arArIntNums[intLinJogar][intColJogar] = intNum
@@ -440,8 +451,8 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //--- btnInicia
             btnInicia.setOnClickListener {
 
-                strInicia = resources.getString(R.string.inicia)
-                strPause = resources.getString(R.string.pause)
+                strInicia   = resources.getString(R.string.inicia)
+                strPause    = resources.getString(R.string.pause)
                 strReInicia = resources.getString(R.string.reinicia)
 
                 //--------------------------------------------------------------
@@ -511,9 +522,9 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                         //-------------
                         crono.text = strCronoInic
 
-                        //-----------------------------------------
-                        arArIntNums = copiaArArInt(arArIntCopia)
-                        //-----------------------------------------
+                        //-------------------------------------------------
+                        arArIntNums = utilsKt.copiaArArInt(arArIntCopia)
+                        //-------------------------------------------------
 
                         arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
                         //-------------
@@ -677,7 +688,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
         //--- Atualiza a imageView do layout
         //----------------------------------------------
-        copiaBmpByBuffer(bmpJogo, bmpMyImage)
+        utilsKt.copiaBmpByBuffer(bmpJogo, bmpMyImage)
         //----------------------------------------------
         iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
         //----------------------------------------------
@@ -711,7 +722,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
         //--- Atualiza a imageView do layout
         //--------------------------------------
-        copiaBmpByBuffer(bmpJogo, bmpMyImage)
+        utilsKt.copiaBmpByBuffer(bmpJogo, bmpMyImage)
         //----------------------------------------------
         iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
         //----------------------------------------------
@@ -1182,7 +1193,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         //--- Inicializa variáveis locais
         tvNivel!!.text = strNivelJogo
         tvSubNivel!!.text = strSubNivelJogo
-        tvClues!!.text = quantZeros(arArIntNums).toString()
+        tvClues!!.text = utilsKt.quantZeros(arArIntNums).toString()
 
         //--- Verifica se fim de jogo
         var flagContJogo = false
@@ -1228,7 +1239,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         }
         iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
         //------------------------------------
-        copiaBmpByBuffer(bmpMyImage, bmpJogo)
+        utilsKt.copiaBmpByBuffer(bmpMyImage, bmpJogo)
         //------------------------------------
 
     }
@@ -1258,8 +1269,10 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
     }
 
+    /*
     //--- copiaBmpByBuffer
     fun copiaBmpByBuffer(bmpSrc: Bitmap?, bmpDest: Bitmap?) {
+
         val buffBase = IntBuffer.allocate(bmpSrc!!.width * bmpSrc.height)
         //--------------------------------------
         bmpSrc.copyPixelsToBuffer(buffBase)
@@ -1268,8 +1281,12 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         //----------------------------------------
         bmpDest!!.copyPixelsFromBuffer(buffBase)
         //----------------------------------------
+
     }
 
+     */
+
+    /*
     //--- copiaArArInt
     private fun copiaArArInt(arArIntPreset: Array<Array<Int>>): Array<Array<Int>> {
 
@@ -1292,7 +1309,9 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         return arArIntTmp
 
     }
+     */
 
+    /*
     //--- quantZeros
     private fun quantZeros(arArIntJogo: Array<Array<Int>>): Int {
 
@@ -1307,6 +1326,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         return intQtiZeros
 
     }
+    */
 
     //--- salvaJogo
     @RequiresApi(Build.VERSION_CODES.O)
@@ -1454,8 +1474,9 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //----------------------------------------------------------------------------
 
             //- jogos / status
-            val strStatus = if (quantZeros(arArIntNums) == 0) "finalizado" else "ativo"
-            //-------------------------------------------------------------
+            //------------------------------------------------------------------------------------
+            val strStatus = if (utilsKt.quantZeros(arArIntNums) == 0) "finalizado" else "ativo"
+            //------------------------------------------------------------------------------------
             strConteudo += preencheConteudo("<status>", strStatus)
             //-------------------------------------------------------------
 

@@ -109,8 +109,8 @@ class MainActivity : AppCompatActivity() {
 
     private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
     private var arArIntNums     = Array(9) { Array(9) { 0 } }
-    private val arIntNumsDisp   = arrayOf ( 1, 2, 3, 4, 5, 6, 7, 8, 9 )
     private var arIntQtiNumDisp = Array(9) { 9 }
+    private val arIntNumsDisp   = arrayOf ( 1, 2, 3, 4, 5, 6, 7, 8, 9 )
 
     private lateinit var txtDadosJogo: TextView
 
@@ -127,6 +127,9 @@ class MainActivity : AppCompatActivity() {
     //--- Arquivos jogos
     private var arStrTags   = Array(3) { "" }
     private var arArStrTags = Array(3) { Array(9) { "" } }
+
+    //--- Classes externas
+    private val utilsKt = UtilsKt ()
 
     //----------------------------------------------------------------------------------------------
     // Eventos e listeners da MainActivity
@@ -212,7 +215,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         //------------------------------------------------------------------------------------------
-        // Listener para os eventos onTouch dos ImageViews (só utilizados na edição).
+        // Listener para os eventos onTouch dos ImageViews (só utilizados na edição)
         //------------------------------------------------------------------------------------------
         ivSudokuBoardMain.setOnTouchListener { _, event -> //--- Coordenadas tocadas
 
@@ -234,6 +237,13 @@ class MainActivity : AppCompatActivity() {
             false
 
         }
+
+        //------------------------------------------------------------------------------------------
+        // Listener para os eventos dos buttons: declarados em res/layout/activity_main.xml
+        //------------------------------------------------------------------------------------------
+        // fun btnGeraJogoClick  (view: View?) {}
+        // fun btnAdaptaJogoClick(view: View?) {}
+        // fun btnJogaJogoClick  (view: View?) {}
 
         // https://www.geeksforgeeks.org/add-ontouchlistener-to-imageview-to-perform-speech-to-text-in-android/
         ivNumDisp.setOnTouchListener { _, motionEvent ->
@@ -264,10 +274,9 @@ class MainActivity : AppCompatActivity() {
             false
         }
 
-        //--- Trata as permissões para uso dos recursos do Android
-        //-------------------------------------------------------------------------------------
-        // Verifica as solicitações de acesso aos recursos do Android (AndroidManifest.xml).
-        //-------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------
+        // Verifica se permitidos os acessos aos recursos do Android (AndroidManifest.xml)
+        //-----------------------------------------------------------------------------------
         VerificaPermissoesAcessoAPI()
         //------------------------------
 
@@ -694,10 +703,15 @@ class MainActivity : AppCompatActivity() {
             //--- Prepara a Intent para chamar JogarActivity
             val intent = Intent(this, JogarActivity::class.java)
             intent.action = strOpcaoJogo
-            intent.putExtra("strNivelJogo", strNivelJogo)
+
+            intent.putExtra("strNivelJogo"   , strNivelJogo)
             intent.putExtra("strSubNivelJogo", edtViewSubNivel.text.toString())
+            intent.putExtra("strCronoConta"  , "00:00")
+            intent.putExtra("strErro"        , "0")
+
             intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
-            intent.putIntegerArrayListExtra("JogoPreparado", arIntNumsJogo)
+            intent.putIntegerArrayListExtra("JogoPreparado" , arIntNumsJogo)
+
             //----------------------
             startActivity(intent)
             //----------------------
@@ -823,9 +837,9 @@ class MainActivity : AppCompatActivity() {
         atualizaIVQtiNumDisp()
         //-----------------------
 
-        //-------------------------------------------------------
-        jogarJogo.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
-        //-------------------------------------------------------
+        //-----------------------------------------------------
+        utilsKt.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
+        //-----------------------------------------------------
 
     }
 
@@ -835,9 +849,9 @@ class MainActivity : AppCompatActivity() {
     //--- mostraCelAEditar
     private fun mostraCelAEditar(intLinha : Int, intCol : Int) {
 
-        //-------------------------------------------------------
-        jogarJogo.copiaBmpByBuffer(bmpMyImageBack, bmpMyImage)
-        //-------------------------------------------------------
+        //-----------------------------------------------------
+        utilsKt.copiaBmpByBuffer(bmpMyImageBack, bmpMyImage)
+        //-----------------------------------------------------
 
         //--- Pinta de laranja a célula tocada
         canvasMyImage = Canvas (bmpMyImage!!)
@@ -1025,82 +1039,6 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     // SudokuBoard
     //----------------------------------------------------------------------------------------------
-    //--- desenhaSudokuBoard
-    /*
-    private fun desenhaSudokuBoard(flagApaga: Boolean) {
-
-        var flCoordXInic: Float
-        var flCoordYInic: Float
-        var flCoordXFim : Float
-        var flCoordYFim : Float
-        val flPincelFino   = 2.toFloat()
-        val flPincelGrosso = 6.toFloat()
-        val pincelDesenhar = pincelPreto
-
-        val flagApagaBoard : Boolean = flagApaga
-
-        //--- Redesenha o board a partir do zero
-        //flagApagaBoard = true
-        if (flagApagaBoard) {
-
-            //-----------------------------------------------------------------------------
-            bmpMyImage?.height?.toFloat()?.let {
-                bmpMyImage?.width?.toFloat()?.let { it1 ->
-                    canvasMyImage?.drawRect(
-                        0f,
-                        0f,
-                        toPx(it1),
-                        toPx(it),
-                        pincelBranco
-                    )
-                }
-            }
-            //-----------------------------------------------------------------------------
-        }
-
-        //--- Desenha as linhas horizontais
-        for (intLinha in 0..9) {
-            flCoordXInic = 0f
-            flCoordYInic = (intLinha * intCellheight).toFloat()
-
-            flCoordXFim = (9 * intCellwidth).toFloat()
-            flCoordYFim = flCoordYInic
-
-            var flLargPincel = flPincelFino
-            if (intLinha % 3 == 0) {
-                flLargPincel = flPincelGrosso
-                if (flCoordYInic > 0) flCoordYInic--
-                if (flCoordYFim > 0)  flCoordYFim--
-            }
-            pincelDesenhar.strokeWidth = flLargPincel
-            //--------------------------------------------------------------------------------------
-            canvasMyImage?.drawLine( toPx(flCoordXInic), toPx(flCoordYInic), toPx(flCoordXFim),
-                                                                toPx(flCoordYFim), pincelDesenhar )
-            //--------------------------------------------------------------------------------------
-        }
-        //--- Desenha as linhas verticais
-        for (intCol in 0..9) {
-            flCoordXInic = (intCol * intCellwidth).toFloat()
-            flCoordYInic = 0f
-            flCoordXFim = flCoordXInic
-            flCoordYFim = (9 * intCellheight).toFloat()
-            var flLargPincel = flPincelFino
-            if (intCol % 3 == 0) {
-                flLargPincel = flPincelGrosso
-                if (flCoordXInic > 0) flCoordXInic--
-                if (flCoordXFim > 0) flCoordXFim--
-            }
-
-            pincelDesenhar.strokeWidth = flLargPincel
-            //--------------------------------------------------------------------------------------
-            canvasMyImage?.drawLine( toPx(flCoordXInic), toPx(flCoordYInic), toPx(flCoordXFim),
-                                                                toPx(flCoordYFim), pincelDesenhar )
-            //--------------------------------------------------------------------------------------
-        }
-
-    }
-    */
-
     //--- preencheSudokuBoard
     private fun preencheSudokuBoard(arArIntJogo : Array<Array<Int>>) {
 
@@ -1153,15 +1091,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        //-------------------------------------------------------
-        jogarJogo.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
-        //-------------------------------------------------------
+        //-----------------------------------------------------
+        utilsKt.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
+        //-----------------------------------------------------
 
         ivSudokuBoardMain.setImageBitmap(bmpMyImage)
 
         //--- DEBUG: atualiza a qtidd de númDisp
         //-----------------------
-        atualizaIVQtiNumDisp()
+        //atualizaIVQtiNumDisp()
         //-----------------------
 
     }
