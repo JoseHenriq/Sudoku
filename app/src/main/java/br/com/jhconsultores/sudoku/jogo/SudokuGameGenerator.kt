@@ -3,6 +3,7 @@ package br.com.jhconsultores.sudoku.jogo
 import android.annotation.SuppressLint
 import android.util.Log
 import br.com.jhconsultores.sudoku.jogo.SudokuBackTracking.intNumBackTracking
+import br.com.jhconsultores.utils.UtilsKt
 
 class SudokuGameGenerator {
 
@@ -18,10 +19,13 @@ class SudokuGameGenerator {
     var intJogoAdaptar = 0
     var intQtiZeros    = 0
 
-    var flagJogoGeradoOk   = false
-    var flagJogoAdaptadoOk = false
+    private var sggFlagJogoGeradoOk   = false
+    private var sggFlagJogoAdaptadoOk = false
 
     private var arArIntNums = Array(9) { Array(9) {0} }
+
+    //--- Classes externas
+    private val utilsKt = UtilsKt ()
 
     //--------------------------------------------------------------------------
     //             Gera Jogos (preset int[9][9] = { 0, 0, ..., 0 })
@@ -30,7 +34,7 @@ class SudokuGameGenerator {
     @SuppressLint("SetTextI18n")
     fun geraJogo(nivelJogo : Int) : Array<Array<Int>> {
 
-        flagJogoGeradoOk    = false
+        // flagJogoGeradoOk    = false
 
         var contaTentaJogo  = 0
         val limTentaJogo    = 150
@@ -40,7 +44,7 @@ class SudokuGameGenerator {
         inicQuadMaiorGeracao()
         //-----------------------
 
-        while (!flagJogoGeradoOk && contaTentaJogo < limTentaJogo) {  // && !flagTimeOut) {          //contaTentaJogo < 50) {  // 20) {   // 10) {
+        while (!sggFlagJogoGeradoOk && contaTentaJogo < limTentaJogo) {  // && !flagTimeOut) {          //contaTentaJogo < 50) {  // 20) {   // 10) {
 
             //Log.d(cTAG, "-> Gera o jogo ${contaTentaJogo + 1}")
 
@@ -93,7 +97,7 @@ class SudokuGameGenerator {
                 //------------------------------------
                 listaQM(quadMaiorRet, false)
                 //------------------------------------
-                flagJogoGeradoOk = true
+                sggFlagJogoGeradoOk = true
 
             }
             else { contaTentaJogo ++ }
@@ -139,7 +143,7 @@ class SudokuGameGenerator {
                 listaQM(arArIntCopia, false)
                 //-------------------------------------
 
-                val intQtiZeros = quantZeros(arArIntNums)
+                val intQtiZeros = utilsKt.quantZeros(arArIntNums)
 
                 val strQtiZerosPad = intQtiZeros.toString().padStart(4)
                 strLog   = String.format ( "%s %s", "-> Quantidade de clues:", strQtiZerosPad)
@@ -277,7 +281,7 @@ class SudokuGameGenerator {
         var contaAdaptaJogo = 0
         var arArIntJogo     = Array(9) { Array(9) {0} }
 
-        flagJogoAdaptadoOk  = false
+        sggFlagJogoAdaptadoOk  = false
 
         while (++contaAdaptaJogo <= limAdaptaJogo) {
 
@@ -301,10 +305,10 @@ class SudokuGameGenerator {
 
             intNumBackTracking = 0
             //-------------------------------------------------------------------------------------
-            flagJogoAdaptadoOk = SudokuBackTracking.solveSudoku(quadMaiorRet, quadMaiorRet.size)
+            sggFlagJogoAdaptadoOk = SudokuBackTracking.solveSudoku(quadMaiorRet, quadMaiorRet.size)
             //-------------------------------------------------------------------------------------
             //val intNumBackTracking = SudokuBackTracking.intNumBackTracking
-            if (flagJogoAdaptadoOk) {
+            if (sggFlagJogoAdaptadoOk) {
 
                 strLog  = "-> Jogo com preset $intJogoAdaptar adaptado"
                 Log.d(cTAG, strLog)
@@ -323,7 +327,7 @@ class SudokuGameGenerator {
                 listaQM(arArIntJogo, true)
                 //-------------------------------------
 
-                intQtiZeros = quantZeros(arArIntJogo)
+                intQtiZeros = utilsKt.quantZeros(arArIntJogo)
 
                 val strQtiZerosPad = intQtiZeros.toString().padStart(4)
                 strLog   = String.format ( "%s %s", "-> Quantidade de clues:", strQtiZerosPad)
@@ -831,7 +835,7 @@ class SudokuGameGenerator {
 
         //--- Para a Regra4, determina a qtidd de Zeros no jogo
         //------------------------------------------
-        var intQtiZeros = quantZeros(arArIntNums)
+        var intQtiZeros = utilsKt.quantZeros(arArIntNums)
         //------------------------------------------
         //--- Inicializa um vetor para evitar repetição de números Rnd
         val arIntNumRnd = Array(81) { 0 }
@@ -880,6 +884,7 @@ class SudokuGameGenerator {
 
     }
 
+    /*
     //--- quantZeros
     fun quantZeros(arArIntJogo : Array <Array <Int>>) : Int{
 
@@ -894,5 +899,6 @@ class SudokuGameGenerator {
         return intQtiZeros
 
     }
+     */
 
 }

@@ -96,16 +96,21 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
     private var arArIntCopia = Array(9) { Array(9) { 0 } }
 
-    private var arIntNumsGab = ArrayList<Int>()   // Gabarito
+    private var arIntNumsGab  = ArrayList<Int>()   // Gabarito
     private var arIntNumsJogo = ArrayList<Int>()   // Jogo
 
-    private var action = "JogoGerado"
-    private var strNivelJogo = "Fácil"
+    private var action          = "JogoGerado"
+    private var strNivelJogo    = "Fácil"
     private var strSubNivelJogo = "0"
 
+    private var strNivelJogoInic    = "Fácil"
+    private var strSubNivelJogoInic = "0"
+
     private lateinit var crono: Chronometer
-    private var strCronoInic = ""
+    private var strCronoInic      = ""
     private var timeStopped: Long = 0L
+
+    private var intContaErroInic  = 0
 
     private var strInicia = ""
     private var strPause = ""
@@ -161,62 +166,6 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //------------------------
             inicializaObjGraficos()
             //------------------------
-
-            //--------------------------------------------------------------------------------------
-            // Inicializa dados para deixar o jogo pronto
-            //--------------------------------------------------------------------------------------
-            //--- Ação à ser executada
-            action          = intent.action.toString()
-
-            //--- Recupera os dados recebidos via intent
-            strNivelJogo    = intent.getStringExtra("strNivelJogo") as String
-            strSubNivelJogo = intent.getStringExtra("strSubNivelJogo") as String
-
-            strCronoInic    = intent.getStringExtra("strCronoConta") as String
-            intContaErro    = (intent.getStringExtra("strErro") as String).toInt()
-
-            // Armazena o gabarito em um array<int>
-            arIntNumsGab  = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
-            arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as  ArrayList<Int>
-
-            // Gabarito e/ou jogo inválidos
-            if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
-
-                Log.d(cTAG, "-> Erro: array(s) com menos numeros que o necessário (81)")
-
-            }
-            // Gabarito e jogo válido
-            else {
-
-                crono.text  = strCronoInic
-                val intMin  = strCronoInic.substring(0, 2).toLong()
-                val intSec  = strCronoInic.substring(3, 5).toLong()
-                timeStopped = -((intMin * 60 + intSec) * 1000)
-
-                tvErros!!.text = intContaErro.toString()
-
-                // Armazena o gabarito em um Array<Array<Int>> para processamento local
-                for (intLinha in 0..8) {
-                    for (intCol in 0..8) {
-
-                        arArIntNums[intLinha][intCol] = arIntNumsJogo[intLinha * 9 + intCol] // Jogo
-                        arArIntGab[intLinha][intCol] =
-                            arIntNumsGab[intLinha * 9 + intCol] // Gabarito
-
-                    }
-                }
-
-                //-------------------------------------------------
-                arArIntCopia = utilsKt.copiaArArInt(arArIntNums)
-                //-------------------------------------------------
-
-                arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-
-                //-------------
-                iniciaJogo()
-                //-------------
-
-            } // Fim de gabarito recebido via intent ok
 
             //------------------------------------------------------------------
             // Listeners para o evento onTouch dos ImageViews
@@ -517,7 +466,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                         tvNivel!!.text = ""
                         tvSubNivel!!.text = ""
 
-                        intContaErro = 0
+                        intContaErro   = intContaErroInic
                         tvErros!!.text = "$intContaErro"
 
                         Log.d(cTAG, "-> ${crono.text} - Reset")
@@ -600,6 +549,62 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                     .show()
 
             }
+
+            //--------------------------------------------------------------------------------------
+            // Dados enviados pelo Main
+            //--------------------------------------------------------------------------------------
+            //--- Ação à ser executada
+            action          = intent.action.toString()
+
+            //--- Recupera os dados recebidos via intent
+            strNivelJogoInic    = intent.getStringExtra("strNivelJogo") as String
+            strSubNivelJogoInic = intent.getStringExtra("strSubNivelJogo") as String
+
+            strCronoInic     = intent.getStringExtra("strCronoConta") as String
+            intContaErroInic = (intent.getStringExtra("strErro") as String).toInt()
+
+            // Armazena o gabarito em um array<int>
+            arIntNumsGab  = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
+            arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as  ArrayList<Int>
+
+            // Gabarito e/ou jogo inválidos
+            if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
+
+                Log.d(cTAG, "-> Erro: array(s) com menos numeros que o necessário (81)")
+
+            }
+            // Gabarito e jogo válido
+            else {
+
+                crono.text  = strCronoInic
+                val intMin  = strCronoInic.substring(0, 2).toLong()
+                val intSec  = strCronoInic.substring(3, 5).toLong()
+                timeStopped = -((intMin * 60 + intSec) * 1000)
+
+                tvErros!!.text = intContaErro.toString()
+
+                // Armazena o gabarito em um Array<Array<Int>> para processamento local
+                for (intLinha in 0..8) {
+                    for (intCol in 0..8) {
+
+                        arArIntNums[intLinha][intCol] = arIntNumsJogo[intLinha * 9 + intCol] // Jogo
+                        arArIntGab[intLinha][intCol] =
+                            arIntNumsGab[intLinha * 9 + intCol] // Gabarito
+
+                    }
+                }
+
+                //-------------------------------------------------
+                arArIntCopia = utilsKt.copiaArArInt(arArIntNums)
+                //-------------------------------------------------
+
+                arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+
+                //-------------
+                iniciaJogo()
+                //-------------
+
+            } // Fim de gabarito recebido via intent ok
 
         } catch (exc: Exception) {
 
@@ -1150,8 +1155,11 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
         //*** Nesse ponto, arArIntNums (rascunho do jogo) e arArIntGab (gabarito) deverão estar Ok.
 
-        //intContaErro = 0
+        intContaErro   = intContaErroInic
         tvErros!!.text = "$intContaErro"
+
+        strNivelJogo    = strNivelJogoInic
+        strSubNivelJogo = strSubNivelJogoInic
 
         Log.d(cTAG, "-> Jogo:")
         //----------------------

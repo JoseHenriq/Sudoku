@@ -16,6 +16,7 @@ import br.com.jhconsultores.sudoku.R
 import br.com.jhconsultores.sudoku.adapter.JogoAdapter
 import br.com.jhconsultores.sudoku.adapter.JogoClickedListener
 import br.com.jhconsultores.sudoku.jogo.SudokuGameGenerator
+import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.flagJogoAdaptadoOk
 
 import br.com.jhconsultores.utils.Utils
 import br.com.jhconsultores.utils.UtilsKt
@@ -197,12 +198,12 @@ class AdaptarActivity : AppCompatActivity() {
         //---------------------------------------------------------------------------------
         strStatus = (leCampo(strTextViews, "Status:", "Nivel:")).trim()
         //---------------------------------------------------------------------------------
-        //--- Jogo NÃO finalizado: verifica se reseta o jogo
         strLog  = "-> status: "
         strLog += if (strStatus == "ativo") "NÃO" else ""
         strLog += " finalizado"
         Log.d(cTAG, strLog)
 
+        //--- Jogo NÃO finalizado: verifica se reseta o jogo
         if (strStatus == "ativo") {
 
             AlertDialog.Builder(this)
@@ -215,7 +216,7 @@ class AdaptarActivity : AppCompatActivity() {
                     Log.d(cTAG, "-> \"Resseta\" was pressed")
 
                     //---------------------
-                    prepJogoRessetado ()
+                    prepJogoRessetado()
                     //---------------------
 
                 }
@@ -225,7 +226,7 @@ class AdaptarActivity : AppCompatActivity() {
                     Log.d(cTAG, "-> \"Continua\" was pressed")
 
                     //----------------------
-                    prepJogoAContinuar ()
+                    prepJogoAContinuar()
                     //----------------------
 
                 }
@@ -238,40 +239,41 @@ class AdaptarActivity : AppCompatActivity() {
                 .show()
 
         }
+
+        //--- Jogo finalizado
+        else {
+
+            Log.d(cTAG, "Sudoku - Jogo finalizado.")
+
+            //---------------------
+            prepJogoRessetado ()
+            //---------------------
+
+        }
     }
-
-    // strOpcaoJogo ok!
-
-
-    //arIntNumsGab
-    //arIntNumsJogo
-
-    //strNivelJogo
-    //strSubNivelJogo   // edtViewSubNivel.text.toString()
 
     //--- prepJogoRessetado
     private fun prepJogoRessetado () {
 
         strErro       = "0"
         strCronoConta = "00:00"
-        //--------------------------
-        finalizaPrepEIniciaJogo()
-        //--------------------------
+        //------------------------------------------
+        finalizaPrepEIniciaJogo(false)
+        //------------------------------------------
 
     }
     //--- prepJogoAContinuar
     private fun prepJogoAContinuar () {
 
-        // <erros>1</erros><tempoJogo>00:43</tempoJogo>
         //---------------------------------------------------------------
         strErro = leCampo(strJogo, "<erros>", "</erros>")
         //----------------------------------------------------------------------------
         strCronoConta = leCampo(strJogo, "<tempoJogo>", "</tempoJogo>")
         //----------------------------------------------------------------------------
 
-        //--------------------------
-        finalizaPrepEIniciaJogo()
-        //--------------------------
+        //-----------------------------------------
+        finalizaPrepEIniciaJogo(true)
+        //-----------------------------------------
 
     }
 
@@ -280,12 +282,47 @@ class AdaptarActivity : AppCompatActivity() {
     private var quadMaior       = Array(9) { Array(9) { 0 } }
     private var strSubNivelJogo = "0"
 
-    private fun finalizaPrepEIniciaJogo() {
+    private fun finalizaPrepEIniciaJogo(flagContinua : Boolean) {
+
+        //--- Instancializações e inicializações
+        var strTagInic  = ""
+        var strTagFim   = ""
+        val intQtiZeros = utilsKt.quantZeros(quadMaior)
+
+        //--- Nível
+        strTagInic  = "<nivel>"
+        strTagFim   = "</nivel>"
+        //-------------------------------------------------------
+        strNivelJogo = leCampo(strJogo, strTagInic, strTagFim)
+        //-------------------------------------------------------
+
+        //--- Subnível
+        strTagInic  = "<subnivel>"
+        strTagFim   = "</subnivel>"
+        //----------------------------------------------------------
+        strSubNivelJogo = leCampo(strJogo, strTagInic, strTagFim)
+        //----------------------------------------------------------
 
         //--- Leitura da matriz bidimensional-proposta de jogo
-        //-----------------------------------------------------------------
-        var strLeit = leCampo(strJogo, "<body>", "</body>")
-        //-----------------------------------------------------------------
+        strTagInic = if (flagContinua) "<body2>"  else "<body>"
+        strTagFim  = if (flagContinua) "</body2>" else "</body>"
+
+        //------------------------------------------------------
+        var strLeit = leCampo(strJogo, strTagInic, strTagFim)
+        //------------------------------------------------------
+
+        if (strLeit.isEmpty()) {
+
+            strLog = "Jogo inválido!!!"
+            Log.d(cTAG, "-> $strLog")
+
+            //--------------------------------------------------------------
+            Toast.makeText(this, strLog, Toast.LENGTH_LONG).show()
+            //--------------------------------------------------------------
+
+            return
+
+        }
 
         for (idxLin in 0..8) {
             //--------------------------------------------------------------------------------------
@@ -327,25 +364,16 @@ class AdaptarActivity : AppCompatActivity() {
                 //-------------------------------------------
             }
         }
-        val intQtiZeros = utilsKt.quantZeros(quadMaior)
-        strNivelJogo = when {
 
-            intQtiZeros < 30 -> "Fácil"
-            intQtiZeros < 40 -> "Médio"
-            intQtiZeros < 50 -> "Difícil"
-            intQtiZeros < 60 -> "Muito difícil"
-            else -> ""
-
-        }
-        strSubNivelJogo = (intQtiZeros % 10).toString()
+        flagJogoAdaptadoOk = true
 
         //--- Prepara a Intent para chamar JogarActivity
         val intent = Intent(this, JogarActivity::class.java)
         intent.action = strOpcaoJogo
-        intent.putExtra("strNivelJogo",    strNivelJogo)
+        intent.putExtra("strNivelJogo"   , strNivelJogo)
         intent.putExtra("strSubNivelJogo", strSubNivelJogo)
-        intent.putExtra("strCronoConta", strCronoConta)
-        intent.putExtra("strErro", strErro)
+        intent.putExtra("strCronoConta"  , strCronoConta)
+        intent.putExtra("strErro"        , strErro)
         intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
         intent.putIntegerArrayListExtra("JogoPreparado" , arIntNumsJogo)
         //----------------------
@@ -466,10 +494,21 @@ class AdaptarActivity : AppCompatActivity() {
     //--- leCampo
     private fun leCampo(itemList : String, tagInic : String, tagFim : String) : String {
 
-        val intIdxInic = itemList.indexOf(tagInic) + tagInic.length
-        val intIdxFim  = if (tagFim.isEmpty()) itemList.length else itemList.indexOf(tagFim)
+        var strRetorno = ""
 
-        return itemList.substring(intIdxInic, intIdxFim)
+        try {
+            val intIdxInic = itemList.indexOf(tagInic) + tagInic.length
+            val intIdxFim = if (tagFim.isEmpty()) itemList.length else itemList.indexOf(tagFim)
+
+            strRetorno = itemList.substring(intIdxInic, intIdxFim)
+        }
+        catch (exc : Exception) {
+
+            Log.d(cTAG, "-> Não existe esse campo!")
+            strRetorno = ""
+
+        }
+        return strRetorno
 
     }
 

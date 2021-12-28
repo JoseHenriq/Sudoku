@@ -114,10 +114,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var txtDadosJogo: TextView
 
-    private var sgg       = SudokuGameGenerator()
-    private var jogarJogo = JogarActivity()
-    private val utils     = Utils ()
-
     //--- Controle de jogadas
     private var intColJogar = 0
     private var intLinJogar = 0
@@ -129,7 +125,18 @@ class MainActivity : AppCompatActivity() {
     private var arArStrTags = Array(3) { Array(9) { "" } }
 
     //--- Classes externas
-    private val utilsKt = UtilsKt ()
+    private var sgg       = SudokuGameGenerator()
+    private var jogarJogo = JogarActivity()
+    private val utils     = Utils ()
+    private val utilsKt   = UtilsKt ()
+
+    companion object {
+
+        const val cTAG = "Sudoku"
+        var flagJogoAdaptadoOk = false
+        var flagJogoGeradoOk   = false
+
+    }
 
     //----------------------------------------------------------------------------------------------
     // Eventos e listeners da MainActivity
@@ -145,9 +152,9 @@ class MainActivity : AppCompatActivity() {
         tvContaNums  = findViewById(R.id.ContaNums)
         tvContaClues = findViewById(R.id.ContaClues)
 
+        btnGeraJogo    = findViewById(R.id.btn_GerarJogo)
         btnAdaptaJogo  = findViewById(R.id.btn_AdaptarJogo)
         btnJogaJogo    = findViewById(R.id.btn_JogarJogo)
-        btnGeraJogo    = findViewById(R.id.btn_GerarJogo)
         //btnTestaRV     = findViewById(R.id.btn_TesteRV)
 
         groupRBnivel   = findViewById(R.id.radioGrpNivel)
@@ -292,7 +299,7 @@ class MainActivity : AppCompatActivity() {
         //--- Ativa o progress bar
         progressBar.visibility = VISIBLE
 
-        //--- Aguarda o teclado ser mostrado
+        //--- Aguarda o teclado ser mostrado para poder escondê-lo
         val waitTime = 3000L  // milisegundos
         Handler(Looper.getMainLooper()).postDelayed( {
 
@@ -307,6 +314,8 @@ class MainActivity : AppCompatActivity() {
         },
         waitTime)  // value in milliseconds
 
+        //---
+
     }
 
     //----------------------------------------------------------------------------------------------
@@ -318,6 +327,8 @@ class MainActivity : AppCompatActivity() {
 
         strLog = "-> Tap no btnGeraJogo"
         Log.d(cTAG, strLog)
+
+        flagJogoGeradoOk = false
 
         //--- Ativa o progress bar
         progressBar.visibility = VISIBLE
@@ -395,6 +406,8 @@ class MainActivity : AppCompatActivity() {
                 //--- Desativa o progress bar
                 progressBar.visibility = INVISIBLE
 
+                flagJogoGeradoOk = true
+
                 // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
             }
 
@@ -427,8 +440,7 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> Tap no btnAdaptaJogo"
         Log.d(cTAG, strLog)
 
-        sgg.flagJogoGeradoOk   = false
-        sgg.flagJogoAdaptadoOk = false
+        flagJogoAdaptadoOk = false
 
         strOpcaoJogo      = "JogoAdaptado"
         txtDadosJogo.text = ""
@@ -640,7 +652,7 @@ class MainActivity : AppCompatActivity() {
                 quadMaior = sgg.adaptaJogoAlgoritmo2()
                 //---------------------------------------
 
-                sgg.flagJogoAdaptadoOk = true
+                flagJogoAdaptadoOk = true
 
             }
 
@@ -659,7 +671,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
 
         //--- Se não tiver jogo válido, informa ao usuário
-        if (!sgg.flagJogoGeradoOk && !sgg.flagJogoAdaptadoOk) {
+        if (!flagJogoGeradoOk && !flagJogoAdaptadoOk) {
 
             val strToast = "Não há jogo válido!"
             //-----------------------------------------------------------------
@@ -780,8 +792,8 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> onClick rbPreset"
         Log.d(cTAG, strLog)
 
-        sgg.flagJogoGeradoOk   = false
-        sgg.flagJogoAdaptadoOk = false
+        flagJogoGeradoOk   = false
+        flagJogoAdaptadoOk = false
 
         //-----------------------------
         visibilidadeViews(INVISIBLE)
@@ -813,8 +825,8 @@ class MainActivity : AppCompatActivity() {
         arArIntNums     = Array(9) { Array(9) { 0 } }
         arIntQtiNumDisp = Array(9) { 9 }
 
-        sgg.flagJogoGeradoOk   = false
-        sgg.flagJogoAdaptadoOk = false
+        flagJogoGeradoOk   = false
+        flagJogoAdaptadoOk = false
 
         //------------------------------------------------------------------------------------------
         // Image view dos números disponíveis
@@ -1289,9 +1301,9 @@ class MainActivity : AppCompatActivity() {
                             arArIntNums[intLinJogar][intColJogar] = intNum
                             //---------------------------------
                             preencheSudokuBoard(arArIntNums)
-                            //----------------------------------------------
-                            val intQtiZeros = sgg.quantZeros(arArIntNums)
-                            //----------------------------------------------
+                            //--------------------------------------------------
+                            val intQtiZeros = utilsKt.quantZeros(arArIntNums)
+                            //--------------------------------------------------
                             tvContaClues.text = intQtiZeros.toString()
                             tvContaNums.text = (81 - intQtiZeros).toString()
 
@@ -1509,8 +1521,8 @@ class MainActivity : AppCompatActivity() {
                 val intNivelTotal = intNivel + edtViewSubNivel.text.toString().toInt()
                 if (intNivelTotal != nivelJogo) {
 
-                    sgg.flagJogoGeradoOk = false
-                    sgg.flagJogoAdaptadoOk = false
+                    flagJogoGeradoOk = false
+                    flagJogoAdaptadoOk = false
 
                     val arArIntJogo = Array(9) { Array(9) { 0 } }
                     //---------------------------------
@@ -2018,7 +2030,7 @@ class MainActivity : AppCompatActivity() {
 
             txtDadosJogo.text = String.format("%s%d","Preset #",sgg.intJogoAdaptar)
 
-            sgg.flagJogoAdaptadoOk = true
+            flagJogoAdaptadoOk = true
 
             //--- Desativa o progress bar
             progressBar.visibility = INVISIBLE

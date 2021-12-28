@@ -4,6 +4,65 @@
 27/12/21 07:00:00
 //--------------------------------------------------------------------------
 
+
+, object : JogoClickedListener {
+        //--------------------------------------------------------------------------------------
+
+            //--- Listener para click em um dos jogos
+            //--- Listener para click na info do arquivo de um dos jogos
+            override fun infoItem (posicao : Int) {
+
+                val itemListArq = itemsListArq[posicao]
+                val intIdxInic  = itemListArq.indexOf("Arq: ") + 5
+                val intIdxFim   = itemListArq.indexOf(" Data:")
+                val strfileName = itemListArq.substring(intIdxInic, intIdxFim)
+                //---------------------------------------------------------------------------------
+                val strfileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
+                //---------------------------------------------------------------------------------
+
+                strToast = "Tapped $posicao: $strfileName!"
+                Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+            }
+
+            //--- Listener para click na info de um dos jogos
+            override fun jogoItem(posicao : Int) {
+
+                /*
+                strToast = "Tapped jogoItem $posicao!"
+                Toast.makeText(baseContext, strToast, Toast.LENGTH_LONG).show()
+
+                strLog   = "   - $strToast"
+                Log.d(cTAG, strLog)
+                */
+
+                val itemListJogo= itemsListJogo[posicao]
+                val intIdxInic  = itemListJogo.indexOf("Nivel: ") + 7
+                val intIdxFim   = itemListJogo.indexOf(" sub:")
+                val strNivel    = itemListJogo.substring(intIdxInic, intIdxFim)
+                //---------------------------------------------------------------------------------
+                val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
+                //---------------------------------------------------------------------------------
+
+                strToast = "Tapped $posicao: $strNivel!"
+                Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 package br.com.jhconsultores.sudoku.adapter
 
 import android.annotation.SuppressLint
