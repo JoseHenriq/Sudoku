@@ -188,11 +188,10 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             // Gabarito e jogo válido
             else {
 
-                crono.text      = strCronoInic
-                val intMin      = strCronoInic.substring(0, 2).toLong()
-                val intSec      = strCronoInic.substring(3, 5).toLong()
-                val tempoJogado = ((intMin * 60 + intSec) * 1000)
-                crono.base      = SystemClock.elapsedRealtime() - tempoJogado
+                crono.text  = strCronoInic
+                val intMin  = strCronoInic.substring(0, 2).toLong()
+                val intSec  = strCronoInic.substring(3, 5).toLong()
+                timeStopped = -((intMin * 60 + intSec) * 1000)
 
                 tvErros!!.text = intContaErro.toString()
 
@@ -467,6 +466,11 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                     iViewNumsDisps!!.isEnabled   = true
 
                     crono.base = SystemClock.elapsedRealtime() + timeStopped
+
+                    Log.d(cTAG, "SystemClock = ${SystemClock.elapsedRealtime()}")
+                    Log.d(cTAG, "timeStopped = $timeStopped")
+                    Log.d(cTAG, "crono.base  = ${crono.base}")
+
                     //--------------
                     crono.start()
                     //--------------
@@ -481,13 +485,14 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                 else {
 
                     Log.d(cTAG, "-> ${crono.text} - $strPause")
+
                     timeStopped = crono.base - SystemClock.elapsedRealtime()
                     //-------------
                     crono.stop()
                     //-------------
 
                     iViewSudokuBoard!!.isEnabled = false
-                    iViewNumsDisps!!.isEnabled = false
+                    iViewNumsDisps!!.isEnabled   = false
 
                     btnInicia.text = strReInicia
 
@@ -1145,7 +1150,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
         //*** Nesse ponto, arArIntNums (rascunho do jogo) e arArIntGab (gabarito) deverão estar Ok.
 
-        intContaErro = 0
+        //intContaErro = 0
         tvErros!!.text = "$intContaErro"
 
         Log.d(cTAG, "-> Jogo:")
@@ -1245,13 +1250,13 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     }
 
     //--- preparaCrono
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun preparaCrono(crono: Chronometer) {
 
-        // set color and size of the text
+        //--- Adiciona o cronometro ao layout
         crono.setTextColor(Color.BLUE)
         crono.setTextSize(TypedValue.COMPLEX_UNIT_IN, 0.15f)
 
-        // Adiciona o cronometro no layout
         val layoutParams = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
@@ -1262,10 +1267,13 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         val linearLayout = findViewById<LinearLayout>(R.id.crono_layout)
         linearLayout?.addView(crono)
 
+        //--- Finaliza a preparação do crono
+        crono.stop()
         timeStopped = 0L
-        //--------------------------
-        crono.text = strCronoInic
-        //--------------------------
+        crono.base  = SystemClock.elapsedRealtime()
+        //---------------------------
+        crono.text  = strCronoInic
+        //---------------------------
 
     }
 
