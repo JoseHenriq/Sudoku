@@ -674,9 +674,9 @@ class MainActivity : AppCompatActivity() {
         if (!flagJogoGeradoOk && !flagJogoAdaptadoOk) {
 
             val strToast = "Não há jogo válido!"
-            //-----------------------------------------------------------------
+            //----------------------------------------------------------------
             Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
-            //-----------------------------------------------------------------
+            //----------------------------------------------------------------
 
             Log.d(cTAG, "-> $strToast")
 

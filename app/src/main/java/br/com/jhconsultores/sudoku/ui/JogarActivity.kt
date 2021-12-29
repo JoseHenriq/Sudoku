@@ -1419,21 +1419,64 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
         var strConteudo : String
 
+        /*
         //-- Lê o modelo
+
         val strNomeComPath = "sudoku/docs/modeloArqXmlSudoku1.txt"
         //-------------------------------------------------------------------------------
         val arStrLeitArq: ArrayList<String> = utils.leitExtMemTextFile(strNomeComPath)
         //-------------------------------------------------------------------------------
+        */
+
+        //-- Lê o modelo para a formatação xml : modelo_arq_xml_sudoku1.txt
+
+        val strNomeArqSemExt = "modelo_arq_xml_sudoku1"    // SÓ a-z 0-9 _
+
+        //--- Obtém lista de arquivos em resource / raw
+        //-----------------------------------------------------
+        val arStrNomeArqRaw: Array<String> = utils.ListRaw()
+        //-----------------------------------------------------
+
+        Log.d(cTAG, "-> Arquivos raw (listRaw):")
+
+        var flagArqExiste = false
+        for (idxFileName in arStrNomeArqRaw.indices) {
+
+            val strFileNameDir = arStrNomeArqRaw[idxFileName]
+            Log.d(cTAG, "$idxFileName: $strFileNameDir")
+
+            flagArqExiste = (strFileNameDir == strNomeArqSemExt)
+            if (flagArqExiste) break
+
+        }
+
+        //--- Leitura se arquivo existente
+        var arStrLeitArqRaw = ArrayList<String>()
+        if (flagArqExiste) {
+
+            Log.d(cTAG, "-> Arquivo $strNomeArqSemExt:")
+            //----------------------------------------------------------------------
+            arStrLeitArqRaw = utils.LeituraFileRaw(this, strNomeArqSemExt)
+            //----------------------------------------------------------------------
+            for (idxDecl in 0 until arStrLeitArqRaw.size) {
+
+                Log.d(cTAG, "   $idxDecl: ${arStrLeitArqRaw[idxDecl]}")
+
+            }
+
+        }
 
         //-- Converte o modelo de ArrayList para String
         Log.d(cTAG, "-> modelo arq Sudoku xml")
-        for (idxDecl in 0 until arStrLeitArq.size) { strModelo += arStrLeitArq[idxDecl] }
+        for (idxDecl in arStrLeitArqRaw.indices) { strModelo += arStrLeitArqRaw[idxDecl] }
+
         Log.d(cTAG, strModelo)
 
         //-- Preenche os campos
         try
         {
             //- header / id
+            intIdxFim = 0
             //-------------------------------------------------------------
             strConteudo = preencheConteudo("<id>", "3")
             //-------------------------------------------------------------
