@@ -99,9 +99,9 @@ class AdaptarActivity : AppCompatActivity() {
         // 3- referencia o ArrayList ao ViewHolder
         Log.d(cTAG, "-> Jogos salvos: ")
         //- Prepara os arrays list das infos para o RV
-        //---------------------------------------------------------------------------------
-        val arStrArqsNames = utils.listaExtMemArqDir("/Download/sudoku/Jogos")
-        //---------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------
+        val arStrArqsNames = utils.listaExtMemArqDir("Download/sudoku/Jogos")
+        //--------------------------------------------------------------------------------
         if (arStrArqsNames.isNotEmpty()) {
 
             for (strArqName in arStrArqsNames) {

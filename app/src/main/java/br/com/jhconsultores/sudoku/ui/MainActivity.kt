@@ -737,6 +737,8 @@ class MainActivity : AppCompatActivity() {
     //--- rbJogoFacil
     fun rbJogoFacil(view: View?) {
 
+        flagJogoGeradoOk = false
+
         strLog = "-> onClick rbJogoFacil"
         Log.d(cTAG, strLog)
 
@@ -748,6 +750,8 @@ class MainActivity : AppCompatActivity() {
 
     //--- rbJogoMedio
     fun rbJogoMedio(view: View?) {
+
+        flagJogoGeradoOk = false
 
         strLog = "-> onClick rbJogoMedio"
         Log.d(cTAG, strLog)
@@ -761,24 +765,28 @@ class MainActivity : AppCompatActivity() {
     //--- rbJogoDificil
     fun rbJogoDificil(view: View?) {
 
+        flagJogoGeradoOk = false
+
         strLog = "-> onClick rbJogoDificil"
         Log.d(cTAG, strLog)
 
-        //-------------------------
+        //---------------------------
         verifMudancaNivel(DIFICIL)
-        //-------------------------
+        //---------------------------
 
     }
 
     //--- rbJogoMuitoDificil
     fun rbJogoMuitoDificil(view: View?) {
 
+        flagJogoGeradoOk = false
+
         strLog = "-> onClick rbJogoMuitoDificil"
         Log.d(cTAG, strLog)
 
-        //-------------------------------
+        //---------------------------------
         verifMudancaNivel(MUITO_DIFICIL)
-        //-------------------------------
+        //---------------------------------
 
     }
 
@@ -793,7 +801,6 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strLog)
 
         flagJogoGeradoOk   = false
-        flagJogoAdaptadoOk = false
 
         //-----------------------------
         visibilidadeViews(INVISIBLE)
@@ -816,17 +823,15 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> onClick rbEdicao"
         Log.d(cTAG, strLog)
 
-        flagAdaptaPreset = false
-        txtDadosJogo.text = ""
+        flagJogoGeradoOk   = false
+
+        txtDadosJogo.text  = ""
 
         tvContaNums.text  = "0"
         tvContaClues.text = resources.getString(R.string.valor81)
 
         arArIntNums     = Array(9) { Array(9) { 0 } }
         arIntQtiNumDisp = Array(9) { 9 }
-
-        flagJogoGeradoOk   = false
-        flagJogoAdaptadoOk = false
 
         //------------------------------------------------------------------------------------------
         // Image view dos números disponíveis

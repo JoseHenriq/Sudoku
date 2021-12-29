@@ -34,7 +34,7 @@ class SudokuGameGenerator {
     @SuppressLint("SetTextI18n")
     fun geraJogo(nivelJogo : Int) : Array<Array<Int>> {
 
-        // flagJogoGeradoOk    = false
+        sggFlagJogoGeradoOk = false
 
         var contaTentaJogo  = 0
         val limTentaJogo    = 150

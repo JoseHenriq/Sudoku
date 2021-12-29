@@ -522,10 +522,10 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                         //------------
 
                         Log.d(cTAG, "-> Jogos salvos: ")
-                        //--------------------------------------------------------------------------
+                        //---------------------------------------------------------
                         val arStrArqsNames = utils
-                            .listaExtMemArqDir("/Download/sudoku/Jogos")
-                        //--------------------------------------------------------------------------
+                            .listaExtMemArqDir("Download/sudoku/Jogos")
+                        //---------------------------------------------------------
                         if (arStrArqsNames.isNotEmpty()) {
 
                             for (strArqName in arStrArqsNames) {
@@ -1361,9 +1361,9 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         if (strConteudo.isNotEmpty()) {
 
             var intNumArq = 0
-            //--------------------------------------------------------------------------------
-            val arStrArqsNames = utils.listaExtMemArqDir("/Download/sudoku/Jogos")
-            //--------------------------------------------------------------------------------
+            //-------------------------------------------------------------------------------
+            val arStrArqsNames = utils.listaExtMemArqDir("Download/sudoku/Jogos")
+            //-------------------------------------------------------------------------------
             if (arStrArqsNames.isNotEmpty()) {
 
                 for (strArqName in arStrArqsNames) {
@@ -1410,7 +1410,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
     //--- preparaConteudo
     var strModelo  : String = ""
-    var strTag     : String = ""
+    //var strTag     : String = ""
     var intIdxInic : Int = 0
     var intIdxFim  : Int = 0
 
@@ -1473,25 +1473,30 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         Log.d(cTAG, strModelo)
 
         //-- Preenche os campos
+        var intTag = 0
         try
         {
             //- header / id
+            intTag    = 0
             intIdxFim = 0
             //-------------------------------------------------------------
             strConteudo = preencheConteudo("<id>", "3")
             //-------------------------------------------------------------
 
             //- header / nivel
+            intTag = 1
             //---------------------------------------------------------------
             strConteudo += preencheConteudo("<nivel>", strNivelJogo)
             //---------------------------------------------------------------
 
             //- header / subnivel
+            intTag = 2
             //---------------------------------------------------------------------
             strConteudo += preencheConteudo("<subnivel>", strSubNivelJogo)
             //---------------------------------------------------------------------
 
             //- body / linha0 até linha8 : jogo preparado
+            intTag = 3
             for (idxLinha in 0 until 9) {
 
                 var strConteudoTmp = ""
@@ -1510,29 +1515,35 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             }
 
             //- jogos / id
+            intTag = 4
             //----------------------------------------------------------------
             strConteudo += preencheConteudo("<id>", "1")
             //----------------------------------------------------------------
 
             //- jogos / dataHora
+            intTag = 5
             //-------------------------------------------------------------------------
             val strDataHora = utils.LeDataHora("dd/MM/yyyy HH:mm:ss")
             //-------------------------------------------------------------------------
+            intTag = 6
             //------------------------------------------------------------------
             strConteudo += preencheConteudo("<dataHora>", strDataHora)
             //------------------------------------------------------------------
 
             //- jogos / tempoJogo
+            intTag = 7
             //--------------------------------------------------------------------------
             strConteudo += preencheConteudo("<tempoJogo>", crono.text.toString())
             //--------------------------------------------------------------------------
 
             //- jogos / erros
+            intTag = 8
             //----------------------------------------------------------------------------
             strConteudo += preencheConteudo("<erros>", tvErros!!.text.toString())
             //----------------------------------------------------------------------------
 
             //- jogos / status
+            intTag = 9
             //------------------------------------------------------------------------------------
             val strStatus = if (utilsKt.quantZeros(arArIntNums) == 0) "finalizado" else "ativo"
             //------------------------------------------------------------------------------------
@@ -1540,6 +1551,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //-------------------------------------------------------------
 
             //- body2 / linha0 até linha8 : jogo no momento do salvamento se ainda ativo
+            intTag = 10
             if (strStatus == "ativo") {
 
                 strConteudo += "</status></jogos><body2>"
@@ -1563,19 +1575,21 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             else {
 
                 //-- Finaliza a preparação do conteúdo
+                intTag = 11
                 strConteudo += strModelo.substring(intIdxFim, strModelo.length)
 
             }
+
+            Log.d(cTAG, "-> Conteudo: $strConteudo")
+
         }
         catch (exc : Exception)
         {
 
-            Toast.makeText(this, "Erro: ${exc.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Erro $intTag: ${exc.message}", Toast.LENGTH_LONG).show()
             strConteudo = ""
 
         }
-
-        Log.d(cTAG, "-> Conteudo: $strConteudo")
 
         return strConteudo
 
