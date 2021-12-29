@@ -1366,6 +1366,9 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //-------------------------------------------------------------------------------
             if (arStrArqsNames.isNotEmpty()) {
 
+
+
+
                 for (strArqName in arStrArqsNames) {
 
                     if (strArqName.contains("jogo_")) {
@@ -1387,20 +1390,21 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             }
             intNumArq++
             val strArqJogo = "jogo_$intNumArq.xml"
-            val strArqName = "/sudoku/jogos/$strArqJogo"
+            val strArqPath = "/sudoku/jogos"
+            val strArqName = "$strArqJogo"
 
             //------------------------------------------------------------------
             // Salva o arquivo
             //------------------------------------------------------------------
-            //------------------------------------------------------------------
-            val flagEscrita = utils.escExtMemTextFile(strArqName, strConteudo)
-            //------------------------------------------------------------------
+            //-------------------------------------------------------------------------------
+            val flagEscrita = utils.escExtMemTextFile(strArqPath, strArqName, strConteudo)
+            //-------------------------------------------------------------------------------
 
             strToast = "Escrita arquivo $strArqJogo "
             strToast += if (flagEscrita) "OK!" else "NÃO ok!"
             Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
 
-            strLog = "-> Escrita arquivo storage/emulated/0/Download$strArqName "
+            strLog = "-> Escrita arquivo storage/emulated/0/Download$strArqPath/$strArqName "
             strLog += if (flagEscrita) "OK!" else "NÃO ok!"
             Log.d(cTAG, strLog)
 

@@ -41,8 +41,10 @@ import static android.os.Environment.DIRECTORY_DOWNLOADS;
 //=============================================================================
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
@@ -190,63 +192,59 @@ public class Utils {
 
         try {
 
-            //--- Se estiver num diretório:
-            if (file.isDirectory()) {
+            // https://stackoverflow.com/questions/203030/best-way-to-list-files-in-java-sorted-by-date-modified
+            // 1- obtain the array of (file, timestamp) pairs;
+            int intIdx = 0;
+            //--------------------------------
+            File[] files = file.listFiles();
+            //--------------------------------
 
-                // https://stackoverflow.com/questions/203030/best-way-to-list-files-in-java-sorted-by-date-modified
-                // 1- obtain the array of (file, timestamp) pairs;
-                int intIdx = 0;
-                //---------------------------------
-                File[] files = file.listFiles();
-                //---------------------------------
+            if (files == null) {
 
-                if (files == null) {
+                Log.d(TAG_Utils, "   - File[] = null !");
 
-                    Log.d(TAG_Utils, "   - File[] = null !");
+            }
+
+            else {
+
+                Pair[] pairs = new Pair[1];
+
+                if (files.length > 1) {
+                    for (File file_ : files) {
+
+                        Log.d(TAG_Utils, String.valueOf(intIdx++) + " " + file_.toString());
+
+                    }
+                    pairs = new Pair[files.length];
+                    for (int i = 0; i < files.length; i++)
+                        pairs[i] = new Pair(files[i]);
+
+                    // 2- sort them by timestamp;
+                    //------------------------------------------------
+                    Arrays.sort(pairs, Collections.reverseOrder());
+                    //------------------------------------------------
+
+                    // 3- take the sorted pairs and extract only the file part, discarding the timestamp.
+                    children = new String[files.length];
+                    for (int i = 0; i < files.length; i++) {
+
+                        files[i] = pairs[i].f;
+                        children[i] = files[i].getName();
+
+                    }
+
+                } else if (files.length == 1) {
+
+                    files[0] = pairs[0].f;
+                    children[0] = files[0].getName();
 
                 }
 
-                else {
+                intIdx = 0;
+                for (String child : children) {
 
-                    Pair[] pairs = new Pair[1];
+                    Log.d(TAG_Utils, String.valueOf(intIdx++) + " " + child.toString());
 
-                    if (files.length > 1) {
-                        for (File file_ : files) {
-
-                            Log.d(TAG_Utils, String.valueOf(intIdx++) + " " + file_.toString());
-
-                        }
-                        pairs = new Pair[files.length];
-                        for (int i = 0; i < files.length; i++)
-                            pairs[i] = new Pair(files[i]);
-
-                        // 2- sort them by timestamp;
-                        //------------------------------------------------
-                        Arrays.sort(pairs, Collections.reverseOrder());
-                        //------------------------------------------------
-
-                        // 3- take the sorted pairs and extract only the file part, discarding the timestamp.
-                        children = new String[files.length];
-                        for (int i = 0; i < files.length; i++) {
-
-                            files[i] = pairs[i].f;
-                            children[i] = files[i].getName();
-
-                        }
-
-                    } else if (files.length == 1) {
-
-                        files[0] = pairs[0].f;
-                        children[0] = files[0].getName();
-
-                    }
-
-                    intIdx = 0;
-                    for (String child : children) {
-
-                        Log.d(TAG_Utils, String.valueOf(intIdx++) + " " + child.toString());
-
-                    }
                 }
             }
 
@@ -263,27 +261,57 @@ public class Utils {
     //--------------------------------------------------------------------------
     // Método para escrita de um arquivo
     //--------------------------------------------------------------------------
-    public boolean escExtMemTextFile(String strFileName, String strConteudo) {
+    public boolean escExtMemTextFile(String strPath, String strFileName, String strConteudo) {
 
         boolean flagEsc = false;
         File fpath      = null;
+        File file       = null;
         File myFile     = null;
+        String[] files  = null;
 
         //https://stackoverflow.com/questions/19853401/saving-to-sd-card-as-text-file
         try {
+
             fpath = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
+            String [] strPathsDir = strPath.split("/");
 
-            myFile = new File(fpath, strFileName);
-            myFile.createNewFile();
+            Boolean flagDirOk  = false;
+            String strFilePath = fpath.getPath();
+            for (String strPathDir : strPathsDir) {
 
-            FileOutputStream fOut          = new FileOutputStream(myFile);
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut, Charset.forName("UTF-8"));
+                if (!strPathDir.isEmpty()) {
 
-            myOutWriter.append(strConteudo);
-            myOutWriter.close();
-            fOut.close();
+                    strFilePath += "/" + strPathDir;
+                    file = new File(strFilePath);
 
-            flagEsc = true;
+                    if (!file.exists() || !file.isDirectory()) {
+
+                        flagDirOk = file.mkdir();
+                        if (!flagDirOk) break;
+
+                    }
+                    else flagDirOk = true;
+                }
+            }
+
+            //--- Se estiver num diretório:
+            if (flagDirOk) {
+
+                myFile = new File(strFilePath, ("/" + strFileName));
+                myFile.createNewFile();
+
+                //myFile.mkdir()
+
+                FileOutputStream fOut = new FileOutputStream(myFile);
+                OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut, Charset.forName("UTF-8"));
+
+                myOutWriter.append(strConteudo);
+                myOutWriter.close();
+                fOut.close();
+
+                flagEsc = true;
+
+            }
 
         } catch (Exception exc) {
 
