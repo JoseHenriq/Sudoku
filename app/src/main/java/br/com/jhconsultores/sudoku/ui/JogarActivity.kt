@@ -532,10 +532,9 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                         //------------
 
                         Log.d(cTAG, "-> Jogos salvos: ")
-                        //---------------------------------------------------------
-                        val arStrArqsNames = utils
-                            .listaExtMemArqDir("Download/sudoku/Jogos")
-                        //---------------------------------------------------------
+                        //-----------------------------------------------------------------------
+                        val arStrArqsNames = utils.listaExtMemArqDir("/sudoku/Jogos")
+                        //-----------------------------------------------------------------------
                         if (arStrArqsNames.isNotEmpty()) {
 
                             for (strArqName in arStrArqsNames) {
@@ -1403,7 +1402,10 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
             var intNumArq = 0
             //-------------------------------------------------------------------------------
-            val arStrArqsNames = utils.listaExtMemArqDir("Download/sudoku/Jogos")
+            //val arStrArqsNames = utils.listaExtMemArqDir("Download/sudoku/Jogos")
+            //-------------------------------------------------------------------------------
+            //-------------------------------------------------------------------------------
+            val arStrArqsNames = utils.listaExtMemArqDir("/sudoku/Jogos")
             //-------------------------------------------------------------------------------
             if (arStrArqsNames.isNotEmpty()) {
 
@@ -1427,7 +1429,11 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
             }
             intNumArq++
-            val strArqJogo = "jogo_$intNumArq.xml"
+            //val strArqJogo = "jogo_$intNumArq.xml"
+
+            val strDataHora = utils.LeDataHora("yyMMddHHmmss")
+            val strArqJogo = "jogo_$strDataHora.xml"
+
             val strArqPath = "/sudoku/jogos"
             val strArqName = "$strArqJogo"
 

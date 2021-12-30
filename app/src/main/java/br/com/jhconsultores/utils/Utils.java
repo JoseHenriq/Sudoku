@@ -184,10 +184,13 @@ public class Utils {
         Log.d(TAG_Utils, "--> Lista arquivos do diretorio");
         String[] children   = new String[] {""};
 
-        String rootPath     = Environment.getExternalStorageDirectory().toString();
+        // String rootPath     = Environment.getExternalStorageDirectory().toString();
         // rootpath: "/storage/emulated/0"
+        // String rootDirName  = rootPath + "/" + strDirName;
+        // File file = new File("Download/sudoku/jogos");
 
-        String rootDirName  = rootPath + "/" + strDirName;
+        File fpath         = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
+        String rootDirName = fpath + "/" + strDirName;   // "sudoku/jogos";
         File file           = new File(rootDirName);
 
         try {
@@ -195,9 +198,9 @@ public class Utils {
             // https://stackoverflow.com/questions/203030/best-way-to-list-files-in-java-sorted-by-date-modified
             // 1- obtain the array of (file, timestamp) pairs;
             int intIdx = 0;
-            //--------------------------------
+            //---------------------------------
             File[] files = file.listFiles();
-            //--------------------------------
+            //---------------------------------
 
             if (files == null) {
 

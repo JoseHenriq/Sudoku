@@ -71,9 +71,9 @@ class AdaptarActivity : AppCompatActivity() {
         // 3- referencia o ArrayList ao ViewHolder
         Log.d(cTAG, "-> Jogos salvos: ")
         //- Prepara os arrays list das infos para o RV
-        //--------------------------------------------------------------------------------
-        val arStrArqsNames = utils.listaExtMemArqDir("Download/sudoku/Jogos")
-        //--------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------
+        val arStrArqsNames = utils.listaExtMemArqDir("/sudoku/jogos")
+        //-----------------------------------------------------------------------
         if (arStrArqsNames.isNotEmpty()) {
 
             for (strArqName in arStrArqsNames) {
@@ -105,9 +105,9 @@ class AdaptarActivity : AppCompatActivity() {
         itemsListArq  = ArrayList<String>()
         itemsListJogo = ArrayList<String>()
 
-        //--------------------------------------------------------------------------------
-        val arStrArqsNames = utils.listaExtMemArqDir("Download/sudoku/Jogos")
-        //--------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------
+        val arStrArqsNames = utils.listaExtMemArqDir("/sudoku/jogos")
+        //-----------------------------------------------------------------------
         if (arStrArqsNames.isNotEmpty()) {
 
             for (strArqName in arStrArqsNames) {
@@ -122,55 +122,52 @@ class AdaptarActivity : AppCompatActivity() {
 
             }
 
+            //---------------------------------------------------------------------------------------
+            customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
+                //---------------------------------------------------------------------------------------
+
+                //--- Listener para click na info do arquivo de um dos jogos
+                override fun infoItem (posicao : Int) {
+
+                    //---------------------------------------------------------------------------------
+                    val strfileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
+                    //---------------------------------------------------------------------------------
+
+                    strToast = "Tapped $posicao: $strfileName!"
+                    Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+                    //-------------------------
+                    adaptaEjogaJogo(posicao)
+                    //-------------------------
+
+                }
+
+                //--- Listener para click na info de um dos jogos
+                override fun jogoItem(posicao : Int) {
+
+                    //---------------------------------------------------------------------------------
+                    val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
+                    //---------------------------------------------------------------------------------
+
+                    strToast = "Tapped $posicao: $strNivel!"
+                    Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+                    //-------------------------
+                    adaptaEjogaJogo(posicao)
+                    //-------------------------
+
+                }
+
+            })
+
+            recyclerView!!.adapter = customAdapter
+
         } else {
 
             strLog = "   - Não há arquivos de jogos no dir /Download/sudoku/Jogos"
             Log.d(cTAG, strLog)
 
         }
-
-//        customAdapter.notifyDataSetChanged()
-//        recyclerView!!.adapter = customAdapter
-
-        //---------------------------------------------------------------------------------------
-        customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
-        //---------------------------------------------------------------------------------------
-
-            //--- Listener para click na info do arquivo de um dos jogos
-            override fun infoItem (posicao : Int) {
-
-                //---------------------------------------------------------------------------------
-                val strfileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
-                //---------------------------------------------------------------------------------
-
-                strToast = "Tapped $posicao: $strfileName!"
-                Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
-
-                //-------------------------
-                adaptaEjogaJogo(posicao)
-                //-------------------------
-
-            }
-
-            //--- Listener para click na info de um dos jogos
-            override fun jogoItem(posicao : Int) {
-
-                //---------------------------------------------------------------------------------
-                val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
-                //---------------------------------------------------------------------------------
-
-                strToast = "Tapped $posicao: $strNivel!"
-                Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
-
-                //-------------------------
-                adaptaEjogaJogo(posicao)
-                //-------------------------
-
-            }
-
-        })
-
-        recyclerView!!.adapter = customAdapter
 
     }
 

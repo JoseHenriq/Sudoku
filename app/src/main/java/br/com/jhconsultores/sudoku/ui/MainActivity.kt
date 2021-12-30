@@ -1650,7 +1650,7 @@ class MainActivity : AppCompatActivity() {
         val strNomeArq = "preset_$numPreset"
 
         //--- Obtém lista de arquivos em Download
-        val strPath = "Download/sudoku/jogos"
+        val strPath = "/sudoku/jogos"
         //-------------------------------------------------------------------
         val arStrNomeArq: Array<String> = utils.listaExtMemArqDir(strPath)
         //-------------------------------------------------------------------
