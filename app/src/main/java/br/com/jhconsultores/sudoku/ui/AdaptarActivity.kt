@@ -4,6 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
+import android.widget.TextView
 
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -30,14 +33,12 @@ class AdaptarActivity : AppCompatActivity() {
     private var strLog   = ""
     private var strToast = ""
 
-    //private lateinit var toolBar     : androidx.appcompat.widget.Toolbar
-    //private lateinit var progressBar : ProgressBar
-
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var customAdapter: JogoAdapter
 
-    private val itemsListArq  = ArrayList<String>()
-    private val itemsListJogo = ArrayList<String>()
+    private var itemsListArq  = ArrayList<String>()
+    private var itemsListJogo = ArrayList<String>()
+    private var recyclerView : RecyclerView? = null
 
     private var strOpcaoJogo = "JogoAdaptado"
 
@@ -58,43 +59,14 @@ class AdaptarActivity : AppCompatActivity() {
         setContentView(R.layout.activity_adaptar)
 
         //------------------------------------------------------------------------------------------
-        // Implementa o Progress Bar
-        //------------------------------------------------------------------------------------------
-        /*
-        progressBar = ProgressBar(this)
-
-        //setting height and width of progressBar
-        progressBar.layoutParams = LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT)
-
-        //accessing our relative layout where the progressBar will add up
-        val layout = findViewById<RelativeLayout>(R.id.layoutProgBar)
-        // Add ProgressBar to our layout
-        layout?.addView(progressBar)
-
-        //--- Ativa o progressBar
-        progressBar.visibility = View.VISIBLE
-        */
-
-        //------------------------------------------------------------------------------------------
-        // Implementa o actionBar
-        //------------------------------------------------------------------------------------------
-        /*
-        toolBar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolBar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        */
-
-        //------------------------------------------------------------------------------------------
         // Implementa o recycler view
         //------------------------------------------------------------------------------------------
         // 1- referencia um objeto RecyclerView local ao declarado no layout
-        val recyclerView: RecyclerView = findViewById(R.id.rv_jogos)
+        recyclerView = findViewById(R.id.rv_jogos) as RecyclerView
 
         // 2- RV assume o controle do layout
         layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
+        recyclerView!!.layoutManager = layoutManager
 
         // 3- referencia o ArrayList ao ViewHolder
         Log.d(cTAG, "-> Jogos salvos: ")
@@ -122,6 +94,43 @@ class AdaptarActivity : AppCompatActivity() {
             Log.d(cTAG, strLog)
 
         }
+
+    }
+
+    override fun onResume () {
+
+        super.onResume()
+
+        //- Prepara os arrays list das infos para o RV
+        itemsListArq  = ArrayList<String>()
+        itemsListJogo = ArrayList<String>()
+
+        //--------------------------------------------------------------------------------
+        val arStrArqsNames = utils.listaExtMemArqDir("Download/sudoku/Jogos")
+        //--------------------------------------------------------------------------------
+        if (arStrArqsNames.isNotEmpty()) {
+
+            for (strArqName in arStrArqsNames) {
+
+                Log.d(cTAG, "   - $strArqName")
+
+                //-----------------------------------------------------
+                itemsListArq.add(preparaItensInfosArq(strArqName))
+                //-----------------------------------------------------
+                itemsListJogo.add(preparaItensInfosJogo(strArqName))
+                //-----------------------------------------------------
+
+            }
+
+        } else {
+
+            strLog = "   - Não há arquivos de jogos no dir /Download/sudoku/Jogos"
+            Log.d(cTAG, strLog)
+
+        }
+
+//        customAdapter.notifyDataSetChanged()
+//        recyclerView!!.adapter = customAdapter
 
         //---------------------------------------------------------------------------------------
         customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
@@ -161,10 +170,7 @@ class AdaptarActivity : AppCompatActivity() {
 
         })
 
-        recyclerView.adapter = customAdapter
-
-        //--- Desativa o progressbar
-        // progressBar.visibility = View.INVISIBLE
+        recyclerView!!.adapter = customAdapter
 
     }
 
@@ -257,6 +263,7 @@ class AdaptarActivity : AppCompatActivity() {
 
         strErro       = "0"
         strCronoConta = "00:00"
+
         //------------------------------------------
         finalizaPrepEIniciaJogo(false)
         //------------------------------------------
@@ -295,7 +302,6 @@ class AdaptarActivity : AppCompatActivity() {
         //-------------------------------------------------------
         strNivelJogo = leCampo(strJogo, strTagInic, strTagFim)
         //-------------------------------------------------------
-
         //--- Subnível
         strTagInic  = "<subnivel>"
         strTagFim   = "</subnivel>"
@@ -370,6 +376,7 @@ class AdaptarActivity : AppCompatActivity() {
         //--- Prepara a Intent para chamar JogarActivity
         val intent = Intent(this, JogarActivity::class.java)
         intent.action = strOpcaoJogo
+
         intent.putExtra("strNivelJogo"   , strNivelJogo)
         intent.putExtra("strSubNivelJogo", strSubNivelJogo)
         intent.putExtra("strCronoConta"  , strCronoConta)
@@ -511,5 +518,82 @@ class AdaptarActivity : AppCompatActivity() {
         return strRetorno
 
     }
+
+    //private lateinit var toolBar     : androidx.appcompat.widget.Toolbar
+    //private lateinit var progressBar : ProgressBar
+
+    //------------------------------------------------------------------------------------------
+    // Implementa o Progress Bar
+    //------------------------------------------------------------------------------------------
+    /*
+    progressBar = ProgressBar(this)
+
+    //setting height and width of progressBar
+    progressBar.layoutParams = LinearLayout.LayoutParams(
+        ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT)
+
+    //accessing our relative layout where the progressBar will add up
+    val layout = findViewById<RelativeLayout>(R.id.layoutProgBar)
+    // Add ProgressBar to our layout
+    layout?.addView(progressBar)
+
+    //--- Ativa o progressBar
+    progressBar.visibility = View.VISIBLE
+    */
+
+    //------------------------------------------------------------------------------------------
+    // Implementa o actionBar
+    //------------------------------------------------------------------------------------------
+    /*
+    toolBar = findViewById(R.id.toolbar)
+    setSupportActionBar(toolBar)
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    */
+
+    /*
+    //---------------------------------------------------------------------------------------
+    customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
+    //---------------------------------------------------------------------------------------
+
+        //--- Listener para click na info do arquivo de um dos jogos
+        override fun infoItem (posicao : Int) {
+
+            //---------------------------------------------------------------------------------
+            val strfileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
+            //---------------------------------------------------------------------------------
+
+            strToast = "Tapped $posicao: $strfileName!"
+            Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+            //-------------------------
+            adaptaEjogaJogo(posicao)
+            //-------------------------
+
+        }
+
+        //--- Listener para click na info de um dos jogos
+        override fun jogoItem(posicao : Int) {
+
+            //---------------------------------------------------------------------------------
+            val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
+            //---------------------------------------------------------------------------------
+
+            strToast = "Tapped $posicao: $strNivel!"
+            Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+            //-------------------------
+            adaptaEjogaJogo(posicao)
+            //-------------------------
+
+        }
+
+    })
+
+    recyclerView!!.adapter = customAdapter
+    */
+
+    //--- Desativa o progressbar
+    // progressBar.visibility = View.INVISIBLE
 
 }

@@ -31,32 +31,32 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     //                         Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
-    private val cTAG = "Sudoku"
-    private var strLog = ""
+    private val cTAG     = "Sudoku"
+    private var strLog   = ""
     private var strToast = ""
 
     //--- Objetos gráficos
     private lateinit var ivSudokuBoardMain: ImageView
-    private lateinit var ivNumDisp: ImageView
-    private lateinit var ivQtiNumDisp: ImageView
+    private lateinit var ivNumDisp        : ImageView
+    private lateinit var ivQtiNumDisp     : ImageView
 
     private var bmpMyImageInic: Bitmap? = null
     private var bmpMyImageBack: Bitmap? = null
-    private var bmpMyImage: Bitmap? = null
+    private var bmpMyImage    : Bitmap? = null
 
     private var bmpNumDisp: Bitmap? = null
 
-    private var intCellwidth = 0
+    private var intCellwidth  = 0
     private var intCellheight = 0
 
-    private var pincelVerde = Paint()
-    private var pincelBranco = Paint()
-    private var pincelPreto = Paint()
-    private var pincelAzul = Paint()
+    private var pincelVerde   = Paint()
+    private var pincelBranco  = Paint()
+    private var pincelPreto   = Paint()
+    private var pincelAzul    = Paint()
     private var pincelLaranja = Paint()
 
     private var intTamTxt = 25
-    private var scale = 0f
+    private var scale     = 0f
 
     private var canvasMyImage: Canvas? = null
     private var canvasNumDisp: Canvas? = null
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
     private var strOpcaoJogo = "JogoGerado"
     private var strNivelJogo = "Fácil"
-    private var nivelJogo = 0
+    private var nivelJogo    = 0
     private var subNivelJogo = 0
     private var nivelTotalJogo = 0
 
@@ -108,9 +108,9 @@ class MainActivity : AppCompatActivity() {
     private val MUITO_DIFICIL = 50
 
     private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
-    private var arArIntNums = Array(9) { Array(9) { 0 } }
+    private var arArIntNums     = Array(9) { Array(9) { 0 } }
     private var arIntQtiNumDisp = Array(9) { 9 }
-    private val arIntNumsDisp = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    private val arIntNumsDisp   = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
 
     private lateinit var txtDadosJogo: TextView
 
@@ -121,20 +121,20 @@ class MainActivity : AppCompatActivity() {
     private var flagBoardSel = false
 
     //--- Arquivos jogos
-    private var arStrTags = Array(3) { "" }
+    private var arStrTags   = Array(3) { "" }
     private var arArStrTags = Array(3) { Array(9) { "" } }
 
     //--- Classes externas
-    private var sgg = SudokuGameGenerator()
+    private var sgg       = SudokuGameGenerator()
     private var jogarJogo = JogarActivity()
-    private val utils = Utils()
-    private val utilsKt = UtilsKt()
+    private val utils     = Utils()
+    private val utilsKt   = UtilsKt()
 
     companion object {
 
-        const val cTAG = "Sudoku"
+        const val cTAG         = "Sudoku"
         var flagJogoAdaptadoOk = false
-        var flagJogoGeradoOk = false
+        var flagJogoGeradoOk   = false
 
     }
 
@@ -149,18 +149,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //--- Instancializações e inicializações
-        tvContaNums = findViewById(R.id.ContaNums)
+        tvContaNums  = findViewById(R.id.ContaNums)
         tvContaClues = findViewById(R.id.ContaClues)
 
-        btnGeraJogo = findViewById(R.id.btn_GerarJogo)
+        btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
         btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
-        btnJogaJogo = findViewById(R.id.btn_JogarJogo)
-        //btnTestaRV     = findViewById(R.id.btn_TesteRV)
+        btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
 
-        groupRBnivel = findViewById(R.id.radioGrpNivel)
-        rbFacil      = findViewById(R.id.nivelFacil)
-        rbMedio      = findViewById(R.id.nivelMédio)
-        rbDificil    = findViewById(R.id.nivelDifícil)
+        groupRBnivel   = findViewById(R.id.radioGrpNivel)
+        rbFacil        = findViewById(R.id.nivelFacil)
+        rbMedio        = findViewById(R.id.nivelMédio)
+        rbDificil      = findViewById(R.id.nivelDifícil)
         rbMuitoDificil = findViewById(R.id.nivelMuitoDifícil)
         //-----------------------------
         prepRBniveis(true)
@@ -316,14 +315,22 @@ class MainActivity : AppCompatActivity() {
                 //----------------------------------
 
             },
-            waitTime
-        )  // value in milliseconds
+            waitTime )  // value in milliseconds
 
-        //--- Torna inválido se jogo adaptado
+        //--- Torna inválidos os jogos gerado e adaptado
+        flagJogoGeradoOk   = false
         flagJogoAdaptadoOk = false
 
         groupRBadapta.visibility = INVISIBLE
-        
+        //-----------------------------
+        prepRBniveis(true)
+        //-----------------------------
+        edtViewSubNivel.isEnabled = true
+
+        //-----------------------------
+        visibilidadeViews(INVISIBLE)
+        //-----------------------------
+
     }
 
     //----------------------------------------------------------------------------------------------
@@ -466,6 +473,7 @@ class MainActivity : AppCompatActivity() {
         //------------------------------
         prepRBniveis(false)
         //------------------------------
+        edtViewSubNivel.isEnabled = false
 
         //--- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
         val waitTime = 100L  // milisegundos
@@ -1869,7 +1877,6 @@ class MainActivity : AppCompatActivity() {
                 //---------------------------
                 prepRBniveis(false)
                 //---------------------------
-
                 edtViewSubNivel.isEnabled = false
 
                 //-------------------------------
@@ -1916,95 +1923,6 @@ class MainActivity : AppCompatActivity() {
             visibilidadeViews(INVISIBLE)
             //-----------------------------
             groupRBadapta.visibility = VISIBLE
-
-            /*
-            //--- < 5: preset em variável definida; matriz bidimensinal
-            if (sgg.intJogoAdaptar < 5) {
-
-                //-------------------------------------------
-                inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
-                //-------------------------------------------
-
-            }
-
-            //--- = 5: preset 1 em /res/raw
-            else {
-
-                //--------------------------------------------
-                quadMaiorAdapta = leituraPreset(1)
-                //--------------------------------------------
-
-            }
-             */
-
-            /*
-            when {
-
-                //--- < 5: preset em variável definida; matriz bidimensinal
-                sgg.intJogoAdaptar < 5 -> inicQuadMaiorAdaptacao(sgg.intJogoAdaptar)
-
-                //--- < 7: preset 1 e 2 em /res/raw
-                sgg.intJogoAdaptar < 7 -> quadMaiorAdapta =
-                                              //------------------------------------------------
-                                              //leResRawPreset(sgg.intJogoAdaptar - 4)
-                                              //------------------------------------------------
-                                              leExtMemDownload((sgg.intJogoAdaptar - 4))
-                                              //------------------------------------------------
-                else -> {}
-
-            }
-
-            sgg.quadMaiorRet = copiaArArInt(quadMaiorAdapta)
-
-            //---------------------------------------
-            quadMaior = sgg.adaptaJogoAlgoritmo2()
-            //---------------------------------------
-
-            //--- Apresenta o nível e o subnível do preset
-            nivelJogo    = (sgg.intQtiZeros / 10) * 10
-            subNivelJogo = sgg.intQtiZeros % 10
-            val rbNivelJogo: RadioButton = when (nivelJogo) {
-
-                20 -> {
-                    strNivelJogo = "Fácil"
-                    rbFacil
-                }
-                30 -> {
-                    strNivelJogo = "Médio"
-                    rbMedio
-                }
-                40 -> {
-                    strNivelJogo = "Difícil"
-                    rbDificil
-                }
-                50 -> {
-                    strNivelJogo = "Muito Difícil"
-                    rbMuitoDificil
-                }
-                else -> {
-                    strNivelJogo = "Fácil"
-                    rbFacil
-                }
-
-            }
-            rbNivelJogo.isChecked = true
-
-            edtViewSubNivel.setText(subNivelJogo.toString())
-
-            //---------------------------
-            prepRBniveis(false)
-            //---------------------------
-
-            edtViewSubNivel.isEnabled = false
-
-            //-------------------------------
-            preencheSudokuBoard(quadMaior)
-            //-------------------------------
-
-            txtDadosJogo.text = String.format("%s%d","Preset #",sgg.intJogoAdaptar)
-
-            sgg.flagJogoAdaptadoOk = true
-            */
 
             rbPreset.isChecked = true
 
@@ -2055,19 +1973,18 @@ class MainActivity : AppCompatActivity() {
         //------------------------------------------------------------------------------------------
         // Image view do jogo
         //------------------------------------------------------------------------------------------
-        //bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board4)
-        //    .copy(Bitmap.Config.ARGB_8888, true)
         bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
             .copy(Bitmap.Config.ARGB_8888, true)
         ivSudokuBoardMain.setImageBitmap(bmpMyImage)
+
+        //-----------------------------------------------------
+        utilsKt.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
+        //-----------------------------------------------------
 
         //--- DEBUG: atualiza a qtidd de númDisp
         //-----------------------
         // atualizaIVQtiNumDisp()
         //-----------------------
-        //-----------------------------------------------------
-        utilsKt.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
-        //-----------------------------------------------------
 
     }
 

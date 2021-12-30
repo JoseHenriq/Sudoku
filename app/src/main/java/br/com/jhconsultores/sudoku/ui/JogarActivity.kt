@@ -15,6 +15,8 @@ import android.view.View
 
 import android.annotation.SuppressLint
 import android.os.SystemClock
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 
 import androidx.annotation.RequiresApi
@@ -56,17 +58,19 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     private var tvErros   : TextView? = null
     private var tvClues   : TextView? = null
     private var intContaErro = 0
+    private var tvLegCluesInic : TextView? = null
+    private var tvCluesInic    : TextView? = null
 
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
 
     private var intTamTxt = 25 // 50 // 200 //
     private var scale     = 0f
 
-    private var pincelVerde = Paint()
+    private var pincelVerde  = Paint()
     private var pincelBranco = Paint()
-    private var pincelPreto = Paint()
-    private var pincelAzul = Paint()
-    private var pincelLaranja = Paint()
+    private var pincelPreto  = Paint()
+    private var pincelAzul   = Paint()
+    private var pincelLaranja   = Paint()
     private var pincelPurple200 = Paint()
 
     //--- Medidas
@@ -112,8 +116,8 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
     private var intContaErroInic  = 0
 
-    private var strInicia = ""
-    private var strPause = ""
+    private var strInicia   = ""
+    private var strPause    = ""
     private var strReInicia = ""
 
     private val utils   = Utils()
@@ -131,6 +135,12 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
         try {
             setContentView(R.layout.activity_jogar)
+
+            tvLegCluesInic = findViewById<TextView>(R.id.tv_LegCluesInic)
+            tvCluesInic    = findViewById<TextView>(R.id.tv_CluesInic)
+
+            tvLegCluesInic!!.visibility = INVISIBLE
+            tvCluesInic!!.visibility    = INVISIBLE
 
             //--- Cronômetro
             strCronoInic = resources.getString(R.string.crono_inic)
@@ -554,13 +564,13 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             // Dados enviados pelo Main
             //--------------------------------------------------------------------------------------
             //--- Ação à ser executada
-            action          = intent.action.toString()
+            action = intent.action.toString()
 
             //--- Recupera os dados recebidos via intent
             strNivelJogoInic    = intent.getStringExtra("strNivelJogo") as String
             strSubNivelJogoInic = intent.getStringExtra("strSubNivelJogo") as String
 
-            strCronoInic     = intent.getStringExtra("strCronoConta") as String
+            strCronoInic     = intent.getStringExtra ("strCronoConta") as String
             intContaErroInic = (intent.getStringExtra("strErro") as String).toInt()
 
             // Armazena o gabarito em um array<int>
@@ -603,6 +613,37 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                 //-------------
                 iniciaJogo()
                 //-------------
+
+                if (action == "JogoAdaptado") {
+
+                    tvLegCluesInic!!.text = " ( Nível inicial: "
+                    tvCluesInic!!.text    = "$strNivelJogo / $strSubNivelJogo )"
+
+                    tvLegCluesInic!!.visibility = VISIBLE
+                    tvCluesInic!!.visibility    = VISIBLE
+
+                    var intQtiClues = tvClues!!.text.toString().toInt()
+                    if ((intQtiClues / 10) < 2) {
+
+                        tvNivel!!.text = "Fácil"
+                        intQtiClues = 0
+
+                    }
+                    else {
+                        tvNivel!!.text = when (intQtiClues / 10) {
+
+                            2 -> "Fácil"
+                            3 -> "Médio"
+                            4 -> "Difícil"
+                            5 -> "Muito difícil"
+                            else -> ""
+
+                        }
+                    }
+
+                    tvSubNivel!!.text = (intQtiClues % 10).toString()
+
+                }
 
             } // Fim de gabarito recebido via intent ok
 
