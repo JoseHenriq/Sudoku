@@ -235,7 +235,7 @@ public class Utils {
 
                 } else if (files.length == 1) {
 
-                    files[0] = pairs[0].f;
+                    //files[0] = pairs[0].f;
                     children[0] = files[0].getName();
 
                 }

@@ -463,14 +463,14 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
                         Log.d(cTAG, "-> \"Sim\" was pressed")
 
-                        tvNivel!!.text = ""
+                        tvNivel!!.text    = ""
                         tvSubNivel!!.text = ""
 
                         intContaErro   = intContaErroInic
                         tvErros!!.text = "$intContaErro"
 
                         Log.d(cTAG, "-> ${crono.text} - Reset")
-                        timeStopped = 0
+                        //timeStopped = 0
                         //-------------
                         crono.stop()
                         //-------------
@@ -1365,9 +1365,6 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             val arStrArqsNames = utils.listaExtMemArqDir("Download/sudoku/Jogos")
             //-------------------------------------------------------------------------------
             if (arStrArqsNames.isNotEmpty()) {
-
-
-
 
                 for (strArqName in arStrArqsNames) {
 
