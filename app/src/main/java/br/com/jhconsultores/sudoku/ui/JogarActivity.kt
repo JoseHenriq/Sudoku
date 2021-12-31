@@ -15,6 +15,8 @@ import android.view.View
 
 import android.annotation.SuppressLint
 import android.os.SystemClock
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 
 import androidx.annotation.RequiresApi
@@ -56,17 +58,19 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     private var tvErros   : TextView? = null
     private var tvClues   : TextView? = null
     private var intContaErro = 0
+    private var tvLegCluesInic : TextView? = null
+    private var tvCluesInic    : TextView? = null
 
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
 
     private var intTamTxt = 25 // 50 // 200 //
     private var scale     = 0f
 
-    private var pincelVerde = Paint()
+    private var pincelVerde  = Paint()
     private var pincelBranco = Paint()
-    private var pincelPreto = Paint()
-    private var pincelAzul = Paint()
-    private var pincelLaranja = Paint()
+    private var pincelPreto  = Paint()
+    private var pincelAzul   = Paint()
+    private var pincelLaranja   = Paint()
     private var pincelPurple200 = Paint()
 
     //--- Medidas
@@ -96,19 +100,24 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
     private var arArIntCopia = Array(9) { Array(9) { 0 } }
 
-    private var arIntNumsGab = ArrayList<Int>()   // Gabarito
+    private var arIntNumsGab  = ArrayList<Int>()   // Gabarito
     private var arIntNumsJogo = ArrayList<Int>()   // Jogo
 
-    private var action = "JogoGerado"
-    private var strNivelJogo = "Fácil"
+    private var action          = "JogoGerado"
+    private var strNivelJogo    = "Fácil"
     private var strSubNivelJogo = "0"
 
+    private var strNivelJogoInic    = "Fácil"
+    private var strSubNivelJogoInic = "0"
+
     private lateinit var crono: Chronometer
-    private var strCronoInic = ""
+    private var strCronoInic      = ""
     private var timeStopped: Long = 0L
 
-    private var strInicia = ""
-    private var strPause = ""
+    private var intContaErroInic  = 0
+
+    private var strInicia   = ""
+    private var strPause    = ""
     private var strReInicia = ""
 
     private val utils   = Utils()
@@ -126,6 +135,12 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
         try {
             setContentView(R.layout.activity_jogar)
+
+            tvLegCluesInic = findViewById<TextView>(R.id.tv_LegCluesInic)
+            tvCluesInic    = findViewById<TextView>(R.id.tv_CluesInic)
+
+            tvLegCluesInic!!.visibility = INVISIBLE
+            tvCluesInic!!.visibility    = INVISIBLE
 
             //--- Cronômetro
             strCronoInic = resources.getString(R.string.crono_inic)
@@ -161,62 +176,6 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //------------------------
             inicializaObjGraficos()
             //------------------------
-
-            //--------------------------------------------------------------------------------------
-            // Inicializa dados para deixar o jogo pronto
-            //--------------------------------------------------------------------------------------
-            //--- Ação à ser executada
-            action          = intent.action.toString()
-
-            //--- Recupera os dados recebidos via intent
-            strNivelJogo    = intent.getStringExtra("strNivelJogo") as String
-            strSubNivelJogo = intent.getStringExtra("strSubNivelJogo") as String
-
-            strCronoInic    = intent.getStringExtra("strCronoConta") as String
-            intContaErro    = (intent.getStringExtra("strErro") as String).toInt()
-
-            // Armazena o gabarito em um array<int>
-            arIntNumsGab  = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
-            arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as  ArrayList<Int>
-
-            // Gabarito e/ou jogo inválidos
-            if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
-
-                Log.d(cTAG, "-> Erro: array(s) com menos numeros que o necessário (81)")
-
-            }
-            // Gabarito e jogo válido
-            else {
-
-                crono.text  = strCronoInic
-                val intMin  = strCronoInic.substring(0, 2).toLong()
-                val intSec  = strCronoInic.substring(3, 5).toLong()
-                timeStopped = -((intMin * 60 + intSec) * 1000)
-
-                tvErros!!.text = intContaErro.toString()
-
-                // Armazena o gabarito em um Array<Array<Int>> para processamento local
-                for (intLinha in 0..8) {
-                    for (intCol in 0..8) {
-
-                        arArIntNums[intLinha][intCol] = arIntNumsJogo[intLinha * 9 + intCol] // Jogo
-                        arArIntGab[intLinha][intCol] =
-                            arIntNumsGab[intLinha * 9 + intCol] // Gabarito
-
-                    }
-                }
-
-                //-------------------------------------------------
-                arArIntCopia = utilsKt.copiaArArInt(arArIntNums)
-                //-------------------------------------------------
-
-                arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-
-                //-------------
-                iniciaJogo()
-                //-------------
-
-            } // Fim de gabarito recebido via intent ok
 
             //------------------------------------------------------------------
             // Listeners para o evento onTouch dos ImageViews
@@ -514,14 +473,14 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
                         Log.d(cTAG, "-> \"Sim\" was pressed")
 
-                        tvNivel!!.text = ""
+                        tvNivel!!.text    = ""
                         tvSubNivel!!.text = ""
 
-                        intContaErro = 0
+                        intContaErro   = intContaErroInic
                         tvErros!!.text = "$intContaErro"
 
                         Log.d(cTAG, "-> ${crono.text} - Reset")
-                        timeStopped = 0
+                        //timeStopped = 0
                         //-------------
                         crono.stop()
                         //-------------
@@ -573,10 +532,9 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                         //------------
 
                         Log.d(cTAG, "-> Jogos salvos: ")
-                        //--------------------------------------------------------------------------
-                        val arStrArqsNames = utils
-                            .listaExtMemArqDir("/Download/sudoku/Jogos")
-                        //--------------------------------------------------------------------------
+                        //-----------------------------------------------------------------------
+                        val arStrArqsNames = utils.listaExtMemArqDir("/sudoku/Jogos")
+                        //-----------------------------------------------------------------------
                         if (arStrArqsNames.isNotEmpty()) {
 
                             for (strArqName in arStrArqsNames) {
@@ -600,6 +558,93 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                     .show()
 
             }
+
+            //--------------------------------------------------------------------------------------
+            // Dados enviados pelo Main
+            //--------------------------------------------------------------------------------------
+            //--- Ação à ser executada
+            action = intent.action.toString()
+
+            //--- Recupera os dados recebidos via intent
+            strNivelJogoInic    = intent.getStringExtra("strNivelJogo") as String
+            strSubNivelJogoInic = intent.getStringExtra("strSubNivelJogo") as String
+
+            strCronoInic     = intent.getStringExtra ("strCronoConta") as String
+            intContaErroInic = (intent.getStringExtra("strErro") as String).toInt()
+
+            // Armazena o gabarito em um array<int>
+            arIntNumsGab  = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
+            arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as  ArrayList<Int>
+
+            // Gabarito e/ou jogo inválidos
+            if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
+
+                Log.d(cTAG, "-> Erro: array(s) com menos numeros que o necessário (81)")
+
+            }
+            // Gabarito e jogo válido
+            else {
+
+                crono.text  = strCronoInic
+                val intMin  = strCronoInic.substring(0, 2).toLong()
+                val intSec  = strCronoInic.substring(3, 5).toLong()
+                timeStopped = -((intMin * 60 + intSec) * 1000)
+
+                tvErros!!.text = intContaErro.toString()
+
+                // Armazena o gabarito em um Array<Array<Int>> para processamento local
+                for (intLinha in 0..8) {
+                    for (intCol in 0..8) {
+
+                        arArIntNums[intLinha][intCol] = arIntNumsJogo[intLinha * 9 + intCol] // Jogo
+                        arArIntGab[intLinha][intCol] =
+                            arIntNumsGab[intLinha * 9 + intCol] // Gabarito
+
+                    }
+                }
+
+                //-------------------------------------------------
+                arArIntCopia = utilsKt.copiaArArInt(arArIntNums)
+                //-------------------------------------------------
+
+                arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+
+                //-------------
+                iniciaJogo()
+                //-------------
+
+                if (action == "JogoAdaptado") {
+
+                    tvLegCluesInic!!.text = " ( Nível inicial: "
+                    tvCluesInic!!.text    = "$strNivelJogo / $strSubNivelJogo )"
+
+                    tvLegCluesInic!!.visibility = VISIBLE
+                    tvCluesInic!!.visibility    = VISIBLE
+
+                    var intQtiClues = tvClues!!.text.toString().toInt()
+                    if ((intQtiClues / 10) < 2) {
+
+                        tvNivel!!.text = "Fácil"
+                        intQtiClues = 0
+
+                    }
+                    else {
+                        tvNivel!!.text = when (intQtiClues / 10) {
+
+                            2 -> "Fácil"
+                            3 -> "Médio"
+                            4 -> "Difícil"
+                            5 -> "Muito difícil"
+                            else -> ""
+
+                        }
+                    }
+
+                    tvSubNivel!!.text = (intQtiClues % 10).toString()
+
+                }
+
+            } // Fim de gabarito recebido via intent ok
 
         } catch (exc: Exception) {
 
@@ -1150,8 +1195,11 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
         //*** Nesse ponto, arArIntNums (rascunho do jogo) e arArIntGab (gabarito) deverão estar Ok.
 
-        //intContaErro = 0
+        intContaErro   = intContaErroInic
         tvErros!!.text = "$intContaErro"
+
+        strNivelJogo    = strNivelJogoInic
+        strSubNivelJogo = strSubNivelJogoInic
 
         Log.d(cTAG, "-> Jogo:")
         //----------------------
@@ -1353,9 +1401,12 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         if (strConteudo.isNotEmpty()) {
 
             var intNumArq = 0
-            //--------------------------------------------------------------------------------
-            val arStrArqsNames = utils.listaExtMemArqDir("/Download/sudoku/Jogos")
-            //--------------------------------------------------------------------------------
+            //-------------------------------------------------------------------------------
+            //val arStrArqsNames = utils.listaExtMemArqDir("Download/sudoku/Jogos")
+            //-------------------------------------------------------------------------------
+            //-------------------------------------------------------------------------------
+            val arStrArqsNames = utils.listaExtMemArqDir("/sudoku/Jogos")
+            //-------------------------------------------------------------------------------
             if (arStrArqsNames.isNotEmpty()) {
 
                 for (strArqName in arStrArqsNames) {
@@ -1378,21 +1429,26 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
             }
             intNumArq++
-            val strArqJogo = "jogo_$intNumArq.xml"
-            val strArqName = "/sudoku/jogos/$strArqJogo"
+            //val strArqJogo = "jogo_$intNumArq.xml"
+
+            val strDataHora = utils.LeDataHora("yyMMddHHmmss")
+            val strArqJogo = "jogo_$strDataHora.xml"
+
+            val strArqPath = "/sudoku/jogos"
+            val strArqName = "$strArqJogo"
 
             //------------------------------------------------------------------
             // Salva o arquivo
             //------------------------------------------------------------------
-            //------------------------------------------------------------------
-            val flagEscrita = utils.escExtMemTextFile(strArqName, strConteudo)
-            //------------------------------------------------------------------
+            //-------------------------------------------------------------------------------
+            val flagEscrita = utils.escExtMemTextFile(strArqPath, strArqName, strConteudo)
+            //-------------------------------------------------------------------------------
 
             strToast = "Escrita arquivo $strArqJogo "
             strToast += if (flagEscrita) "OK!" else "NÃO ok!"
             Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
 
-            strLog = "-> Escrita arquivo storage/emulated/0/Download$strArqName "
+            strLog = "-> Escrita arquivo storage/emulated/0/Download$strArqPath/$strArqName "
             strLog += if (flagEscrita) "OK!" else "NÃO ok!"
             Log.d(cTAG, strLog)
 
@@ -1402,7 +1458,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
     //--- preparaConteudo
     var strModelo  : String = ""
-    var strTag     : String = ""
+    //var strTag     : String = ""
     var intIdxInic : Int = 0
     var intIdxFim  : Int = 0
 
@@ -1411,36 +1467,84 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
         var strConteudo : String
 
+        /*
         //-- Lê o modelo
+
         val strNomeComPath = "sudoku/docs/modeloArqXmlSudoku1.txt"
         //-------------------------------------------------------------------------------
         val arStrLeitArq: ArrayList<String> = utils.leitExtMemTextFile(strNomeComPath)
         //-------------------------------------------------------------------------------
+        */
+
+        //-- Lê o modelo para a formatação xml : modelo_arq_xml_sudoku1.txt
+
+        val strNomeArqSemExt = "modelo_arq_xml_sudoku1"    // SÓ a-z 0-9 _
+
+        //--- Obtém lista de arquivos em resource / raw
+        //-----------------------------------------------------
+        val arStrNomeArqRaw: Array<String> = utils.ListRaw()
+        //-----------------------------------------------------
+
+        Log.d(cTAG, "-> Arquivos raw (listRaw):")
+
+        var flagArqExiste = false
+        for (idxFileName in arStrNomeArqRaw.indices) {
+
+            val strFileNameDir = arStrNomeArqRaw[idxFileName]
+            Log.d(cTAG, "$idxFileName: $strFileNameDir")
+
+            flagArqExiste = (strFileNameDir == strNomeArqSemExt)
+            if (flagArqExiste) break
+
+        }
+
+        //--- Leitura se arquivo existente
+        var arStrLeitArqRaw = ArrayList<String>()
+        if (flagArqExiste) {
+
+            Log.d(cTAG, "-> Arquivo $strNomeArqSemExt:")
+            //----------------------------------------------------------------------
+            arStrLeitArqRaw = utils.LeituraFileRaw(this, strNomeArqSemExt)
+            //----------------------------------------------------------------------
+            for (idxDecl in 0 until arStrLeitArqRaw.size) {
+
+                Log.d(cTAG, "   $idxDecl: ${arStrLeitArqRaw[idxDecl]}")
+
+            }
+
+        }
 
         //-- Converte o modelo de ArrayList para String
         Log.d(cTAG, "-> modelo arq Sudoku xml")
-        for (idxDecl in 0 until arStrLeitArq.size) { strModelo += arStrLeitArq[idxDecl] }
+        for (idxDecl in arStrLeitArqRaw.indices) { strModelo += arStrLeitArqRaw[idxDecl] }
+
         Log.d(cTAG, strModelo)
 
         //-- Preenche os campos
+        var intTag = 0
         try
         {
             //- header / id
+            intTag    = 0
+            intIdxFim = 0
             //-------------------------------------------------------------
             strConteudo = preencheConteudo("<id>", "3")
             //-------------------------------------------------------------
 
             //- header / nivel
+            intTag = 1
             //---------------------------------------------------------------
             strConteudo += preencheConteudo("<nivel>", strNivelJogo)
             //---------------------------------------------------------------
 
             //- header / subnivel
+            intTag = 2
             //---------------------------------------------------------------------
             strConteudo += preencheConteudo("<subnivel>", strSubNivelJogo)
             //---------------------------------------------------------------------
 
             //- body / linha0 até linha8 : jogo preparado
+            intTag = 3
             for (idxLinha in 0 until 9) {
 
                 var strConteudoTmp = ""
@@ -1459,29 +1563,35 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             }
 
             //- jogos / id
+            intTag = 4
             //----------------------------------------------------------------
             strConteudo += preencheConteudo("<id>", "1")
             //----------------------------------------------------------------
 
             //- jogos / dataHora
+            intTag = 5
             //-------------------------------------------------------------------------
             val strDataHora = utils.LeDataHora("dd/MM/yyyy HH:mm:ss")
             //-------------------------------------------------------------------------
+            intTag = 6
             //------------------------------------------------------------------
             strConteudo += preencheConteudo("<dataHora>", strDataHora)
             //------------------------------------------------------------------
 
             //- jogos / tempoJogo
+            intTag = 7
             //--------------------------------------------------------------------------
             strConteudo += preencheConteudo("<tempoJogo>", crono.text.toString())
             //--------------------------------------------------------------------------
 
             //- jogos / erros
+            intTag = 8
             //----------------------------------------------------------------------------
             strConteudo += preencheConteudo("<erros>", tvErros!!.text.toString())
             //----------------------------------------------------------------------------
 
             //- jogos / status
+            intTag = 9
             //------------------------------------------------------------------------------------
             val strStatus = if (utilsKt.quantZeros(arArIntNums) == 0) "finalizado" else "ativo"
             //------------------------------------------------------------------------------------
@@ -1489,6 +1599,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //-------------------------------------------------------------
 
             //- body2 / linha0 até linha8 : jogo no momento do salvamento se ainda ativo
+            intTag = 10
             if (strStatus == "ativo") {
 
                 strConteudo += "</status></jogos><body2>"
@@ -1512,19 +1623,21 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             else {
 
                 //-- Finaliza a preparação do conteúdo
+                intTag = 11
                 strConteudo += strModelo.substring(intIdxFim, strModelo.length)
 
             }
+
+            Log.d(cTAG, "-> Conteudo: $strConteudo")
+
         }
         catch (exc : Exception)
         {
 
-            Toast.makeText(this, "Erro: ${exc.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Erro $intTag: ${exc.message}", Toast.LENGTH_LONG).show()
             strConteudo = ""
 
         }
-
-        Log.d(cTAG, "-> Conteudo: $strConteudo")
 
         return strConteudo
 

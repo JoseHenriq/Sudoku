@@ -4,6 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
+import android.widget.TextView
 
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -16,6 +19,7 @@ import br.com.jhconsultores.sudoku.R
 import br.com.jhconsultores.sudoku.adapter.JogoAdapter
 import br.com.jhconsultores.sudoku.adapter.JogoClickedListener
 import br.com.jhconsultores.sudoku.jogo.SudokuGameGenerator
+import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.flagJogoAdaptadoOk
 
 import br.com.jhconsultores.utils.Utils
 import br.com.jhconsultores.utils.UtilsKt
@@ -29,14 +33,12 @@ class AdaptarActivity : AppCompatActivity() {
     private var strLog   = ""
     private var strToast = ""
 
-    //private lateinit var toolBar     : androidx.appcompat.widget.Toolbar
-    //private lateinit var progressBar : ProgressBar
-
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var customAdapter: JogoAdapter
 
-    private val itemsListArq  = ArrayList<String>()
-    private val itemsListJogo = ArrayList<String>()
+    private var itemsListArq  = ArrayList<String>()
+    private var itemsListJogo = ArrayList<String>()
+    private var recyclerView : RecyclerView? = null
 
     private var strOpcaoJogo = "JogoAdaptado"
 
@@ -57,50 +59,21 @@ class AdaptarActivity : AppCompatActivity() {
         setContentView(R.layout.activity_adaptar)
 
         //------------------------------------------------------------------------------------------
-        // Implementa o Progress Bar
-        //------------------------------------------------------------------------------------------
-        /*
-        progressBar = ProgressBar(this)
-
-        //setting height and width of progressBar
-        progressBar.layoutParams = LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT)
-
-        //accessing our relative layout where the progressBar will add up
-        val layout = findViewById<RelativeLayout>(R.id.layoutProgBar)
-        // Add ProgressBar to our layout
-        layout?.addView(progressBar)
-
-        //--- Ativa o progressBar
-        progressBar.visibility = View.VISIBLE
-        */
-
-        //------------------------------------------------------------------------------------------
-        // Implementa o actionBar
-        //------------------------------------------------------------------------------------------
-        /*
-        toolBar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolBar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        */
-
-        //------------------------------------------------------------------------------------------
         // Implementa o recycler view
         //------------------------------------------------------------------------------------------
         // 1- referencia um objeto RecyclerView local ao declarado no layout
-        val recyclerView: RecyclerView = findViewById(R.id.rv_jogos)
+        recyclerView = findViewById(R.id.rv_jogos) as RecyclerView
 
         // 2- RV assume o controle do layout
         layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
+        recyclerView!!.layoutManager = layoutManager
 
         // 3- referencia o ArrayList ao ViewHolder
         Log.d(cTAG, "-> Jogos salvos: ")
         //- Prepara os arrays list das infos para o RV
-        //---------------------------------------------------------------------------------
-        val arStrArqsNames = utils.listaExtMemArqDir("/Download/sudoku/Jogos")
-        //---------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------
+        val arStrArqsNames = utils.listaExtMemArqDir("/sudoku/jogos")
+        //-----------------------------------------------------------------------
         if (arStrArqsNames.isNotEmpty()) {
 
             for (strArqName in arStrArqsNames) {
@@ -122,48 +95,79 @@ class AdaptarActivity : AppCompatActivity() {
 
         }
 
-        //---------------------------------------------------------------------------------------
-        customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
-        //---------------------------------------------------------------------------------------
+    }
 
-            //--- Listener para click na info do arquivo de um dos jogos
-            override fun infoItem (posicao : Int) {
+    override fun onResume () {
 
-                //---------------------------------------------------------------------------------
-                val strfileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
-                //---------------------------------------------------------------------------------
+        super.onResume()
 
-                strToast = "Tapped $posicao: $strfileName!"
-                Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+        //- Prepara os arrays list das infos para o RV
+        itemsListArq  = ArrayList<String>()
+        itemsListJogo = ArrayList<String>()
 
-                //-------------------------
-                adaptaEjogaJogo(posicao)
-                //-------------------------
+        //-----------------------------------------------------------------------
+        val arStrArqsNames = utils.listaExtMemArqDir("/sudoku/jogos")
+        //-----------------------------------------------------------------------
+        if (arStrArqsNames.isNotEmpty()) {
 
-            }
+            for (strArqName in arStrArqsNames) {
 
-            //--- Listener para click na info de um dos jogos
-            override fun jogoItem(posicao : Int) {
+                Log.d(cTAG, "   - $strArqName")
 
-                //---------------------------------------------------------------------------------
-                val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
-                //---------------------------------------------------------------------------------
-
-                strToast = "Tapped $posicao: $strNivel!"
-                Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
-
-                //-------------------------
-                adaptaEjogaJogo(posicao)
-                //-------------------------
+                //-----------------------------------------------------
+                itemsListArq.add(preparaItensInfosArq(strArqName))
+                //-----------------------------------------------------
+                itemsListJogo.add(preparaItensInfosJogo(strArqName))
+                //-----------------------------------------------------
 
             }
 
-        })
+            //---------------------------------------------------------------------------------------
+            customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
+                //---------------------------------------------------------------------------------------
 
-        recyclerView.adapter = customAdapter
+                //--- Listener para click na info do arquivo de um dos jogos
+                override fun infoItem (posicao : Int) {
 
-        //--- Desativa o progressbar
-        // progressBar.visibility = View.INVISIBLE
+                    //---------------------------------------------------------------------------------
+                    val strfileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
+                    //---------------------------------------------------------------------------------
+
+                    strToast = "Tapped $posicao: $strfileName!"
+                    Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+                    //-------------------------
+                    adaptaEjogaJogo(posicao)
+                    //-------------------------
+
+                }
+
+                //--- Listener para click na info de um dos jogos
+                override fun jogoItem(posicao : Int) {
+
+                    //---------------------------------------------------------------------------------
+                    val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
+                    //---------------------------------------------------------------------------------
+
+                    strToast = "Tapped $posicao: $strNivel!"
+                    Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+                    //-------------------------
+                    adaptaEjogaJogo(posicao)
+                    //-------------------------
+
+                }
+
+            })
+
+            recyclerView!!.adapter = customAdapter
+
+        } else {
+
+            strLog = "   - Não há arquivos de jogos no dir /Download/sudoku/Jogos"
+            Log.d(cTAG, strLog)
+
+        }
 
     }
 
@@ -197,12 +201,12 @@ class AdaptarActivity : AppCompatActivity() {
         //---------------------------------------------------------------------------------
         strStatus = (leCampo(strTextViews, "Status:", "Nivel:")).trim()
         //---------------------------------------------------------------------------------
-        //--- Jogo NÃO finalizado: verifica se reseta o jogo
         strLog  = "-> status: "
         strLog += if (strStatus == "ativo") "NÃO" else ""
         strLog += " finalizado"
         Log.d(cTAG, strLog)
 
+        //--- Jogo NÃO finalizado: verifica se reseta o jogo
         if (strStatus == "ativo") {
 
             AlertDialog.Builder(this)
@@ -215,7 +219,7 @@ class AdaptarActivity : AppCompatActivity() {
                     Log.d(cTAG, "-> \"Resseta\" was pressed")
 
                     //---------------------
-                    prepJogoRessetado ()
+                    prepJogoRessetado()
                     //---------------------
 
                 }
@@ -225,7 +229,7 @@ class AdaptarActivity : AppCompatActivity() {
                     Log.d(cTAG, "-> \"Continua\" was pressed")
 
                     //----------------------
-                    prepJogoAContinuar ()
+                    prepJogoAContinuar()
                     //----------------------
 
                 }
@@ -238,40 +242,42 @@ class AdaptarActivity : AppCompatActivity() {
                 .show()
 
         }
+
+        //--- Jogo finalizado
+        else {
+
+            Log.d(cTAG, "Sudoku - Jogo finalizado.")
+
+            //---------------------
+            prepJogoRessetado ()
+            //---------------------
+
+        }
     }
-
-    // strOpcaoJogo ok!
-
-
-    //arIntNumsGab
-    //arIntNumsJogo
-
-    //strNivelJogo
-    //strSubNivelJogo   // edtViewSubNivel.text.toString()
 
     //--- prepJogoRessetado
     private fun prepJogoRessetado () {
 
         strErro       = "0"
         strCronoConta = "00:00"
-        //--------------------------
-        finalizaPrepEIniciaJogo()
-        //--------------------------
+
+        //------------------------------------------
+        finalizaPrepEIniciaJogo(false)
+        //------------------------------------------
 
     }
     //--- prepJogoAContinuar
     private fun prepJogoAContinuar () {
 
-        // <erros>1</erros><tempoJogo>00:43</tempoJogo>
         //---------------------------------------------------------------
         strErro = leCampo(strJogo, "<erros>", "</erros>")
         //----------------------------------------------------------------------------
         strCronoConta = leCampo(strJogo, "<tempoJogo>", "</tempoJogo>")
         //----------------------------------------------------------------------------
 
-        //--------------------------
-        finalizaPrepEIniciaJogo()
-        //--------------------------
+        //-----------------------------------------
+        finalizaPrepEIniciaJogo(true)
+        //-----------------------------------------
 
     }
 
@@ -280,12 +286,46 @@ class AdaptarActivity : AppCompatActivity() {
     private var quadMaior       = Array(9) { Array(9) { 0 } }
     private var strSubNivelJogo = "0"
 
-    private fun finalizaPrepEIniciaJogo() {
+    private fun finalizaPrepEIniciaJogo(flagContinua : Boolean) {
+
+        //--- Instancializações e inicializações
+        var strTagInic  = ""
+        var strTagFim   = ""
+        val intQtiZeros = utilsKt.quantZeros(quadMaior)
+
+        //--- Nível
+        strTagInic  = "<nivel>"
+        strTagFim   = "</nivel>"
+        //-------------------------------------------------------
+        strNivelJogo = leCampo(strJogo, strTagInic, strTagFim)
+        //-------------------------------------------------------
+        //--- Subnível
+        strTagInic  = "<subnivel>"
+        strTagFim   = "</subnivel>"
+        //----------------------------------------------------------
+        strSubNivelJogo = leCampo(strJogo, strTagInic, strTagFim)
+        //----------------------------------------------------------
 
         //--- Leitura da matriz bidimensional-proposta de jogo
-        //-----------------------------------------------------------------
-        var strLeit = leCampo(strJogo, "<body>", "</body>")
-        //-----------------------------------------------------------------
+        strTagInic = if (flagContinua) "<body2>"  else "<body>"
+        strTagFim  = if (flagContinua) "</body2>" else "</body>"
+
+        //------------------------------------------------------
+        var strLeit = leCampo(strJogo, strTagInic, strTagFim)
+        //------------------------------------------------------
+
+        if (strLeit.isEmpty()) {
+
+            strLog = "Jogo inválido!!!"
+            Log.d(cTAG, "-> $strLog")
+
+            //--------------------------------------------------------------
+            Toast.makeText(this, strLog, Toast.LENGTH_LONG).show()
+            //--------------------------------------------------------------
+
+            return
+
+        }
 
         for (idxLin in 0..8) {
             //--------------------------------------------------------------------------------------
@@ -327,25 +367,17 @@ class AdaptarActivity : AppCompatActivity() {
                 //-------------------------------------------
             }
         }
-        val intQtiZeros = utilsKt.quantZeros(quadMaior)
-        strNivelJogo = when {
 
-            intQtiZeros < 30 -> "Fácil"
-            intQtiZeros < 40 -> "Médio"
-            intQtiZeros < 50 -> "Difícil"
-            intQtiZeros < 60 -> "Muito difícil"
-            else -> ""
-
-        }
-        strSubNivelJogo = (intQtiZeros % 10).toString()
+        flagJogoAdaptadoOk = true
 
         //--- Prepara a Intent para chamar JogarActivity
         val intent = Intent(this, JogarActivity::class.java)
         intent.action = strOpcaoJogo
-        intent.putExtra("strNivelJogo",    strNivelJogo)
+
+        intent.putExtra("strNivelJogo"   , strNivelJogo)
         intent.putExtra("strSubNivelJogo", strSubNivelJogo)
-        intent.putExtra("strCronoConta", strCronoConta)
-        intent.putExtra("strErro", strErro)
+        intent.putExtra("strCronoConta"  , strCronoConta)
+        intent.putExtra("strErro"        , strErro)
         intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
         intent.putIntegerArrayListExtra("JogoPreparado" , arIntNumsJogo)
         //----------------------
@@ -466,11 +498,99 @@ class AdaptarActivity : AppCompatActivity() {
     //--- leCampo
     private fun leCampo(itemList : String, tagInic : String, tagFim : String) : String {
 
-        val intIdxInic = itemList.indexOf(tagInic) + tagInic.length
-        val intIdxFim  = if (tagFim.isEmpty()) itemList.length else itemList.indexOf(tagFim)
+        var strRetorno = ""
 
-        return itemList.substring(intIdxInic, intIdxFim)
+        try {
+            val intIdxInic = itemList.indexOf(tagInic) + tagInic.length
+            val intIdxFim = if (tagFim.isEmpty()) itemList.length else itemList.indexOf(tagFim)
+
+            strRetorno = itemList.substring(intIdxInic, intIdxFim)
+        }
+        catch (exc : Exception) {
+
+            Log.d(cTAG, "-> Não existe esse campo!")
+            strRetorno = ""
+
+        }
+        return strRetorno
 
     }
+
+    //private lateinit var toolBar     : androidx.appcompat.widget.Toolbar
+    //private lateinit var progressBar : ProgressBar
+
+    //------------------------------------------------------------------------------------------
+    // Implementa o Progress Bar
+    //------------------------------------------------------------------------------------------
+    /*
+    progressBar = ProgressBar(this)
+
+    //setting height and width of progressBar
+    progressBar.layoutParams = LinearLayout.LayoutParams(
+        ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT)
+
+    //accessing our relative layout where the progressBar will add up
+    val layout = findViewById<RelativeLayout>(R.id.layoutProgBar)
+    // Add ProgressBar to our layout
+    layout?.addView(progressBar)
+
+    //--- Ativa o progressBar
+    progressBar.visibility = View.VISIBLE
+    */
+
+    //------------------------------------------------------------------------------------------
+    // Implementa o actionBar
+    //------------------------------------------------------------------------------------------
+    /*
+    toolBar = findViewById(R.id.toolbar)
+    setSupportActionBar(toolBar)
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    */
+
+    /*
+    //---------------------------------------------------------------------------------------
+    customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
+    //---------------------------------------------------------------------------------------
+
+        //--- Listener para click na info do arquivo de um dos jogos
+        override fun infoItem (posicao : Int) {
+
+            //---------------------------------------------------------------------------------
+            val strfileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
+            //---------------------------------------------------------------------------------
+
+            strToast = "Tapped $posicao: $strfileName!"
+            Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+            //-------------------------
+            adaptaEjogaJogo(posicao)
+            //-------------------------
+
+        }
+
+        //--- Listener para click na info de um dos jogos
+        override fun jogoItem(posicao : Int) {
+
+            //---------------------------------------------------------------------------------
+            val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
+            //---------------------------------------------------------------------------------
+
+            strToast = "Tapped $posicao: $strNivel!"
+            Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+            //-------------------------
+            adaptaEjogaJogo(posicao)
+            //-------------------------
+
+        }
+
+    })
+
+    recyclerView!!.adapter = customAdapter
+    */
+
+    //--- Desativa o progressbar
+    // progressBar.visibility = View.INVISIBLE
 
 }

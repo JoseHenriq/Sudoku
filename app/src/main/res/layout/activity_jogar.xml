@@ -46,8 +46,7 @@
             android:textSize ="24sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tv_Nivel"
+        <TextView android:id="@+id/tv_Nivel"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -151,13 +150,42 @@
 
         android:text="@string/legClues"
         android:textSize="15sp" />
+
     <TextView android:id="@+id/tv_Clues"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/ivSudokuBoard"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/tv_LegClues"
+
+        android:text="@string/clues_inic"
+        android:textSize="15sp" />
+
+    <!--- Quantidade de clues inicial -->
+    <TextView android:id="@+id/tv_LegCluesInic"
+
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_below     ="@id/ivSudokuBoard"
-        android:layout_toRightOf ="@id/tv_LegClues"
-        android:layout_marginLeft="20dp"
+        android:layout_below      ="@id/ivSudokuBoard"
+        android:layout_toRightOf  ="@id/tv_Clues"
+        android:layout_marginRight="10dp"
+
+        android:text=" - Nivel inicial: "
+
+        android:textSize   ="15sp" />
+
+    <TextView android:id="@+id/tv_CluesInic"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below      ="@id/ivSudokuBoard"
+        android:layout_marginRight="20dp"
+
+        android:layout_toRightOf= "@id/tv_LegCluesInic"
 
         android:text="@string/clues_inic"
         android:textSize="15sp" />
