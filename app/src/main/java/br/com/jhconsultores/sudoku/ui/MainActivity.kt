@@ -318,7 +318,7 @@ class MainActivity : AppCompatActivity() {
             waitTime )  // value in milliseconds
 
         //--- Torna inválidos os jogos gerado e adaptado
-        flagJogoGeradoOk   = false
+//        flagJogoGeradoOk   = false
         flagJogoAdaptadoOk = false
 
         groupRBadapta.visibility = INVISIBLE
@@ -1994,6 +1994,8 @@ class MainActivity : AppCompatActivity() {
         //---------------------------
         visibilidadeViews(VISIBLE)
         //---------------------------
+
+        quadMaior = utilsKt.copiaArArInt(arArIntNums)
 
         var flagEdicaoOK = false
         val intQtiZeros  = utilsKt.quantZeros(quadMaior)    //tvContaClues.text.toString().toInt()
