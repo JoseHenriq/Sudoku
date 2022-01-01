@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     //--- Objetos gráficos
     private lateinit var ivSudokuBoardMain: ImageView
     private lateinit var ivNumDisp        : ImageView
-    private lateinit var ivQtiNumDisp     : ImageView
+    //private lateinit var ivQtiNumDisp     : ImageView
 
     private var bmpMyImageInic: Bitmap? = null
     private var bmpMyImageBack: Bitmap? = null
@@ -1120,9 +1120,10 @@ class MainActivity : AppCompatActivity() {
             val cellX = coordX / intCellwidth
             val intNum = arIntNumsDisp[cellX]
 
+            //--- Se tocou em célula válida
             if (intLinJogar < 9 && intColJogar < 9 && cellX < 9) {
 
-                //--- Se tocou numa célula já com número; solicita ao usuário que confirme sua sobreescrita.
+                //--- Se tocou numa célula com número; solicita ao usuário que confirme sua sobreescrita.
                 if (arArIntNums[intLinJogar][intColJogar] > 0) {
 
                     //-----------------
@@ -1196,7 +1197,19 @@ class MainActivity : AppCompatActivity() {
 
                         }
                     }
+                    //----------------------------------------------
+                    quadMaior = utilsKt.copiaArArInt(arArIntNums)
+                    //----------------------------------------------
+
                 }
+            }
+
+            //--- Tocou em célula NÃO válida
+            else {
+
+                strToast = "Célula NÃO válida (c=$intLinJogar, l=$intColJogar)!"
+                Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
+
             }
         }
         //--- Não há célula selecionada no Sudoku Board
