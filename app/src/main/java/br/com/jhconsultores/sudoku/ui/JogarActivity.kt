@@ -268,7 +268,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                         if (intQtidd > 0) {
 
                             //--- Verifica se num válido
-                            // Determina a que Qm o número pertence
+                            // Determina a que Qm a célula pertence
                             //----------------------------------------------------------
                             val intQuadMenor = determinaQm(intLinJogar, intColJogar)
                             //----------------------------------------------------------
@@ -278,10 +278,10 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                             //            intColJogar + " Qm = " + intQuadMenor )
 
                             // Verifica se esse número ainda não existe no seu Qm e nem no seu QM
-                            //--------------------------------------------------------------------------
+                            //----------------------------------------------------------------------
                             flagNumValido =
                                 verifValidade(intQuadMenor, intLinJogar, intColJogar, intNum)
-                            //--------------------------------------------------------------------------
+                            //----------------------------------------------------------------------
                             if (!flagNumValido) {
 
                                 //strLog = "-> Número NÃO válido (linha, coluna ou quadro); NÃO será incluído" +

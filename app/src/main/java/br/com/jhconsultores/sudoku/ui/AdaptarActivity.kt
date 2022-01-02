@@ -47,7 +47,8 @@ class AdaptarActivity : AppCompatActivity() {
 
     private val utils   = Utils ()
     private val utilsKt = UtilsKt ()
-    private var sgg     = SudokuGameGenerator()
+    private val sgg     = SudokuGameGenerator()
+    private val main    = MainActivity ()
 
     //--------------------------------------------------------------------------
     //                                Eventos
@@ -294,14 +295,14 @@ class AdaptarActivity : AppCompatActivity() {
         val intQtiZeros = utilsKt.quantZeros(quadMaior)
 
         //--- Nível
-        strTagInic  = "<nivel>"
-        strTagFim   = "</nivel>"
+        strTagInic = "<nivel>"
+        strTagFim  = "</nivel>"
         //-------------------------------------------------------
         strNivelJogo = leCampo(strJogo, strTagInic, strTagFim)
         //-------------------------------------------------------
         //--- Subnível
-        strTagInic  = "<subnivel>"
-        strTagFim   = "</subnivel>"
+        strTagInic = "<subnivel>"
+        strTagFim  = "</subnivel>"
         //----------------------------------------------------------
         strSubNivelJogo = leCampo(strJogo, strTagInic, strTagFim)
         //----------------------------------------------------------
@@ -351,6 +352,7 @@ class AdaptarActivity : AppCompatActivity() {
         //---------------------------------------
         val arIntNumsGab = ArrayList<Int>()
         for (idxLin in 0..8) {
+            Log.d(cTAG, "idxLin = $idxLin")
             for (idxCol in 0..8) {
                 //-------------------------------------------------
                 arIntNumsGab += sgg.quadMaiorRet[idxLin][idxCol]
@@ -368,21 +370,36 @@ class AdaptarActivity : AppCompatActivity() {
             }
         }
 
-        flagJogoAdaptadoOk = true
+        //----------------------------------------------------------
+        val flagJogoValido = main.verificaSeJogoValido(quadMaior)
+        //----------------------------------------------------------
 
-        //--- Prepara a Intent para chamar JogarActivity
-        val intent = Intent(this, JogarActivity::class.java)
-        intent.action = strOpcaoJogo
+        if (!flagJogoValido) {
 
-        intent.putExtra("strNivelJogo"   , strNivelJogo)
-        intent.putExtra("strSubNivelJogo", strSubNivelJogo)
-        intent.putExtra("strCronoConta"  , strCronoConta)
-        intent.putExtra("strErro"        , strErro)
-        intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
-        intent.putIntegerArrayListExtra("JogoPreparado" , arIntNumsJogo)
-        //----------------------
-        startActivity(intent)
-        //----------------------
+            flagJogoAdaptadoOk = false
+
+            Toast.makeText(cTAG, "Jogo adaptado inválido!")
+
+        }
+        else {
+
+            flagJogoAdaptadoOk = true
+
+            //--- Prepara a Intent para chamar JogarActivity
+            val intent    = Intent(this, JogarActivity::class.java)
+            intent.action = strOpcaoJogo
+
+            intent.putExtra("strNivelJogo"   , strNivelJogo)
+            intent.putExtra("strSubNivelJogo", strSubNivelJogo)
+            intent.putExtra("strCronoConta"  , strCronoConta)
+            intent.putExtra("strErro"        , strErro)
+            intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
+            intent.putIntegerArrayListExtra("JogoPreparado" , arIntNumsJogo)
+            //----------------------
+            startActivity(intent)
+            //----------------------
+
+        }
 
     }
 

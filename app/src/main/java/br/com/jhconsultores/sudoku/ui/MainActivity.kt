@@ -31,51 +31,51 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     //                         Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
-    private val cTAG     = "Sudoku"
-    private var strLog   = ""
+    private val cTAG = "Sudoku"
+    private var strLog = ""
     private var strToast = ""
 
     //--- Objetos gráficos
     private lateinit var ivSudokuBoardMain: ImageView
-    private lateinit var ivNumDisp        : ImageView
-    private lateinit var ivQtiNumDisp     : ImageView
+    private lateinit var ivNumDisp: ImageView
+    private lateinit var ivQtiNumDisp: ImageView
 
     private var bmpMyImageInic: Bitmap? = null
     private var bmpMyImageBack: Bitmap? = null
-    private var bmpMyImage    : Bitmap? = null
+    private var bmpMyImage: Bitmap? = null
 
     private var bmpNumDisp: Bitmap? = null
 
-    private var intCellwidth  = 0
+    private var intCellwidth = 0
     private var intCellheight = 0
 
-    private var pincelVerde   = Paint()
-    private var pincelBranco  = Paint()
-    private var pincelPreto   = Paint()
-    private var pincelAzul    = Paint()
+    private var pincelVerde = Paint()
+    private var pincelBranco = Paint()
+    private var pincelPreto = Paint()
+    private var pincelAzul = Paint()
     private var pincelLaranja = Paint()
 
     private var intTamTxt = 25
-    private var scale     = 0f
+    private var scale = 0f
 
     private var canvasMyImage: Canvas? = null
     private var canvasNumDisp: Canvas? = null
 
     //--- Textos
-    private lateinit var tvContaNums : TextView
+    private lateinit var tvContaNums: TextView
     private lateinit var tvContaClues: TextView
 
     //--- Botões principais
-    private lateinit var btnGeraJogo  : Button
+    private lateinit var btnGeraJogo: Button
     private lateinit var btnAdaptaJogo: Button
-    private lateinit var btnJogaJogo  : Button
-    private lateinit var btnTestaRV   : Button
+    private lateinit var btnJogaJogo: Button
+    private lateinit var btnTestaRV: Button
 
     //--- Radio Buttons
     private lateinit var groupRBnivel: RadioGroup
-    private lateinit var rbFacil     : RadioButton
-    private lateinit var rbMedio     : RadioButton
-    private lateinit var rbDificil   : RadioButton
+    private lateinit var rbFacil: RadioButton
+    private lateinit var rbMedio: RadioButton
+    private lateinit var rbDificil: RadioButton
     private lateinit var rbMuitoDificil: RadioButton
 
     private lateinit var groupRBadapta: RadioGroup
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
     private var strOpcaoJogo = "JogoGerado"
     private var strNivelJogo = "Fácil"
-    private var nivelJogo    = 0
+    private var nivelJogo = 0
     private var subNivelJogo = 0
     private var nivelTotalJogo = 0
 
@@ -102,9 +102,9 @@ class MainActivity : AppCompatActivity() {
     //        |xxxx|  MUITO DIFÍCIL | DIFÍCIL |   MÉDIO   |  FÁCIL |xxxxxxx|
     //        |----|----------------|---------|-----------|--------|-------|
 
-    private val FACIL = 20
-    private val MEDIO = 30
-    private val DIFICIL       = 40
+    private val FACIL   = 20
+    private val MEDIO   = 30
+    private val DIFICIL = 40
     private val MUITO_DIFICIL = 50
 
     private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
@@ -125,10 +125,10 @@ class MainActivity : AppCompatActivity() {
     private var arArStrTags = Array(3) { Array(9) { "" } }
 
     //--- Classes externas
-    private var sgg       = SudokuGameGenerator()
+    private var sgg = SudokuGameGenerator()
     private var jogarJogo = JogarActivity()
-    private val utils     = Utils()
-    private val utilsKt   = UtilsKt()
+    private val utils = Utils()
+    private val utilsKt = UtilsKt()
 
     companion object {
 
@@ -149,17 +149,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //--- Instancializações e inicializações
-        tvContaNums  = findViewById(R.id.ContaNums)
+        tvContaNums = findViewById(R.id.ContaNums)
         tvContaClues = findViewById(R.id.ContaClues)
 
-        btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
+        btnGeraJogo = findViewById(R.id.btn_GerarJogo)
         btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
-        btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
+        btnJogaJogo = findViewById(R.id.btn_JogarJogo)
 
-        groupRBnivel   = findViewById(R.id.radioGrpNivel)
-        rbFacil        = findViewById(R.id.nivelFacil)
-        rbMedio        = findViewById(R.id.nivelMédio)
-        rbDificil      = findViewById(R.id.nivelDifícil)
+        groupRBnivel = findViewById(R.id.radioGrpNivel)
+        rbFacil = findViewById(R.id.nivelFacil)
+        rbMedio = findViewById(R.id.nivelMédio)
+        rbDificil = findViewById(R.id.nivelDifícil)
         rbMuitoDificil = findViewById(R.id.nivelMuitoDifícil)
         //-----------------------------
         prepRBniveis(true)
@@ -167,13 +167,13 @@ class MainActivity : AppCompatActivity() {
         edtViewSubNivel = findViewById(R.id.edtViewSubNivel)
 
         groupRBadapta = findViewById(R.id.radioGrpAdapta)
-        rbPreset      = findViewById(R.id.preset)
-        rbEdicao      = findViewById(R.id.edicao)
-        txtDadosJogo  = findViewById(R.id.txtJogos)
+        rbPreset = findViewById(R.id.preset)
+        rbEdicao = findViewById(R.id.edicao)
+        txtDadosJogo = findViewById(R.id.txtJogos)
 
         groupRBadapta.visibility = INVISIBLE
 
-        tvContaNums.text  =  "0"
+        tvContaNums.text = "0"
         tvContaClues.text = getString(R.string.valor81)
 
         //--- Objetos gráficos
@@ -315,11 +315,8 @@ class MainActivity : AppCompatActivity() {
                 //----------------------------------
 
             },
-            waitTime )  // value in milliseconds
-
-        //--- Torna inválidos os jogos gerado e adaptado
-//        flagJogoGeradoOk   = false
-        flagJogoAdaptadoOk = false
+            waitTime
+        )  // value in milliseconds
 
         groupRBadapta.visibility = INVISIBLE
         //-----------------------------
@@ -477,36 +474,38 @@ class MainActivity : AppCompatActivity() {
 
         //--- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
         val waitTime = 100L  // milisegundos
-        Handler(Looper.getMainLooper()).postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
 
-            androidx.appcompat.app.AlertDialog.Builder(this)
+                androidx.appcompat.app.AlertDialog.Builder(this)
 
-                .setTitle("Sudoku - Adaptar Jogo")
-                .setMessage("Carrega ou Edita jogo?")
+                    .setTitle("Sudoku - Adaptar Jogo")
+                    .setMessage("Carrega ou Edita jogo?")
 
-                .setPositiveButton("Carrega") { _, _ ->
+                    .setPositiveButton("Carrega") { _, _ ->
 
-                    Log.d(cTAG, "-> \"Carrega\" was pressed")
+                        Log.d(cTAG, "-> \"Carrega\" was pressed")
 
-                    //---------------
-                    adaptaPreset()
-                    //---------------
+                        //---------------
+                        adaptaPreset()
+                        //---------------
 
-                }
+                    }
 
-                .setNegativeButton("Edita") { _, _ ->
+                    .setNegativeButton("Edita") { _, _ ->
 
-                    Log.d(cTAG, "-> \"Edita\" was pressed")
+                        Log.d(cTAG, "-> \"Edita\" was pressed")
 
-                    //---------------
-                    edicaoPreset()
-                    //---------------
+                        //---------------
+                        edicaoPreset()
+                        //---------------
 
-                }
-                .show()
+                    }
+                    .show()
 
-        },
-        waitTime)  // value in milliseconds
+            },
+            waitTime
+        )  // value in milliseconds
 
     }
 
@@ -517,8 +516,16 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> Tap no btnJogaJogo"
         Log.d(cTAG, strLog)
 
+        //--- Verifica se jogo válido
+        //-----------------------------------------------------
+        val flagJogoValido = verificaSeJogoValido(quadMaior)
+        //-----------------------------------------------------
+
         //--- Se não tiver jogo válido, informa ao usuário
-        if (!flagJogoGeradoOk && !flagJogoAdaptadoOk) {
+        // if (!flagJogoGeradoOk && !flagJogoAdaptadoOk) {
+        if (!flagJogoValido) {
+
+            flagJogoGeradoOk = false
 
             val strToast = "Não há jogo válido!"
             //----------------------------------------------------------------
@@ -530,6 +537,8 @@ class MainActivity : AppCompatActivity() {
         }
         //--- Se tiver jogo válido, finaliza a preparação do jogo
         else {
+
+            flagJogoGeradoOk = true
 
             //-----------------------------
             //visibilidadeViews(INVISIBLE)
@@ -1075,9 +1084,9 @@ class MainActivity : AppCompatActivity() {
         arIntQtiNumDisp[intNum - 1]++
 
         val intQtiZeros = tvContaClues.text.toString().toInt()
-        val intQtiNums  = 81 - intQtiZeros
+        val intQtiNums = 81 - intQtiZeros
 
-        tvContaNums.text  = (intQtiNums - 1).toString()
+        tvContaNums.text = (intQtiNums - 1).toString()
         tvContaClues.text = (intQtiZeros + 1).toString()
 
         //--------------
@@ -1929,20 +1938,22 @@ class MainActivity : AppCompatActivity() {
 
         //--- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
         val waitTime = 100L  // milisegundos
-        Handler(Looper.getMainLooper()).postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
 
-            //-----------------------------
-            visibilidadeViews(INVISIBLE)
-            //-----------------------------
-            groupRBadapta.visibility = VISIBLE
+                //-----------------------------
+                visibilidadeViews(INVISIBLE)
+                //-----------------------------
+                groupRBadapta.visibility = VISIBLE
 
-            rbPreset.isChecked = true
+                rbPreset.isChecked = true
 
-            //--- Desativa o progress bar
-            progressBar.visibility = INVISIBLE
+                //--- Desativa o progress bar
+                progressBar.visibility = INVISIBLE
 
-        },
-        waitTime)  // value in milliseconds
+            },
+            waitTime
+        )  // value in milliseconds
 
         //--- Prepara o preset para se conseguir o gabarito do jogo
         strLog = "-> Presset is checked"
@@ -2008,9 +2019,11 @@ class MainActivity : AppCompatActivity() {
         //---------------------------
 
         var flagEdicaoOK = false
-        val intQtiZeros  = utilsKt.quantZeros(quadMaior)    //tvContaClues.text.toString().toInt()
+        //-------------------------------------------------
+        val intQtiZeros = utilsKt.quantZeros(quadMaior)
+        //-------------------------------------------------
 
-        val intNivel    = intQtiZeros / 10
+        val intNivel = intQtiZeros / 10
         val intSubNivel = intQtiZeros % 10
         //---------- ---------- ----------------------
         // intNivel     Nivel      números / Zeros
@@ -2061,8 +2074,7 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
 
         //--- Se edição OK gera o gabarito para o jogo editado
-        if (flagEdicaoOK)
-        {
+        if (flagEdicaoOK) {
 
             sgg.quadMaiorRet = copiaArArInt(quadMaior)
             arArIntNums      = copiaArArInt(quadMaior)
@@ -2076,6 +2088,44 @@ class MainActivity : AppCompatActivity() {
 
         // **** O array preparado (quadMaior) e o gabarito (sgg.quadMaiorRet) serão enviados
         // **** pelo listener do botão JogaJogo.
+    }
+
+    //--- verificaSeJogoValido
+    fun verificaSeJogoValido(arArJogo : Array<Array<Int>>): Boolean {
+
+        var flagJogoValido = false
+
+        //--- Quantidade de clues entre 20 e 59   (Fácil: 2.0 e MuitoDifícil: 5.9)
+        val qtizeros = utilsKt.quantZeros(arArJogo)
+        if (qtizeros < 20 || qtizeros > 59) return false
+
+        //--- Confere números nos Qm, linhas e colunas
+        for (idxLin in 0..8) {
+            for (idxCol in 0..8) {
+
+                val intNum = arArJogo[idxLin][idxCol]
+                if (intNum > 0) {
+
+                    arArJogo[idxLin][idxCol] = 0
+
+                    // Determina a que Qm a célula pertence
+                    //---------------------------------------------------------
+                    val intQuadMenor = jogarJogo.determinaQm(idxLin, idxCol)
+                    //---------------------------------------------------------
+
+                    // Verifica se o número dessa célula não existe no seu Qm, na sua linha e na
+                    // sua coluna.
+                    //------------------------------------------------------------------------------
+                    flagJogoValido = jogarJogo.verifValidade(intQuadMenor, idxLin, idxCol, intNum)
+                    //------------------------------------------------------------------------------
+
+                    arArJogo[idxLin][idxCol] = intNum
+
+                }
+            }
+        }
+        return flagJogoValido
+
     }
 
 }
