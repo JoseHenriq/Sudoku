@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
     private var flagAdaptaPreset = true
 
     //--- Objetos para o jogo
-    private var quadMaior = arrayOf<Array<Int>>()
+    private var quadMaior = Array(9) { Array(9) { 0 } }
 
     private var strOpcaoJogo = "JogoGerado"
     private var strNivelJogo = "Fácil"
@@ -132,9 +132,11 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
 
-        const val cTAG         = "Sudoku"
-        var flagJogoAdaptadoOk = false
-        var flagJogoGeradoOk   = false
+        const val cTAG        = "Sudoku"
+        var flagJogoGeradoOk  = false
+        var flagJogoEditadoOk = false
+
+        var flagJogoAdaptadoOk= false
 
     }
 
@@ -149,17 +151,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //--- Instancializações e inicializações
-        tvContaNums = findViewById(R.id.ContaNums)
+        tvContaNums  = findViewById(R.id.ContaNums)
         tvContaClues = findViewById(R.id.ContaClues)
 
-        btnGeraJogo = findViewById(R.id.btn_GerarJogo)
+        btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
         btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
-        btnJogaJogo = findViewById(R.id.btn_JogarJogo)
+        btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
 
-        groupRBnivel = findViewById(R.id.radioGrpNivel)
-        rbFacil = findViewById(R.id.nivelFacil)
-        rbMedio = findViewById(R.id.nivelMédio)
-        rbDificil = findViewById(R.id.nivelDifícil)
+        groupRBnivel   = findViewById(R.id.radioGrpNivel)
+        rbFacil        = findViewById(R.id.nivelFacil)
+        rbMedio        = findViewById(R.id.nivelMédio)
+        rbDificil      = findViewById(R.id.nivelDifícil)
         rbMuitoDificil = findViewById(R.id.nivelMuitoDifícil)
         //-----------------------------
         prepRBniveis(true)
@@ -167,13 +169,13 @@ class MainActivity : AppCompatActivity() {
         edtViewSubNivel = findViewById(R.id.edtViewSubNivel)
 
         groupRBadapta = findViewById(R.id.radioGrpAdapta)
-        rbPreset = findViewById(R.id.preset)
-        rbEdicao = findViewById(R.id.edicao)
-        txtDadosJogo = findViewById(R.id.txtJogos)
+        rbPreset      = findViewById(R.id.preset)
+        rbEdicao      = findViewById(R.id.edicao)
+        txtDadosJogo  = findViewById(R.id.txtJogos)
 
         groupRBadapta.visibility = INVISIBLE
 
-        tvContaNums.text = "0"
+        tvContaNums.text  = "0"
         tvContaClues.text = getString(R.string.valor81)
 
         //--- Objetos gráficos
@@ -435,12 +437,12 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     //--------------------------------------------------------------------------------------
+
                 }
 
             },
-
-            waitTime
-        )  // value in milliseconds
+            waitTime      // value in milliseconds
+        )
 
     }
 
@@ -452,9 +454,6 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> Tap no btnAdaptaJogo"
         Log.d(cTAG, strLog)
 
-        flagJogoAdaptadoOk = false
-
-        strOpcaoJogo = "JogoAdaptado"
         txtDadosJogo.text = ""
         sgg.txtDados = ""
 
@@ -522,12 +521,12 @@ class MainActivity : AppCompatActivity() {
         //-----------------------------------------------------
 
         //--- Se não tiver jogo válido, informa ao usuário
-        // if (!flagJogoGeradoOk && !flagJogoAdaptadoOk) {
-        if (!flagJogoValido) {
+        if (!flagJogoValido || (!flagJogoGeradoOk && !flagJogoEditadoOk)) {
 
-            flagJogoGeradoOk = false
+            //flagJogoGeradoOk = false
 
-            val strToast = "Não há jogo válido!"
+            strToast  = "Não há jogo válido!\nv=$flagJogoValido g=$flagJogoGeradoOk"
+            strToast += " e=$flagJogoEditadoOk"
             //----------------------------------------------------------------
             Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
             //----------------------------------------------------------------
@@ -538,7 +537,7 @@ class MainActivity : AppCompatActivity() {
         //--- Se tiver jogo válido, finaliza a preparação do jogo
         else {
 
-            flagJogoGeradoOk = true
+            //flagJogoGeradoOk = true
 
             //-----------------------------
             //visibilidadeViews(INVISIBLE)
@@ -1126,7 +1125,7 @@ class MainActivity : AppCompatActivity() {
         if (flagBoardSel) {
 
             //--- Determina a célula e o número tocado
-            val cellX = coordX / intCellwidth
+            val cellX  = coordX / intCellwidth
             val intNum = arIntNumsDisp[cellX]
 
             //--- Célula válida
@@ -1208,6 +1207,12 @@ class MainActivity : AppCompatActivity() {
                         //----------------------------------------------
                         quadMaior = utilsKt.copiaArArInt(arArIntNums)
                         //----------------------------------------------
+
+                        //--- Seta flag se jogo em edição for válido
+                        //----------------------------------------------------
+                        flagJogoEditadoOk = verificaSeJogoValido(quadMaior)
+                        //----------------------------------------------------
+
                     }
                 }
             }
@@ -1930,13 +1935,7 @@ class MainActivity : AppCompatActivity() {
     private fun adaptaPreset() {
 
         // --- Prepara o preset para se conseguir o gabarito do jogo
-
-        /*
-        if (++sgg.intJogoAdaptar > 6) sgg.intJogoAdaptar = 1
-        txtDadosJogo.text = String.format("%s%d %s","Preset #",sgg.intJogoAdaptar,"aguarde ...")
-        */
-
-        //--- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
+        //- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
         val waitTime = 100L  // milisegundos
         Handler(Looper.getMainLooper()).postDelayed(
             {
@@ -1973,14 +1972,17 @@ class MainActivity : AppCompatActivity() {
 
         rbEdicao.isChecked = true
 
-        flagJogoGeradoOk = false
+        flagJogoGeradoOk  = false
+        flagJogoEditadoOk = false
+
+        strOpcaoJogo = "JogoEditado"
 
         txtDadosJogo.text = ""
 
-        tvContaNums.text = "0"
+        tvContaNums.text  = "0"
         tvContaClues.text = resources.getString(R.string.valor81)
 
-        arArIntNums = Array(9) { Array(9) { 0 } }
+        arArIntNums     = Array(9) { Array(9) { 0 } }
         arIntQtiNumDisp = Array(9) { 9 }
 
         ivNumDisp.isEnabled = true
@@ -2023,7 +2025,7 @@ class MainActivity : AppCompatActivity() {
         val intQtiZeros = utilsKt.quantZeros(quadMaior)
         //-------------------------------------------------
 
-        val intNivel = intQtiZeros / 10
+        val intNivel    = intQtiZeros / 10
         val intSubNivel = intQtiZeros % 10
         //---------- ---------- ----------------------
         // intNivel     Nivel      números / Zeros
@@ -2081,8 +2083,6 @@ class MainActivity : AppCompatActivity() {
             //---------------------------------------
             quadMaior = sgg.adaptaJogoAlgoritmo2()
             //---------------------------------------
-
-            flagJogoAdaptadoOk = true
 
         }
 

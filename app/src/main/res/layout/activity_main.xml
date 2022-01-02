@@ -22,10 +22,10 @@
         app:layout_constraintGuide_percent="0.5" />
     <!-- 33% -->
     <androidx.constraintlayout.widget.Guideline
-        android:id           ="@+id/guide_umTerco_esq"
-        android:layout_width ="wrap_content"
+        android:id="@+id/guide_umTerco_esq"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation  ="vertical"
+        android:orientation="vertical"
         app:layout_constraintGuide_percent="0.33" />
     <!-- 66% -->
     <androidx.constraintlayout.widget.Guideline
@@ -45,6 +45,22 @@
         android:orientation  ="horizontal"
         app:layout_constraintGuide_percent="0.5" />
 
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+
+        android:id="@+id/maintoolbar"
+
+        android:layout_width ="match_parent"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf    ="parent"
+
+        android:background="@color/design_default_color_primary"
+        app:titleTextColor="@color/white"
+
+        app:title         ="@string/app_name" />
+
     <!-- Nível do Jogo -->
     <!-- 1- Legenda -->
     <TextView android:id ="@+id/legNivel"
@@ -53,13 +69,14 @@
         android:layout_height="wrap_content"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf    ="parent"
+        app:layout_constraintTop_toBottomOf="@id/maintoolbar"
 
         android:layout_marginTop  ="@dimen/RB_MargemTop"
         android:layout_marginStart="5dp"
 
         android:textSize         ="@dimen/TamanhoTxt"
         android:text             ="@string/legNivel"/>
+
     <!-- 2- Radio Buttons para escolha do nível do jogo qdo gerar Jogo-->
     <RadioGroup
         android:id="@+id/radioGrpNivel"
@@ -73,7 +90,7 @@
         android:orientation="horizontal"
 
         app:layout_constraintStart_toEndOf="@id/legNivel"
-        app:layout_constraintTop_toTopOf  ="parent">
+        app:layout_constraintTop_toBottomOf="@id/maintoolbar">
 
         <RadioButton
             android:id="@+id/nivelFacil"
@@ -131,13 +148,14 @@
 
         android:textSize         ="@dimen/TamanhoTxt"
         android:text             ="@string/legSubnivel"/>
+
     <!-- 2- EditText para edição do subnível: de 0 à 9 -->
     <EditText android:id="@+id/edtViewSubNivel"
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
         android:layout_marginStart="10dp"
-        android:layout_marginTop  ="35dp"
+        android:layout_marginTop  ="90dp"
 
         android:cursorVisible="true"
 
@@ -163,7 +181,7 @@
         app:layout_constraintEnd_toEndOf ="parent"
 
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="90dp"
 
         android:visibility="visible" >
 
@@ -196,7 +214,7 @@
         android:background="@android:color/darker_gray"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf ="@id/edtViewSubNivel"
+        app:layout_constraintTop_toBottomOf ="@id/legSubNivel"
         android:layout_marginTop            ="10dp" />
 
     <ImageView android:id ="@+id/ivSudokuBoardMain"

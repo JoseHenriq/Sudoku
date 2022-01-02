@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.TextView
@@ -19,7 +20,7 @@ import br.com.jhconsultores.sudoku.R
 import br.com.jhconsultores.sudoku.adapter.JogoAdapter
 import br.com.jhconsultores.sudoku.adapter.JogoClickedListener
 import br.com.jhconsultores.sudoku.jogo.SudokuGameGenerator
-import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.flagJogoAdaptadoOk
+//import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.flagJogoAdaptadoOk
 
 import br.com.jhconsultores.utils.Utils
 import br.com.jhconsultores.utils.UtilsKt
@@ -39,7 +40,8 @@ class AdaptarActivity : AppCompatActivity() {
     private var itemsListArq  = ArrayList<String>()
     private var itemsListJogo = ArrayList<String>()
     private var recyclerView : RecyclerView? = null
-
+    private lateinit var adaptarToolBar: androidx.appcompat.widget.Toolbar
+    
     private var strOpcaoJogo = "JogoAdaptado"
 
     private var strNivelJogo = "Fácil"
@@ -58,6 +60,13 @@ class AdaptarActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_adaptar)
+
+        //------------------------------------------------------------------------------------------
+        // Implementa o actionBar
+        //------------------------------------------------------------------------------------------
+        adaptarToolBar = findViewById(R.id.adaptartoolbar)
+        setSupportActionBar(adaptarToolBar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         //------------------------------------------------------------------------------------------
         // Implementa o recycler view
@@ -376,14 +385,14 @@ class AdaptarActivity : AppCompatActivity() {
 
         if (!flagJogoValido) {
 
-            flagJogoAdaptadoOk = false
+            //flagJogoAdaptadoOk = false
 
-            Toast.makeText(cTAG, "Jogo adaptado inválido!")
+            Toast.makeText(this, "Jogo adaptado inválido!", Toast.LENGTH_SHORT).show()
 
         }
         else {
 
-            flagJogoAdaptadoOk = true
+            //flagJogoAdaptadoOk = true
 
             //--- Prepara a Intent para chamar JogarActivity
             val intent    = Intent(this, JogarActivity::class.java)
