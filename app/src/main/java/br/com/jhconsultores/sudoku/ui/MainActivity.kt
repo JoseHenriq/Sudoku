@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
 
         const val cTAG = "Sudoku"
-        val strApp     = "Sudoku_#8.4"
+        val strApp     = "Sudoku_#8.5"
 
         var flagJogoGeradoOk  = false
         var flagJogoEditadoOk = false
@@ -368,8 +368,6 @@ class MainActivity : AppCompatActivity() {
 
                 rbPreset.isChecked = true
 
-                strOpcaoJogo = "JogoGerado"
-
                 sgg.txtDados = ""
 
                 //--------------------------
@@ -415,12 +413,14 @@ class MainActivity : AppCompatActivity() {
 
                 if (edtViewSubNivel.text.toString().isNotEmpty()) {
 
+                    strOpcaoJogo = "JogoGerado"
+
                     subNivelJogo = edtViewSubNivel.text.toString().toInt()
                     nivelTotalJogo = nivelJogo + subNivelJogo
 
-                    //-----------------------------------------
+                    //=========================================
                     quadMaior = sgg.geraJogo(nivelTotalJogo)
-                    //-----------------------------------------
+                    //=========================================
                     preencheSudokuBoard(quadMaior)
                     //-------------------------------
 
@@ -545,16 +545,6 @@ class MainActivity : AppCompatActivity() {
         //--- Se tiver jogo válido, finaliza a preparação do jogo
         else {
 
-            //flagJogoGeradoOk = true
-
-            //-----------------------------
-            //visibilidadeViews(INVISIBLE)
-            //-----------------------------
-
-            //txtDadosJogo.text = if (strOpcaoJogo == "JogoAdaptado")
-            //    String.format("%s%d", "Preset #", sgg.intJogoAdaptar) else ""
-            //sgg.txtDados = ""
-
             //-----------------------
             finalizaEdicaoPreset()
             //-----------------------
@@ -579,17 +569,17 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            //--- Prepara a Intent para chamar JogarActivity
+            //--- Prepara a Intent para chamar JogarActivity para JogosGerados e para JogosEditados
             val intent = Intent(this, JogarActivity::class.java)
             intent.action = strOpcaoJogo
 
-            intent.putExtra("strNivelJogo", strNivelJogo)
+            intent.putExtra("strNivelJogo"   , strNivelJogo)
             intent.putExtra("strSubNivelJogo", edtViewSubNivel.text.toString())
-            intent.putExtra("strCronoConta", "00:00")
-            intent.putExtra("strErro", "0")
+            intent.putExtra("strCronoConta"  ,"00:00")
+            intent.putExtra("strErro"        ,"0")
 
             intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
-            intent.putIntegerArrayListExtra("JogoPreparado", arIntNumsJogo)
+            intent.putIntegerArrayListExtra("JogoPreparado" , arIntNumsJogo)
 
             //----------------------
             startActivity(intent)
@@ -1220,6 +1210,8 @@ class MainActivity : AppCompatActivity() {
                         //----------------------------------------------------
                         flagJogoEditadoOk = verificaSeJogoValido(quadMaior)
                         //----------------------------------------------------
+
+                        if (flagJogoEditadoOk) strOpcaoJogo = "JogoEditado"
 
                     }
                 }
@@ -1982,8 +1974,6 @@ class MainActivity : AppCompatActivity() {
 
         flagJogoGeradoOk  = false
         flagJogoEditadoOk = false
-
-        strOpcaoJogo = "JogoEditado"
 
         txtDadosJogo.text = ""
 

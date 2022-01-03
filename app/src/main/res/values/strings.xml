@@ -57,5 +57,9 @@
     <string name="clues"  >Clues: </string>
     <string name="valor81">81</string>
     <string name="salvar">Salvar</string>
+    <string name="deletar_todos">Deletar todos</string>
+    <string name="selecionar">Selecionar</string>
+    <string name="deletar_selecionados">Deletar selecionados</string>
+    <string name="cancelar">Cancelar</string>
 
 </resources>

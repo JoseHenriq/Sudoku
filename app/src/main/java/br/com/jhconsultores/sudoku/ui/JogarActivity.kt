@@ -563,7 +563,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             }
 
             //--------------------------------------------------------------------------------------
-            // Dados enviados pelo Main
+            // Dados enviados pelo MainActivity e pelo AdaptarActivity
             //--------------------------------------------------------------------------------------
             //--- Ação à ser executada
             action = intent.action.toString()
@@ -577,7 +577,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
             // Armazena o gabarito em um array<int>
             arIntNumsGab  = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
-            arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as  ArrayList<Int>
+            arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado")  as  ArrayList<Int>
 
             // Gabarito e/ou jogo inválidos
             if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
@@ -595,13 +595,13 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
                 tvErros!!.text = intContaErro.toString()
 
-                // Armazena o gabarito em um Array<Array<Int>> para processamento local
+                // Armazena o gabarito e o jogo em Array<Array<Int>> para processamento local
                 for (intLinha in 0..8) {
                     for (intCol in 0..8) {
 
-                        arArIntNums[intLinha][intCol] = arIntNumsJogo[intLinha * 9 + intCol] // Jogo
-                        arArIntGab[intLinha][intCol] =
-                            arIntNumsGab[intLinha * 9 + intCol] // Gabarito
+                        val intCell = intLinha * 9 + intCol
+                        arArIntNums[intLinha][intCol] = arIntNumsJogo[intCell]  // Jogo
+                        arArIntGab [intLinha][intCol] = arIntNumsGab [intCell]  // Gabarito
 
                     }
                 }
@@ -610,7 +610,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                 arArIntCopia = utilsKt.copiaArArInt(arArIntNums)
                 //-------------------------------------------------
 
-                arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+                arIntNumsDisp = Array(9) { 9 }
 
                 //-------------
                 iniciaJogo()
@@ -668,9 +668,9 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
         var flCoordXInic: Float
         var flCoordYInic: Float
-        var flCoordXFim: Float
-        var flCoordYFim: Float
-        val flPincelFino = 2.toFloat()
+        var flCoordXFim : Float
+        var flCoordYFim : Float
+        val flPincelFino   = 2.toFloat()
         val flPincelGrosso = 6.toFloat()
         val pincelDesenhar = pincelPreto
 
@@ -921,40 +921,18 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         // Grandezas gráficas
         scale = resources.displayMetrics.density
 
-        // Pincéis
+        //--- Pincéis
         // ContextCompat.getColor(context, R.color.your_color);
-        pincelVerde.color =
-            ContextCompat.getColor(
-                this,
-                R.color.verde
-            )       // resources.getColor(R.color.verde)
-        pincelBranco.color =
-            ContextCompat.getColor(
-                this,
-                R.color.white
-            )       // resources.getColor(R.color.white)
-        pincelPreto.color =
-            ContextCompat.getColor(
-                this,
-                R.color.black
-            )       // resources.getColor(R.color.black)
-        pincelAzul.color =
-            ContextCompat.getColor(
-                this,
-                R.color.azul
-            )        // resources.getColor(R.color.azul)
-        pincelLaranja.color =
-            ContextCompat.getColor(
-                this,
-                R.color.laranja
-            )     // resources.getColor(R.color.laranja)
-        pincelPurple200.color = ContextCompat.getColor(
-            this,
-            R.color.purple_200
-        )  // resources.getColor(R.color.purple_200)
+        pincelVerde.color     = ContextCompat.getColor(this, R.color.verde )
+        pincelBranco.color    = ContextCompat.getColor(this, R.color.white )
+        pincelPreto.color     = ContextCompat.getColor(this, R.color.black )
+        pincelAzul.color      = ContextCompat.getColor(this, R.color.azul )
+        pincelLaranja.color   = ContextCompat.getColor(this, R.color.laranja )
+        pincelPurple200.color = ContextCompat.getColor(this, R.color.purple_200 )
 
         // Bit maps
         intImageResource = R.drawable.sudoku_board3
+
         bmpMyImage = BitmapFactory.decodeResource(resources, intImageResource)
             .copy(Bitmap.Config.ARGB_8888, true)
         bmpJogo = BitmapFactory.decodeResource(resources, intImageResource)
@@ -968,7 +946,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             .copy(Bitmap.Config.ARGB_8888, true)
 
         // Canvas
-        canvasMyImage = Canvas(bmpMyImage!!)
+        canvasMyImage     = Canvas(bmpMyImage!!)
         canvasSudokuBoard = Canvas(bmpSudokuBoard!!)
 
         canvasNumDisp = Canvas(bmpNumDisp!!)
@@ -977,7 +955,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         // Images Views
         //------------------------------------------------------------------------------------------
         iViewSudokuBoard = findViewById<View>(R.id.ivSudokuBoard) as ImageView
-        iViewNumsDisps = findViewById<View>(R.id.ivNumDisp) as ImageView
+        iViewNumsDisps   = findViewById<View>(R.id.ivNumDisp) as ImageView
 
         //-----------------------------
         determinaGrandezasGraficas()
@@ -1003,6 +981,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 			int int_dyWidth  = m_size.x;
 			int int_dyHeight = m_size.y; */
 
+			/*
             //Log.d(cTAG, "-> Grandezas gráficas:")
             //val displayMetrics = this.resources.displayMetrics
             //val intDyWidth     = displayMetrics.heightPixels
@@ -1010,18 +989,19 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //strLog = "   -Display: Largura: " + intDyWidth  + " pixels, Altura  : " +
             //                                                               intDyHeight + " pixels"
             //Log.d(cTAG, strLog)
+            */
 
             //--- Margens do board
-            intmargTopDp = resources.getDimension(R.dimen.MargemAcima).toInt()
+            intmargTopDp  = resources.getDimension(R.dimen.MargemAcima).toInt()
             intMargleftdp = resources.getDimension(R.dimen.MargemEsquerda).toInt()
-            intMargtoppx = toPixels2(this, intmargTopDp.toFloat())
+            intMargtoppx  = toPixels2(this, intmargTopDp.toFloat())
             intMargleftpx = toPixels2(this, intMargleftdp.toFloat())
             //strLog = "   -Margens: Acima  :  " + intMargtoppx + " pixels, Esquerda:    " +
             //        intMargleftpx + " pixels"
             //Log.d(cTAG, strLog)
 
             //--- Imagem Sudoku board
-            intImgwidth = bmpSudokuBoard!!.width
+            intImgwidth  = bmpSudokuBoard!!.width
             intImgheight = bmpSudokuBoard!!.height
             //strLog = "   -Image  : Largura: " + intImgwidth + " pixels, Altura  :  " +
             //        intImgheight + " pixels"
@@ -1403,15 +1383,10 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         //----------------------------------------------------------------------
         if (strConteudo.isNotEmpty()) {
 
-            var intNumArq = 0
-            //-------------------------------------------------------------------------------
-            //val arStrArqsNames = utils.listaExtMemArqDir("Download/sudoku/Jogos")
-            //-------------------------------------------------------------------------------
             //-------------------------------------------------------------------------------
             val arStrArqsNames = utils.listaExtMemArqDir("/sudoku/Jogos")
             //-------------------------------------------------------------------------------
-
-            /*
+            var intNumArq = 0
             if (arStrArqsNames.isNotEmpty()) {
 
                 for (strArqName in arStrArqsNames) {
@@ -1435,10 +1410,11 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             }
             intNumArq++
             val strArqJogo = "jogo_$intNumArq.xml"
-             */
 
+            /*
             val strDataHora = utils.LeDataHora("yyMMddHHmmss")
             val strArqJogo = "jogo_$strDataHora.xml"
+            */
 
             val strArqPath = "/sudoku/jogos"
             val strArqName = "$strArqJogo"

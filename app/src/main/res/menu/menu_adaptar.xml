@@ -1,0 +1,28 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app    ="http://schemas.android.com/apk/res-auto"
+    xmlns:tools  ="http://schemas.android.com/tools"
+    tools:context=".ui.AdaptarActivity">
+
+    <item
+        android:id       ="@+id/action_deletarTodos"
+        android:title    ="@string/deletar_todos"
+        android:enabled  ="false"
+        app:showAsAction ="never" />
+
+    <item
+        android:id       ="@+id/action_selecionar"
+        android:title    ="@string/selecionar"
+        app:showAsAction ="never" />
+
+    <item
+        android:id       ="@+id/action_deletar_sels"
+        android:title    ="@string/deletar_selecionados"
+        app:showAsAction ="never" />
+
+    <item
+        android:id       ="@+id/action_cancelar"
+        android:title    ="@string/cancelar"
+        app:showAsAction ="never" />
+
+</menu>

@@ -41,10 +41,11 @@
         app:titleTextColor="@color/white"
 
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-        app:title         ="@string/app_name" />
+        app:title         ="@string/app_name"/>
+
+        <!-- Ícone para ativação de menu com mais ações -->
 
     <!-- RV -->
-    <!--app:layout_constraintTop_toBottomOf ="@id/toolbar"-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_jogos"
 

@@ -2,9 +2,15 @@ package br.com.jhconsultores.sudoku.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 
+import android.view.Menu
+import android.view.MenuItem
+
+import android.view.MenuInflater
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.TextView
@@ -21,10 +27,12 @@ import br.com.jhconsultores.sudoku.adapter.JogoAdapter
 import br.com.jhconsultores.sudoku.adapter.JogoClickedListener
 import br.com.jhconsultores.sudoku.jogo.SudokuGameGenerator
 import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strApp
-//import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.flagJogoAdaptadoOk
+import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strOpcaoJogo
 
 import br.com.jhconsultores.utils.Utils
 import br.com.jhconsultores.utils.UtilsKt
+import java.nio.file.Files.size
+import android.view.MenuItem as MenuItem1
 
 class AdaptarActivity : AppCompatActivity() {
 
@@ -43,8 +51,6 @@ class AdaptarActivity : AppCompatActivity() {
     private var recyclerView : RecyclerView? = null
     private lateinit var adaptarToolBar: androidx.appcompat.widget.Toolbar
     
-    private var strOpcaoJogo = "JogoAdaptado"
-
     private var strNivelJogo = "Fácil"
     private var subNivelJogo = 0
 
@@ -110,6 +116,7 @@ class AdaptarActivity : AppCompatActivity() {
 
     }
 
+    //--- onResume
     override fun onResume () {
 
         super.onResume()
@@ -135,19 +142,21 @@ class AdaptarActivity : AppCompatActivity() {
 
             }
 
-            //---------------------------------------------------------------------------------------
+            //--- Instancia um adapter das listas ao RV passando um objeto interface dos listeners
+            //--------------------------------------------------------------------------------------
             customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
-                //---------------------------------------------------------------------------------------
+            //--------------------------------------------------------------------------------------
 
                 //--- Listener para click na info do arquivo de um dos jogos
                 override fun infoItem (posicao : Int) {
 
-                    //---------------------------------------------------------------------------------
+                    //------------------------------------------------------------------------------
                     val strfileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
-                    //---------------------------------------------------------------------------------
+                    //------------------------------------------------------------------------------
 
                     strToast = "Tapped $posicao: $strfileName!"
-                    Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+                    Log.d(cTAG, "-> $strToast")
 
                     //-------------------------
                     adaptaEjogaJogo(posicao)
@@ -162,8 +171,9 @@ class AdaptarActivity : AppCompatActivity() {
                     val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
                     //---------------------------------------------------------------------------------
 
-                    strToast = "Tapped $posicao: $strNivel!"
-                    Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+                    // strToast = "Tapped $posicao: $strNivel!"
+                    //Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+                    Log.d(cTAG, "-> $strToast")
 
                     //-------------------------
                     adaptaEjogaJogo(posicao)
@@ -184,12 +194,49 @@ class AdaptarActivity : AppCompatActivity() {
 
     }
 
+    //---------------------------------------------------------------------
+    // Menu Actions Overflow
+    //---------------------------------------------------------------------
+    override fun onCreateOptionsMenu(menu : Menu) : Boolean {
+
+        // Infla o menu com os botões da actionbar
+        // https://stackoverflow.com/questions/29844064/how-to-change-the-menu-text-size
+
+        //MenuInflater infl = getMenuInflater ();
+        //infl.inflate(R.menu.menu_main, menu);
+
+        val infl = getMenuInflater ()
+        infl.inflate(R.menu.menu_adaptar, menu)
+
+        //actionOverflowArItem = new MenuItem [menu.size()];
+        val actionOverflowArItem = MenuItem[menu.size()]
+
+        for (i in 0 until menu.size()) {
+
+            val item = menu.getItem (i)
+            actionOverflowArItem[i] = item
+
+            //--- Aumenta o tamanho do texto
+            val spanString = SpannableString(menu.getItem(i).getTitle().toString())
+            val end        = spanString.length
+            spanString.setSpan(
+                SpannableString.absoluteSizeSpan (22,
+                true
+            ), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            item.setTitle(spanString)
+
+        }
+
+    }
+
     //--------------------------------------------------------------------------
     //                                Funções
     //--------------------------------------------------------------------------
     //--- Adapta jogo selecionado no RV e passa a Jogar o jogo
     var strTextViews  = ""
     var strFileName   = ""
+    var salvaFileName = ""
     var strJogo       = ""
     var strStatus     = ""
     var strErro       = "0"
@@ -198,12 +245,14 @@ class AdaptarActivity : AppCompatActivity() {
     fun adaptaEjogaJogo(idxItemView : Int) {
 
         strTextViews = ("${itemsListArq[idxItemView]}  ${itemsListJogo[idxItemView]}").trim()
+
         Log.d(cTAG, "-> item textViews:\n$strTextViews")
 
         val strTagFim = if (strTextViews.contains(" Jogo")) " Jogo" else "Data:"
-        //---------------------------------------------------------------------------
-        strFileName = (leCampo(strTextViews, "Arq:", strTagFim)).trim()
-        //---------------------------------------------------------------------------
+        //------------------------------------------------------------------------
+        strFileName   = (leCampo(strTextViews, "Arq:", strTagFim)).trim()
+        //------------------------------------------------------------------------
+        salvaFileName = strFileName
         Log.d(cTAG, "-> nome do arquivo: $strFileName")
 
         //--- Lê o arquivo selecionado
@@ -359,10 +408,11 @@ class AdaptarActivity : AppCompatActivity() {
         //---------------------------------------------------------
         sgg.quadMaiorRet = utilsKt.copiaArArInt(quadMaiorAdapta)
         //---------------------------------------------------------
-        //--- Gera o gabarito! em um array unidimensional
+        //--- Gera o gabarito! em um array bidimensional
         //---------------------------------------
         quadMaior = sgg.adaptaJogoAlgoritmo2()
         //---------------------------------------
+        //--- Prepara o gabarito, em um array unidimensional
         val arIntNumsGab = ArrayList<Int>()
         for (idxLin in 0..8) {
             Log.d(cTAG, "idxLin = $idxLin")
@@ -373,7 +423,7 @@ class AdaptarActivity : AppCompatActivity() {
             }
         }
 
-        //--- Prepara o jogo preparado para ser jogado em um array unidimensional
+        //--- Prepara o jogo à ser jogado, em um array unidimensional
         val arIntNumsJogo = ArrayList<Int>()
         for (idxLin in 0..8) {
             for (idxCol in 0..8) {
@@ -396,7 +446,7 @@ class AdaptarActivity : AppCompatActivity() {
         }
         else {
 
-            //flagJogoAdaptadoOk = true
+            strOpcaoJogo = "JogoPresetado: $salvaFileName"
 
             //--- Prepara a Intent para chamar JogarActivity
             val intent    = Intent(this, JogarActivity::class.java)
@@ -442,7 +492,7 @@ class AdaptarActivity : AppCompatActivity() {
             }
 
             //--- DataHora
-            strPrepInfoArq += "  Data: "
+            strPrepInfoArq += "\nData: "
             strTag          = "<dataHora>"
             intIdxInic      = strLeitArq.indexOf(strTag) + strTag.length
             intIdxFim       = strLeitArq.indexOf("</dataHora>")
