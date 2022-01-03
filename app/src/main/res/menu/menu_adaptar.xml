@@ -1,28 +1,43 @@
 <menu
+
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app    ="http://schemas.android.com/apk/res-auto"
+
     xmlns:tools  ="http://schemas.android.com/tools"
     tools:context=".ui.AdaptarActivity">
 
     <item
-        android:id       ="@+id/action_deletarTodos"
-        android:title    ="@string/deletar_todos"
-        android:enabled  ="false"
-        app:showAsAction ="never" />
+        android:id    ="@+id/tresmore"
+        android:title ="@string/op_es"
+        android:orderInCategory="101"
+        app:showAsAction="always"
+        android:icon    ="@drawable/ic_morebranco">
 
-    <item
-        android:id       ="@+id/action_selecionar"
-        android:title    ="@string/selecionar"
-        app:showAsAction ="never" />
+        <menu>
 
-    <item
-        android:id       ="@+id/action_deletar_sels"
-        android:title    ="@string/deletar_selecionados"
-        app:showAsAction ="never" />
+            <item
+                android:id       ="@+id/action_selecionarTodos"
+                android:title    ="@string/selecionar_todos"
+                app:showAsAction ="never" />
 
-    <item
-        android:id       ="@+id/action_cancelar"
-        android:title    ="@string/cancelar"
-        app:showAsAction ="never" />
+            <item
+                android:id       ="@+id/action_selecionar"
+                android:title    ="@string/selecionar"
+                app:showAsAction ="never" />
+
+            <item
+                android:id       ="@+id/action_deletar_sels"
+                android:title    ="@string/deletar_selecionados"
+                android:enabled  ="false"
+                app:showAsAction ="never" />
+
+            <item
+                android:id       ="@+id/action_cancelar"
+                android:title    ="@string/cancelar"
+                app:showAsAction ="never" />
+
+        </menu>
+
+    </item>
 
 </menu>

@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android/Kotlin/Sudoku/app/src/main/res/drawable/ic_moreWhite.xml" value="0.2203125" />
+        <entry key="..\:/Android/Kotlin/Sudoku/app/src/main/res/drawable/ic_morebranco.xml" value="0.2203125" />
         <entry key="..\:/Android/Kotlin/Sudoku/app/src/main/res/layout/activity_adaptar.xml" value="0.22" />
         <entry key="..\:/Android/Kotlin/Sudoku/app/src/main/res/layout/activity_jogar.xml" value="0.25" />
         <entry key="..\:/Android/Kotlin/Sudoku/app/src/main/res/layout/activity_main.xml" value="0.18" />

@@ -61,5 +61,9 @@
     <string name="selecionar">Selecionar</string>
     <string name="deletar_selecionados">Deletar selecionados</string>
     <string name="cancelar">Cancelar</string>
+    <string name="op_es">Opções</string>
+    <string name="jogo">Jogo:</string>
+    <string name="arquivo">Arquivo:</string>
+    <string name="selecionar_todos">Selecionar todos</string>
 
 </resources>

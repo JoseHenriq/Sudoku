@@ -2,22 +2,18 @@ package br.com.jhconsultores.sudoku.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 
 import android.view.Menu
 import android.view.MenuItem
-
-import android.view.MenuInflater
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.widget.TextView
 
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.text.isDigitsOnly
+import androidx.core.view.size
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,8 +27,6 @@ import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strOpcaoJogo
 
 import br.com.jhconsultores.utils.Utils
 import br.com.jhconsultores.utils.UtilsKt
-import java.nio.file.Files.size
-import android.view.MenuItem as MenuItem1
 
 class AdaptarActivity : AppCompatActivity() {
 
@@ -62,7 +56,7 @@ class AdaptarActivity : AppCompatActivity() {
     //--------------------------------------------------------------------------
     //                                Eventos
     //--------------------------------------------------------------------------
-    //--- onCreate MainActivity
+    //--- onCreate AdaptarActivity
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -197,37 +191,62 @@ class AdaptarActivity : AppCompatActivity() {
     //---------------------------------------------------------------------
     // Menu Actions Overflow
     //---------------------------------------------------------------------
-    override fun onCreateOptionsMenu(menu : Menu) : Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
 
-        // Infla o menu com os botões da actionbar
-        // https://stackoverflow.com/questions/29844064/how-to-change-the-menu-text-size
+        menuInflater.inflate(R.menu.menu_adaptar, menu)
 
-        //MenuInflater infl = getMenuInflater ();
-        //infl.inflate(R.menu.menu_main, menu);
+        /*
+        val DELETAR_SELECIONADOS = 2
+        val itemMenu       = menu.getItem(DELETAR_SELECIONADOS)
+        itemMenu.isEnabled = (itemsListArq.size != 0)
+        */
 
-        val infl = getMenuInflater ()
-        infl.inflate(R.menu.menu_adaptar, menu)
+        return true
 
-        //actionOverflowArItem = new MenuItem [menu.size()];
-        val actionOverflowArItem = MenuItem[menu.size()]
+    }
 
-        for (i in 0 until menu.size()) {
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
-            val item = menu.getItem (i)
-            actionOverflowArItem[i] = item
+        R.id.action_selecionarTodos -> {
 
-            //--- Aumenta o tamanho do texto
-            val spanString = SpannableString(menu.getItem(i).getTitle().toString())
-            val end        = spanString.length
-            spanString.setSpan(
-                SpannableString.absoluteSizeSpan (22,
-                true
-            ), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            // User chose the "Settings" item, show the app settings UI...
+            Log.d(cTAG, "-> Tap em actionBar / Selecionar Todos")
 
-            item.setTitle(spanString)
+            true
+        }
+
+        R.id.action_selecionar -> {
+
+            // User chose the "Favorite" action, mark the current item as a favorite...
+            Log.d(cTAG, "-> Tap em actionBar / Selecionar")
+
+            true
 
         }
 
+        R.id.action_deletar_sels-> {
+
+            // User chose the "Favorite" action, mark the current item as a favorite...
+            Log.d(cTAG, "-> Tap em actionBar / Deletar selecionados")
+
+            true
+
+        }
+
+        R.id.action_cancelar -> {
+
+            // User chose the "Favorite" action, mark the current item  as a favorite...
+            Log.d(cTAG, "-> Tap em actionBar / Cancelar")
+
+            true
+
+        }
+
+        else -> {
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            super.onOptionsItemSelected(item)
+        }
     }
 
     //--------------------------------------------------------------------------
