@@ -31,58 +31,71 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     //                         Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
-    private val cTAG = "Sudoku"
-    private var strLog = ""
+    private var strLog   = ""
     private var strToast = ""
+
+    companion object {
+
+        const val cTAG = "Sudoku"
+        val strApp     = "Sudoku_#8.4"
+
+        var flagJogoGeradoOk  = false
+        var flagJogoEditadoOk = false
+
+        var flagJogoAdaptadoOk= false
+
+        var strOpcaoJogo = "JogoGerado"
+
+    }
 
     //--- Objetos gráficos
     private lateinit var ivSudokuBoardMain: ImageView
-    private lateinit var ivNumDisp: ImageView
-    private lateinit var ivQtiNumDisp: ImageView
+    private lateinit var ivNumDisp        : ImageView
+    private lateinit var ivQtiNumDisp     : ImageView
 
     private var bmpMyImageInic: Bitmap? = null
     private var bmpMyImageBack: Bitmap? = null
-    private var bmpMyImage: Bitmap? = null
+    private var bmpMyImage    : Bitmap? = null
 
     private var bmpNumDisp: Bitmap? = null
 
-    private var intCellwidth = 0
+    private var intCellwidth  = 0
     private var intCellheight = 0
 
-    private var pincelVerde = Paint()
-    private var pincelBranco = Paint()
-    private var pincelPreto = Paint()
-    private var pincelAzul = Paint()
+    private var pincelVerde   = Paint()
+    private var pincelBranco  = Paint()
+    private var pincelPreto   = Paint()
+    private var pincelAzul    = Paint()
     private var pincelLaranja = Paint()
 
     private var intTamTxt = 25
-    private var scale = 0f
+    private var scale     = 0f
 
     private var canvasMyImage: Canvas? = null
     private var canvasNumDisp: Canvas? = null
 
     //--- Textos
-    private lateinit var tvContaNums: TextView
+    private lateinit var tvContaNums : TextView
     private lateinit var tvContaClues: TextView
 
     //--- Botões principais
-    private lateinit var btnGeraJogo: Button
+    private lateinit var btnGeraJogo  : Button
     private lateinit var btnAdaptaJogo: Button
-    private lateinit var btnJogaJogo: Button
-    private lateinit var btnTestaRV: Button
+    private lateinit var btnJogaJogo  : Button
+    private lateinit var btnTestaRV   : Button
 
     //--- Radio Buttons
     private lateinit var groupRBnivel: RadioGroup
-    private lateinit var rbFacil: RadioButton
-    private lateinit var rbMedio: RadioButton
-    private lateinit var rbDificil: RadioButton
+    private lateinit var rbFacil     : RadioButton
+    private lateinit var rbMedio     : RadioButton
+    private lateinit var rbDificil   : RadioButton
     private lateinit var rbMuitoDificil: RadioButton
 
     private lateinit var groupRBadapta: RadioGroup
-    private lateinit var rbPreset: RadioButton
-    private lateinit var rbEdicao: RadioButton
+    private lateinit var rbPreset     : RadioButton
+    private lateinit var rbEdicao     : RadioButton
 
-    private lateinit var progressBar: ProgressBar
+    private lateinit var progressBar  : ProgressBar
 
     private lateinit var edtViewSubNivel: EditText
     private var flagAdaptaPreset = true
@@ -90,10 +103,9 @@ class MainActivity : AppCompatActivity() {
     //--- Objetos para o jogo
     private var quadMaior = Array(9) { Array(9) { 0 } }
 
-    private var strOpcaoJogo = "JogoGerado"
-    private var strNivelJogo = "Fácil"
-    private var nivelJogo = 0
-    private var subNivelJogo = 0
+    private var strNivelJogo   = "Fácil"
+    private var nivelJogo      = 0
+    private var subNivelJogo   = 0
     private var nivelTotalJogo = 0
 
     // Núm     0   22               31        41          51       61     81
@@ -124,21 +136,13 @@ class MainActivity : AppCompatActivity() {
     private var arStrTags   = Array(3) { "" }
     private var arArStrTags = Array(3) { Array(9) { "" } }
 
+    private lateinit var toolBar: androidx.appcompat.widget.Toolbar
+
     //--- Classes externas
     private var sgg = SudokuGameGenerator()
     private var jogarJogo = JogarActivity()
     private val utils = Utils()
     private val utilsKt = UtilsKt()
-
-    companion object {
-
-        const val cTAG        = "Sudoku"
-        var flagJogoGeradoOk  = false
-        var flagJogoEditadoOk = false
-
-        var flagJogoAdaptadoOk= false
-
-    }
 
     //----------------------------------------------------------------------------------------------
     // Eventos e listeners da MainActivity
@@ -149,6 +153,10 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //--- Implementa o actionBar
+        toolBar = findViewById(R.id.maintoolbar)
+        toolBar.title = strApp +  " - main"
 
         //--- Instancializações e inicializações
         tvContaNums  = findViewById(R.id.ContaNums)
@@ -215,9 +223,9 @@ class MainActivity : AppCompatActivity() {
                 // tvSample.setText("Text in EditText : $s")
 
                 if (s.isNotEmpty())
-                //---------------------------
+                    //-----------------------------
                     verifMudancaNivel(nivelJogo)
-                //---------------------------
+                    //-----------------------------
 
             }
 

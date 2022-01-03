@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
 import br.com.jhconsultores.sudoku.R
+import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strOpcaoJogo
 import br.com.jhconsultores.utils.*
 
 import java.lang.Exception
@@ -164,8 +165,10 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             val btnSalvar = findViewById<View>(R.id.btnSalvar) as Button
             btnInicia.isEnabled = true
 
-            //--- Ativa o actionBar
+            //--- Implementa o actionBar
             toolBar = findViewById(R.id.toolbar2)
+            toolBar.title = MainActivity.strApp + " - Jogo"
+
             setSupportActionBar(toolBar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -1407,6 +1410,8 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //-------------------------------------------------------------------------------
             val arStrArqsNames = utils.listaExtMemArqDir("/sudoku/Jogos")
             //-------------------------------------------------------------------------------
+
+            /*
             if (arStrArqsNames.isNotEmpty()) {
 
                 for (strArqName in arStrArqsNames) {
@@ -1429,7 +1434,8 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
             }
             intNumArq++
-            //val strArqJogo = "jogo_$intNumArq.xml"
+            val strArqJogo = "jogo_$intNumArq.xml"
+             */
 
             val strDataHora = utils.LeDataHora("yyMMddHHmmss")
             val strArqJogo = "jogo_$strDataHora.xml"
@@ -1458,7 +1464,6 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
     //--- preparaConteudo
     var strModelo  : String = ""
-    //var strTag     : String = ""
     var intIdxInic : Int = 0
     var intIdxFim  : Int = 0
 
@@ -1467,17 +1472,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
         var strConteudo : String
 
-        /*
-        //-- Lê o modelo
-
-        val strNomeComPath = "sudoku/docs/modeloArqXmlSudoku1.txt"
-        //-------------------------------------------------------------------------------
-        val arStrLeitArq: ArrayList<String> = utils.leitExtMemTextFile(strNomeComPath)
-        //-------------------------------------------------------------------------------
-        */
-
         //-- Lê o modelo para a formatação xml : modelo_arq_xml_sudoku1.txt
-
         val strNomeArqSemExt = "modelo_arq_xml_sudoku1"    // SÓ a-z 0-9 _
 
         //--- Obtém lista de arquivos em resource / raw
@@ -1568,30 +1563,37 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             strConteudo += preencheConteudo("<id>", "1")
             //----------------------------------------------------------------
 
-            //- jogos / dataHora
+            //- opção de jogo - 02/01/2022 - versão 8.4
             intTag = 5
+            //-------------------------------------------------------------------
+            strConteudo += preencheConteudo("<opcaoJogo>", strOpcaoJogo)
+            //-------------------------------------------------------------------
+
+            //- jogos / dataHora
+            intTag = 6
             //-------------------------------------------------------------------------
             val strDataHora = utils.LeDataHora("dd/MM/yyyy HH:mm:ss")
             //-------------------------------------------------------------------------
-            intTag = 6
+
+            intTag = 7
             //------------------------------------------------------------------
             strConteudo += preencheConteudo("<dataHora>", strDataHora)
             //------------------------------------------------------------------
 
             //- jogos / tempoJogo
-            intTag = 7
+            intTag = 8
             //--------------------------------------------------------------------------
             strConteudo += preencheConteudo("<tempoJogo>", crono.text.toString())
             //--------------------------------------------------------------------------
 
             //- jogos / erros
-            intTag = 8
+            intTag = 9
             //----------------------------------------------------------------------------
             strConteudo += preencheConteudo("<erros>", tvErros!!.text.toString())
             //----------------------------------------------------------------------------
 
             //- jogos / status
-            intTag = 9
+            intTag = 10
             //------------------------------------------------------------------------------------
             val strStatus = if (utilsKt.quantZeros(arArIntNums) == 0) "finalizado" else "ativo"
             //------------------------------------------------------------------------------------
@@ -1599,7 +1601,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             //-------------------------------------------------------------
 
             //- body2 / linha0 até linha8 : jogo no momento do salvamento se ainda ativo
-            intTag = 10
+            intTag = 11
             if (strStatus == "ativo") {
 
                 strConteudo += "</status></jogos><body2>"
@@ -1623,7 +1625,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             else {
 
                 //-- Finaliza a preparação do conteúdo
-                intTag = 11
+                intTag = 12
                 strConteudo += strModelo.substring(intIdxFim, strModelo.length)
 
             }

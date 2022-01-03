@@ -20,6 +20,7 @@ import br.com.jhconsultores.sudoku.R
 import br.com.jhconsultores.sudoku.adapter.JogoAdapter
 import br.com.jhconsultores.sudoku.adapter.JogoClickedListener
 import br.com.jhconsultores.sudoku.jogo.SudokuGameGenerator
+import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strApp
 //import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.flagJogoAdaptadoOk
 
 import br.com.jhconsultores.utils.Utils
@@ -65,6 +66,8 @@ class AdaptarActivity : AppCompatActivity() {
         // Implementa o actionBar
         //------------------------------------------------------------------------------------------
         adaptarToolBar = findViewById(R.id.adaptartoolbar)
+        adaptarToolBar.title = strApp +  " - Adaptação"
+
         setSupportActionBar(adaptarToolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -197,8 +200,9 @@ class AdaptarActivity : AppCompatActivity() {
         strTextViews = ("${itemsListArq[idxItemView]}  ${itemsListJogo[idxItemView]}").trim()
         Log.d(cTAG, "-> item textViews:\n$strTextViews")
 
+        val strTagFim = if (strTextViews.contains(" Jogo")) " Jogo" else "Data:"
         //---------------------------------------------------------------------------
-        strFileName = (leCampo(strTextViews, "Arq:", "Data:")).trim()
+        strFileName = (leCampo(strTextViews, "Arq:", strTagFim)).trim()
         //---------------------------------------------------------------------------
         Log.d(cTAG, "-> nome do arquivo: $strFileName")
 
@@ -427,13 +431,23 @@ class AdaptarActivity : AppCompatActivity() {
             //--- Nome do arquivo
             strPrepInfoArq = "Arq: $strArqName"
 
+            //--- Opção de jogo - 02/01/2022 - vers 8.4
+            var intIdxFim   = 0
+            var strTag      = "<opcaoJogo>"
+            var intIdxInic  = strLeitArq.indexOf(strTag)
+            if (intIdxInic > 0) {
+                intIdxInic     += strTag.length
+                intIdxFim       = strLeitArq.indexOf("</opcaoJogo>")
+                strPrepInfoArq += "  " + strLeitArq.substring(intIdxInic, intIdxFim)
+            }
+
             //--- DataHora
             strPrepInfoArq += "  Data: "
-            var strTag      = "<dataHora>"
-            var intIdxInic  = strLeitArq.indexOf(strTag) + strTag.length
-            var intIdxFim   = strLeitArq.indexOf("</dataHora>")
+            strTag          = "<dataHora>"
+            intIdxInic      = strLeitArq.indexOf(strTag) + strTag.length
+            intIdxFim       = strLeitArq.indexOf("</dataHora>")
             strPrepInfoArq += strLeitArq.substring(intIdxInic, intIdxFim)
-
+            //--- Status
             strPrepInfoArq += "  Status: "
             strTag          = "<status>"
             intIdxInic      = strLeitArq.indexOf(strTag) + strTag.length
