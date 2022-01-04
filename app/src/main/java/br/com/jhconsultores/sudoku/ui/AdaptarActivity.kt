@@ -7,14 +7,14 @@ import android.util.Log
 
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.widget.CheckBox
+import android.widget.TextView
 
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.text.isDigitsOnly
-import androidx.core.view.size
+import androidx.core.view.children
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -52,6 +52,16 @@ class AdaptarActivity : AppCompatActivity() {
     
     private var strNivelJogo = "Fácil"
     private var subNivelJogo = 0
+
+    //private lateinit var arItemActionBarMenu: Array<MenuItem>
+    //private lateinit var menu : Menu
+
+    //private lateinit var itemActionMenuDel : MenuItem
+
+    var SELECIONAR_TODOS = 0
+    var DES_SELECIONAR   = 1
+    var DELETA_SELECS    = 2
+    var CANCELAR         = 3
 
     private val utils   = Utils ()
     private val utilsKt = UtilsKt ()
@@ -148,86 +158,39 @@ class AdaptarActivity : AppCompatActivity() {
             }
 
             //--- Instancia um adapter das listas ao RV passando um objeto interface dos listeners
-            //--------------------------------------------------------------------------------------
-            customAdapter = JogoAdapter(itemsListArq, itemsListJogo, itemsListChkDel,
-                                                                     object : JogoClickedListener {
-            //--------------------------------------------------------------------------------------
-
-                //--- Listener para click na info do arquivo de um dos jogos
-                override fun infoItem (posicao : Int) {
-
-                    //------------------------------------------------------------------------------
-                    val strfileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
-                    //------------------------------------------------------------------------------
-
-                    strToast = "Tapped $posicao: $strfileName!"
-                    //Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
-                    Log.d(cTAG, "-> $strToast")
-
-                    //-------------------------
-                    adaptaEjogaJogo(posicao)
-                    //-------------------------
-
-                }
-
-                //--- Listener para click na info de um dos jogos
-                override fun jogoItem(posicao : Int) {
-
-                    //------------------------------------------------------------------------------
-                    val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
-                    //------------------------------------------------------------------------------
-
-                    // strToast = "Tapped $posicao: $strNivel!"
-                    //Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
-                    Log.d(cTAG, "-> $strToast")
-
-                    //-------------------------
-                    adaptaEjogaJogo(posicao)
-                    //-------------------------
-
-                }
-
-                //--- Listener para click no del sel check box de um dos jogos
-                override fun checkBoxItem (posicao : Int, isChecked : Boolean) {
-
-                    itemsListChkDel[posicao] = isChecked
-
-                    Log.d(cTAG, "-> itemsChkDel: $itemsListChkDel")
-
-                }
-
-            })
-
-            recyclerView!!.adapter = customAdapter
+            //--------------------------------
+            atualizaRecyclerView(INVISIBLE)
+            //--------------------------------
 
         } else {
 
             strLog = "   - Não há arquivos de jogos no dir /Download/sudoku/Jogos"
             Log.d(cTAG, strLog)
-
         }
 
     }
 
     //---------------------------------------------------------------------
-    // Action Bar Menu listener
-    //---------------------------------------------------------------------
-
-
-
-
-    //---------------------------------------------------------------------
-    // Action Bar Menu items
+    // Action Bar Menu
     //---------------------------------------------------------------------
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
 
-        menuInflater.inflate(R.menu.menu_adaptar, menu)
+        try {
 
-        /*
-        val DELETAR_SELECIONADOS = 2
-        val itemMenu       = menu.getItem(DELETAR_SELECIONADOS)
-        itemMenu.isEnabled = (itemsListArq.size != 0)
-        */
+            val infl = getMenuInflater()
+
+            infl.inflate(R.menu.menu_adaptar, menu)
+            //val menuItem = menu.getItem(DELETA_SELECS)
+            //itemActionMenuDel = menuItem
+
+        }
+        catch (exc : Exception) {
+
+            Log.d(cTAG, "-> Erro: ${exc.message}")
+
+        }
+
+//        itemActionMenuDel.isEnabled = false
 
         return true
 
@@ -235,50 +198,91 @@ class AdaptarActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
+        //--- Tapping no menu do actionBar
         R.id.tresmore -> {
 
             Log.d(cTAG, "-> Tap no tresmore actionBar menu")
 
-            for (idxItem in itemsListChkDel.indices) {
-
-
-
-            }
+            //------------------------------
+            atualizaRecyclerView(VISIBLE)
+            //------------------------------
 
             true
 
         }
 
+        //--- Tapping no item 'Selecionar todos' do menu do actionBar
         R.id.action_selecionarTodos -> {
 
             // User chose the "Settings" item, show the app settings UI...
             Log.d(cTAG, "-> Tap em actionBar / Selecionar Todos")
 
+            for (idxChecked in itemsListChkDel.indices) {
+
+                itemsListChkDel[idxChecked] = true
+
+            }
+
+            //------------------------------
+            atualizaRecyclerView(VISIBLE)
+            //------------------------------
+ //           itemActionMenuDel.isEnabled = true
+
             true
+
         }
 
-        R.id.action_selecionar -> {
+        //--- Tapping no item 'Des_selecionar' do menu do actionBar
+        R.id.action_desSelecionar -> {
 
             // User chose the "Favorite" action, mark the current item as a favorite...
-            Log.d(cTAG, "-> Tap em actionBar / Selecionar")
+            Log.d(cTAG, "-> Tap em actionBar / Des_selecionar")
+
+            for (idxChecked in itemsListChkDel.indices) {
+
+                itemsListChkDel[idxChecked] = false
+
+            }
+
+            //------------------------------
+            atualizaRecyclerView(VISIBLE)
+            //------------------------------
+
+//            itemActionMenuDel.isEnabled = false
 
             true
 
         }
 
+        //--- Tapping no item 'Deletar selecionados' do menu do actionBar
         R.id.action_deletar_sels-> {
 
             // User chose the "Favorite" action, mark the current item as a favorite...
             Log.d(cTAG, "-> Tap em actionBar / Deletar selecionados")
 
+            // TODO: código para a deleção dos jogos selecionados
+
+            //------------------------------
+            atualizaRecyclerView(VISIBLE)
+            //------------------------------
+
+//            itemActionMenuDel.isEnabled = false
+
             true
 
         }
 
+        //--- Tapping no item 'Cancelar' do menu do actionBar
         R.id.action_cancelar -> {
 
             // User chose the "Favorite" action, mark the current item  as a favorite...
             Log.d(cTAG, "-> Tap em actionBar / Cancelar")
+
+            //--------------------------------
+            atualizaRecyclerView(INVISIBLE)
+            //--------------------------------
+
+//            itemActionMenuDel.isEnabled = false
 
             true
 
@@ -288,6 +292,7 @@ class AdaptarActivity : AppCompatActivity() {
             // If we got here, the user's action was not recognized.
             // Invoke the superclass to handle it.
             super.onOptionsItemSelected(item)
+
         }
 
     }
@@ -665,6 +670,75 @@ class AdaptarActivity : AppCompatActivity() {
 
         }
         return strRetorno
+
+    }
+
+    //--- adaptaRecyclerView
+    private fun atualizaRecyclerView(intVisibilidde : Int) {
+
+        //------------------------------------------------------------------------------------------
+        customAdapter = JogoAdapter(itemsListArq, itemsListJogo, itemsListChkDel, intVisibilidde,
+                                                                     object : JogoClickedListener {
+        //------------------------------------------------------------------------------------------
+
+            //--- Listener para click na info do arquivo de um dos jogos
+            override fun infoItem(posicao: Int) {
+
+                //------------------------------------------------------------------------------
+                val strfileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
+                //------------------------------------------------------------------------------
+
+                strToast = "Tapped $posicao: $strfileName!"
+                //Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+                Log.d(cTAG, "-> $strToast")
+
+                //-------------------------
+                adaptaEjogaJogo(posicao)
+                //-------------------------
+
+            }
+
+            //--- Listener para click na info de um dos jogos
+            override fun jogoItem(posicao: Int) {
+
+                //------------------------------------------------------------------------------
+                val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
+                //------------------------------------------------------------------------------
+
+                // strToast = "Tapped $posicao: $strNivel!"
+                //Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+                Log.d(cTAG, "-> $strToast")
+
+                //-------------------------
+                adaptaEjogaJogo(posicao)
+                //-------------------------
+
+            }
+
+            //--- Listener para click no del sel check box de um dos jogos
+            override fun checkBoxItem(posicao: Int, isChecked: Boolean) {
+
+                Log.d(cTAG, "-> itemsChkDel: $itemsListChkDel")
+
+                itemsListChkDel[posicao] = isChecked
+
+                //--- Habilita ou desabilita a opção de deleção de jogo(s)
+
+//                itemActionMenuDel.isEnabled = false
+                for (idxItem in itemsListChkDel.indices) {
+
+                    if (itemsListChkDel[idxItem]) {
+
+//                        itemActionMenuDel.isEnabled = true
+                        break
+
+                    }
+                }
+            }
+
+        })
+
+        recyclerView!!.adapter = customAdapter
 
     }
 

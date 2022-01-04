@@ -17,7 +17,8 @@ import br.com.jhconsultores.sudoku.R
 
 class JogoAdapter(private val arLstArq   : ArrayList<String>,
                   private val arLstJogo  : ArrayList<String>,
-                  private val arLstChkDel: ArrayList<Boolean>,
+                  private val arLstChkBox: ArrayList<Boolean>,
+                  private val intVisivel : Int,
                   private val listener   : JogoClickedListener) :
                                                    RecyclerView.Adapter<JogoAdapter.ViewHolder>() {
 
@@ -64,14 +65,16 @@ class JogoAdapter(private val arLstArq   : ArrayList<String>,
         //----------------------------------------------------------------------
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.arqTxt.text  = arLstArq[position]
-        viewHolder.jogoTxt.text = arLstJogo[position]
+        viewHolder.arqTxt.text      = arLstArq   [position]
+        viewHolder.jogoTxt.text     = arLstJogo  [position]
+        viewHolder.chkDel.isChecked = arLstChkBox[position]
 
         //--- Colore o card conforme o status do jogo
         val strDado    = arLstArq [position]
         val intIdxInic = strDado.indexOf("Status: ") + 8
         val strStatus  = strDado.substring(intIdxInic)
         val cardColor : Long = if (strStatus.contains("ativo")) 0xFFA5F55C else 0xFF3D91E4
+
         viewHolder.arqTxt.setBackgroundColor  (cardColor.toInt())
         viewHolder.jogoTxt.setBackgroundColor (cardColor.toInt())
 
@@ -101,18 +104,18 @@ class JogoAdapter(private val arLstArq   : ArrayList<String>,
         //----------------------------------------------------------------------
 
         //--- Ativa ou desativa o checkbox do ítem conforme o status do action menu
-        viewHolder.chkDel.visibility = INVISIBLE
+        viewHolder.chkDel.visibility = intVisivel
 
         //--- Seleciona o vH (viewHolder) conforme a lista recebida
-        viewHolder.chkDel.isChecked = arLstChkDel[position]
+        //viewHolder.chkDel.isChecked = arLstChkDel[position]
 
         //--- Seleciona o check Box conforme ...
-        viewHolder.chkDel.isChecked = true
+        //viewHolder.chkDel.isChecked = true
 
         //--- Listener
         viewHolder.chkDel.setOnClickListener {
 
-            Log.d(cTAG, "-> Del checkBox $position")
+            Log.d(cTAG, "-> Del sel checkBox $position")
 
             //-------------------------------------------------------------
             listener.checkBoxItem(position, viewHolder.chkDel.isChecked)

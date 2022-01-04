@@ -10,19 +10,18 @@
         android:id    ="@+id/tresmore"
         android:title ="@string/op_es"
         android:orderInCategory="101"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:icon    ="@drawable/ic_morebranco">
 
         <menu>
-
             <item
                 android:id       ="@+id/action_selecionarTodos"
                 android:title    ="@string/selecionar_todos"
                 app:showAsAction ="never" />
 
             <item
-                android:id       ="@+id/action_selecionar"
-                android:title    ="@string/selecionar"
+                android:id       ="@+id/action_desSelecionar"
+                android:title    ="@string/desselecionar"
                 app:showAsAction ="never" />
 
             <item

@@ -65,5 +65,6 @@
     <string name="jogo">Jogo:</string>
     <string name="arquivo">Arquivo:</string>
     <string name="selecionar_todos">Selecionar todos</string>
+    <string name="desselecionar">Desselecionar</string>
 
 </resources>
