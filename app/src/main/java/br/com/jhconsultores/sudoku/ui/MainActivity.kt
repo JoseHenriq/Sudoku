@@ -139,10 +139,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
 
     //--- Classes externas
-    private var sgg = SudokuGameGenerator()
+    private var sgg       = SudokuGameGenerator()
     private var jogarJogo = JogarActivity()
-    private val utils = Utils()
-    private val utilsKt = UtilsKt()
+    private val utils     = Utils()
+    private val utilsKt   = UtilsKt()
 
     //----------------------------------------------------------------------------------------------
     // Eventos e listeners da MainActivity

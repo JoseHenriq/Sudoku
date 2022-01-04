@@ -5,7 +5,9 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -13,10 +15,11 @@ import br.com.jhconsultores.sudoku.R
 
 // https://developer.android.com/guide/topics/ui/layout/recyclerview
 
-class JogoAdapter(private val arLstArq:  ArrayList<String>,
-                  private val arLstJogo: ArrayList<String>,
-                  private val listener: JogoClickedListener) :
-                                                RecyclerView.Adapter<JogoAdapter.ViewHolder>() {
+class JogoAdapter(private val arLstArq   : ArrayList<String>,
+                  private val arLstJogo  : ArrayList<String>,
+                  private val arLstChkDel: ArrayList<Boolean>,
+                  private val listener   : JogoClickedListener) :
+                                                   RecyclerView.Adapter<JogoAdapter.ViewHolder>() {
 
     companion object {
 
@@ -31,11 +34,13 @@ class JogoAdapter(private val arLstArq:  ArrayList<String>,
 
         val arqTxt  : TextView
         val jogoTxt : TextView
+        val chkDel  : CheckBox
 
         init {
 
             arqTxt  = view.findViewById(R.id.card_Arq_txt)
             jogoTxt = view.findViewById(R.id.card_Jogo_txt)
+            chkDel  = view.findViewById(R.id.chkBoxSelArqDel)
 
         }
 
@@ -54,6 +59,9 @@ class JogoAdapter(private val arLstArq:  ArrayList<String>,
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
 
+        //----------------------------------------------------------------------
+        //                        text cards
+        //----------------------------------------------------------------------
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.arqTxt.text  = arLstArq[position]
@@ -67,7 +75,7 @@ class JogoAdapter(private val arLstArq:  ArrayList<String>,
         viewHolder.arqTxt.setBackgroundColor  (cardColor.toInt())
         viewHolder.jogoTxt.setBackgroundColor (cardColor.toInt())
 
-        //--- Declara os listeners de tap nos textos do rv
+        //--- Declara os listeners de tap nos textos do ítem do rv
         viewHolder.arqTxt.setOnClickListener {
 
             Log.d(cTAG, "-> arqTxt $position" )
@@ -85,6 +93,30 @@ class JogoAdapter(private val arLstArq:  ArrayList<String>,
             //----------------------------
             listener.jogoItem(position)
             //----------------------------
+
+        }
+
+        //----------------------------------------------------------------------
+        //                        delete sel checkBoxes
+        //----------------------------------------------------------------------
+
+        //--- Ativa ou desativa o checkbox do ítem conforme o status do action menu
+        viewHolder.chkDel.visibility = INVISIBLE
+
+        //--- Seleciona o vH (viewHolder) conforme a lista recebida
+        viewHolder.chkDel.isChecked = arLstChkDel[position]
+
+        //--- Seleciona o check Box conforme ...
+        viewHolder.chkDel.isChecked = true
+
+        //--- Listener
+        viewHolder.chkDel.setOnClickListener {
+
+            Log.d(cTAG, "-> Del checkBox $position")
+
+            //-------------------------------------------------------------
+            listener.checkBoxItem(position, viewHolder.chkDel.isChecked)
+            //-------------------------------------------------------------
 
         }
 

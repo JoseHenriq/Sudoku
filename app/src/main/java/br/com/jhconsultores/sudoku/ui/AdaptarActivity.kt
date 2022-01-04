@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.widget.CheckBox
 
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -40,9 +41,13 @@ class AdaptarActivity : AppCompatActivity() {
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var customAdapter: JogoAdapter
 
-    private var itemsListArq  = ArrayList<String>()
-    private var itemsListJogo = ArrayList<String>()
+    private var itemsListArq    = ArrayList<String>()
+    private var itemsListJogo   = ArrayList<String>()
+    private var itemsListChkDel = ArrayList<Boolean>()
+
     private var recyclerView : RecyclerView? = null
+    private var chkBtnDelete : CheckBox?     = null
+
     private lateinit var adaptarToolBar: androidx.appcompat.widget.Toolbar
     
     private var strNivelJogo = "Fácil"
@@ -63,7 +68,7 @@ class AdaptarActivity : AppCompatActivity() {
         setContentView(R.layout.activity_adaptar)
 
         //------------------------------------------------------------------------------------------
-        // Implementa o actionBar
+        // Implementa o tool - action Bar
         //------------------------------------------------------------------------------------------
         adaptarToolBar = findViewById(R.id.adaptartoolbar)
         adaptarToolBar.title = strApp +  " - Adaptação"
@@ -99,6 +104,10 @@ class AdaptarActivity : AppCompatActivity() {
                 itemsListJogo.add(preparaItensInfosJogo(strArqName))
                 //-----------------------------------------------------
 
+                //---------------------------
+                itemsListChkDel.add(false)
+                //---------------------------
+
             }
 
         } else {
@@ -107,6 +116,8 @@ class AdaptarActivity : AppCompatActivity() {
             Log.d(cTAG, strLog)
 
         }
+
+        chkBtnDelete = findViewById(R.id.chkBoxSelArqDel)
 
     }
 
@@ -138,7 +149,8 @@ class AdaptarActivity : AppCompatActivity() {
 
             //--- Instancia um adapter das listas ao RV passando um objeto interface dos listeners
             //--------------------------------------------------------------------------------------
-            customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
+            customAdapter = JogoAdapter(itemsListArq, itemsListJogo, itemsListChkDel,
+                                                                     object : JogoClickedListener {
             //--------------------------------------------------------------------------------------
 
                 //--- Listener para click na info do arquivo de um dos jogos
@@ -161,9 +173,9 @@ class AdaptarActivity : AppCompatActivity() {
                 //--- Listener para click na info de um dos jogos
                 override fun jogoItem(posicao : Int) {
 
-                    //---------------------------------------------------------------------------------
+                    //------------------------------------------------------------------------------
                     val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
-                    //---------------------------------------------------------------------------------
+                    //------------------------------------------------------------------------------
 
                     // strToast = "Tapped $posicao: $strNivel!"
                     //Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
@@ -172,6 +184,15 @@ class AdaptarActivity : AppCompatActivity() {
                     //-------------------------
                     adaptaEjogaJogo(posicao)
                     //-------------------------
+
+                }
+
+                //--- Listener para click no del sel check box de um dos jogos
+                override fun checkBoxItem (posicao : Int, isChecked : Boolean) {
+
+                    itemsListChkDel[posicao] = isChecked
+
+                    Log.d(cTAG, "-> itemsChkDel: $itemsListChkDel")
 
                 }
 
@@ -189,7 +210,14 @@ class AdaptarActivity : AppCompatActivity() {
     }
 
     //---------------------------------------------------------------------
-    // Menu Actions Overflow
+    // Action Bar Menu listener
+    //---------------------------------------------------------------------
+
+
+
+
+    //---------------------------------------------------------------------
+    // Action Bar Menu items
     //---------------------------------------------------------------------
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
 
@@ -206,6 +234,20 @@ class AdaptarActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+
+        R.id.tresmore -> {
+
+            Log.d(cTAG, "-> Tap no tresmore actionBar menu")
+
+            for (idxItem in itemsListChkDel.indices) {
+
+
+
+            }
+
+            true
+
+        }
 
         R.id.action_selecionarTodos -> {
 
@@ -247,6 +289,7 @@ class AdaptarActivity : AppCompatActivity() {
             // Invoke the superclass to handle it.
             super.onOptionsItemSelected(item)
         }
+
     }
 
     //--------------------------------------------------------------------------
