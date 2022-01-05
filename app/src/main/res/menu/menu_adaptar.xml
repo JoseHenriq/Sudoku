@@ -8,34 +8,12 @@
 
     <item
         android:id    ="@+id/tresmore"
-        android:title ="@string/op_es"
+        android:title ="@string/threedots"
         android:orderInCategory="101"
         app:showAsAction="ifRoom"
         android:icon    ="@drawable/ic_morebranco">
 
-        <menu>
-            <item
-                android:id       ="@+id/action_selecionarTodos"
-                android:title    ="@string/selecionar_todos"
-                app:showAsAction ="never" />
-
-            <item
-                android:id       ="@+id/action_desSelecionar"
-                android:title    ="@string/desselecionar"
-                app:showAsAction ="never" />
-
-            <item
-                android:id       ="@+id/action_deletar_sels"
-                android:title    ="@string/deletar_selecionados"
-                android:enabled  ="false"
-                app:showAsAction ="never" />
-
-            <item
-                android:id       ="@+id/action_cancelar"
-                android:title    ="@string/cancelar"
-                app:showAsAction ="never" />
-
-        </menu>
+        <menu android:id = "@+id/sub_menu" />
 
     </item>
 

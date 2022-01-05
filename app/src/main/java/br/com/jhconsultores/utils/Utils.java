@@ -135,7 +135,7 @@ public class Utils {
     //-------------------------------------------------------------------------
     //  Solicita as permissões
     //-------------------------------------------------------------------------
-     boolean validate(Activity activity, int requestCode, String... permissions) {
+    boolean validate(Activity activity, int requestCode, String... permissions) {
 
         boolean flagValidateOk = false;
 
@@ -378,23 +378,41 @@ public class Utils {
     //--------------------------------------------------------------------------
     // Método para deletar o arquivo em um diretorio cujos nomes são recebidos.
     //--------------------------------------------------------------------------
-    public boolean delExtMemFile(String strDirName, String strFileName) {
+     public boolean delExtMemFile(String strDirName, String strFileName) {
+    //public boolean delExtMemFile(String strFileName) {
 
-        Log.d(TAG_Utils, "--> Deleta Arquivo do Diretório " + strDirName);
-        boolean flagDelOk  = false;
+        boolean flagDelOk = false;
+
+        /*
+        Log.d(TAG_Utils, "--> Deleta Arquivo no diretório: " + strDirName);
+
         String rootDirName = Environment.getExternalStorageDirectory().toString() + strDirName;
         File Dir  = new File(rootDirName);
         File file = new File(rootDirName + strFileName);
+        */
+
+        File fpath = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
+        File Dir   = new File(fpath + "/" + strDirName);
+        File file  = new File(Dir + "/", strFileName);
+
+        Log.d(TAG_Utils, "--> Deleta: " + file);
+
         try {
 
+            //--- Se o arquivo a ser deletado existir nesse diretório, deleta-o
             if (Dir.isDirectory()) {
+
                 String[] children = Dir.list();
+
                 int i = 0;
                 for ( ; i < children.length; i++ ) {
                     if (children[i].equals(strFileName)) break;
                 }
+
                 if (i < children.length) {
+                    //---------------------------
                     flagDelOk = file.delete();
+                    //---------------------------
                 }
             }
 
@@ -402,7 +420,9 @@ public class Utils {
 
             Log.d(TAG_Utils, "--> Erro: " + exc.getMessage());
             flagDelOk = false;
+
         }
+
         return flagDelOk;
     }
 

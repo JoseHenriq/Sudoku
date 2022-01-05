@@ -1,3 +1,87 @@
+//--------------------------------------------------------------------------
+05/01/22 09:16:00
+//--------------------------------------------------------------------------
+ 
+    // sudoku_#8.5
+
+
+    //private lateinit var toolBar     : androidx.appcompat.widget.Toolbar
+    //private lateinit var progressBar : ProgressBar
+
+    //------------------------------------------------------------------------------------------
+    // Implementa o Progress Bar
+    //------------------------------------------------------------------------------------------
+    /*
+    progressBar = ProgressBar(this)
+
+    //setting height and width of progressBar
+    progressBar.layoutParams = LinearLayout.LayoutParams(
+        ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT)
+
+    //accessing our relative layout where the progressBar will add up
+    val layout = findViewById<RelativeLayout>(R.id.layoutProgBar)
+    // Add ProgressBar to our layout
+    layout?.addView(progressBar)
+
+    //--- Ativa o progressBar
+    progressBar.visibility = View.VISIBLE
+    */
+
+    //------------------------------------------------------------------------------------------
+    // Implementa o actionBar
+    //------------------------------------------------------------------------------------------
+    /*
+    toolBar = findViewById(R.id.toolbar)
+    setSupportActionBar(toolBar)
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    */
+
+    /*
+    //---------------------------------------------------------------------------------------
+    customAdapter = JogoAdapter(itemsListArq, itemsListJogo, object : JogoClickedListener {
+    //---------------------------------------------------------------------------------------
+
+        //--- Listener para click na info do arquivo de um dos jogos
+        override fun infoItem (posicao : Int) {
+
+            //---------------------------------------------------------------------------------
+            val strfileName = leCampo(itemsListArq[posicao], "Arq: ", " Data:")
+            //---------------------------------------------------------------------------------
+
+            strToast = "Tapped $posicao: $strfileName!"
+            Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+            //-------------------------
+            adaptaEjogaJogo(posicao)
+            //-------------------------
+
+        }
+
+        //--- Listener para click na info de um dos jogos
+        override fun jogoItem(posicao : Int) {
+
+            //---------------------------------------------------------------------------------
+            val strNivel = leCampo(itemsListJogo[posicao], "Nivel: ", " sub: ")
+            //---------------------------------------------------------------------------------
+
+            strToast = "Tapped $posicao: $strNivel!"
+            Toast.makeText(baseContext, strToast, Toast.LENGTH_SHORT).show()
+
+            //-------------------------
+            adaptaEjogaJogo(posicao)
+            //-------------------------
+
+        }
+
+    })
+
+    recyclerView!!.adapter = customAdapter
+    */
+
+    //--- Desativa o progressbar
+    // progressBar.visibility = View.INVISIBLE
+
 
 
 //--------------------------------------------------------------------------
