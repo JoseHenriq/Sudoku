@@ -58,6 +58,8 @@ class AdaptarActivity : AppCompatActivity() {
     var DELETA_SELECS    = 2
     var CANCELAR         = 3
 
+    private lateinit var bundle : Bundle
+
     private val utils   = Utils()
     private val utilsKt = UtilsKt()
 
@@ -72,6 +74,8 @@ class AdaptarActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_adaptar)
+
+        if (savedInstanceState != null) { bundle = savedInstanceState }
 
         //------------------------------------------------------------------------------------------
         // Implementa o tool - action Bar
@@ -129,9 +133,9 @@ class AdaptarActivity : AppCompatActivity() {
             }
 
             //--- Instancia um adapter das listas ao RV passando um objeto interface dos listeners
-            //--------------------------------
-            atualizaRecyclerView(INVISIBLE)
-            //--------------------------------
+            //------------------------------
+            atualizaRecyclerView(VISIBLE)
+            //------------------------------
 
         } else {
 
@@ -182,7 +186,7 @@ class AdaptarActivity : AppCompatActivity() {
         //--- Tapping no menu do actionBar
         R.id.tresmore -> {
 
-            Log.d(cTAG, "-> Tap no tresmore actionBar menu")
+            Log.d(cTAG, "-> Tap no 'three dots' actionBar menu")
 
             //------------------------------
             atualizaRecyclerView(VISIBLE)
@@ -271,21 +275,17 @@ class AdaptarActivity : AppCompatActivity() {
                     val flagDelOk = utils.delExtMemFile("sudoku/Jogos/", strFileName)
                     //----------------------------------------------------------------------------
 
-                    if (flagDelOk) {
-
-                        strLog += "OK!"
-
-                        itemsListChkDel[idxItemSel] = false
-
-                        //--------------
-                        //prepArLists()
-                        //--------------
-
-                        recyclerView!!.removeViewAt(idxItemSel)
-
-                    } else strLog += "NÃO OK!"
-
+                    strLog += if (flagDelOk) "OK!" else "NÃO OK!"
                     Log.d(cTAG, strLog)
+
+                    //--- Retorna com o resultado
+                    val intent = Intent()
+                    intent.putExtra("Status", "Deletar Jogo")
+                    //------------------------------------------------------------------
+                    setResult (if (flagDelOk) RESULT_OK else RESULT_CANCELED, intent)
+                    //------------------------------------------------------------------
+                    finish()
+                    //---------
 
                 }
             }
@@ -293,18 +293,11 @@ class AdaptarActivity : AppCompatActivity() {
             //--- Atualiza os Arrays List (ViewHolder)
             //---------------
             prepArLists()
-            //---------------
-
-            //-------------------------------------
-            customAdapter.notifyDataSetChanged()
-            //-------------------------------------
 
             //--- Atualiza o RV
             //------------------------------
             atualizaRecyclerView(VISIBLE)
             //------------------------------
-
-            subMenuDelSels.isEnabled = false
 
             true
 
@@ -322,9 +315,9 @@ class AdaptarActivity : AppCompatActivity() {
 
             }
 
-            //--------------------------------
-            atualizaRecyclerView(INVISIBLE)
-            //--------------------------------
+            //------------------------------
+            atualizaRecyclerView(VISIBLE)
+            //------------------------------
 
             subMenuDelSels.isEnabled = false
 
@@ -345,12 +338,12 @@ class AdaptarActivity : AppCompatActivity() {
     //                                Funções
     //--------------------------------------------------------------------------
     //--- Adapta jogo selecionado no RV e passa a Jogar o jogo
-    var strTextViews = ""
-    var strFileName = ""
+    var strTextViews  = ""
+    var strFileName   = ""
     var salvaFileName = ""
-    var strJogo = ""
-    var strStatus = ""
-    var strErro = "0"
+    var strJogo       = ""
+    var strStatus     = ""
+    var strErro       = "0"
     var strCronoConta = "00:00:00"
 
     fun adaptaEjogaJogo(idxItemView: Int) {
@@ -781,10 +774,6 @@ class AdaptarActivity : AppCompatActivity() {
             })
 
         recyclerView!!.adapter = customAdapter
-
-        //adapter.submitList(dbTasksList)
-
-        //customAdapter.notifyDataSetChanged()
 
     }
 

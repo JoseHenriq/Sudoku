@@ -1,6 +1,7 @@
 package br.com.jhconsultores.sudoku.ui
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 
 import android.content.Intent
@@ -20,10 +21,14 @@ import androidx.core.view.isVisible
 import android.view.MotionEvent
 import android.view.View.*
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import br.com.jhconsultores.sudoku.R
 import br.com.jhconsultores.sudoku.jogo.SudokuGameGenerator
 import br.com.jhconsultores.utils.*
+import java.lang.Exception
 
 @Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
@@ -31,18 +36,18 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     //                         Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
-    private var strLog   = ""
+    private var strLog = ""
     private var strToast = ""
 
     companion object {
 
-        const val cTAG = "Sudoku"
-        val strApp     = "Sudoku_#8.5"
+        const val cTAG   = "Sudoku"
+        const val strApp = "Sudoku_#8.5"
 
         var flagJogoGeradoOk  = false
         var flagJogoEditadoOk = false
 
-        var flagJogoAdaptadoOk= false
+        var flagJogoAdaptadoOk = false
 
         var strOpcaoJogo = "JogoGerado"
 
@@ -50,62 +55,62 @@ class MainActivity : AppCompatActivity() {
 
     //--- Objetos gráficos
     private lateinit var ivSudokuBoardMain: ImageView
-    private lateinit var ivNumDisp        : ImageView
-    private lateinit var ivQtiNumDisp     : ImageView
+    private lateinit var ivNumDisp: ImageView
+    //private lateinit var ivQtiNumDisp: ImageView
 
     private var bmpMyImageInic: Bitmap? = null
     private var bmpMyImageBack: Bitmap? = null
-    private var bmpMyImage    : Bitmap? = null
+    private var bmpMyImage: Bitmap? = null
 
     private var bmpNumDisp: Bitmap? = null
 
-    private var intCellwidth  = 0
+    private var intCellwidth = 0
     private var intCellheight = 0
 
-    private var pincelVerde   = Paint()
-    private var pincelBranco  = Paint()
-    private var pincelPreto   = Paint()
-    private var pincelAzul    = Paint()
+    private var pincelVerde = Paint()
+    private var pincelBranco = Paint()
+    private var pincelPreto = Paint()
+    private var pincelAzul = Paint()
     private var pincelLaranja = Paint()
 
     private var intTamTxt = 25
-    private var scale     = 0f
+    private var scale = 0f
 
     private var canvasMyImage: Canvas? = null
     private var canvasNumDisp: Canvas? = null
 
     //--- Textos
-    private lateinit var tvContaNums : TextView
+    private lateinit var tvContaNums: TextView
     private lateinit var tvContaClues: TextView
 
     //--- Botões principais
-    private lateinit var btnGeraJogo  : Button
+    private lateinit var btnGeraJogo: Button
     private lateinit var btnAdaptaJogo: Button
-    private lateinit var btnJogaJogo  : Button
-    private lateinit var btnTestaRV   : Button
+    private lateinit var btnJogaJogo: Button
+    //private lateinit var btnTestaRV: Button
 
     //--- Radio Buttons
     private lateinit var groupRBnivel: RadioGroup
-    private lateinit var rbFacil     : RadioButton
-    private lateinit var rbMedio     : RadioButton
-    private lateinit var rbDificil   : RadioButton
+    private lateinit var rbFacil: RadioButton
+    private lateinit var rbMedio: RadioButton
+    private lateinit var rbDificil: RadioButton
     private lateinit var rbMuitoDificil: RadioButton
 
     private lateinit var groupRBadapta: RadioGroup
-    private lateinit var rbPreset     : RadioButton
-    private lateinit var rbEdicao     : RadioButton
+    private lateinit var rbPreset: RadioButton
+    private lateinit var rbEdicao: RadioButton
 
-    private lateinit var progressBar  : ProgressBar
+    private lateinit var progressBar: ProgressBar
 
     private lateinit var edtViewSubNivel: EditText
-    private var flagAdaptaPreset = true
+    //private var flagAdaptaPreset = true
 
     //--- Objetos para o jogo
     private var quadMaior = Array(9) { Array(9) { 0 } }
 
-    private var strNivelJogo   = "Fácil"
-    private var nivelJogo      = 0
-    private var subNivelJogo   = 0
+    private var strNivelJogo = "Fácil"
+    private var nivelJogo = 0
+    private var subNivelJogo = 0
     private var nivelTotalJogo = 0
 
     // Núm     0   22               31        41          51       61     81
@@ -114,12 +119,12 @@ class MainActivity : AppCompatActivity() {
     //        |xxxx|  MUITO DIFÍCIL | DIFÍCIL |   MÉDIO   |  FÁCIL |xxxxxxx|
     //        |----|----------------|---------|-----------|--------|-------|
 
-    private val FACIL   = 20
-    private val MEDIO   = 30
-    private val DIFICIL = 40
+    private val FACIL = 20
+    private val MEDIO = 30
+    private val DIFICIL       = 40
     private val MUITO_DIFICIL = 50
 
-    private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
+    //private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
     private var arArIntNums     = Array(9) { Array(9) { 0 } }
     private var arIntQtiNumDisp = Array(9) { 9 }
     private val arIntNumsDisp   = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
@@ -133,10 +138,12 @@ class MainActivity : AppCompatActivity() {
     private var flagBoardSel = false
 
     //--- Arquivos jogos
-    private var arStrTags   = Array(3) { "" }
-    private var arArStrTags = Array(3) { Array(9) { "" } }
+    //private var arStrTags = Array(3) { "" }
+    //private var arArStrTags = Array(3) { Array(9) { "" } }
 
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
+
+    private lateinit var previewRequest : ActivityResultLauncher<Intent>
 
     //--- Classes externas
     private var sgg       = SudokuGameGenerator()
@@ -156,20 +163,20 @@ class MainActivity : AppCompatActivity() {
 
         //--- Implementa o actionBar
         toolBar = findViewById(R.id.maintoolbar)
-        toolBar.title = strApp +  " - main"
+        toolBar.title = "$strApp - main"
 
         //--- Instancializações e inicializações
-        tvContaNums  = findViewById(R.id.ContaNums)
+        tvContaNums = findViewById(R.id.ContaNums)
         tvContaClues = findViewById(R.id.ContaClues)
 
-        btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
+        btnGeraJogo = findViewById(R.id.btn_GerarJogo)
         btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
-        btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
+        btnJogaJogo = findViewById(R.id.btn_JogarJogo)
 
-        groupRBnivel   = findViewById(R.id.radioGrpNivel)
-        rbFacil        = findViewById(R.id.nivelFacil)
-        rbMedio        = findViewById(R.id.nivelMédio)
-        rbDificil      = findViewById(R.id.nivelDifícil)
+        groupRBnivel = findViewById(R.id.radioGrpNivel)
+        rbFacil = findViewById(R.id.nivelFacil)
+        rbMedio = findViewById(R.id.nivelMédio)
+        rbDificil = findViewById(R.id.nivelDifícil)
         rbMuitoDificil = findViewById(R.id.nivelMuitoDifícil)
         //-----------------------------
         prepRBniveis(true)
@@ -177,13 +184,13 @@ class MainActivity : AppCompatActivity() {
         edtViewSubNivel = findViewById(R.id.edtViewSubNivel)
 
         groupRBadapta = findViewById(R.id.radioGrpAdapta)
-        rbPreset      = findViewById(R.id.preset)
-        rbEdicao      = findViewById(R.id.edicao)
-        txtDadosJogo  = findViewById(R.id.txtJogos)
+        rbPreset = findViewById(R.id.preset)
+        rbEdicao = findViewById(R.id.edicao)
+        txtDadosJogo = findViewById(R.id.txtJogos)
 
         groupRBadapta.visibility = INVISIBLE
 
-        tvContaNums.text  = "0"
+        tvContaNums.text = "0"
         tvContaClues.text = getString(R.string.valor81)
 
         //--- Objetos gráficos
@@ -223,9 +230,9 @@ class MainActivity : AppCompatActivity() {
                 // tvSample.setText("Text in EditText : $s")
 
                 if (s.isNotEmpty())
-                    //-----------------------------
+                //-----------------------------
                     verifMudancaNivel(nivelJogo)
-                    //-----------------------------
+                //-----------------------------
 
             }
 
@@ -294,8 +301,45 @@ class MainActivity : AppCompatActivity() {
         //-----------------------------------------------------------------------------------
         // Verifica se permitidos os acessos aos recursos do Android (AndroidManifest.xml)
         //-----------------------------------------------------------------------------------
-        VerificaPermissoesAcessoAPI()
+        verifPermissoesAcessoAPI()
         //------------------------------
+
+        Log.d(cTAG, "-> Registra activity for result")
+
+        //------------------------------------------------------------------------------------------
+        previewRequest = registerForActivityResult( ActivityResultContracts.
+                                            StartActivityForResult() ) { result: ActivityResult ->
+        //------------------------------------------------------------------------------------------
+
+            Log.d(cTAG, "-> Retorna da activity for result")
+
+            if (result.resultCode == Activity.RESULT_OK) {
+
+                //  you will get result here in result.data
+                // val list = result.data
+
+                // do whatever with the data in the callback
+                val strStatus = result.data!!.getStringExtra("Status")
+                Log.d(cTAG, "-> activity results OK! Status: $strStatus")
+
+                //--- Se deletou jogo retorna à adaptação de jogo
+                if (strStatus == "Deletar Jogo") {
+
+                    //--- Prepara a Intent para chamar AdaptarActivity
+                    val intent    = Intent(this, AdaptarActivity::class.java)
+                    intent.action = "InstanciaRVJogosSalvos"
+                    //------------------------------
+                    previewRequest.launch(intent)
+                    //------------------------------
+
+                }
+
+            } else {
+
+                Log.d(cTAG, "-> activity results NÃO OK!")
+
+            }
+        }
 
     }
 
@@ -533,7 +577,7 @@ class MainActivity : AppCompatActivity() {
 
             //flagJogoGeradoOk = false
 
-            strToast  = "Não há jogo válido!\nv=$flagJogoValido g=$flagJogoGeradoOk"
+            strToast = "Não há jogo válido!\nv=$flagJogoValido g=$flagJogoGeradoOk"
             strToast += " e=$flagJogoEditadoOk"
             //----------------------------------------------------------------
             Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
@@ -573,13 +617,13 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, JogarActivity::class.java)
             intent.action = strOpcaoJogo
 
-            intent.putExtra("strNivelJogo"   , strNivelJogo)
+            intent.putExtra("strNivelJogo", strNivelJogo)
             intent.putExtra("strSubNivelJogo", edtViewSubNivel.text.toString())
-            intent.putExtra("strCronoConta"  ,"00:00")
-            intent.putExtra("strErro"        ,"0")
+            intent.putExtra("strCronoConta", "00:00")
+            intent.putExtra("strErro", "0")
 
             intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
-            intent.putIntegerArrayListExtra("JogoPreparado" , arIntNumsJogo)
+            intent.putIntegerArrayListExtra("JogoPreparado", arIntNumsJogo)
 
             //----------------------
             startActivity(intent)
@@ -1123,7 +1167,7 @@ class MainActivity : AppCompatActivity() {
         if (flagBoardSel) {
 
             //--- Determina a célula e o número tocado
-            val cellX  = coordX / intCellwidth
+            val cellX = coordX / intCellwidth
             val intNum = arIntNumsDisp[cellX]
 
             //--- Célula válida
@@ -1168,7 +1212,7 @@ class MainActivity : AppCompatActivity() {
                             tvContaClues.text = intQtiZeros.toString()
                             tvContaNums.text = (81 - intQtiZeros).toString()
 
-                            flagJogoAdaptadoOk = (intQtiZeros > 19 && intQtiZeros < 60)
+                            flagJogoAdaptadoOk = (intQtiZeros in 20..59)
 
                             //--- Sinaliza se já posicionou os 9 desse número
                             if (arIntQtiNumDisp[cellX] == 0) {
@@ -1256,6 +1300,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /*
     //lateinit var document : Document
 
     //--- inicQuadMaiorAdaptacao
@@ -1364,6 +1409,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    */
 
     //--- copiaArArInt
     private fun copiaArArInt(arArIntPreset: Array<Array<Int>>): Array<Array<Int>> {
@@ -1463,6 +1509,7 @@ class MainActivity : AppCompatActivity() {
     }
     */
 
+    /*
     //--- separaArq
     private fun separaArq(arStrLeit: ArrayList<String>, strTag: String): String {
 
@@ -1488,7 +1535,9 @@ class MainActivity : AppCompatActivity() {
         return strReturn
 
     }
+    */
 
+    /*
     //--- separaCampo
     private fun separaCampo(strCampo: String, strSubTag: String): String {
 
@@ -1511,6 +1560,7 @@ class MainActivity : AppCompatActivity() {
         return strReturn
 
     }
+    */
 
     //--- Converte um valor em dp para pixels (px)
     private fun toPx(dip: Float): Float {
@@ -1666,6 +1716,7 @@ class MainActivity : AppCompatActivity() {
     }
     */
 
+    /*
     //--- leExtMem:  Download/sudoku/ do smartphone
     private fun leExtMemDownload(numPreset: Int): Array<Array<Int>> {
 
@@ -1816,6 +1867,7 @@ class MainActivity : AppCompatActivity() {
         return arArIntJogoAdaptar
 
     }
+    */
 
     //----------------------------------------------------------------------------------------------
     //                                        Permissões
@@ -1823,7 +1875,7 @@ class MainActivity : AppCompatActivity() {
     //---------------------------------------------------------------------
     // Verifica se Permissions do Manifest estão granted
     //---------------------------------------------------------------------
-    private fun VerificaPermissoesAcessoAPI(): Boolean {
+    private fun verifPermissoesAcessoAPI(): Boolean {
 
         var strMsgDebug = "--> main "
         strMsgDebug += "Verifica permissões"
@@ -1846,6 +1898,8 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     //                                 Funções Jogo selecionado
     //----------------------------------------------------------------------------------------------
+
+    /*
     //--- preparaJogoSelec
     private fun preparaJogoSelec(strJogoSelec: String) {
 
@@ -1921,7 +1975,9 @@ class MainActivity : AppCompatActivity() {
         )  // value in milliseconds
 
     }
+    */
 
+    /*
     //--- extraeQMSelec
     private fun extraeQMSelec(strJogoSelec: String): Array<Array<Int>> {
 
@@ -1930,6 +1986,7 @@ class MainActivity : AppCompatActivity() {
         return arArJogoSelec
 
     }
+    */
 
     //--- adaptaPreset
     private fun adaptaPreset() {
@@ -1950,21 +2007,45 @@ class MainActivity : AppCompatActivity() {
                 //--- Desativa o progress bar
                 progressBar.visibility = INVISIBLE
 
-            },
-            waitTime
-        )  // value in milliseconds
+                //--- Ativa a activity de adaptação de jogos
+                //-----------------------
+                ativaAdaptarActivity()
+                //-----------------------
 
-        //--- Prepara o preset para se conseguir o gabarito do jogo
+            },
+            waitTime   // value in milliseconds
+        )
+    }
+
+    //--- ativaAdaptarActivity
+    private fun ativaAdaptarActivity() {
+
+        //--- Prepara o preset para conseguir o gabarito do jogo
         strLog = "-> Presset is checked"
         Log.d(cTAG, strLog)
 
-        //--- Prepara a Intent para chamar AdaptarActivity
-        val intent = Intent(this, AdaptarActivity::class.java)
-        intent.action = "InstanciaRVJogosSalvos"
-        //----------------------
-        startActivity(intent)
-        //----------------------
+        //https://stackoverflow.com/questions/63435989/startactivityforresultandroid-content-intent-int-is-deprecated
+        //--- Prepara o startActivityForResult atual
+        try {
 
+            //--- Prepara a Intent para chamar AdaptarActivity
+            val intent    = Intent(this, AdaptarActivity::class.java)
+            intent.action = "InstanciaRVJogosSalvos"
+
+            //val intent = Intent(this, PreviewFullscreenActivity::class.java)
+            //intent.putStringArrayListExtra(AppConstants.PARAMS.IMAGE_URIS, list)
+
+            //------------------------------
+            previewRequest.launch(intent)
+            //------------------------------
+
+            Log.d(cTAG, "-> Launch AdaptarActivity")
+
+        } catch (exc : Exception) {
+
+            Log.d(cTAG, "-> Erro: ${exc.message}")
+
+        }
     }
 
     //--- edicaoPreset()
@@ -2018,7 +2099,7 @@ class MainActivity : AppCompatActivity() {
         visibilidadeViews(VISIBLE)
         //---------------------------
 
-        var flagEdicaoOK = false
+        val flagEdicaoOK : Boolean
         //-------------------------------------------------
         val intQtiZeros = utilsKt.quantZeros(quadMaior)
         //-------------------------------------------------

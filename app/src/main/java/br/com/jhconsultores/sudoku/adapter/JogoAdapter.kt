@@ -1,25 +1,16 @@
 package br.com.jhconsultores.sudoku.adapter
 
-import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.ListAdapter
 import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import br.com.jhconsultores.model.Jogo
 
 import br.com.jhconsultores.sudoku.R
 
 // https://developer.android.com/guide/topics/ui/layout/recyclerview
-
-// Projeto Agenda Basica
-//class TaskListAdapter : ListAdapter <Task, TaskListAdapter.TaskViewHolder> (DiffCallback()) {
 class JogoAdapter(private val arLstArq   : ArrayList<String>,
                   private val arLstJogo  : ArrayList<String>,
                   private val arLstChkBox: ArrayList<Boolean>,
@@ -128,15 +119,3 @@ class JogoAdapter(private val arLstArq   : ArrayList<String>,
     override fun getItemCount() = arLstArq.size
 
 }
-
-/*
-//---------------------------------------------------------------------------------------------
-// Classe Auxiliar
-//---------------------------------------------------------------------------------------------
-class DiffCallback : DiffUtil.ItemCallback<Jogo>() {
-
-    override fun areItemsTheSame   (oldItem: Jogo, newItem: Jogo) = oldItem    == newItem
-    override fun areContentsTheSame(oldItem: Jogo, newItem: Jogo) = oldItem.id == newItem.id
-
-}
-*/
