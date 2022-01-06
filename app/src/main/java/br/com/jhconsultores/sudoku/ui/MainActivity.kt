@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
 
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#8.5"
+        const val strApp = "Sudoku_#8.5.0"
 
         var flagJogoGeradoOk  = false
         var flagJogoEditadoOk = false
