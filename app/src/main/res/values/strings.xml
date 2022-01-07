@@ -67,5 +67,7 @@
     <string name="selecionar_todos">Selecionar todos</string>
     <string name="desselecionar">Desselecionar</string>
     <string name="threedots">threeDots</string>
+    <string name="muito_dif_cil">Muito difícil</string>
+    <string name="value_9">9</string>
 
 </resources>

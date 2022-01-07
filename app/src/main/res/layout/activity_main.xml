@@ -221,9 +221,12 @@
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="10dp"
         android:layout_marginTop  ="10dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf    ="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+
         app:layout_constraintTop_toBottomOf ="@id/separador_subnivel_ivJogo"
 
         android:contentDescription="@string/testeCanva3"
@@ -241,8 +244,8 @@
 
         android:background="@android:color/darker_gray"
 
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/ivSudokuBoardMain" />
+        app:layout_constraintTop_toBottomOf="@id/ivSudokuBoardMain"
+        android:layout_marginTop="10dp" />
 
     <!-- Layout para o progressBar -->
     <RelativeLayout android:id = "@+id/relLayoutProgBar"
@@ -340,11 +343,12 @@
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
+        app:layout_constraintTop_toBottomOf ="@id/ContaClues"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf ="@id/separador_ivJogo_scroll"
+        app:layout_constraintEnd_toEndOf    ="parent"
+        app:layout_constraintHorizontal_bias="0.5"
 
-        android:layout_marginStart="10dp"
-        android:layout_marginTop  ="50dp"
+        android:layout_marginTop  ="10dp"
 
         android:contentDescription="@string/numDisp"
         android:src ="@drawable/quadro_nums_disp" />
@@ -366,48 +370,53 @@
         android:src ="@drawable/quadro_nums_disp" /-->
 
     <!-- scrolling e seu Textview -->
-    <ScrollView android:id="@+id/srcTextScrollView"
+    <ScrollView
+        android:id="@+id/srcTextScrollView"
 
-        android:layout_width ="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
 
-        android:fillViewport="true"
-        android:scrollbars  ="vertical"
-
-        app:layout_constraintBottom_toTopOf="@id/btn_AdaptarJogo"
-        app:layout_constraintTop_toBottomOf="@id/imageView3"
-
         android:layout_marginTop="20dp"
+        android:fillViewport="true"
 
+        android:scrollbars="vertical"
+
+        app:layout_constraintBottom_toTopOf="@id/btn_GerarJogo"
+        app:layout_constraintTop_toBottomOf="@id/imageView3"
         app:layout_constraintVertical_bias="1.0"
-        tools:layout_editor_absoluteX     ="-1dp">
 
-        <TextView android:id="@+id/txtJogos"
+        tools:layout_editor_absoluteX="-1dp">
+
+        <TextView
+            android:id="@+id/txtJogos"
 
             android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
+
             android:layout_marginStart="10dp"
-
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="10dp"
 
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf    ="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guide_center_horiz" />
+
+            app:layout_constraintBottom_toTopOf ="@id/btn_GerarJogo"
+            app:layout_constraintTop_toBottomOf ="@id/imageView3"
+
+            android:textSize="20sp" />
 
     </ScrollView>
 
     <!-- Separador entre resultados e botões -->
-    <View android:id ="@+id/separador_resultados_botões"
+    <View
+        android:id="@+id/separador_resultados_botoes"
 
-        android:layout_width ="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
 
-        app:layout_constraintTop_toBottomOf="@id/srcTextScrollView"
-
-        android:background ="@android:color/darker_gray" />
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="@+id/srcTextScrollView" />
 
     <!-- 4- Botões -->
     <Button android:id="@+id/btn_GerarJogo"

@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     //                         Instancializações e inicializações
     //----------------------------------------------------------------------------------------------
-    private var strLog = ""
+    private var strLog   = ""
     private var strToast = ""
 
     companion object {
@@ -160,6 +160,18 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //--- Versão do Android e versão da API
+        val versAndroid = Build.VERSION.BASE_OS  // samsung/on5xelteub/on5xelte:8.0.0/R16NW/G570MUBU4CSB1:user/release-keys
+        val intSepInic  = versAndroid.indexOf(":", 0, false) + 1
+        val intSepFim   = versAndroid.indexOf("/", intSepInic, false)
+
+        strToast  = " BaseOS: A${versAndroid.substring(intSepInic, intSepFim)}"
+        strToast+= " SDK_INT: API${Build.VERSION.SDK_INT}"
+        
+        Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+
+        Log.d(cTAG, "-> $strToast")
 
         //--- Implementa o actionBar
         toolBar = findViewById(R.id.maintoolbar)
@@ -1125,9 +1137,9 @@ class MainActivity : AppCompatActivity() {
         arIntQtiNumDisp[intNum - 1]++
 
         val intQtiZeros = tvContaClues.text.toString().toInt()
-        val intQtiNums = 81 - intQtiZeros
+        val intQtiNums  = 81 - intQtiZeros
 
-        tvContaNums.text = (intQtiNums - 1).toString()
+        tvContaNums.text  = (intQtiNums - 1).toString()
         tvContaClues.text = (intQtiZeros + 1).toString()
 
         //--------------
