@@ -123,13 +123,35 @@ public class Utils {
                                             Manifest.permission.READ_EXTERNAL_STORAGE,
                                             Manifest.permission.WRITE_EXTERNAL_STORAGE };
 
+        //--- Permissão para o acesso aos arquivos da memória externa em Android >= A11 (R) API30
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+
+            String strPermissoes = "";
+            for (int idx = 0; idx < permissoes.length + 1; idx++) {
+
+                if (idx > 0) {
+
+                    if (idx > 1) strPermissoes += " ";
+
+                    strPermissoes += permissoes[idx - 1];
+
+                }
+            }
+
+            strPermissoes += " " + Manifest.permission.MANAGE_EXTERNAL_STORAGE;
+
+            permissoes = strPermissoes.split(" ");
+
+        }
+
         //String[] permissoes = new String[]{Manifest.permission.INTERNET};
 
-        //--------------------------------------------------------------------------
+        //------------------------------------------------------------------------
         boolean flagValidatePerm = validate(activity, 0, permissoes);
-        //--------------------------------------------------------------------------
+        //------------------------------------------------------------------------
 
         return (flagValidatePerm);
+
     }
 
     //-------------------------------------------------------------------------
@@ -146,7 +168,7 @@ public class Utils {
             // Valida permissão
             //---------------------------------------------------------------------------
             boolean ok = ContextCompat.checkSelfPermission(activity, permission) ==
-                                                    PackageManager.PERMISSION_GRANTED;
+                                                       PackageManager.PERMISSION_GRANTED;
             //---------------------------------------------------------------------------
             if (! ok ) {
                 list.add(permission);

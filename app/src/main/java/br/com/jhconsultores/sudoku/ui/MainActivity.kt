@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
 
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#8.5.0"
+        const val strApp = "Sudoku_#8.5.1"
 
         var flagJogoGeradoOk  = false
         var flagJogoEditadoOk = false
@@ -60,45 +60,45 @@ class MainActivity : AppCompatActivity() {
 
     private var bmpMyImageInic: Bitmap? = null
     private var bmpMyImageBack: Bitmap? = null
-    private var bmpMyImage: Bitmap? = null
+    private var bmpMyImage    : Bitmap? = null
 
     private var bmpNumDisp: Bitmap? = null
 
-    private var intCellwidth = 0
+    private var intCellwidth  = 0
     private var intCellheight = 0
 
-    private var pincelVerde = Paint()
-    private var pincelBranco = Paint()
-    private var pincelPreto = Paint()
-    private var pincelAzul = Paint()
+    private var pincelVerde   = Paint()
+    private var pincelBranco  = Paint()
+    private var pincelPreto   = Paint()
+    private var pincelAzul    = Paint()
     private var pincelLaranja = Paint()
 
     private var intTamTxt = 25
-    private var scale = 0f
+    private var scale     = 0f
 
     private var canvasMyImage: Canvas? = null
     private var canvasNumDisp: Canvas? = null
 
     //--- Textos
-    private lateinit var tvContaNums: TextView
+    private lateinit var tvContaNums : TextView
     private lateinit var tvContaClues: TextView
 
     //--- Botões principais
-    private lateinit var btnGeraJogo: Button
+    private lateinit var btnGeraJogo  : Button
     private lateinit var btnAdaptaJogo: Button
-    private lateinit var btnJogaJogo: Button
+    private lateinit var btnJogaJogo  : Button
     //private lateinit var btnTestaRV: Button
 
     //--- Radio Buttons
-    private lateinit var groupRBnivel: RadioGroup
-    private lateinit var rbFacil: RadioButton
-    private lateinit var rbMedio: RadioButton
-    private lateinit var rbDificil: RadioButton
+    private lateinit var groupRBnivel  : RadioGroup
+    private lateinit var rbFacil       : RadioButton
+    private lateinit var rbMedio       : RadioButton
+    private lateinit var rbDificil     : RadioButton
     private lateinit var rbMuitoDificil: RadioButton
 
     private lateinit var groupRBadapta: RadioGroup
-    private lateinit var rbPreset: RadioButton
-    private lateinit var rbEdicao: RadioButton
+    private lateinit var rbPreset     : RadioButton
+    private lateinit var rbEdicao     : RadioButton
 
     private lateinit var progressBar: ProgressBar
 
@@ -108,9 +108,9 @@ class MainActivity : AppCompatActivity() {
     //--- Objetos para o jogo
     private var quadMaior = Array(9) { Array(9) { 0 } }
 
-    private var strNivelJogo = "Fácil"
-    private var nivelJogo = 0
-    private var subNivelJogo = 0
+    private var strNivelJogo   = "Fácil"
+    private var nivelJogo      = 0
+    private var subNivelJogo   = 0
     private var nivelTotalJogo = 0
 
     // Núm     0   22               31        41          51       61     81
@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity() {
         val intSepInic  = versAndroid.indexOf(":", 0, false) + 1
         val intSepFim   = versAndroid.indexOf("/", intSepInic, false)
 
-        strToast  = " BaseOS: A${versAndroid.substring(intSepInic, intSepFim)}"
+        strToast = " BaseOS: A${versAndroid.substring(intSepInic, intSepFim)}"
         strToast+= " SDK_INT: API${Build.VERSION.SDK_INT}"
         
         Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
@@ -178,17 +178,17 @@ class MainActivity : AppCompatActivity() {
         toolBar.title = "$strApp - main"
 
         //--- Instancializações e inicializações
-        tvContaNums = findViewById(R.id.ContaNums)
+        tvContaNums  = findViewById(R.id.ContaNums)
         tvContaClues = findViewById(R.id.ContaClues)
 
-        btnGeraJogo = findViewById(R.id.btn_GerarJogo)
+        btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
         btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
-        btnJogaJogo = findViewById(R.id.btn_JogarJogo)
+        btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
 
         groupRBnivel = findViewById(R.id.radioGrpNivel)
-        rbFacil = findViewById(R.id.nivelFacil)
-        rbMedio = findViewById(R.id.nivelMédio)
-        rbDificil = findViewById(R.id.nivelDifícil)
+        rbFacil      = findViewById(R.id.nivelFacil)
+        rbMedio      = findViewById(R.id.nivelMédio)
+        rbDificil    = findViewById(R.id.nivelDifícil)
         rbMuitoDificil = findViewById(R.id.nivelMuitoDifícil)
         //-----------------------------
         prepRBniveis(true)
@@ -196,13 +196,13 @@ class MainActivity : AppCompatActivity() {
         edtViewSubNivel = findViewById(R.id.edtViewSubNivel)
 
         groupRBadapta = findViewById(R.id.radioGrpAdapta)
-        rbPreset = findViewById(R.id.preset)
-        rbEdicao = findViewById(R.id.edicao)
-        txtDadosJogo = findViewById(R.id.txtJogos)
+        rbPreset      = findViewById(R.id.preset)
+        rbEdicao      = findViewById(R.id.edicao)
+        txtDadosJogo  = findViewById(R.id.txtJogos)
 
         groupRBadapta.visibility = INVISIBLE
 
-        tvContaNums.text = "0"
+        tvContaNums.text  = "0"
         tvContaClues.text = getString(R.string.valor81)
 
         //--- Objetos gráficos

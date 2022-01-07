@@ -33,20 +33,20 @@ class AdaptarActivity : AppCompatActivity() {
     //--------------------------------------------------------------------------
     //                    Instancializações e inicializações
     //--------------------------------------------------------------------------
-    private var cTAG = "Sudoku"
-    private var strLog = ""
+    private var cTAG     = "Sudoku"
+    private var strLog   = ""
     private var strToast = ""
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var customAdapter: JogoAdapter
     // private val jogoAdapter by lazy { JogoAdapter() }
 
-    private var itemsListArq = ArrayList<String>()
-    private var itemsListJogo = ArrayList<String>()
+    private var itemsListArq    = ArrayList<String>()
+    private var itemsListJogo   = ArrayList<String>()
     private var itemsListChkDel = ArrayList<Boolean>()
 
     private var recyclerView: RecyclerView? = null
-    private var chkBtnDelete: CheckBox? = null
+    private var chkBtnDelete: CheckBox?     = null
 
     private lateinit var adaptarToolBar: androidx.appcompat.widget.Toolbar
 
