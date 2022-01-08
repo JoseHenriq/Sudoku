@@ -8,12 +8,14 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -50,6 +52,7 @@ import java.io.FilenameFilter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -74,12 +77,15 @@ import br.com.jhconsultores.sudoku.ui.MainActivity;
 //public class Utils<EnumStorage> {
 public class Utils {
 
+    int ALL_FILES_ACCESS_PERMISSION = 4;
 
     //--- Intancializações e inicializações
     private final String TAG_Utils = "Utils";
     String strLog = "";
 
     public Boolean flagSO_A11 = false;
+
+    //private val utilsKt = UtilsKt()
 
     //--------------------------------------------------------------------------
     //                             Inner class
@@ -159,6 +165,7 @@ public class Utils {
     //-------------------------------------------------------------------------
     //  O SO pergunta ao usuário se autoriza-o a solicitar as permissões
     //-------------------------------------------------------------------------
+    @RequiresApi(api = Build.VERSION_CODES.N)
     boolean validate(Activity activity, int requestCode, String... permissions) {
 
         boolean flagValidateOk = false;
@@ -188,19 +195,53 @@ public class Utils {
 
             Log.d(cTAG, "-> SO solicita autorização para permissão:");
 
-            //--- Converte de List para Array[]
-            String[] newPermissions = new String[list.size()];
-            list.toArray(newPermissions);
+            //--- Se tiver uma chamada para Scoped Storage, separa-a para outro comando
+            // https://stackoverflow.com/questions/65876736/how-do-you-request-manage-external-storage-permission-in-android
+            String permScopedStorage = "";
+            for (String strPerm : list) {
 
-            for (String strNewPerm : newPermissions) {
+                Log.d(cTAG, "   - " + strPerm);
+                if (strPerm.equals("android.permission.MANAGE_EXTERNAL_STORAGE")) {
 
-                Log.d(cTAG, "   - " + strNewPerm);
+                    permScopedStorage = "android.permission.MANAGE_EXTERNAL_STORAGE";
+                    list.removeIf(it -> it.equals("android.permission.MANAGE_EXTERNAL_STORAGE"));
+                    break;
+
+                }
 
             }
 
-            //----------------------------------------------------------------------------
-            ActivityCompat.requestPermissions(activity, newPermissions, 1);
-            //----------------------------------------------------------------------------
+            if (!permScopedStorage.isEmpty()) {
+
+                /*
+                Uri uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}");
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                        uri);
+                activity.startActivity(intent);
+                */
+
+                //---------------------------------------------------------------------------
+                //utilsKt.requestAllFilesAccessPermission(activity.getApplicationContext());
+                //---------------------------------------------------------------------------
+
+                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                activity.startActivityForResult (intent, ALL_FILES_ACCESS_PERMISSION);
+
+            }
+
+            //--- Converte a List para Array[]
+            if (!list.isEmpty()) {
+
+                String[] newPermissions = new String[list.size()];
+                list.toArray(newPermissions);
+
+                for (String strNewPerm : newPermissions) {
+                    Log.d(cTAG, "   - " + strNewPerm);
+                }
+                //----------------------------------------------------------------------------
+                ActivityCompat.requestPermissions(activity, newPermissions, 1);
+                //----------------------------------------------------------------------------
+            }
 
         }
 

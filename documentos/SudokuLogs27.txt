@@ -5,7 +5,53 @@ Commit130- Scoped Storage A11 - 3 px
 ================================================================================
 
 
+--------------------------------------------------------------------------------
+2022-01-08 17:13:18.046 D: -> Smartphone: samsung - SM-G570M
+2022-01-08 17:13:18.047 D: -> App: Sudoku_#8.5.1
+2022-01-08 17:13:18.097 D: -> BaseOS: A8.0.0 SDK_INT: API26
+--------------------------------------------------------------------------------
+2022-01-08 17:13:18.194 D: -> main Verifica permissões
+2022-01-08 17:13:18.194 D:    - Checa se permissões Ok
+2022-01-08 17:13:18.196 D:      - android.permission.INTERNET: true
+2022-01-08 17:13:18.196 D:      - android.permission.READ_EXTERNAL_STORAGE: true
+2022-01-08 17:13:18.197 D:      - android.permission.WRITE_EXTERNAL_STORAGE: true
+2022-01-08 17:13:18.217 D: Permission Granted!
+--------------------------------------------------------------------------------
+2022-01-08 17:13:18.217 D: -> Registra activity for result
+--------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+2022-01-08 17:06:37.005 D: -> Smartphone: samsung - SM-T561M
+2022-01-08 17:06:37.005 D: -> App: A4.4.4 Sudoku_#8.5.1
+2022-01-08 17:06:37.145 D: -> BaseOS:  SDK_INT: API19
+--------------------------------------------------------------------------------
+2022-01-08 17:06:37.175 D: -> main Verifica permissões
+2022-01-08 17:06:37.175 D:    - Checa se permissões Ok
+2022-01-08 17:06:37.175 D:      - android.permission.INTERNET: true
+2022-01-08 17:06:37.175 D:      - android.permission.READ_EXTERNAL_STORAGE: true
+2022-01-08 17:06:37.175 D:      - android.permission.WRITE_EXTERNAL_STORAGE: true
+2022-01-08 17:06:37.185 D: Permission Granted!
+2022-01-08 17:06:37.185 D: -> Registra activity for result
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+2022-01-08 15:59:24.131 D: -> Smartphone: samsung - SM-G570M
+2022-01-08 15:59:24.131 D: -> App: Sudoku_#8.5.1
+2022-01-08 15:59:24.273 D: -> BaseOS: A8.0.0 SDK_INT: API26
+--------------------------------------------------------------------------------
+2022-01-08 15:59:24.427 D: -> main Verifica permissões
+2022-01-08 15:59:24.428 D:    - Checa se permissões Ok
+2022-01-08 15:59:24.429 D:      - android.permission.INTERNET: true
+2022-01-08 15:59:24.430 D:      - android.permission.READ_EXTERNAL_STORAGE: false
+2022-01-08 15:59:24.431 D:      - android.permission.WRITE_EXTERNAL_STORAGE: false
+2022-01-08 15:59:24.431 D: -> SO solicita autorização para permissão:
+2022-01-08 15:59:24.431 D:    - android.permission.READ_EXTERNAL_STORAGE
+2022-01-08 15:59:24.431 D:    - android.permission.WRITE_EXTERNAL_STORAGE
+2022-01-08 15:59:24.635 D: Permission unGranted
+--------------------------------------------------------------------------------
+2022-01-08 15:59:24.636 D: -> Registra activity for result
+--------------------------------------------------------------------------------
 
 ================================================================================
 Commit129- Scoped Storage A11 - 2
@@ -13,6 +59,7 @@ Commit129- Scoped Storage A11 - 2
 2022-01-08 13:00:08.462 D: -> Smartphone: samsung - SM-F415F
 2022-01-08 13:00:08.463 D: -> App: Sudoku_#8.5.1
 2022-01-08 13:00:08.491 D: -> BaseOS: A11 SDK_INT: API30
+--------------------------------------------------------------------------------
 2022-01-08 13:00:08.549 D: -> main Verifica permissões
 2022-01-08 13:00:08.549 D:    - Checa se permissões Ok
 2022-01-08 13:00:08.550 D:      - android.permission.INTERNET: true
@@ -21,6 +68,7 @@ Commit129- Scoped Storage A11 - 2
 2022-01-08 13:00:08.550 D: -> SO solicita autorização para permissão:
 2022-01-08 13:00:08.550 D:    - android.permission.MANAGE_EXTERNAL_STORAGE
 2022-01-08 13:00:08.571 D: Permission unGranted
+--------------------------------------------------------------------------------
 
 ================================================================================
 2022-01-08 10:54:38.954 D: ->  BaseOS: A11 SDK_INT: API30

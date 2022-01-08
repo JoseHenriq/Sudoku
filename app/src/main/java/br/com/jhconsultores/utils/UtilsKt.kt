@@ -1,9 +1,60 @@
 package br.com.jhconsultores.utils
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Build
+import android.os.Environment
+import android.provider.Settings
+import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat.startActivityForResult
+import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.cTAG
 import java.nio.IntBuffer
 
 class UtilsKt {
+
+    /*
+    //--- requestAllFilesAccessPermission para Android >= A11
+    fun requestAllFilesAccessPermission(context: Context) {
+
+        //--- Android < A11 (R -> A11 API30)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R ||
+                                                         Environment.isExternalStorageManager()) {
+
+            val strToast = "We can access all files on external storage now"
+            mToast (context, strToast)
+            Log.d(cTAG, "-> $strToast")
+
+        }
+
+        //--- Android >= A11
+        else {
+
+            val builder = AlertDialog.Builder(context)
+
+                .setTitle("Tip")
+                .setMessage("We need permission to access all files on external storage")
+                .setPositiveButton("OK") { _, _ ->
+
+                    val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                    startActivityForResult(intent, ALL_FILES_ACCESS_PERMISSION)
+
+                }
+                .setNegativeButton("Cancel", null)
+
+            builder.show()
+        }
+
+    }
+    */
+    //--- mToast
+    fun mToast(context : Context, msgErro : String) {
+
+        Toast.makeText(context, msgErro, Toast.LENGTH_LONG).show()
+
+    }
 
     //--- copiaBmpByBuffer
     fun copiaBmpByBuffer(bmpSrc: Bitmap?, bmpDest: Bitmap?) {

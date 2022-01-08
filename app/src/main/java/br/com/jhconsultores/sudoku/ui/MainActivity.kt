@@ -31,6 +31,7 @@ import br.com.jhconsultores.sudoku.jogo.SudokuGameGenerator
 import br.com.jhconsultores.utils.*
 import java.lang.Exception
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.app.AlertDialog
 import android.media.audiofx.BassBoost
 import android.net.Uri
 
@@ -40,9 +41,11 @@ import android.os.Build
 import android.os.Build.VERSION
 
 import android.os.Build.VERSION.SDK_INT
+import android.provider.Settings
 import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
 
+const val ALL_FILES_ACCESS_PERMISSION = 4
 
 @Suppress("UNUSED_PARAMETER")
 class MainActivity : AppCompatActivity() {
@@ -181,11 +184,25 @@ class MainActivity : AppCompatActivity() {
         Log.d (cTAG, "-> App: $strApp")
 
         //--- Versão do Android e versão da API
-        val versAndroid = Build.VERSION.BASE_OS  // samsung/on5xelteub/on5xelte:8.0.0/R16NW/G570MUBU4CSB1:user/release-keys
-        val intSepInic  = versAndroid.indexOf(":", 0, false) + 1
-        val intSepFim   = versAndroid.indexOf("/", intSepInic, false)
+        val versAndroid = Build.VERSION.RELEASE    //.BASE_OS  // samsung/on5xelteub/on5xelte:8.0.0/R16NW/G570MUBU4CSB1:user/release-keys
+        //val intSepInic  = versAndroid.indexOf(":", 0, false) + 1
+        //val intSepFim   = versAndroid.indexOf("/", intSepInic, false)
 
-        val strSO        = "A${versAndroid.substring(intSepInic, intSepFim)}"
+        var strSO = ""
+        try {
+
+            //strSO = "A${versAndroid.substring(intSepInic, intSepFim)}"
+            strSO = "A$versAndroid"
+
+
+        } catch (exc : Exception) {
+
+            //---------------------------------------------------------------
+            utilsKt.mToast(this, "-> Erro: ${exc.message}")
+            //---------------------------------------------------------------
+
+        }
+
         utils.flagSO_A11 = (strSO == "A11")
 
         strToast = "BaseOS: $strSO SDK_INT: API${Build.VERSION.SDK_INT}"
@@ -341,7 +358,7 @@ class MainActivity : AppCompatActivity() {
 
         //------------------------------------------------------------------------------------------
         previewRequest = registerForActivityResult( ActivityResultContracts.
-                                            StartActivityForResult() ) { result: ActivityResult ->
+                                                                 StartActivityForResult() ) { result: ActivityResult ->
         //------------------------------------------------------------------------------------------
 
             Log.d(cTAG, "-> Retorna da activity for result")
@@ -372,6 +389,39 @@ class MainActivity : AppCompatActivity() {
                 Log.d(cTAG, "-> activity results NÃO OK!")
 
             }
+        }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    override fun onRequestPermissionsResult( requestCode : Int, permissions: Array<String>,
+                                                                          grantResults: IntArray) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == 1 || requestCode == ALL_FILES_ACCESS_PERMISSION) {
+
+            val lstPermNaoOk: MutableList<String> = java.util.ArrayList()
+            var strLogRes = "Permissions: "
+            for (intIdx in permissions.indices) {
+
+                strLogRes += """
+                
+                ${permissions[intIdx]}=${grantResults[intIdx]} """.trimIndent()
+
+                if (grantResults[intIdx] == -1) lstPermNaoOk.add(permissions[intIdx])
+
+            }
+
+            Log.d(cTAG, strLogRes)
+
+            val flagInstalacao_Ok = lstPermNaoOk.isEmpty()
+
+            if (flagInstalacao_Ok) Log.d(cTAG, "- Permissão concedida!")
+
+            //---------------
+            //Instala_App()
+            //---------------
         }
 
     }

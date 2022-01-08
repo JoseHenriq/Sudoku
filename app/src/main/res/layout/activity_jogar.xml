@@ -73,19 +73,25 @@
         android:textStyle="bold"
         android:text     ="@string/legSubnivel" />
 
-    <EditText android:id="@+id/tv_Subnivel"
+    <EditText
+        android:id="@+id/tv_Subnivel"
 
-        android:layout_width ="wrap_content"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        app:layout_constraintTop_toBottomOf ="@id/toolbar2"
-        app:layout_constraintLeft_toRightOf ="@id/tv_LegSubNivel"
-        android:layout_marginTop            ="22dp"
+        android:layout_marginTop="22dp"
+        android:enabled="false"
 
+        android:inputType="textMultiLine"
+        android:lines="1"
+
+        android:maxLength="1"
+        android:maxLines="1"
+        android:text="@string/value_9"
         android:textSize="24sp"
-        android:text    ="@string/value_9"
-
-        tools:ignore    ="LabelFor,TextFields" />
+        app:layout_constraintLeft_toRightOf="@id/tv_LegSubNivel"
+        app:layout_constraintTop_toBottomOf="@id/toolbar2"
+        tools:ignore="LabelFor,TextFields" />
 
     <!--- Contador de erros -->
     <TextView android:id="@+id/tv_LegErros"
