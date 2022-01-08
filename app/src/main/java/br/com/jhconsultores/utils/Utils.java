@@ -39,6 +39,8 @@ import static android.os.Environment.DIRECTORY_DOWNLOADS;
 //=============================================================================
 //                           Biblioteca Java
 //=============================================================================
+import static br.com.jhconsultores.sudoku.ui.MainActivity.cTAG;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
@@ -63,6 +65,7 @@ import java.util.List;
 //                           Biblioteca JH
 //=============================================================================
 import br.com.jhconsultores.sudoku.R;
+import br.com.jhconsultores.sudoku.ui.MainActivity;
 
 /*==============================================================================
  * Sistemas de permissão do Android 6.0
@@ -71,9 +74,12 @@ import br.com.jhconsultores.sudoku.R;
 //public class Utils<EnumStorage> {
 public class Utils {
 
+
     //--- Intancializações e inicializações
     private final String TAG_Utils = "Utils";
     String strLog = "";
+
+    public Boolean flagSO_A11 = false;
 
     //--------------------------------------------------------------------------
     //                             Inner class
@@ -116,35 +122,31 @@ public class Utils {
     //--------------------------------------------------------------------------
     public boolean VerificaPermissoes(Activity activity) {
 
-        String[] permissoes = new String[]{ //Manifest.permission.RECORD_AUDIO,         // 11/01/21
+        String[] permissoes;
 
-                                            Manifest.permission.INTERNET,
+        //--- O acesso aos arquivos da memória externa em Android >= A11 (R) API30 (Scoped Storage)
+        // é diferente do que o acesso em Android < A11 (Legacy Storage).
 
-                                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                                            Manifest.permission.WRITE_EXTERNAL_STORAGE };
+        // SO < A11
+        if (!flagSO_A11) {
 
-        //--- Permissão para o acesso aos arquivos da memória externa em Android >= A11 (R) API30
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            permissoes = new String[]{ //Manifest.permission.RECORD_AUDIO,         // 11/01/21
 
-            String strPermissoes = "";
-            for (int idx = 0; idx < permissoes.length + 1; idx++) {
-
-                if (idx > 0) {
-
-                    if (idx > 1) strPermissoes += " ";
-
-                    strPermissoes += permissoes[idx - 1];
-
-                }
-            }
-
-            strPermissoes += " " + Manifest.permission.MANAGE_EXTERNAL_STORAGE;
-
-            permissoes = strPermissoes.split(" ");
+                    Manifest.permission.INTERNET,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         }
+        // SO >= A11
+        else {
 
-        //String[] permissoes = new String[]{Manifest.permission.INTERNET};
+            permissoes = new String[] { //Manifest.permission.RECORD_AUDIO,         // 11/01/21
+
+                    Manifest.permission.INTERNET,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.MANAGE_EXTERNAL_STORAGE};
+
+        }
 
         //------------------------------------------------------------------------
         boolean flagValidatePerm = validate(activity, 0, permissoes);
@@ -155,40 +157,51 @@ public class Utils {
     }
 
     //-------------------------------------------------------------------------
-    //  Solicita as permissões
+    //  O SO pergunta ao usuário se autoriza-o a solicitar as permissões
     //-------------------------------------------------------------------------
     boolean validate(Activity activity, int requestCode, String... permissions) {
 
         boolean flagValidateOk = false;
-
         List<String> list = new ArrayList<String>();
+
+        Log.d(cTAG, "   - Checa se permissões Ok");
 
         //--- Prepara a lista de permissions ungranted
         for (String permission : permissions) {
+
             // Valida permissão
             //---------------------------------------------------------------------------
             boolean ok = ContextCompat.checkSelfPermission(activity, permission) ==
                                                        PackageManager.PERMISSION_GRANTED;
             //---------------------------------------------------------------------------
-            if (! ok ) {
-                list.add(permission);
-            }
+            if (!ok ) { list.add(permission); }
+
+            Log.d(cTAG, "     - " + permission + ": " + ((ok)? "true" : "false"));
+
         }
 
         //--- Se todas as permissions estiverem granted retorna com true
-        if (list.isEmpty()) {
+        if (list.isEmpty()) { flagValidateOk = true; }
 
-            flagValidateOk = true;
-
-        }
         //--- Se houver 1+ permissions ungranted: solicita permissions requer permission
         else {
 
+            Log.d(cTAG, "-> SO solicita autorização para permissão:");
+
+            //--- Converte de List para Array[]
             String[] newPermissions = new String[list.size()];
             list.toArray(newPermissions);
+
+            for (String strNewPerm : newPermissions) {
+
+                Log.d(cTAG, "   - " + strNewPerm);
+
+            }
+
             //----------------------------------------------------------------------------
             ActivityCompat.requestPermissions(activity, newPermissions, 1);
             //----------------------------------------------------------------------------
+
         }
 
         return flagValidateOk;
