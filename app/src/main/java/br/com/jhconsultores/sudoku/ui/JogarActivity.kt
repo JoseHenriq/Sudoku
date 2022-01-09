@@ -1372,14 +1372,14 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     private fun salvaJogo() {
 
         //----------------------------------------------------------------------
-        // Prepara o conteúdo
+        // 1- Prepara o conteúdo
         //----------------------------------------------------------------------
         //------------------------------------
         val strConteudo = preparaConteudo()
         //------------------------------------
 
         //----------------------------------------------------------------------
-        // Define um nome para o arquivo
+        // 2- Define um nome para o arquivo
         //----------------------------------------------------------------------
         if (strConteudo.isNotEmpty()) {
 
@@ -1411,20 +1411,24 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             intNumArq++
             val strArqJogo = "jogo_$intNumArq.xml"
 
-            /*
+            /* Nome com dataHora
             val strDataHora = utils.LeDataHora("yyMMddHHmmss")
             val strArqJogo = "jogo_$strDataHora.xml"
             */
 
+            //----------------------------------------------------------------------
+            // 3- Define o path
+            //----------------------------------------------------------------------
             val strArqPath = "/sudoku/jogos"
-            val strArqName = "$strArqJogo"
+            val strArqName = strArqJogo
 
             //------------------------------------------------------------------
             // Salva o arquivo
             //------------------------------------------------------------------
-            //-------------------------------------------------------------------------------
-            val flagEscrita = utils.escExtMemTextFile(strArqPath, strArqName, strConteudo)
-            //-------------------------------------------------------------------------------
+            //--------------------------------------------------------------------------------------
+            val flagEscrita = utils.escExtMemTextFile(this, strArqPath, strArqName,
+                                                                                       strConteudo)
+            //--------------------------------------------------------------------------------------
 
             strToast = "Escrita arquivo $strArqJogo "
             strToast += if (flagEscrita) "OK!" else "NÃO ok!"

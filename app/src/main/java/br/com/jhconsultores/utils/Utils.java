@@ -6,6 +6,8 @@ package br.com.jhconsultores.utils;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +17,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.TypedValue;
@@ -43,6 +46,7 @@ import static android.os.Environment.DIRECTORY_DOWNLOADS;
 //=============================================================================
 import static br.com.jhconsultores.sudoku.ui.MainActivity.cTAG;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
@@ -50,6 +54,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
 import java.net.URI;
@@ -67,6 +72,7 @@ import java.util.List;
 //=============================================================================
 //                           Biblioteca JH
 //=============================================================================
+import br.com.jhconsultores.sudoku.BuildConfig;
 import br.com.jhconsultores.sudoku.R;
 import br.com.jhconsultores.sudoku.ui.MainActivity;
 
@@ -78,6 +84,7 @@ import br.com.jhconsultores.sudoku.ui.MainActivity;
 public class Utils {
 
     int ALL_FILES_ACCESS_PERMISSION = 4;
+    public String permScopedStorage        = "";
 
     //--- Intancializações e inicializações
     private final String TAG_Utils = "Utils";
@@ -179,25 +186,25 @@ public class Utils {
             // Valida permissão
             //---------------------------------------------------------------------------
             boolean ok = ContextCompat.checkSelfPermission(activity, permission) ==
-                                                       PackageManager.PERMISSION_GRANTED;
+                    PackageManager.PERMISSION_GRANTED;
             //---------------------------------------------------------------------------
-            if (!ok ) { list.add(permission); }
+            if (!ok) { list.add(permission); }
 
-            Log.d(cTAG, "     - " + permission + ": " + ((ok)? "true" : "false"));
+            Log.d(cTAG, "     - " + permission + ": " + ((ok) ? "true" : "false"));
 
         }
 
         //--- Se todas as permissions estiverem granted retorna com true
         if (list.isEmpty()) { flagValidateOk = true; }
 
-        //--- Se houver 1+ permissions ungranted: solicita permissions requer permission
+        //--- Se houver 1+ permissions ungranted: requer permission
         else {
 
             Log.d(cTAG, "-> SO solicita autorização para permissão:");
 
             //--- Se tiver uma chamada para Scoped Storage, separa-a para outro comando
             // https://stackoverflow.com/questions/65876736/how-do-you-request-manage-external-storage-permission-in-android
-            String permScopedStorage = "";
+            permScopedStorage = "";
             for (String strPerm : list) {
 
                 Log.d(cTAG, "   - " + strPerm);
@@ -211,38 +218,20 @@ public class Utils {
 
             }
 
-            if (!permScopedStorage.isEmpty()) {
+        }
 
-                /*
-                Uri uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}");
-                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-                        uri);
-                activity.startActivity(intent);
-                */
+        //--- Requer permissão para os recursos necessários para A10- ainda não permitidos
+        if (!list.isEmpty()) {
 
-                //---------------------------------------------------------------------------
-                //utilsKt.requestAllFilesAccessPermission(activity.getApplicationContext());
-                //---------------------------------------------------------------------------
+            String[] newPermissions = new String[list.size()];
+            list.toArray(newPermissions);
 
-                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                activity.startActivityForResult (intent, ALL_FILES_ACCESS_PERMISSION);
-
+            for (String strNewPerm : newPermissions) {
+                Log.d(cTAG, "   - " + strNewPerm);
             }
-
-            //--- Converte a List para Array[]
-            if (!list.isEmpty()) {
-
-                String[] newPermissions = new String[list.size()];
-                list.toArray(newPermissions);
-
-                for (String strNewPerm : newPermissions) {
-                    Log.d(cTAG, "   - " + strNewPerm);
-                }
-                //----------------------------------------------------------------------------
-                ActivityCompat.requestPermissions(activity, newPermissions, 1);
-                //----------------------------------------------------------------------------
-            }
-
+            //--------------------------------------------------------------------------
+            ActivityCompat.requestPermissions(activity, newPermissions, 1);
+            //--------------------------------------------------------------------------
         }
 
         return flagValidateOk;
@@ -340,21 +329,23 @@ public class Utils {
     //--------------------------------------------------------------------------
     // Método para escrita de um arquivo
     //--------------------------------------------------------------------------
-    public boolean escExtMemTextFile(String strPath, String strFileName, String strConteudo) {
+    public boolean escExtMemTextFile(Context context, String strPath, String strFileName, String strConteudo) {
 
         boolean flagEsc = false;
-        File fpath      = null;
-        File file       = null;
-        File myFile     = null;
-        String[] files  = null;
+        File fpath = null;
+        File file = null;
+        File myFile = null;
+        String[] files = null;
 
         //https://stackoverflow.com/questions/19853401/saving-to-sd-card-as-text-file
+        // ScopedStorage
         try {
 
             fpath = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
-            String [] strPathsDir = strPath.split("/");
 
-            Boolean flagDirOk  = false;
+            String[] strPathsDir = strPath.split("/");
+
+            Boolean flagDirOk = false;
             String strFilePath = fpath.getPath();
             for (String strPathDir : strPathsDir) {
 
@@ -368,8 +359,7 @@ public class Utils {
                         flagDirOk = file.mkdir();
                         if (!flagDirOk) break;
 
-                    }
-                    else flagDirOk = true;
+                    } else flagDirOk = true;
                 }
             }
 
@@ -381,24 +371,66 @@ public class Utils {
 
                 //myFile.mkdir()
 
-                FileOutputStream fOut = new FileOutputStream(myFile);
-                OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut, Charset.forName("UTF-8"));
+                //--- SO < A10
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
 
-                myOutWriter.append(strConteudo);
-                myOutWriter.close();
-                fOut.close();
+                    FileOutputStream fOut = new FileOutputStream(myFile);
+                    OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut, Charset.forName("UTF-8"));
 
-                flagEsc = true;
+                    myOutWriter.append(strConteudo);
+                    myOutWriter.close();
+                    fOut.close();
 
+                }
+                //--- SO >= A10
+                else {
+
+                    //----------------------------------------------------------------------------------
+                    // Prepara o arquivo
+                    String rootDirName = fpath + "/" + strPath;   // "sudoku/jogos";
+                    file = new File(rootDirName);
+
+                    //----------------------------------------------------------------------------------
+                    // Salvamento do arquivo
+                    //----------------------------------------------------------------------------------
+                    //--- Define o URI do conteúdo a ser salvo
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.MediaColumns.DISPLAY_NAME, strFileName);
+                    values.put(MediaStore.MediaColumns.RELATIVE_PATH,
+                            Environment.DIRECTORY_DOWNLOADS);
+                    //MainActivity mainActivity = new MainActivity();
+                    //Context context = mainActivity.getApplicationContext();
+                    ContentResolver contentResolver = context.getContentResolver();
+                    Uri uri =
+                          contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+
+                    //--- Salva o conteúdo no arquivo strFileName
+                    if (uri != null) {
+
+                        OutputStream outputStream = contentResolver.openOutputStream(uri);
+                        if (outputStream != null) {
+
+                            BufferedOutputStream bos = new BufferedOutputStream(outputStream);
+                            byte[] arByBuffer        = strConteudo.getBytes();
+
+                            bos.write(arByBuffer);
+                            bos.flush();
+                            bos.close();
+
+                        }
+
+                    }
+                }
             }
+            flagEsc = true;
 
         } catch (Exception exc) {
-
 
 
         }
 
         return  flagEsc;
+
     }
 
     //--------------------------------------------------------------------------

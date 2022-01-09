@@ -1,9 +1,90 @@
 //--------------------------------------------------------------------------
-08/01/22 09:09:00
+09/01/22 09:58:00
 //--------------------------------------------------------------------------
  
     // sudoku_#8.5.1
 
+
+// Scoped storage    
+
+// - Download File
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+
+            strToast = "You must use device running Android 10 or higher"
+            Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+
+            return
+
+        }
+
+        thread {
+
+            try {
+
+                //----------------------------------------------------------------------------------
+                // Recepção do arquivo
+                //----------------------------------------------------------------------------------
+                //--- Conexão http
+                val url = URL(fileUrl)
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod  = "GET"
+                connection.connectTimeout = 8000
+                connection.readTimeout    = 8000
+
+                //--- Recepção do arquivo em stream
+                val inputStream = connection.inputStream
+                val bis         = BufferedInputStream(inputStream)
+
+                //----------------------------------------------------------------------------------
+                // Salvamento do arquivo
+                //----------------------------------------------------------------------------------
+                //--- Prepara para salvar o arquivo recebido
+                val values = ContentValues()
+                values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+                values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+                val uri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
+
+                //--- Salva o arquivo stream
+                if (uri != null) {
+
+                    val outputStream = contentResolver.openOutputStream(uri)
+                    if (outputStream != null) {
+
+                        val bos    = BufferedOutputStream(outputStream)
+
+                        val buffer = ByteArray(1024)
+                        var bytes  = bis.read(buffer)
+                        while (bytes >= 0) {
+
+                            bos.write(buffer, 0 , bytes)
+                            bos.flush()
+                            bytes = bis.read(buffer)
+
+                        }
+                        bos.close()
+
+                        runOnUiThread {
+                            strToast = "$fileName is in Download directory now."
+                            Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+                        }
+
+                    }
+                }
+                bis.close()
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+//--------------------------------------------------------------------------
+08/01/22 09:09:00
+//--------------------------------------------------------------------------
+ 
+    // sudoku_#8.5.1
 
 //---------------------------------------------------------------------------------------------------------------
 

@@ -1,17 +1,23 @@
 package br.com.jhconsultores.utils
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat.startActivityForResult
+import br.com.jhconsultores.sudoku.ui.MainActivity
 import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.cTAG
+import java.io.BufferedOutputStream
+import java.io.File
 import java.nio.IntBuffer
+import kotlin.concurrent.thread
 
 class UtilsKt {
 
@@ -49,6 +55,93 @@ class UtilsKt {
 
     }
     */
+
+    /*
+    // Scoped storage demo
+    fun writeFile(context : Context, fileName: String) {
+
+        //--- SO < A10
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+
+            //strToast = "You must use device running Android 10 or higher"
+            //Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+
+            //return
+
+        } else {
+
+            thread {
+
+                try {
+                    /*
+                    //----------------------------------------------------------------------------------
+                    // Busca e recepção do arquivo
+                    //----------------------------------------------------------------------------------
+                    //--- Conexão http
+                    val url = URL(fileUrl)
+                    val connection = url.openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    connection.connectTimeout = 8000
+                    connection.readTimeout = 8000
+
+                    //--- Recepção do arquivo em stream
+                    val inputStream = connection.inputStream
+                    val bis = BufferedInputStream(inputStream)
+                     */
+
+                    //----------------------------------------------------------------------------------
+                    // Prepara o arquivo
+                    //----------------------------------------------------------------------------------
+                    val file  = File(fileName)
+                    val bytes = file.readBytes()
+
+                    //----------------------------------------------------------------------------------
+                    // Salvamento do arquivo
+                    //----------------------------------------------------------------------------------
+                    //--- Prepara para salvar o arquivo recebido
+                    val values = ContentValues()
+                    values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+                    values.put(MediaStore.MediaColumns.RELATIVE_PATH,
+                                                                    Environment.DIRECTORY_DOWNLOADS)
+                    var contentResolver = context.getContentResolver()
+                    val uri =
+                        contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
+
+                    //--- Salva o arquivo stream
+                    if (uri != null) {
+
+                        val outputStream = contentResolver.openOutputStream(uri)
+                        if (outputStream != null) {
+
+                            val bos = BufferedOutputStream(outputStream)
+
+                            val buffer = ByteArray(1024)               //file.length().toInt())
+                            while (bytes >= 0) {
+
+                                bos.write(buffer, 0, bytes)
+                                bos.flush()
+                                bytes = file.readBytes()                         //bis.read(buffer)
+
+                            }
+                            bos.close()
+
+                            runOnUiThread {
+                                strToast = "$fileName is in Download directory now."
+                                Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+                            }
+
+                        }
+                    }
+                    bis.close()
+
+                } catch (e: Exception) {
+                     e.printStackTrace()
+                }
+            }
+        }
+    }
+    */
+
     //--- mToast
     fun mToast(context : Context, msgErro : String) {
 

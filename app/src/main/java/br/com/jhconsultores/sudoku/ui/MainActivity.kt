@@ -32,6 +32,7 @@ import br.com.jhconsultores.utils.*
 import java.lang.Exception
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.media.audiofx.BassBoost
 import android.net.Uri
 
@@ -44,6 +45,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.provider.Settings
 import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+import br.com.jhconsultores.sudoku.BuildConfig
 
 const val ALL_FILES_ACCESS_PERMISSION = 4
 
@@ -60,9 +62,10 @@ class MainActivity : AppCompatActivity() {
         const val cTAG   = "Sudoku"
         const val strApp = "Sudoku_#8.5.1"
 
-        var flagJogoGeradoOk  = false
-        var flagJogoEditadoOk = false
+        var flagScopedStorage  = false
 
+        var flagJogoGeradoOk   = false
+        var flagJogoEditadoOk  = false
         var flagJogoAdaptadoOk = false
 
         var strOpcaoJogo = "JogoGerado"
@@ -1580,234 +1583,261 @@ class MainActivity : AppCompatActivity() {
         strMsgDebug = if (flagPermissoesOk) "Permission Granted!" else "Permission unGranted"
 
         Toast.makeText(this, strMsgDebug, Toast.LENGTH_SHORT).show()
-
         Log.d(cTAG, strMsgDebug)
 
-        return flagPermissoesOk
+        //--- Se precisar solicita ao jogador que autorize pelo config a utilização do ScopedStorage
+        if (!flagScopedStorage && !utils.permScopedStorage.isEmpty()) {
 
-    }
+            //--- Solicita ativação no config para o jogador habilitar o Scoped Storage desse App
+            val builder = AlertDialog.Builder(this)
+            builder
+                .setTitle("Tip")
+                .setMessage("O Sudoku para essa versão do Android precisa de sua autorização")
+                .setPositiveButton("OK") { _, _ ->
 
-    //----------------------------------------------------------------------------------------------
-    //                                 Funções Jogo selecionado
-    //----------------------------------------------------------------------------------------------
+                    flagScopedStorage = true
 
-    //--- adaptaPreset
-    private fun adaptaPreset() {
+                    val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
 
-        // --- Prepara o preset para se conseguir o gabarito do jogo
-        //- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
-        val waitTime = 100L  // milisegundos
-        Handler(Looper.getMainLooper()).postDelayed(
-            {
-
-                //-----------------------------
-                visibilidadeViews(INVISIBLE)
-                //-----------------------------
-                groupRBadapta.visibility = VISIBLE
-
-                rbPreset.isChecked = true
-
-                //--- Desativa o progress bar
-                progressBar.visibility = INVISIBLE
-
-                //--- Ativa a activity de adaptação de jogos
-                //-----------------------
-                ativaAdaptarActivity()
-                //-----------------------
-
-            },
-            waitTime   // value in milliseconds
-        )
-    }
-
-    //--- ativaAdaptarActivity
-    private fun ativaAdaptarActivity() {
-
-        //--- Prepara o preset para conseguir o gabarito do jogo
-        strLog = "-> Presset is checked"
-        Log.d(cTAG, strLog)
-
-        //https://stackoverflow.com/questions/63435989/startactivityforresultandroid-content-intent-int-is-deprecated
-        //--- Prepara o startActivityForResult atual
-        try {
-
-            //--- Prepara a Intent para chamar AdaptarActivity
-            val intent    = Intent(this, AdaptarActivity::class.java)
-            intent.action = "InstanciaRVJogosSalvos"
-
-            //val intent = Intent(this, PreviewFullscreenActivity::class.java)
-            //intent.putStringArrayListExtra(AppConstants.PARAMS.IMAGE_URIS, list)
-
-            //------------------------------
-            previewRequest.launch(intent)
-            //------------------------------
-
-            Log.d(cTAG, "-> Launch AdaptarActivity")
-
-        } catch (exc : Exception) {
-
-            Log.d(cTAG, "-> Erro: ${exc.message}")
-
-        }
-    }
-
-    //--- edicaoPreset()
-    private fun edicaoPreset() {
-
-        rbEdicao.isChecked = true
-
-        flagJogoGeradoOk  = false
-        flagJogoEditadoOk = false
-
-        txtDadosJogo.text = ""
-
-        tvContaNums.text  = "0"
-        tvContaClues.text = resources.getString(R.string.valor81)
-
-        arArIntNums     = Array(9) { Array(9) { 0 } }
-        arIntQtiNumDisp = Array(9) { 9 }
-
-        ivNumDisp.isEnabled = true
-        ivSudokuBoardMain.isEnabled = true
-
-        //------------------------------------------------------------------------------------------
-        // Image view dos números disponíveis
-        //------------------------------------------------------------------------------------------
-        //-------------------
-        preparaIVNumDisp()
-        //-------------------
-
-        //------------------------------------------------------------------------------------------
-        // Image view do jogo
-        //------------------------------------------------------------------------------------------
-        bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
-            .copy(Bitmap.Config.ARGB_8888, true)
-        ivSudokuBoardMain.setImageBitmap(bmpMyImage)
-
-        //-----------------------------------------------------
-        utilsKt.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
-        //-----------------------------------------------------
-
-        //--- DEBUG: atualiza a qtidd de númDisp
-        //-----------------------
-        // atualizaIVQtiNumDisp()
-        //-----------------------
-
-    }
-
-    //--- finalizaEdicaoPreset
-    private fun finalizaEdicaoPreset() {
-
-        //---------------------------
-        visibilidadeViews(VISIBLE)
-        //---------------------------
-
-        val flagEdicaoOK : Boolean
-        //-------------------------------------------------
-        val intQtiZeros = utilsKt.quantZeros(quadMaior)
-        //-------------------------------------------------
-
-        val intNivel    = intQtiZeros / 10
-        val intSubNivel = intQtiZeros % 10
-        //---------- ---------- ----------------------
-        // intNivel     Nivel      números / Zeros
-        //---------- ---------- ----------------------
-        //    2       fácil     de: 61 / 20  a 52 / 29
-        //    3       médio     de: 51 / 30  a 42 / 39
-        //    4       difícil   de: 41 / 40  a 32 / 49
-        //    5       muito dif de: 31 / 50  a 22 / 59
-
-        when {
-
-            intQtiZeros > 59 -> {
-                strToast = "Para gerar jogo editar mais do que 21 números!"
-            }
-            intQtiZeros < 20 -> {
-                strToast = "Para gerar jogo editar menos do que 62 números!"
-            }
-            else -> {
-
-                strNivelJogo = when (intNivel) {
-
-                    2 -> {
-                        rbFacil.isChecked = true
-                        "Fácil"
-                    }
-                    3 -> {
-                        rbMedio.isChecked = true
-                        "Médio"
-                    }
-                    4 -> {
-                        rbDificil.isChecked = true
-                        "Difícil"
-                    }
-                    else -> {
-                        rbMuitoDificil.isChecked = true
-                        "Muito Difícil"
-                    }
-                }
-            }
-
-        }
-
-        edtViewSubNivel.setText(intSubNivel.toString())
-        strToast = "Gera jogo:\n- nível: $strNivelJogo subnível: $intSubNivel"
-
-        flagEdicaoOK = true
-
-        Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
-
-        //--- Se edição OK gera o gabarito para o jogo editado
-        if (flagEdicaoOK) {
-
-            sgg.quadMaiorRet = copiaArArInt(quadMaior)
-            arArIntNums      = copiaArArInt(quadMaior)
-            //---------------------------------------
-            quadMaior = sgg.adaptaJogoAlgoritmo2()
-            //---------------------------------------
-
-        }
-
-        // **** O array preparado (quadMaior) e o gabarito (sgg.quadMaiorRet) serão enviados
-        // **** pelo listener do botão JogaJogo.
-    }
-
-    //--- verificaSeJogoValido
-    fun verificaSeJogoValido(arArJogo : Array<Array<Int>>): Boolean {
-
-        var flagJogoValido = false
-
-        //--- Quantidade de clues entre 20 e 59   (Fácil: 2.0 e MuitoDifícil: 5.9)
-        val qtizeros = utilsKt.quantZeros(arArJogo)
-        if (qtizeros < 20 || qtizeros > 59) return false
-
-        //--- Confere números nos Qm, linhas e colunas
-        for (idxLin in 0..8) {
-            for (idxCol in 0..8) {
-
-                val intNum = arArJogo[idxLin][idxCol]
-                if (intNum > 0) {
-
-                    arArJogo[idxLin][idxCol] = 0
-
-                    // Determina a que Qm a célula pertence
-                    //---------------------------------------------------------
-                    val intQuadMenor = jogarJogo.determinaQm(idxLin, idxCol)
-                    //---------------------------------------------------------
-
-                    // Verifica se o número dessa célula não existe no seu Qm, na sua linha e na
-                    // sua coluna.
-                    //------------------------------------------------------------------------------
-                    flagJogoValido = jogarJogo.verifValidade(intQuadMenor, idxLin, idxCol, intNum)
-                    //------------------------------------------------------------------------------
-
-                    arArJogo[idxLin][idxCol] = intNum
+                    val intent = Intent()
+                    intent.setAction(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                    intent.setData(uri)
+                    startActivity(intent)
 
                 }
-            }
-        }
-        return flagJogoValido
 
-    }
+                .setNegativeButton("Não") { _, _ ->
+
+                }
+
+            builder.show()
+        }
+
+    return flagPermissoesOk
+
+}
+
+//----------------------------------------------------------------------------------------------
+//                                 Funções Jogo selecionado
+//----------------------------------------------------------------------------------------------
+
+//--- adaptaPreset
+private fun adaptaPreset() {
+
+// --- Prepara o preset para se conseguir o gabarito do jogo
+//- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
+val waitTime = 100L  // milisegundos
+Handler(Looper.getMainLooper()).postDelayed(
+{
+
+//-----------------------------
+visibilidadeViews(INVISIBLE)
+//-----------------------------
+groupRBadapta.visibility = VISIBLE
+
+rbPreset.isChecked = true
+
+//--- Desativa o progress bar
+progressBar.visibility = INVISIBLE
+
+//--- Ativa a activity de adaptação de jogos
+//-----------------------
+ativaAdaptarActivity()
+//-----------------------
+
+},
+waitTime   // value in milliseconds
+)
+}
+
+//--- ativaAdaptarActivity
+private fun ativaAdaptarActivity() {
+
+//--- Prepara o preset para conseguir o gabarito do jogo
+strLog = "-> Presset is checked"
+Log.d(cTAG, strLog)
+
+//https://stackoverflow.com/questions/63435989/startactivityforresultandroid-content-intent-int-is-deprecated
+//--- Prepara o startActivityForResult atual
+try {
+
+//--- Prepara a Intent para chamar AdaptarActivity
+val intent    = Intent(this, AdaptarActivity::class.java)
+intent.action = "InstanciaRVJogosSalvos"
+
+//val intent = Intent(this, PreviewFullscreenActivity::class.java)
+//intent.putStringArrayListExtra(AppConstants.PARAMS.IMAGE_URIS, list)
+
+//------------------------------
+previewRequest.launch(intent)
+//------------------------------
+
+Log.d(cTAG, "-> Launch AdaptarActivity")
+
+} catch (exc : Exception) {
+
+Log.d(cTAG, "-> Erro: ${exc.message}")
+
+}
+}
+
+//--- edicaoPreset()
+private fun edicaoPreset() {
+
+rbEdicao.isChecked = true
+
+flagJogoGeradoOk  = false
+flagJogoEditadoOk = false
+
+txtDadosJogo.text = ""
+
+tvContaNums.text  = "0"
+tvContaClues.text = resources.getString(R.string.valor81)
+
+arArIntNums     = Array(9) { Array(9) { 0 } }
+arIntQtiNumDisp = Array(9) { 9 }
+
+ivNumDisp.isEnabled = true
+ivSudokuBoardMain.isEnabled = true
+
+//------------------------------------------------------------------------------------------
+// Image view dos números disponíveis
+//------------------------------------------------------------------------------------------
+//-------------------
+preparaIVNumDisp()
+//-------------------
+
+//------------------------------------------------------------------------------------------
+// Image view do jogo
+//------------------------------------------------------------------------------------------
+bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
+.copy(Bitmap.Config.ARGB_8888, true)
+ivSudokuBoardMain.setImageBitmap(bmpMyImage)
+
+//-----------------------------------------------------
+utilsKt.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
+//-----------------------------------------------------
+
+//--- DEBUG: atualiza a qtidd de númDisp
+//-----------------------
+// atualizaIVQtiNumDisp()
+//-----------------------
+
+}
+
+//--- finalizaEdicaoPreset
+private fun finalizaEdicaoPreset() {
+
+//---------------------------
+visibilidadeViews(VISIBLE)
+//---------------------------
+
+val flagEdicaoOK : Boolean
+//-------------------------------------------------
+val intQtiZeros = utilsKt.quantZeros(quadMaior)
+//-------------------------------------------------
+
+val intNivel    = intQtiZeros / 10
+val intSubNivel = intQtiZeros % 10
+//---------- ---------- ----------------------
+// intNivel     Nivel      números / Zeros
+//---------- ---------- ----------------------
+//    2       fácil     de: 61 / 20  a 52 / 29
+//    3       médio     de: 51 / 30  a 42 / 39
+//    4       difícil   de: 41 / 40  a 32 / 49
+//    5       muito dif de: 31 / 50  a 22 / 59
+
+when {
+
+intQtiZeros > 59 -> {
+strToast = "Para gerar jogo editar mais do que 21 números!"
+}
+intQtiZeros < 20 -> {
+strToast = "Para gerar jogo editar menos do que 62 números!"
+}
+else -> {
+
+strNivelJogo = when (intNivel) {
+
+2 -> {
+    rbFacil.isChecked = true
+    "Fácil"
+}
+3 -> {
+    rbMedio.isChecked = true
+    "Médio"
+}
+4 -> {
+    rbDificil.isChecked = true
+    "Difícil"
+}
+else -> {
+    rbMuitoDificil.isChecked = true
+    "Muito Difícil"
+}
+}
+}
+
+}
+
+edtViewSubNivel.setText(intSubNivel.toString())
+strToast = "Gera jogo:\n- nível: $strNivelJogo subnível: $intSubNivel"
+
+flagEdicaoOK = true
+
+Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
+
+//--- Se edição OK gera o gabarito para o jogo editado
+if (flagEdicaoOK) {
+
+sgg.quadMaiorRet = copiaArArInt(quadMaior)
+arArIntNums      = copiaArArInt(quadMaior)
+//---------------------------------------
+quadMaior = sgg.adaptaJogoAlgoritmo2()
+//---------------------------------------
+
+}
+
+// **** O array preparado (quadMaior) e o gabarito (sgg.quadMaiorRet) serão enviados
+// **** pelo listener do botão JogaJogo.
+}
+
+//--- verificaSeJogoValido
+fun verificaSeJogoValido(arArJogo : Array<Array<Int>>): Boolean {
+
+var flagJogoValido = false
+
+//--- Quantidade de clues entre 20 e 59   (Fácil: 2.0 e MuitoDifícil: 5.9)
+val qtizeros = utilsKt.quantZeros(arArJogo)
+if (qtizeros < 20 || qtizeros > 59) return false
+
+//--- Confere números nos Qm, linhas e colunas
+for (idxLin in 0..8) {
+for (idxCol in 0..8) {
+
+val intNum = arArJogo[idxLin][idxCol]
+if (intNum > 0) {
+
+arArJogo[idxLin][idxCol] = 0
+
+// Determina a que Qm a célula pertence
+//---------------------------------------------------------
+val intQuadMenor = jogarJogo.determinaQm(idxLin, idxCol)
+//---------------------------------------------------------
+
+// Verifica se o número dessa célula não existe no seu Qm, na sua linha e na
+// sua coluna.
+//------------------------------------------------------------------------------
+flagJogoValido = jogarJogo.verifValidade(intQuadMenor, idxLin, idxCol, intNum)
+//------------------------------------------------------------------------------
+
+arArJogo[idxLin][idxCol] = intNum
+
+}
+}
+}
+return flagJogoValido
+
+}
 
 }
