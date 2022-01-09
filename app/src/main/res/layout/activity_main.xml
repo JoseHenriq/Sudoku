@@ -81,28 +81,27 @@
     <RadioGroup
         android:id="@+id/radioGrpNivel"
 
-        android:layout_width="wrap_content"
+        android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginStart="5dp"
+        app:layout_constraintTop_toBottomOf="@id/maintoolbar"
+        app:layout_constraintStart_toStartOf="@id/guide_center_vert"
+        android:layout_marginStart="-139dp"
 
         android:gravity    ="center_vertical"
-        android:orientation="horizontal"
-
-        app:layout_constraintStart_toEndOf="@id/legNivel"
-        app:layout_constraintTop_toBottomOf="@id/maintoolbar">
+        android:orientation="horizontal" >
 
         <RadioButton
             android:id="@+id/nivelFacil"
 
-            android:layout_width="wrap_content"
+            android:layout_width ="wrap_content"
             android:layout_height="wrap_content"
+
             android:checked="true"
 
             android:onClick="rbJogoFacil"
 
-            android:text="@string/nivelFacil"
-            tools:ignore="RtlSymmetry" />
+            android:text="@string/nivelFacil" />
 
         <RadioButton
             android:id="@+id/nivelMédio"
@@ -127,6 +126,8 @@
 
             android:layout_width ="wrap_content"
             android:layout_height="wrap_content"
+
+            android:layout_marginStart="5dp"
 
             android:onClick="rbJogoMuitoDificil"
             android:text="@string/nivelMuitoDificil" />
@@ -178,12 +179,14 @@
         android:background ="@drawable/moldura_grupo2"
 
         app:layout_constraintTop_toTopOf ="parent"
-        app:layout_constraintEnd_toEndOf ="parent"
 
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="90dp"
+        app:layout_constraintLeft_toRightOf="@id/guide_center_vert"
+
+        android:layout_marginTop="95dp"
 
         android:visibility="visible" >
+        <!--android:layout_marginEnd="79dp"
+        app:layout_constraintEnd_toEndOf ="parent"-->
 
         <RadioButton android:id="@+id/preset"
 
@@ -382,7 +385,7 @@
         android:scrollbars="vertical"
 
         app:layout_constraintBottom_toTopOf="@id/btn_GerarJogo"
-        app:layout_constraintTop_toBottomOf="@id/imageView3"
+        app:layout_constraintTop_toBottomOf="@id/ivSudokuBoardMain"
         app:layout_constraintVertical_bias="1.0"
 
         tools:layout_editor_absoluteX="-1dp">
@@ -390,18 +393,18 @@
         <TextView
             android:id="@+id/txtJogos"
 
-            android:layout_width="wrap_content"
+            android:layout_width ="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart ="10dp"
+            android:layout_marginEnd   ="10dp"
             android:layout_marginBottom="10dp"
 
             app:layout_constraintEnd_toEndOf    ="parent"
             app:layout_constraintStart_toStartOf="parent"
 
             app:layout_constraintBottom_toTopOf ="@id/btn_GerarJogo"
-            app:layout_constraintTop_toBottomOf ="@id/imageView3"
+            app:layout_constraintTop_toBottomOf ="@id/ivSudokuBoardMain"
 
             android:textSize="20sp" />
 

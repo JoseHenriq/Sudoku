@@ -372,7 +372,7 @@ public class Utils {
                 //myFile.mkdir()
 
                 //--- SO < A10
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                //if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
 
                     FileOutputStream fOut = new FileOutputStream(myFile);
                     OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut, Charset.forName("UTF-8"));
@@ -381,25 +381,23 @@ public class Utils {
                     myOutWriter.close();
                     fOut.close();
 
-                }
+                //}
                 //--- SO >= A10
+                /*
                 else {
 
                     //----------------------------------------------------------------------------------
                     // Prepara o arquivo
-                    String rootDirName = fpath + "/" + strPath;   // "sudoku/jogos";
-                    file = new File(rootDirName);
+                    String rootDirName = fpath + strPath + "/";   // "sudoku/jogos";
 
                     //----------------------------------------------------------------------------------
                     // Salvamento do arquivo
                     //----------------------------------------------------------------------------------
                     //--- Define o URI do conteúdo a ser salvo
                     ContentValues values = new ContentValues();
-                    values.put(MediaStore.MediaColumns.DISPLAY_NAME, strFileName);
-                    values.put(MediaStore.MediaColumns.RELATIVE_PATH,
-                            Environment.DIRECTORY_DOWNLOADS);
-                    //MainActivity mainActivity = new MainActivity();
-                    //Context context = mainActivity.getApplicationContext();
+                    values.put(MediaStore.MediaColumns.DISPLAY_NAME,  strFileName);
+                    values.put(MediaStore.MediaColumns.RELATIVE_PATH, rootDirName);  //Environment.DIRECTORY_DOWNLOADS);
+
                     ContentResolver contentResolver = context.getContentResolver();
                     Uri uri =
                           contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
@@ -413,6 +411,9 @@ public class Utils {
                             BufferedOutputStream bos = new BufferedOutputStream(outputStream);
                             byte[] arByBuffer        = strConteudo.getBytes();
 
+                            strLog = arByBuffer.toString();
+                            Log.d(cTAG, strLog);
+
                             bos.write(arByBuffer);
                             bos.flush();
                             bos.close();
@@ -420,12 +421,15 @@ public class Utils {
                         }
 
                     }
+
                 }
+                 */
             }
             flagEsc = true;
 
         } catch (Exception exc) {
 
+            Log.d(cTAG, "-> " + exc.getMessage());
 
         }
 

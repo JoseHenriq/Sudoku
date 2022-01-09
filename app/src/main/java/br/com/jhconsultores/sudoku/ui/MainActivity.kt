@@ -155,6 +155,7 @@ class MainActivity : AppCompatActivity() {
     private var intLinJogar = 0
 
     private var flagBoardSel = false
+    private var versAndroid  = ""
 
     //--- Arquivos jogos
     //private var arStrTags = Array(3) { "" }
@@ -187,7 +188,7 @@ class MainActivity : AppCompatActivity() {
         Log.d (cTAG, "-> App: $strApp")
 
         //--- Versão do Android e versão da API
-        val versAndroid = Build.VERSION.RELEASE    //.BASE_OS  // samsung/on5xelteub/on5xelte:8.0.0/R16NW/G570MUBU4CSB1:user/release-keys
+        versAndroid = Build.VERSION.RELEASE    //.BASE_OS  // samsung/on5xelteub/on5xelte:8.0.0/R16NW/G570MUBU4CSB1:user/release-keys
         //val intSepInic  = versAndroid.indexOf(":", 0, false) + 1
         //val intSepFim   = versAndroid.indexOf("/", intSepInic, false)
 
@@ -611,38 +612,42 @@ class MainActivity : AppCompatActivity() {
 
         //--- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
         val waitTime = 100L  // milisegundos
-        Handler(Looper.getMainLooper()).postDelayed(
-            {
+        Handler(Looper.getMainLooper()).postDelayed( {
 
-                androidx.appcompat.app.AlertDialog.Builder(this)
+            androidx.appcompat.app.AlertDialog.Builder(this)
 
-                    .setTitle("Sudoku - Adaptar Jogo")
-                    .setMessage("Carrega ou Edita jogo?")
+                .setTitle("Sudoku - Adaptar Jogo")
+                .setMessage("Carrega ou Edita jogo?")
 
-                    .setPositiveButton("Carrega") { _, _ ->
+                .setPositiveButton("Carrega") { _, _ ->
 
-                        Log.d(cTAG, "-> \"Carrega\" was pressed")
+                    Log.d(cTAG, "-> \"Carrega\" was pressed")
 
-                        //---------------
-                        adaptaPreset()
-                        //---------------
+                    //---------------
+                    adaptaPreset()
+                    //---------------
 
-                    }
+                }
 
-                    .setNegativeButton("Edita") { _, _ ->
+                .setNegativeButton("Edita") { _, _ ->
 
-                        Log.d(cTAG, "-> \"Edita\" was pressed")
+                    Log.d(cTAG, "-> \"Edita\" was pressed")
 
-                        //---------------
-                        edicaoPreset()
-                        //---------------
+                    //---------------
+                    edicaoPreset()
+                    //---------------
 
-                    }
-                    .show()
+                }
+
+                .setNeutralButton("Cancela") { _, _ ->
+
+                    Log.d(cTAG, "-> \"Cancela\" was pressed")
+
+                }
+                .show()
 
             },
-            waitTime
-        )  // value in milliseconds
+            waitTime ) // value in milliseconds
 
     }
 
@@ -1249,9 +1254,10 @@ class MainActivity : AppCompatActivity() {
         val flXInfDir: Float
         val flYInfDir: Float
 
-        //--- Se tem célula selecionada no Sudoku Board, trata a edição da célula
+        //--- Se o jogo nâo está em pausa e nem esperando ser iniciado
         if (flagBoardSel) {
 
+            //--- Se tem célula selecionada no Sudoku Board, trata a edição da célula
             //--- Determina a célula e o número tocado
             val cellX = coordX / intCellwidth
             val intNum = arIntNumsDisp[cellX]
@@ -1273,15 +1279,15 @@ class MainActivity : AppCompatActivity() {
                     //--- Se ainda tem número desse disponível e ele é válido para o jogo, escreve-o no board
                     if (arIntQtiNumDisp[cellX] > 0) {
 
-                        //--- Verifica se válido
+                        //--- Verifica se número válido
                         //--------------------------------------------------
                         jogarJogo.arArIntNums = copiaArArInt(arArIntNums)
                         //---------------------------------------------------------
                         val Qm = jogarJogo.determinaQm(intLinJogar, intColJogar)
-                        //---------------------------------------------------------------------------
+                        //--------------------------------------------------------------------------
                         val flagNumVal =
-                            jogarJogo.verifValidade(Qm, intLinJogar, intColJogar, intNum)
-                        //---------------------------------------------------------------------------
+                                      jogarJogo.verifValidade(Qm, intLinJogar, intColJogar, intNum)
+                        //--------------------------------------------------------------------------
 
                         //--- Se válido e ainda tem número desse disponível escreve-o no board
                         if (flagNumVal) {
@@ -1327,11 +1333,12 @@ class MainActivity : AppCompatActivity() {
                         else {
 
                             strToast = "Número NÃO OK!\n(linha, coluna ou quadro)"
-                            //-----------------------------------------------------------------
-                            Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
-                            //-----------------------------------------------------------------
+                            //--------------------------------------
+                            utilsKt.mToast(this, strToast)
+                            //--------------------------------------
 
                         }
+
                         //----------------------------------------------
                         quadMaior = utilsKt.copiaArArInt(arArIntNums)
                         //----------------------------------------------
@@ -1582,7 +1589,7 @@ class MainActivity : AppCompatActivity() {
         //-----------------------------------------------------------------------
         strMsgDebug = if (flagPermissoesOk) "Permission Granted!" else "Permission unGranted"
 
-        Toast.makeText(this, strMsgDebug, Toast.LENGTH_SHORT).show()
+        utilsKt.mToast(this, strMsgDebug)
         Log.d(cTAG, strMsgDebug)
 
         //--- Se precisar solicita ao jogador que autorize pelo config a utilização do ScopedStorage
@@ -1592,7 +1599,7 @@ class MainActivity : AppCompatActivity() {
             val builder = AlertDialog.Builder(this)
             builder
                 .setTitle("Tip")
-                .setMessage("O Sudoku para essa versão do Android precisa de sua autorização")
+                .setMessage("O Sudoku para Android A$versAndroid precisa de sua autorização")
                 .setPositiveButton("OK") { _, _ ->
 
                     flagScopedStorage = true
@@ -1613,231 +1620,230 @@ class MainActivity : AppCompatActivity() {
             builder.show()
         }
 
-    return flagPermissoesOk
+        return flagPermissoesOk
 
-}
+    }
 
-//----------------------------------------------------------------------------------------------
-//                                 Funções Jogo selecionado
-//----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //                                 Funções Jogo selecionado
+    //----------------------------------------------------------------------------------------------
 
-//--- adaptaPreset
-private fun adaptaPreset() {
+    //--- adaptaPreset
+    private fun adaptaPreset() {
 
-// --- Prepara o preset para se conseguir o gabarito do jogo
-//- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
-val waitTime = 100L  // milisegundos
-Handler(Looper.getMainLooper()).postDelayed(
-{
+        // --- Prepara o preset para se conseguir o gabarito do jogo
+        //- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
+        val waitTime = 100L  // milisegundos
+        Handler(Looper.getMainLooper()).postDelayed( {
 
-//-----------------------------
-visibilidadeViews(INVISIBLE)
-//-----------------------------
-groupRBadapta.visibility = VISIBLE
+            //-----------------------------
+            visibilidadeViews(INVISIBLE)
+            //-----------------------------
+            groupRBadapta.visibility = VISIBLE
 
-rbPreset.isChecked = true
+            rbPreset.isChecked = true
 
-//--- Desativa o progress bar
-progressBar.visibility = INVISIBLE
+            //--- Desativa o progress bar
+            progressBar.visibility = INVISIBLE
 
-//--- Ativa a activity de adaptação de jogos
-//-----------------------
-ativaAdaptarActivity()
-//-----------------------
+            //--- Ativa a activity de adaptação de jogos
+            //-----------------------
+            ativaAdaptarActivity()
+            //-----------------------
 
-},
-waitTime   // value in milliseconds
-)
-}
+            },
+            waitTime )  // value in milliseconds
+    }
 
-//--- ativaAdaptarActivity
-private fun ativaAdaptarActivity() {
+    //--- ativaAdaptarActivity
+    private fun ativaAdaptarActivity() {
 
-//--- Prepara o preset para conseguir o gabarito do jogo
-strLog = "-> Presset is checked"
-Log.d(cTAG, strLog)
+        //--- Prepara o preset para conseguir o gabarito do jogo
+        strLog = "-> Presset is checked"
+        Log.d(cTAG, strLog)
 
-//https://stackoverflow.com/questions/63435989/startactivityforresultandroid-content-intent-int-is-deprecated
-//--- Prepara o startActivityForResult atual
-try {
+        //https://stackoverflow.com/questions/63435989/startactivityforresultandroid-content-intent-int-is-deprecated
+        //--- Prepara o startActivityForResult atual
+        try {
 
-//--- Prepara a Intent para chamar AdaptarActivity
-val intent    = Intent(this, AdaptarActivity::class.java)
-intent.action = "InstanciaRVJogosSalvos"
+            //--- Prepara a Intent para chamar AdaptarActivity
+            val intent    = Intent(this, AdaptarActivity::class.java)
+            intent.action = "InstanciaRVJogosSalvos"
 
-//val intent = Intent(this, PreviewFullscreenActivity::class.java)
-//intent.putStringArrayListExtra(AppConstants.PARAMS.IMAGE_URIS, list)
+            //val intent = Intent(this, PreviewFullscreenActivity::class.java)
+            //intent.putStringArrayListExtra(AppConstants.PARAMS.IMAGE_URIS, list)
 
-//------------------------------
-previewRequest.launch(intent)
-//------------------------------
+            //------------------------------
+            previewRequest.launch(intent)
+            //------------------------------
 
-Log.d(cTAG, "-> Launch AdaptarActivity")
+            Log.d(cTAG, "-> Launch AdaptarActivity")
 
-} catch (exc : Exception) {
+        } catch (exc : Exception) {
 
-Log.d(cTAG, "-> Erro: ${exc.message}")
+            Log.d(cTAG, "-> Erro: ${exc.message}")
 
-}
-}
+        }
 
-//--- edicaoPreset()
-private fun edicaoPreset() {
+    }
 
-rbEdicao.isChecked = true
+    //--- edicaoPreset()
+    private fun edicaoPreset() {
 
-flagJogoGeradoOk  = false
-flagJogoEditadoOk = false
+        rbEdicao.isChecked = true
 
-txtDadosJogo.text = ""
+        flagJogoGeradoOk  = false
+        flagJogoEditadoOk = false
 
-tvContaNums.text  = "0"
-tvContaClues.text = resources.getString(R.string.valor81)
+        txtDadosJogo.text = ""
 
-arArIntNums     = Array(9) { Array(9) { 0 } }
-arIntQtiNumDisp = Array(9) { 9 }
+        tvContaNums.text  = "0"
+        tvContaClues.text = resources.getString(R.string.valor81)
 
-ivNumDisp.isEnabled = true
-ivSudokuBoardMain.isEnabled = true
+        arArIntNums     = Array(9) { Array(9) { 0 } }
+        arIntQtiNumDisp = Array(9) { 9 }
 
-//------------------------------------------------------------------------------------------
-// Image view dos números disponíveis
-//------------------------------------------------------------------------------------------
-//-------------------
-preparaIVNumDisp()
-//-------------------
+        ivNumDisp.isEnabled = true
+        ivSudokuBoardMain.isEnabled = true
 
-//------------------------------------------------------------------------------------------
-// Image view do jogo
-//------------------------------------------------------------------------------------------
-bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
-.copy(Bitmap.Config.ARGB_8888, true)
-ivSudokuBoardMain.setImageBitmap(bmpMyImage)
+        //------------------------------------------------------------------------------------------
+        // Image view dos números disponíveis
+        //------------------------------------------------------------------------------------------
+        //-------------------
+        preparaIVNumDisp()
+        //-------------------
 
-//-----------------------------------------------------
-utilsKt.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
-//-----------------------------------------------------
+        //------------------------------------------------------------------------------------------
+        // Image view do jogo
+        //------------------------------------------------------------------------------------------
+        bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
+                                                      .copy(Bitmap.Config.ARGB_8888, true)
+        ivSudokuBoardMain.setImageBitmap(bmpMyImage)
 
-//--- DEBUG: atualiza a qtidd de númDisp
-//-----------------------
-// atualizaIVQtiNumDisp()
-//-----------------------
+        //-----------------------------------------------------
+        utilsKt.copiaBmpByBuffer(bmpMyImage, bmpMyImageBack)
+        //-----------------------------------------------------
 
-}
+        //--- DEBUG: atualiza a qtidd de númDisp
+        //-----------------------
+        // atualizaIVQtiNumDisp()
+        //-----------------------
 
-//--- finalizaEdicaoPreset
-private fun finalizaEdicaoPreset() {
+    }
 
-//---------------------------
-visibilidadeViews(VISIBLE)
-//---------------------------
+    //--- finalizaEdicaoPreset
+    private fun finalizaEdicaoPreset() {
 
-val flagEdicaoOK : Boolean
-//-------------------------------------------------
-val intQtiZeros = utilsKt.quantZeros(quadMaior)
-//-------------------------------------------------
+        //---------------------------
+        visibilidadeViews(VISIBLE)
+        //---------------------------
 
-val intNivel    = intQtiZeros / 10
-val intSubNivel = intQtiZeros % 10
-//---------- ---------- ----------------------
-// intNivel     Nivel      números / Zeros
-//---------- ---------- ----------------------
-//    2       fácil     de: 61 / 20  a 52 / 29
-//    3       médio     de: 51 / 30  a 42 / 39
-//    4       difícil   de: 41 / 40  a 32 / 49
-//    5       muito dif de: 31 / 50  a 22 / 59
+        val flagEdicaoOK : Boolean
+        //-------------------------------------------------
+        val intQtiZeros = utilsKt.quantZeros(quadMaior)
+        //-------------------------------------------------
 
-when {
+        val intNivel    = intQtiZeros / 10
+        val intSubNivel = intQtiZeros % 10
+        //---------- ---------- ----------------------
+        // intNivel     Nivel      números / Zeros
+        //---------- ---------- ----------------------
+        //    2       fácil     de: 61 / 20  a 52 / 29
+        //    3       médio     de: 51 / 30  a 42 / 39
+        //    4       difícil   de: 41 / 40  a 32 / 49
+        //    5       muito dif de: 31 / 50  a 22 / 59
 
-intQtiZeros > 59 -> {
-strToast = "Para gerar jogo editar mais do que 21 números!"
-}
-intQtiZeros < 20 -> {
-strToast = "Para gerar jogo editar menos do que 62 números!"
-}
-else -> {
+        when {
 
-strNivelJogo = when (intNivel) {
+            intQtiZeros > 59 -> {
+            strToast = "Para gerar jogo editar mais do que 21 números!"
+            }
+            intQtiZeros < 20 -> {
+            strToast = "Para gerar jogo editar menos do que 62 números!"
+            }
+            else -> {
 
-2 -> {
-    rbFacil.isChecked = true
-    "Fácil"
-}
-3 -> {
-    rbMedio.isChecked = true
-    "Médio"
-}
-4 -> {
-    rbDificil.isChecked = true
-    "Difícil"
-}
-else -> {
-    rbMuitoDificil.isChecked = true
-    "Muito Difícil"
-}
-}
-}
+                strNivelJogo = when (intNivel) {
 
-}
+                    2 -> {
+                        rbFacil.isChecked = true
+                        "Fácil"
+                    }
+                    3 -> {
+                        rbMedio.isChecked = true
+                        "Médio"
+                    }
+                    4 -> {
+                        rbDificil.isChecked = true
+                        "Difícil"
+                    }
+                    else -> {
+                        rbMuitoDificil.isChecked = true
+                        "Muito Difícil"
+                    }
+                }
+            }
 
-edtViewSubNivel.setText(intSubNivel.toString())
-strToast = "Gera jogo:\n- nível: $strNivelJogo subnível: $intSubNivel"
+        }
 
-flagEdicaoOK = true
+        edtViewSubNivel.setText(intSubNivel.toString())
+        strToast = "Jogo:\n- nível: $strNivelJogo subnível: $intSubNivel"
 
-Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
+        flagEdicaoOK = true
 
-//--- Se edição OK gera o gabarito para o jogo editado
-if (flagEdicaoOK) {
+        utilsKt.mToast(this, strToast)
 
-sgg.quadMaiorRet = copiaArArInt(quadMaior)
-arArIntNums      = copiaArArInt(quadMaior)
-//---------------------------------------
-quadMaior = sgg.adaptaJogoAlgoritmo2()
-//---------------------------------------
+        //--- Se edição OK gera o gabarito para o jogo editado
+        if (flagEdicaoOK) {
 
-}
+        sgg.quadMaiorRet = copiaArArInt(quadMaior)
+        arArIntNums      = copiaArArInt(quadMaior)
+        //---------------------------------------
+        quadMaior = sgg.adaptaJogoAlgoritmo2()
+        //---------------------------------------
 
-// **** O array preparado (quadMaior) e o gabarito (sgg.quadMaiorRet) serão enviados
-// **** pelo listener do botão JogaJogo.
-}
+        }
 
-//--- verificaSeJogoValido
-fun verificaSeJogoValido(arArJogo : Array<Array<Int>>): Boolean {
+    // **** O array preparado (quadMaior) e o gabarito (sgg.quadMaiorRet) serão enviados
+    // **** pelo listener do botão JogaJogo.
+    }
 
-var flagJogoValido = false
+    //--- verificaSeJogoValido
+    fun verificaSeJogoValido(arArJogo : Array<Array<Int>>): Boolean {
 
-//--- Quantidade de clues entre 20 e 59   (Fácil: 2.0 e MuitoDifícil: 5.9)
-val qtizeros = utilsKt.quantZeros(arArJogo)
-if (qtizeros < 20 || qtizeros > 59) return false
+        var flagJogoValido = false
 
-//--- Confere números nos Qm, linhas e colunas
-for (idxLin in 0..8) {
-for (idxCol in 0..8) {
+        //--- Quantidade de clues entre 20 e 59   (Fácil: 2.0 e MuitoDifícil: 5.9)
+        val qtizeros = utilsKt.quantZeros(arArJogo)
+        if (qtizeros < 20 || qtizeros > 59) return false
 
-val intNum = arArJogo[idxLin][idxCol]
-if (intNum > 0) {
+        //--- Confere números nos Qm, linhas e colunas
+        for (idxLin in 0..8) {
+            for (idxCol in 0..8) {
 
-arArJogo[idxLin][idxCol] = 0
+                val intNum = arArJogo[idxLin][idxCol]
+                if (intNum > 0) {
 
-// Determina a que Qm a célula pertence
-//---------------------------------------------------------
-val intQuadMenor = jogarJogo.determinaQm(idxLin, idxCol)
-//---------------------------------------------------------
+                arArJogo[idxLin][idxCol] = 0
 
-// Verifica se o número dessa célula não existe no seu Qm, na sua linha e na
-// sua coluna.
-//------------------------------------------------------------------------------
-flagJogoValido = jogarJogo.verifValidade(intQuadMenor, idxLin, idxCol, intNum)
-//------------------------------------------------------------------------------
+                // Determina a que Qm a célula pertence
+                //---------------------------------------------------------
+                val intQuadMenor = jogarJogo.determinaQm(idxLin, idxCol)
+                //---------------------------------------------------------
 
-arArJogo[idxLin][idxCol] = intNum
+                // Verifica se o número dessa célula não existe no seu Qm, na sua linha e na
+                // sua coluna.
+                //------------------------------------------------------------------------------
+                flagJogoValido = jogarJogo.verifValidade(intQuadMenor, idxLin, idxCol, intNum)
+                //------------------------------------------------------------------------------
 
-}
-}
-}
-return flagJogoValido
+                arArJogo[idxLin][idxCol] = intNum
 
-}
+                }
+            }
+        }
+        return flagJogoValido
+
+    }
 
 }
