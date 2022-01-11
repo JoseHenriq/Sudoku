@@ -128,7 +128,7 @@
         app:layout_constraintTop_toBottomOf ="@id/tv_Nivel"
         app:layout_constraintLeft_toRightOf ="@id/tv_Erros"
         android:layout_marginTop            ="3dp"
-        android:layout_marginStart          ="30dp"
+        android:layout_marginStart          ="15dp"
 
         android:orientation="horizontal">
 

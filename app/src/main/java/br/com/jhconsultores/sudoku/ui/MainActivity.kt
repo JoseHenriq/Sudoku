@@ -68,7 +68,11 @@ class MainActivity : AppCompatActivity() {
         var flagJogoEditadoOk  = false
         var flagJogoAdaptadoOk = false
 
+        // Opções de jogo: "JogoGerado", "JogoAdaptado", "JogoPresetado", "JogoEditado"
         var strOpcaoJogo = "JogoGerado"
+
+        var fatorLargura : Double = 0.0
+        var fatorAltura  : Double = 0.0
 
     }
 
@@ -183,23 +187,44 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //----------------------------------------------------------------------
+        // Device
+        //----------------------------------------------------------------------
         //--- Smartphone
-        Log.d (cTAG, "-> Smartphone: ${Build.MANUFACTURER} - ${Build.MODEL}")
-        Log.d (cTAG, "-> App: $strApp")
+        strToast  = "Smartphone: ${Build.MANUFACTURER} - ${Build.MODEL}"
+        strToast += " Build: ${Build.DEVICE}"
+        utilsKt.mToast(this, strToast)
+        Log.d (cTAG, "-> $strToast")
+
+        //--- Calcula o fator a ser usado para as diferenças de tamanho dos screens
+        // desenv Smartphone JH: Samsung SM-G570M
+        val larguraDesenv = 2.44  // inches
+        val alturaDesenv  = 4.33  // inches
+
+        val metrics  = resources.displayMetrics
+        val yInches = metrics.heightPixels.toDouble() / metrics.ydpi.toDouble()
+        val xInches = metrics.widthPixels.toDouble()  / metrics.xdpi.toDouble()
+
+        Log.d (cTAG, "-> Dimensões screen:")
+        strLog = String.format("%s %.2f%s","   - largura  : ",metrics.widthPixels.toDouble()," px")
+        strLog+= String.format(" (%.2f\")", xInches)
+        Log.d(cTAG, strLog)
+        strLog = String.format("%s %.2f%s","   - altura   : ",metrics.heightPixels.toDouble()," px")
+        strLog+= String.format(" (%.2f\")", yInches)
+        Log.d(cTAG, strLog)
+        val diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches)
+        Log.d (cTAG, String.format("%s %.2f%s", "   - Diagonal : ", diagonalInches, "\""))
+
+        fatorLargura= xInches / larguraDesenv
+        fatorAltura = yInches / alturaDesenv
+
+        Log.d(cTAG, String.format("%s %.2f","   - fatorlargura : ", fatorLargura))
+        Log.d(cTAG, String.format("%s %.2f","   - fatorAltura  : ", fatorAltura))
 
         //--- Versão do Android e versão da API
         versAndroid = Build.VERSION.RELEASE    //.BASE_OS  // samsung/on5xelteub/on5xelte:8.0.0/R16NW/G570MUBU4CSB1:user/release-keys
-        //val intSepInic  = versAndroid.indexOf(":", 0, false) + 1
-        //val intSepFim   = versAndroid.indexOf("/", intSepInic, false)
-
         var strSO = ""
-        try {
-
-            //strSO = "A${versAndroid.substring(intSepInic, intSepFim)}"
-            strSO = "A$versAndroid"
-
-
-        } catch (exc : Exception) {
+        try { strSO = "A$versAndroid" } catch (exc : Exception) {
 
             //---------------------------------------------------------------
             utilsKt.mToast(this, "-> Erro: ${exc.message}")
@@ -210,16 +235,21 @@ class MainActivity : AppCompatActivity() {
         utils.flagSO_A11 = (strSO == "A11")
 
         strToast = "BaseOS: $strSO SDK_INT: API${Build.VERSION.SDK_INT}"
-        
         Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
-
         Log.d(cTAG, "-> $strToast")
 
-        //--- Implementa o actionBar
+
+
+
+        //----------------------------------------------------------------------
+        // Implementa o o actionBar
+        //----------------------------------------------------------------------
         toolBar = findViewById(R.id.maintoolbar)
         toolBar.title = "$strApp - main"
 
-        //--- Instancializações e inicializações
+        //----------------------------------------------------------------------
+        // Instancializações e inicializações
+        //----------------------------------------------------------------------
         tvContaNums  = findViewById(R.id.ContaNums)
         tvContaClues = findViewById(R.id.ContaClues)
 
@@ -355,8 +385,9 @@ class MainActivity : AppCompatActivity() {
         //-----------------------------------------------------------------------------------
         // Verifica se permitidos os acessos aos recursos do Android (AndroidManifest.xml)
         //-----------------------------------------------------------------------------------
+        //---------------------------
         verifPermissoesAcessoAPI()
-        //------------------------------
+        //---------------------------
 
         Log.d(cTAG, "-> Registra activity for result")
 
@@ -481,6 +512,7 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> Tap no btnGeraJogo"
         Log.d(cTAG, strLog)
 
+        strOpcaoJogo     = "JogoGerado"
         flagJogoGeradoOk = false
 
         //--- Ativa o progress bar
@@ -544,8 +576,6 @@ class MainActivity : AppCompatActivity() {
 
                 if (edtViewSubNivel.text.toString().isNotEmpty()) {
 
-                    strOpcaoJogo = "JogoGerado"
-
                     subNivelJogo = edtViewSubNivel.text.toString().toInt()
                     nivelTotalJogo = nivelJogo + subNivelJogo
 
@@ -590,6 +620,8 @@ class MainActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun btnAdaptaJogoClick(view: View?) {
 
+        strOpcaoJogo = "JogoAdaptado"
+
         strLog = "-> Tap no btnAdaptaJogo"
         Log.d(cTAG, strLog)
 
@@ -632,6 +664,7 @@ class MainActivity : AppCompatActivity() {
                 .setNegativeButton("Edita") { _, _ ->
 
                     Log.d(cTAG, "-> \"Edita\" was pressed")
+                    strOpcaoJogo = "JogoEditado"
 
                     //---------------
                     edicaoPreset()
@@ -1348,8 +1381,6 @@ class MainActivity : AppCompatActivity() {
                         flagJogoEditadoOk = verificaSeJogoValido(quadMaior)
                         //----------------------------------------------------
 
-                        if (flagJogoEditadoOk) strOpcaoJogo = "JogoEditado"
-
                     }
                 }
             }
@@ -1815,8 +1846,8 @@ class MainActivity : AppCompatActivity() {
 
         //--- Quantidade de clues entre 20 e 59   (Fácil: 2.0 e MuitoDifícil: 5.9)
         val qtizeros = utilsKt.quantZeros(arArJogo)
-        if (qtizeros < 20 || qtizeros > 59) return false
-
+        if ((strOpcaoJogo == "JogoGerado" || strOpcaoJogo == "JogoEditado")  &&
+                                                    (qtizeros < 20 || qtizeros > 59)) return false
         //--- Confere números nos Qm, linhas e colunas
         for (idxLin in 0..8) {
             for (idxCol in 0..8) {

@@ -181,6 +181,9 @@ class AdaptarActivity : AppCompatActivity() {
 
     }
 
+    //----------------------------------------------------------------------------------------------
+    // Listener para seleção de opções no menu pop-up do ActionBar (more three dots)
+    //----------------------------------------------------------------------------------------------
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
         //--- Tapping no menu do actionBar
@@ -284,6 +287,7 @@ class AdaptarActivity : AppCompatActivity() {
                     //------------------------------------------------------------------
                     setResult (if (flagDelOk) RESULT_OK else RESULT_CANCELED, intent)
                     //------------------------------------------------------------------
+                    //---------
                     finish()
                     //---------
 
@@ -293,6 +297,7 @@ class AdaptarActivity : AppCompatActivity() {
             //--- Atualiza os Arrays List (ViewHolder)
             //---------------
             prepArLists()
+            //---------------
 
             //--- Atualiza o RV
             //------------------------------
@@ -469,27 +474,23 @@ class AdaptarActivity : AppCompatActivity() {
         //-------------------------------------------------------
         //--- Subnível
         strTagInic = "<subnivel>"
-        strTagFim = "</subnivel>"
+        strTagFim  = "</subnivel>"
         //----------------------------------------------------------
         strSubNivelJogo = leCampo(strJogo, strTagInic, strTagFim)
         //----------------------------------------------------------
-
         //--- Leitura da matriz bidimensional-proposta de jogo
-        strTagInic = if (flagContinua) "<body2>" else "<body>"
-        strTagFim = if (flagContinua) "</body2>" else "</body>"
-
+        strTagInic = if (flagContinua) "<body2>"  else "<body>"
+        strTagFim  = if (flagContinua) "</body2>" else "</body>"
         //------------------------------------------------------
         var strLeit = leCampo(strJogo, strTagInic, strTagFim)
         //------------------------------------------------------
 
         if (strLeit.isEmpty()) {
 
-            strLog = "Jogo inválido!!!"
-            Log.d(cTAG, "-> $strLog")
+            strLog = "Jogo inválido!!!\nCampo body2 vazio!"
 
-            //--------------------------------------------------------------
+            Log.d(cTAG, "-> $strLog")
             Toast.makeText(this, strLog, Toast.LENGTH_LONG).show()
-            //--------------------------------------------------------------
 
             return
 
@@ -544,9 +545,9 @@ class AdaptarActivity : AppCompatActivity() {
 
         if (!flagJogoValido) {
 
-            //flagJogoAdaptadoOk = false
-
-            Toast.makeText(this, "Jogo adaptado inválido!", Toast.LENGTH_SHORT).show()
+            strToast = "Jogo adaptado inválido!"
+            utilsKt.mToast( this, "$strToast\n($strOpcaoJogo)")
+            Log.d(cTAG, "-> $strToast: $strOpcaoJogo)")
 
         } else {
 

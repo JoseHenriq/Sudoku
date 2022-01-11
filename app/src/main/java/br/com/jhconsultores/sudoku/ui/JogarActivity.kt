@@ -427,7 +427,9 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                     iViewSudokuBoard!!.isEnabled = true
                     iViewNumsDisps!!.isEnabled   = true
 
-                    crono.base = SystemClock.elapsedRealtime() + timeStopped
+                    var cronoBase = SystemClock.elapsedRealtime()
+                    cronoBase += if (strOpcaoJogo.contains("JogoGerado")) timeStopped else 0
+                    crono.base = cronoBase
 
                     Log.d(cTAG, "SystemClock = ${SystemClock.elapsedRealtime()}")
                     Log.d(cTAG, "timeStopped = $timeStopped")

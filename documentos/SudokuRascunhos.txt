@@ -1,83 +1,125 @@
 //--------------------------------------------------------------------------
+11/01/22 06:47:00
+//--------------------------------------------------------------------------
+// sudoku_#8.5.1
+
+MaainActivity - onCreate
+
+        //--- Smartphone
+        Log.d (cTAG, "-> Smartphone: ${Build.MANUFACTURER} - ${Build.MODEL}")
+        Log.d (cTAG, "-> App: $strApp")
+
+        //--- Versão do Android e versão da API
+        versAndroid = Build.VERSION.RELEASE    //.BASE_OS  // samsung/on5xelteub/on5xelte:8.0.0/R16NW/G570MUBU4CSB1:user/release-keys
+        //val intSepInic  = versAndroid.indexOf(":", 0, false) + 1
+        //val intSepFim   = versAndroid.indexOf("/", intSepInic, false)
+
+        var strSO = ""
+        try {
+
+            //strSO = "A${versAndroid.substring(intSepInic, intSepFim)}"
+            strSO = "A$versAndroid"
+
+
+        } catch (exc : Exception) {
+
+            //---------------------------------------------------------------
+            utilsKt.mToast(this, "-> Erro: ${exc.message}")
+            //---------------------------------------------------------------
+
+        }
+
+        utils.flagSO_A11 = (strSO == "A11")
+
+        strToast = "BaseOS: $strSO SDK_INT: API${Build.VERSION.SDK_INT}"
+        
+        Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+
+        Log.d(cTAG, "-> $strToast")
+
+
+
+//--------------------------------------------------------------------------
 09/01/22 09:58:00
 //--------------------------------------------------------------------------
  
-    // sudoku_#8.5.1
+// sudoku_#8.5.1
 
 
 // Scoped storage    
 
-// - Download File
+private fun downloadFile(fileUrl: String, fileName: String) {
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
 
-            strToast = "You must use device running Android 10 or higher"
-            Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+        strToast = "You must use device running Android 10 or higher"
+        Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
 
-            return
+        return
 
-        }
+    }
 
-        thread {
+    thread {
 
-            try {
+        try {
 
-                //----------------------------------------------------------------------------------
-                // Recepção do arquivo
-                //----------------------------------------------------------------------------------
-                //--- Conexão http
-                val url = URL(fileUrl)
-                val connection = url.openConnection() as HttpURLConnection
-                connection.requestMethod  = "GET"
-                connection.connectTimeout = 8000
-                connection.readTimeout    = 8000
+            //----------------------------------------------------------------------------------
+            // Recepção do arquivo
+            //----------------------------------------------------------------------------------
+            //--- Conexão http
+            val url = URL(fileUrl)
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod  = "GET"
+            connection.connectTimeout = 8000
+            connection.readTimeout    = 8000
 
-                //--- Recepção do arquivo em stream
-                val inputStream = connection.inputStream
-                val bis         = BufferedInputStream(inputStream)
+            //--- Recepção do arquivo em stream
+            val inputStream = connection.inputStream
+            val bis         = BufferedInputStream(inputStream)
 
-                //----------------------------------------------------------------------------------
-                // Salvamento do arquivo
-                //----------------------------------------------------------------------------------
-                //--- Prepara para salvar o arquivo recebido
-                val values = ContentValues()
-                values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-                values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-                val uri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
+            //----------------------------------------------------------------------------------
+            // Salvamento do arquivo
+            //----------------------------------------------------------------------------------
+            //--- Prepara para salvar o arquivo recebido
+            val values = ContentValues()
+            values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            val uri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
 
-                //--- Salva o arquivo stream
-                if (uri != null) {
+            //--- Salva o arquivo stream
+            if (uri != null) {
 
-                    val outputStream = contentResolver.openOutputStream(uri)
-                    if (outputStream != null) {
+                val outputStream = contentResolver.openOutputStream(uri)
+                if (outputStream != null) {
 
-                        val bos    = BufferedOutputStream(outputStream)
+                    val bos    = BufferedOutputStream(outputStream)
 
-                        val buffer = ByteArray(1024)
-                        var bytes  = bis.read(buffer)
-                        while (bytes >= 0) {
+                    val buffer = ByteArray(1024)
+                    var bytes  = bis.read(buffer)
+                    while (bytes >= 0) {
 
-                            bos.write(buffer, 0 , bytes)
-                            bos.flush()
-                            bytes = bis.read(buffer)
-
-                        }
-                        bos.close()
-
-                        runOnUiThread {
-                            strToast = "$fileName is in Download directory now."
-                            Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
-                        }
+                        bos.write(buffer, 0 , bytes)
+                        bos.flush()
+                        bytes = bis.read(buffer)
 
                     }
-                }
-                bis.close()
+                    bos.close()
 
-            } catch (e: Exception) {
-                e.printStackTrace()
+                    runOnUiThread {
+                        strToast = "$fileName is in Download directory now."
+                        Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
+                    }
+
+                }
             }
+            bis.close()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
+
+}
 
 
 //--------------------------------------------------------------------------
