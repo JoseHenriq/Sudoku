@@ -15,7 +15,6 @@ import android.view.View
 
 import android.annotation.SuppressLint
 import android.os.SystemClock
-import android.util.DisplayMetrics
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
@@ -25,7 +24,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
 import br.com.jhconsultores.sudoku.R
-import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.fatorLargura
 import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strOpcaoJogo
 import br.com.jhconsultores.utils.*
 
@@ -41,9 +39,6 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     private var strToast = ""
 
     private var intImageResource = 0
-
-    private var bmpTmp : Bitmap? = null
-
     private var bmpInic: Bitmap? = null // Board vazio Lido a partir do resource/drawable
     private var bmpJogo: Bitmap? = null // Preset ou jogo gerado ANTES dos novos números
 
@@ -749,7 +744,6 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         utilsKt.copiaBmpByBuffer(bmpJogo, bmpMyImage)
         //----------------------------------------------
         iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
-
         //----------------------------------------------
         for (intLin in 0..8) {
             for (intColuna in 0..8) {
@@ -939,45 +933,23 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
         // Bit maps
         intImageResource = R.drawable.sudoku_board3
 
-        //bitmap = Bitmap.createScaledBitmap(src, dstWidth, dstHeight, filter)
+        bmpMyImage = BitmapFactory.decodeResource(resources, intImageResource)
+            .copy(Bitmap.Config.ARGB_8888, true)
+        bmpJogo = BitmapFactory.decodeResource(resources, intImageResource)
+            .copy(Bitmap.Config.ARGB_8888, true)
+        bmpInic = BitmapFactory.decodeResource(resources, intImageResource)
+            .copy(Bitmap.Config.ARGB_8888, true)
+        bmpSudokuBoard = BitmapFactory.decodeResource(resources, intImageResource)
+            .copy(Bitmap.Config.ARGB_8888, true)
 
-        //--- Adapta o bitmap MyImage
-        bmpTmp     = BitmapFactory.decodeResource(resources, intImageResource)
-                                                     .copy(Bitmap.Config.ARGB_8888, true)
-        bmpMyImage = Bitmap.createScaledBitmap(bmpTmp!!, (fatorLargura * bmpTmp!!.width).toInt() ,
-                                             (fatorLargura * bmpTmp!!.height).toInt(), false)
-        canvasMyImage = Canvas(bmpMyImage!!)
+        bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
+            .copy(Bitmap.Config.ARGB_8888, true)
 
-        //--- Adapta o bitmap Jogo
-        //bmpJogo = BitmapFactory.decodeResource(resources, intImageResource)
-        //    .copy(Bitmap.Config.ARGB_8888, true)
-        utilsKt.copiaBmpByBuffer(bmpMyImage, bmpJogo)
-
-        //--- Adapta o bitmap Inic
-        //bmpInic = BitmapFactory.decodeResource(resources, intImageResource)
-        //    .copy(Bitmap.Config.ARGB_8888, true)
-        utilsKt.copiaBmpByBuffer(bmpMyImage, bmpInic)
-
-        //bmpSudokuBoard = BitmapFactory.decodeResource(resources, intImageResource)
-        //    .copy(Bitmap.Config.ARGB_8888, true)
-        utilsKt.copiaBmpByBuffer(bmpMyImage, bmpSudokuBoard)
+        // Canvas
+        canvasMyImage     = Canvas(bmpMyImage!!)
         canvasSudokuBoard = Canvas(bmpSudokuBoard!!)
 
-        //--- Adapta o bitmap dos números disponíveis
-        //bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
-        //    .copy(Bitmap.Config.ARGB_8888, true)
-        bmpTmp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
-                                                       .copy(Bitmap.Config.ARGB_8888, true)
-        bmpNumDisp = Bitmap.createScaledBitmap(bmpTmp!!, (fatorLargura * bmpTmp!!.width).toInt() ,
-            (fatorLargura * bmpTmp!!.height).toInt(), false)
-
         canvasNumDisp = Canvas(bmpNumDisp!!)
-
-        //bmpSudokuBoard!!.density = scale.toInt()
-        //canvasSudokuBoard        = Canvas(bmpSudokuBoard!!)
-
-        //bmpNumDisp!!.density = scale.toInt()
-        //canvasNumDisp        = Canvas(bmpNumDisp!!)
 
         //------------------------------------------------------------------------------------------
         // Images Views

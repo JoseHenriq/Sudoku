@@ -1,5 +1,6 @@
 package br.com.jhconsultores.sudoku.ui
 
+import android.Manifest.permission
 import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
@@ -29,22 +30,22 @@ import br.com.jhconsultores.sudoku.R
 import br.com.jhconsultores.sudoku.jogo.SudokuGameGenerator
 import br.com.jhconsultores.utils.*
 import java.lang.Exception
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.AlertDialog
-import android.app.PendingIntent.getActivity
-import android.content.Context
-import android.content.res.Configuration
+import android.content.DialogInterface
+import android.media.audiofx.BassBoost
 import android.net.Uri
+
+import androidx.core.app.ActivityCompat
 
 import android.os.Build
 import android.os.Build.VERSION
 
 import android.os.Build.VERSION.SDK_INT
+import android.provider.Settings
+import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
-import android.telephony.TelephonyManager
 import br.com.jhconsultores.sudoku.BuildConfig
-import java.util.*
-import kotlin.collections.ArrayList
-import android.util.DisplayMetrics
 
 const val ALL_FILES_ACCESS_PERMISSION = 4
 
@@ -69,15 +70,12 @@ class MainActivity : AppCompatActivity() {
 
         var strOpcaoJogo = "JogoGerado"
 
-        var fatorLargura : Double = 0.0
-        var fatorAltura  : Double = 0.0
-
     }
 
     //--- Objetos gráficos
     private lateinit var ivSudokuBoardMain: ImageView
     private lateinit var ivNumDisp: ImageView
-    //private lateinit var ivQtiNumDisp: ImageView    // DEBUG
+    //private lateinit var ivQtiNumDisp: ImageView
 
     private var bmpMyImageInic: Bitmap? = null
     private var bmpMyImageBack: Bitmap? = null
@@ -167,8 +165,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var previewRequest : ActivityResultLauncher<Intent>
 
-    var flagA11SO = false
-    private var device    = ""
+    var flagSO_A11 = false
 
     //--- Classes externas
     private var sgg       = SudokuGameGenerator()
@@ -180,67 +177,52 @@ class MainActivity : AppCompatActivity() {
     // Eventos e listeners da MainActivity
     //----------------------------------------------------------------------------------------------
     //--- onCreate
-    @RequiresApi(Build.VERSION_CODES.R)
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //--- Device
-        strToast  = "Smartphone: ${Build.MANUFACTURER} - ${Build.MODEL}"
-        strToast += " Build: ${Build.DEVICE}"
-        utilsKt.mToast(this, strToast)
-        Log.d (cTAG, "-> $strToast")
-
-        //--- Calcula o fator a ser usado para as diferenças de tamanho dos screens
-        // desenv Smartphone JH: Samsung SM-G570M
-        val larguraDesenv = 2.44  // inches
-        val alturaDesenv  = 4.33  // inches
-
-        Log.d (cTAG, "-> Dimensões screen:")
-        val metrics  = resources.displayMetrics
-        val yInches = metrics.heightPixels.toDouble() / metrics.ydpi.toDouble()
-        val xInches = metrics.widthPixels.toDouble()  / metrics.xdpi.toDouble()
-
-        strLog = String.format("%s %.2f%s","   - largura  : ",metrics.widthPixels.toDouble()," px")
-        strLog+= String.format(" (%.2f\")", xInches)
-        Log.d(cTAG, strLog)
-        strLog = String.format("%s %.2f%s","   - altura   : ",metrics.heightPixels.toDouble()," px")
-        strLog+= String.format(" (%.2f\")", yInches)
-        Log.d(cTAG, strLog)
-
-        val diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches)
-        Log.d (cTAG, String.format("%s %.2f%s", "   - Diagonal : ", diagonalInches, "\""))
-
-        fatorLargura= xInches / larguraDesenv
-        fatorAltura = yInches / alturaDesenv
-
-        Log.d(cTAG, String.format("%s %.2f","   - fatorlargura : ", fatorLargura))
-        Log.d(cTAG, String.format("%s %.2f","   - fatorAltura  : ", fatorAltura))
-
-        //------------------------------------------------------------------------------------------
+        //--- Smartphone
+        Log.d (cTAG, "-> Smartphone: ${Build.MANUFACTURER} - ${Build.MODEL}")
+        Log.d (cTAG, "-> App: $strApp")
 
         //--- Versão do Android e versão da API
-        versAndroid = VERSION.RELEASE
+        versAndroid = Build.VERSION.RELEASE    //.BASE_OS  // samsung/on5xelteub/on5xelte:8.0.0/R16NW/G570MUBU4CSB1:user/release-keys
+        //val intSepInic  = versAndroid.indexOf(":", 0, false) + 1
+        //val intSepFim   = versAndroid.indexOf("/", intSepInic, false)
 
         var strSO = ""
-        try { strSO = "A$versAndroid" }
-        catch (exc : Exception) { utilsKt.mToast(this, "-> Erro: ${exc.message}") }
+        try {
+
+            //strSO = "A${versAndroid.substring(intSepInic, intSepFim)}"
+            strSO = "A$versAndroid"
+
+
+        } catch (exc : Exception) {
+
+            //---------------------------------------------------------------
+            utilsKt.mToast(this, "-> Erro: ${exc.message}")
+            //---------------------------------------------------------------
+
+        }
 
         utils.flagSO_A11 = (strSO == "A11")
 
-        strToast = "BaseOS: $strSO SDK_INT: API${SDK_INT}"
+        strToast = "BaseOS: $strSO SDK_INT: API${Build.VERSION.SDK_INT}"
         
         Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
 
         Log.d(cTAG, "-> $strToast")
 
-        //--- App version
-        strToast = "App: $strApp"
-        Log.d (cTAG, "-> $strToast")
+        //--- Implementa o actionBar
+        toolBar = findViewById(R.id.maintoolbar)
+        toolBar.title = "$strApp - main"
 
         //--- Instancializações e inicializações
+        tvContaNums  = findViewById(R.id.ContaNums)
+        tvContaClues = findViewById(R.id.ContaClues)
+
         btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
         btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
         btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
@@ -262,22 +244,13 @@ class MainActivity : AppCompatActivity() {
 
         groupRBadapta.visibility = INVISIBLE
 
-        tvContaNums       = findViewById(R.id.ContaNums)
         tvContaNums.text  = "0"
-
-        tvContaClues      = findViewById(R.id.ContaClues)
         tvContaClues.text = getString(R.string.valor81)
 
-        //----------------------------------------------------------------------
-        // Instancia e inicializa os objetos gráficos
-        //----------------------------------------------------------------------
+        //--- Objetos gráficos
+        //--------------------
         inicializaObjGraf()
-
-        //----------------------------------------------------------------------
-        // Implementa o actionBar
-        //----------------------------------------------------------------------
-        toolBar = findViewById(R.id.maintoolbar)
-        toolBar.title = "$strApp - main"
+        //--------------------
 
         //----------------------------------------------------------------------
         // Implementa o Progress Bar
@@ -446,9 +419,9 @@ class MainActivity : AppCompatActivity() {
 
             Log.d(cTAG, strLogRes)
 
-            val flagInstalacaoOk = lstPermNaoOk.isEmpty()
+            val flagInstalacao_Ok = lstPermNaoOk.isEmpty()
 
-            if (flagInstalacaoOk) Log.d(cTAG, "- Permissão concedida!")
+            if (flagInstalacao_Ok) Log.d(cTAG, "- Permissão concedida!")
 
             //---------------
             //Instala_App()
@@ -1172,7 +1145,7 @@ class MainActivity : AppCompatActivity() {
             else {
 
                 //---------------------------
-                editaIVSudokuBoardC1()
+                editaIVSudokuBoard_c1()
                 //---------------------------
 
             }
@@ -1206,7 +1179,7 @@ class MainActivity : AppCompatActivity() {
                 //-------------
                 zeraCelula()
                 //------------------------
-                editaIVSudokuBoardC1()
+                editaIVSudokuBoard_c1()
                 //------------------------
 
             }
@@ -1226,7 +1199,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- editaIVSudokuBoard_c1
-    private fun editaIVSudokuBoardC1() {
+    private fun editaIVSudokuBoard_c1() {
 
         //-------------------------------------------
         mostraCelAEditar(intLinJogar, intColJogar)
@@ -1606,7 +1579,6 @@ class MainActivity : AppCompatActivity() {
     //---------------------------------------------------------------------
     // Verifica se Permissions do Manifest estão granted
     //---------------------------------------------------------------------
-    @RequiresApi(Build.VERSION_CODES.R)
     private fun verifPermissoesAcessoAPI(): Boolean {
 
         var strMsgDebug = "-> main Verifica permissões"
@@ -1621,7 +1593,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strMsgDebug)
 
         //--- Se precisar solicita ao jogador que autorize pelo config a utilização do ScopedStorage
-        if (!flagScopedStorage && utils.permScopedStorage.isNotEmpty()) {
+        if (!flagScopedStorage && !utils.permScopedStorage.isEmpty()) {
 
             //--- Solicita ativação no config para o jogador habilitar o Scoped Storage desse App
             val builder = AlertDialog.Builder(this)
@@ -1634,9 +1606,9 @@ class MainActivity : AppCompatActivity() {
 
                     val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
 
-                    val intent    = Intent()
-                    intent.action = ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
-                    intent.data   = uri
+                    val intent = Intent()
+                    intent.setAction(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                    intent.setData(uri)
                     startActivity(intent)
 
                 }
