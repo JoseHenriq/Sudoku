@@ -349,7 +349,8 @@ class AdaptarActivity : AppCompatActivity() {
     var strJogo       = ""
     var strStatus     = ""
     var strErro       = "0"
-    var strCronoConta = "00:00:00"
+    var strCronoConta = "00:00"
+    var strCronoInic  = "00:00"
 
     fun adaptaEjogaJogo(idxItemView: Int) {
 
