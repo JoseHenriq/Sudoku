@@ -1119,6 +1119,7 @@ class JogarActivity : AppCompatActivity() {
 
     //--- verifValidade de um número do Qm para inserção no QM
     fun verifValidade(quadMenor: Int, linQM: Int, colQM: Int, numero: Int): Boolean {
+
         var flagNumeroOk = true
 
         //--- Calcula as linhas desse quadrado menor no QM
@@ -1137,14 +1138,19 @@ class JogarActivity : AppCompatActivity() {
 		int colQM = colsQM[colunaQm];
 		*/
 
-        //----------------------------------------------------
-        // Verifica se número já existe no Qm da cel tocada
-        //----------------------------------------------------
+        //-------------------------------------------------------
+        // 1- verifica se número já existe no Qm da cel tocada
+        //-------------------------------------------------------
         for (intLinha in linhasQM[0]..linhasQM[2]) {
             for (intColuna in colsQM[0]..colsQM[2]) {
                 if (intLinha != intLinJogar || intColuna != intColJogar) {
                     if (arArIntNums[intLinha][intColuna] == numero) {
                         flagNumeroOk = false
+
+                        strLog  = "   - invalido Qm: Qm=$quadMenor; lin=$intLinha; col=$intColuna"
+                        strLog += " num=$numero"
+                        Log.d(cTAG, strLog)
+
                         break
                     }
                 }
@@ -1153,9 +1159,9 @@ class JogarActivity : AppCompatActivity() {
         //--- Se existe, retorna para gerar um novo numero
         if (!flagNumeroOk) return false
 
-        //--------------------------------------------
-        // Verifica se número existe na LINHA do QM
-        //--------------------------------------------
+        //-----------------------------------------------
+        // 2- verifica se número existe na LINHA do QM
+        //-----------------------------------------------
         var numeroQM: Int
         for (idxColQM in 0..8) {
 
@@ -1165,7 +1171,12 @@ class JogarActivity : AppCompatActivity() {
                 numeroQM = arArIntNums[linQM][idxColQM]
                 if (numero == numeroQM) {
                     flagNumeroOk = false
+
+                    strLog  = "   - invalido lin: linha=$linQM; col=$idxColQM; num=$numero"
+                    Log.d(cTAG, strLog)
+
                     break
+
                 }
             }
         }
@@ -1174,7 +1185,7 @@ class JogarActivity : AppCompatActivity() {
         if (!flagNumeroOk) return false
 
         //---------------------------------------------------------------------
-        // Se não existe na linha, verifica se número existe na COLUNA do QM
+        // 3- verifica se número existe na COLUNA do QM
         //---------------------------------------------------------------------
         for (idxLinQM in 0..8) {
 
@@ -1184,7 +1195,12 @@ class JogarActivity : AppCompatActivity() {
                 numeroQM = arArIntNums[idxLinQM][colQM]
                 if (numero == numeroQM) {
                     flagNumeroOk = false
+
+                    strLog  = " - invalido col: linha=$idxLinQM; col=$colQM; num=$numero"
+                    Log.d(cTAG, strLog)
+
                     break
+
                 }
             }
         }

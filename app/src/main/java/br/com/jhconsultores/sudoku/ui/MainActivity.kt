@@ -32,6 +32,7 @@ import br.com.jhconsultores.utils.*
 import java.lang.Exception
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.DialogInterface
 import android.media.audiofx.BassBoost
 import android.net.Uri
@@ -123,12 +124,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rbPreset     : RadioButton
     private lateinit var rbEdicao     : RadioButton
 
-    private lateinit var progressBar: ProgressBar
 
+    //private lateinit var progressBar : Dialog
+    private lateinit var progressBar    : ProgressBar
     private lateinit var edtViewSubNivel: EditText
-    //private var flagAdaptaPreset = true
+    private lateinit var layout         : RelativeLayout
 
-    //--- Objetos para o jogo
+        //--- Objetos para o jogo
     private var quadMaior = Array(9) { Array(9) { 0 } }
 
     private var strNivelJogo   = "Fácil"
@@ -238,9 +240,6 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
         Log.d(cTAG, "-> $strToast")
 
-
-
-
         //----------------------------------------------------------------------
         // Implementa o o actionBar
         //----------------------------------------------------------------------
@@ -286,18 +285,21 @@ class MainActivity : AppCompatActivity() {
         // Implementa o Progress Bar
         //----------------------------------------------------------------------
         progressBar = ProgressBar(this)
-        progressBar.visibility = INVISIBLE
+        //progressBar = Dialog(this)
+        //progressBar.setTitle("Aguarde ...")
 
         //setting height and width of progressBar
         progressBar.layoutParams = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
-
         //accessing our relative layout where the progressBar will add up
-        val layout = findViewById<RelativeLayout>(R.id.relLayoutProgBar)
+        layout = findViewById<RelativeLayout>(R.id.relLayoutProgBar)
         // Add ProgressBar to our layout
         layout?.addView(progressBar)
+
+        //progressBar.show()
+        progressBar.visibility = VISIBLE
 
         //------------------------------------------------
         // Listener para mudança do subnivel (editView)
@@ -333,8 +335,8 @@ class MainActivity : AppCompatActivity() {
 
                 val x = event.x.toInt()
                 val y = event.y.toInt()
-                Log.d(cTAG, "touched x: $x")
-                Log.d(cTAG, "touched y: $y")
+                //Log.d(cTAG, "touched x: $x")
+                //Log.d(cTAG, "touched y: $y")
 
                 //-------------------------
                 editaIVSudokuBoard(x, y)
@@ -368,9 +370,9 @@ class MainActivity : AppCompatActivity() {
 
                 MotionEvent.ACTION_DOWN -> {
 
-                    Log.d(cTAG, "   - ACTION_DOWN")
+                    //Log.d(cTAG, "   - ACTION_DOWN")
                     val x = motionEvent.x.toInt()
-                    Log.d(cTAG, "   touched x: $x")
+                    //Log.d(cTAG, "   touched x: $x")
 
                     //-------------------
                     editaIVNumDisp(x)
@@ -379,7 +381,13 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
+
+            //-------------------
+            apresNumsEQtidds()
+            //-------------------
+
             false
+
         }
 
         //-----------------------------------------------------------------------------------
@@ -388,7 +396,6 @@ class MainActivity : AppCompatActivity() {
         //---------------------------
         verifPermissoesAcessoAPI()
         //---------------------------
-
         Log.d(cTAG, "-> Registra activity for result")
 
         //------------------------------------------------------------------------------------------
@@ -471,7 +478,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         //--- Ativa o progress bar
-        progressBar.visibility = VISIBLE
+        //progressBar.show()
+        //progressBar.visibility = VISIBLE
+        layout.visibility = VISIBLE
 
         //--- Aguarda o teclado ser mostrado para poder escondê-lo
         val waitTime = 3000L  // milisegundos
@@ -479,7 +488,10 @@ class MainActivity : AppCompatActivity() {
             {
 
                 //--- Desativa o progress bar
-                progressBar.visibility = INVISIBLE
+                //progressBar.dismiss()
+                //progressBar.visibility = INVISIBLE
+                layout.visibility = INVISIBLE
+
 
                 //--- Esconde o teclado
                 //----------------------------------
@@ -516,9 +528,12 @@ class MainActivity : AppCompatActivity() {
         flagJogoGeradoOk = false
 
         //--- Ativa o progress bar
-        progressBar.visibility = VISIBLE
+        //progressBar.show()
+        //progressBar.visibility = VISIBLE
+        layout.visibility = VISIBLE
 
-        txtDadosJogo.text = String.format("%s", "Aguarde ...")
+        txtDadosJogo.text       = String.format("%s", "Aguarde ...")
+        txtDadosJogo.bringToFront()
 
         //--- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
         val waitTime = 100L  // milisegundos
@@ -588,24 +603,28 @@ class MainActivity : AppCompatActivity() {
                     txtDadosJogo.text = ""
 
                     //--- Desativa o progress bar
-                    progressBar.visibility = INVISIBLE
+                    //progressBar.dismiss()
+                    //progressBar.visibility = INVISIBLE
+                    layout.visibility = INVISIBLE
 
                     flagJogoGeradoOk = true
 
                     // **** O array preparado (quadMaior) será enviado pelo listener do botão JogaJogo ****
+
                 } else {
 
                     txtDadosJogo.text = ""
 
                     //--- Desativa o progress bar
-                    progressBar.visibility = INVISIBLE
+                    //progressBar.dismiss()
+                    //progressBar.visibility = INVISIBLE
+                    layout.visibility = INVISIBLE
 
-                    //--------------------------------------------------------------------------------------
-                    Toast.makeText(
-                        this, "Não é possível gerar o jogo sem subnivel!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    //--------------------------------------------------------------------------------------
+                    strLog = "Não é possível gerar o jogo sem subnivel!"
+                    //------------------------------------------
+                    utilsKt.mToast (this, strLog)
+                    //------------------------------------------
+                    Log.d(cTAG, "-> $strLog")
 
                 }
 
@@ -657,6 +676,8 @@ class MainActivity : AppCompatActivity() {
 
                             Log.d(cTAG, "-> \"Carrega\" was pressed")
 
+                            txtDadosJogo.bringToFront()
+
                             //---------------
                             adaptaPreset()
                             //---------------
@@ -667,6 +688,8 @@ class MainActivity : AppCompatActivity() {
 
                             Log.d(cTAG, "-> \"Edita\" was pressed")
                             strOpcaoJogo = "JogoEditado"
+
+                            txtDadosJogo.visibility = INVISIBLE
 
                             //---------------
                             edicaoPreset()
@@ -700,6 +723,24 @@ class MainActivity : AppCompatActivity() {
 
         strLog = "-> Tap no btnJogaJogo"
         Log.d(cTAG, strLog)
+
+        txtDadosJogo.bringToFront()
+
+        // <DEBUG>
+
+        quadMaior [0] = arrayOf (8, 0, 0, 0, 1, 0, 0, 0, 9 )
+        quadMaior [1] = arrayOf (0, 9, 0, 0, 2, 0, 0, 8, 0 )
+        quadMaior [2] = arrayOf (0, 0, 6, 0, 3, 0, 7, 0, 0 )
+        quadMaior [3] = arrayOf (0, 0, 0, 7, 9, 6, 0, 0, 0 )
+        quadMaior [4] = arrayOf (0, 0, 0, 0, 5, 0, 0, 0, 0 )
+        quadMaior [5] = arrayOf (0, 0, 0, 4, 8, 3, 0, 0, 0 )
+        quadMaior [6] = arrayOf (0, 0, 3, 0, 7, 0, 4, 0, 0 )
+        quadMaior [7] = arrayOf (0, 2, 0, 0, 6, 0, 0, 1, 0 )
+        quadMaior [8] = arrayOf (1, 0, 0, 0, 4, 0, 0, 0, 2 )
+
+        arIntQtiNumDisp = arrayOf (6, 6, 6, 6, 8, 6, 6, 6, 6)
+
+        // </DEBUG>
 
         //--- Verifica se jogo válido
         //-----------------------------------------------------
@@ -1048,7 +1089,7 @@ class MainActivity : AppCompatActivity() {
         scale = resources.displayMetrics.density
 
         ivSudokuBoardMain = findViewById(R.id.ivSudokuBoardMain)
-        ivNumDisp = findViewById(R.id.imageView3)
+        ivNumDisp         = findViewById(R.id.imageView3)
         //ivQtiNumDisp         = findViewById(R.id.imageView4)
 
         //-----------------------------
@@ -1154,14 +1195,14 @@ class MainActivity : AppCompatActivity() {
         val viewCoords = IntArray(2)
 
         ivSudokuBoardMain.getLocationOnScreen(viewCoords)
-        Log.d(cTAG, "viewCoord x: " + viewCoords[0])
-        Log.d(cTAG, "viewCoord y: " + viewCoords[1])
+        //Log.d(cTAG, "viewCoord x: " + viewCoords[0])
+        //Log.d(cTAG, "viewCoord y: " + viewCoords[1])
 
         //--- Coordenadas reais (???)
         val imageX = coordX - viewCoords[0] // viewCoords[0] is the X coordinate
         val imageY = coordY - viewCoords[1] // viewCoords[1] is the y coordinate
-        Log.d(cTAG, "Real x: $imageX")
-        Log.d(cTAG, "Real y: $imageY")
+        //Log.d(cTAG, "Real x: $imageX")
+        //Log.d(cTAG, "Real y: $imageY")
 
         //--- Coordenadas da célula tocada
         intColJogar = coordX / intCellwidth
@@ -1176,20 +1217,20 @@ class MainActivity : AppCompatActivity() {
                     ", numero = " + intNum
             Log.d(cTAG, strLog)
 
-            //--- Se tocou numa célula com número, solicita ao usuário que confirme sua sobreescrita
-            if (intNum > 0) {
-
-                //-----------------
-                verifEdicaoCel()
-                //-----------------
-
-            }
             //--- Tocou numa célula sem número
-            else {
+            if (intNum == 0) {
 
                 //---------------------------
                 editaIVSudokuBoard_c1()
                 //---------------------------
+
+            }
+            //--- Se tocou numa célula com número, solicita ao usuário que confirme sua sobreescrita
+            else {
+
+                //-----------------
+                verifEdicaoCel()
+                //-----------------
 
             }
         }
@@ -1302,7 +1343,7 @@ class MainActivity : AppCompatActivity() {
 
             //--- Se tem célula selecionada no Sudoku Board, trata a edição da célula
             //--- Determina a célula e o número tocado
-            val cellX = coordX / intCellwidth
+            val cellX  = coordX / intCellwidth
             val intNum = arIntNumsDisp[cellX]
 
             //--- Célula válida
@@ -1685,7 +1726,9 @@ class MainActivity : AppCompatActivity() {
             rbPreset.isChecked = true
 
             //--- Desativa o progress bar
-            progressBar.visibility = INVISIBLE
+            //progressBar.dismiss()
+            //progressBar.visibility = INVISIBLE
+            layout.visibility = INVISIBLE
 
             //--- Ativa a activity de adaptação de jogos
             //-----------------------
@@ -1731,7 +1774,7 @@ class MainActivity : AppCompatActivity() {
     //--- edicaoPreset()
     private fun edicaoPreset() {
 
-        rbEdicao.isChecked = true
+        rbEdicao.isChecked      = true
 
         flagJogoGeradoOk  = false
         flagJogoEditadoOk = false
@@ -1744,7 +1787,7 @@ class MainActivity : AppCompatActivity() {
         arArIntNums     = Array(9) { Array(9) { 0 } }
         arIntQtiNumDisp = Array(9) { 9 }
 
-        ivNumDisp.isEnabled = true
+        ivNumDisp.isEnabled         = true
         ivSudokuBoardMain.isEnabled = true
 
         //------------------------------------------------------------------------------------------
@@ -1856,35 +1899,70 @@ class MainActivity : AppCompatActivity() {
 
         //--- Quantidade de clues entre 20 e 59   (Fácil: 2.0 e MuitoDifícil: 5.9)
         val qtizeros = utilsKt.quantZeros(arArJogo)
+        // Quantidade de zeros menos que 20 ou mais do que 59
         if ((strOpcaoJogo == "JogoGerado" || strOpcaoJogo == "JogoEditado")  &&
                                                     (qtizeros < 20 || qtizeros > 59)) return false
-        //--- Confere números nos Qm, linhas e colunas
+        // Quantidade de zeros entre 20 e 59
+        else {
+
+            Log.d(cTAG, "Qm Lin Col Num val")
+
+            //--- Confere números nos Qm, linhas e colunas
+            for (idxLin in 0..8) {
+
+                for (idxCol in 0..8) {
+
+                    val intNum = arArJogo[idxLin][idxCol]
+                    if (intNum > 0) {
+
+                        arArJogo[idxLin][idxCol] = 0
+
+                        // Determina a que Qm a célula pertence
+                        //---------------------------------------------------------
+                        val intQuadMenor = jogarJogo.determinaQm(idxLin, idxCol)
+                        //---------------------------------------------------------
+
+                        // Verifica se o número dessa célula não existe no seu Qm, na sua linha e na
+                        // sua coluna.
+
+                        //--------------------------------------------------------------------------
+                        flagJogoValido =
+                                       jogarJogo.verifValidade(intQuadMenor, idxLin, idxCol, intNum)
+                        //--------------------------------------------------------------------------
+
+                        arArJogo[idxLin][idxCol] = intNum
+
+                    }
+                }
+            }
+
+        }
+        return flagJogoValido
+
+    }
+
+    //--- apresNumsEQtidds
+    private fun apresNumsEQtidds() {
+
+        var strLog1 = ""
+        var strLog2 = ""
         for (idxLin in 0..8) {
+
             for (idxCol in 0..8) {
 
-                val intNum = arArJogo[idxLin][idxCol]
-                if (intNum > 0) {
+                strLog1 += if (idxCol == 0) "\n" else (if (idxCol < 9) ", " else "") //else (if (idxLin < 8) "," else ""))
+                strLog1 += "${arArIntNums[idxLin][idxCol]}"
 
-                arArJogo[idxLin][idxCol] = 0
+                if (idxLin == 0) {
 
-                // Determina a que Qm a célula pertence
-                //---------------------------------------------------------
-                val intQuadMenor = jogarJogo.determinaQm(idxLin, idxCol)
-                //---------------------------------------------------------
-
-                // Verifica se o número dessa célula não existe no seu Qm, na sua linha e na
-                // sua coluna.
-                //------------------------------------------------------------------------------
-                flagJogoValido = jogarJogo.verifValidade(intQuadMenor, idxLin, idxCol, intNum)
-                //------------------------------------------------------------------------------
-
-                arArJogo[idxLin][idxCol] = intNum
+                    strLog2 += if (idxCol == 0) "\n" else (if (idxCol < 9) ", " else "")
+                    strLog2 += "${arIntQtiNumDisp[idxCol]}"
 
                 }
             }
         }
-        return flagJogoValido
-
+        Log.d(cTAG, "   - arArInt : $strLog1")
+        Log.d(cTAG, "   - arIntQti: $strLog2")
     }
 
 }

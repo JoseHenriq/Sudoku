@@ -262,6 +262,20 @@
         app:layout_constraintEnd_toEndOf    ="parent"
         app:layout_constraintTop_toBottomOf ="@id/separador_ivJogo_scroll" >
 
+        <TextView android:id ="@+id/msg1user"
+
+            android:layout_width ="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintStart_toStartOf   ="parent"
+            app:layout_constraintBottom_toBottomOf ="parent"
+
+            android:layout_marginTop  ="50dp"
+            android:gravity           ="center_horizontal"
+
+            android:textSize         ="@dimen/TamanhoTxt"
+            android:text             ="@string/aguarde"/>
+
     </RelativeLayout>
 
     <!-- Qtidd de números já colocados em jogo -->
@@ -278,6 +292,7 @@
 
         android:textSize         ="@dimen/TamanhoTxt"
         android:text             ="@string/numeros"/>
+
     <TextView android:id ="@+id/ContaNums"
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
@@ -385,7 +400,7 @@
         android:scrollbars="vertical"
 
         app:layout_constraintBottom_toTopOf="@id/btn_GerarJogo"
-        app:layout_constraintTop_toBottomOf="@id/ivSudokuBoardMain"
+        app:layout_constraintTop_toBottomOf="@id/imageView3"
         app:layout_constraintVertical_bias="1.0"
 
         tools:layout_editor_absoluteX="-1dp">
@@ -398,21 +413,20 @@
 
             android:layout_marginStart ="10dp"
             android:layout_marginEnd   ="10dp"
+            android:layout_marginTop   ="10dp"
             android:layout_marginBottom="10dp"
 
-            app:layout_constraintEnd_toEndOf    ="parent"
+            android:textSize="20sp"
+
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf    ="parent"
 
-            app:layout_constraintBottom_toTopOf ="@id/btn_GerarJogo"
-            app:layout_constraintTop_toBottomOf ="@id/ivSudokuBoardMain"
-
-            android:textSize="20sp" />
+            app:layout_constraintTop_toBottomOf="@id/imageView3" />
 
     </ScrollView>
 
     <!-- Separador entre resultados e botões -->
-    <View
-        android:id="@+id/separador_resultados_botoes"
+    <View android:id="@+id/separador_resultados_botoes"
 
         android:layout_width="match_parent"
         android:layout_height="1dp"
