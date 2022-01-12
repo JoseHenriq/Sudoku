@@ -28,8 +28,9 @@ import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strOpcaoJogo
 import br.com.jhconsultores.utils.*
 
 import java.lang.Exception
+import java.time.Duration
 
-class JogarActivity : AppCompatActivity() {   //Activity() {
+class JogarActivity : AppCompatActivity() {
 
     //--------------------------------------------------------------------------
     //                    Instancializações e inicializações
@@ -92,36 +93,37 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
     //--- Controle de jogadas
     private var intColJogar = 0
     private var intLinJogar = 0
-    private var flagJoga = false
+    private var flagJoga    = false
 
     private var arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-    private var arArIntGab = Array(9) { Array(9) { 0 } }
+    private var arArIntGab    = Array(9) { Array(9) { 0 } }
 
     var arArIntNums = Array(9) { Array(9) { 0 } }
 
     private var arArIntCopia = Array(9) { Array(9) { 0 } }
 
-    private var arIntNumsGab = ArrayList<Int>()   // Gabarito
+    private var arIntNumsGab  = ArrayList<Int>()   // Gabarito
     private var arIntNumsJogo = ArrayList<Int>()   // Jogo
 
-    private var action = "JogoGerado"
-    private var strNivelJogo = "Fácil"
+    private var action          = "JogoGerado"
+    private var strNivelJogo    = "Fácil"
     private var strSubNivelJogo = "0"
 
-    private var strNivelJogoInic = "Fácil"
+    private var strNivelJogoInic    = "Fácil"
     private var strSubNivelJogoInic = "0"
 
     private lateinit var crono: Chronometer
     private var strCronoInic = ""
-    private var timeStopped: Long = 0L
+    private var strCronoInicIntent = ""
+    //private var timeStopped: Long = 0L
 
     private var intContaErroInic = 0
 
-    private var strInicia = ""
-    private var strPause = ""
+    private var strInicia   = ""
+    private var strPause    = ""
     private var strReInicia = ""
 
-    private val utils = Utils()
+    private val utils   = Utils()
     private val utilsKt = UtilsKt()
 
     //--------------------------------------------------------------------------
@@ -385,7 +387,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                             crono.stop()
                             flagJoga = false
 
-                            btnInicia.text = strInicia
+                            btnInicia.text      = strInicia
                             btnInicia.isEnabled = false
 
                         }
@@ -420,20 +422,25 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                 if (btnInicia.text == strInicia || btnInicia.text == strReInicia) {
 
                     strLog = if (btnInicia.text == strInicia) strInicia else strReInicia
+
                     Log.d(cTAG, "-> ${crono.text} - $strLog")
 
                     iViewSudokuBoard!!.isEnabled = true
                     iViewNumsDisps!!.isEnabled   = true
 
-                    crono.base = SystemClock.elapsedRealtime() + timeStopped
+                    //crono.base = SystemClock.elapsedRealtime() + timeStopped
 
-                    Log.d(cTAG, "SystemClock = ${SystemClock.elapsedRealtime()}  Display: ${crono.text}")
-                    Log.d(cTAG, "timeStopped = $timeStopped")
-                    Log.d(cTAG, "crono.base  = ${crono.base}")
+                    //Log.d(cTAG, "SystemClock = ${SystemClock.elapsedRealtime()}  Display: ${crono.text}")
+                    //Log.d(cTAG, "timeStopped = $timeStopped")
+                    //Log.d(cTAG, "crono.base  = ${crono.base}")
 
                     //--------------
-                    crono.start()
+                    //crono.start()
                     //--------------
+
+                    //-------------------------
+                    parteCrono(strCronoInic)
+                    //-------------------------
 
                     btnInicia.text = strPause
 
@@ -446,10 +453,10 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
                     Log.d(cTAG, "-> ${crono.text} - $strPause")
 
-                    timeStopped = crono.base - SystemClock.elapsedRealtime()
-                    //-------------
+                    //timeStopped = crono.base - SystemClock.elapsedRealtime()
+
                     crono.stop()
-                    //-------------
+                    strCronoInic = crono.text.toString()
 
                     iViewSudokuBoard!!.isEnabled = false
                     iViewNumsDisps!!.isEnabled = false
@@ -483,20 +490,25 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                         Log.d(cTAG, "-> ${crono.text} - Reset")
 
                         //-------------
-                        crono.stop()
+                        //crono.stop()
                         //-------------
                         //if (action.contains ("JogoPressetado")) timeStopped = 0
-                        if (action == "JogoGerado" || action == "JogoEditado") timeStopped = 0
-                        crono.text  = strCronoInic
+                        //if (action == "JogoGerado" || action == "JogoEditado") timeStopped = 0
+                        //crono.text  = strCronoInic
+                        //Log.d(cTAG, "d: strCronoInic = $strCronoInic")
+                        //Log.d(cTAG, "d: crono.text   = ${crono.text}")
 
-                        Log.d(cTAG, "d: strCronoInic = $strCronoInic")
-                        Log.d(cTAG, "d: crono.text   = ${crono.text}")
+                        strCronoInic = strCronoInicIntent
+                        //--------------------------
+                        acertaCrono(strCronoInic)
+                        //--------------------------
 
                         //-------------------------------------------------
                         arArIntNums = utilsKt.copiaArArInt(arArIntCopia)
                         //-------------------------------------------------
 
                         arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+
                         //-------------
                         iniciaJogo()
                         //-------------
@@ -572,15 +584,16 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
             action = intent.action.toString()        // Main:
 
             //--- Recupera os dados recebidos via intent
-            strNivelJogoInic = intent.getStringExtra("strNivelJogo") as String
+            strNivelJogoInic    = intent.getStringExtra("strNivelJogo")    as String
             strSubNivelJogoInic = intent.getStringExtra("strSubNivelJogo") as String
 
-            strCronoInic = intent.getStringExtra("strCronoConta") as String
-            intContaErroInic = (intent.getStringExtra("strErro") as String).toInt()
+            strCronoInic     = intent.getStringExtra("strCronoConta") as String
+            intContaErroInic = (intent.getStringExtra("strErro")      as String).toInt()
 
             // Armazena o gabarito em um array<int>
             arIntNumsGab = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
-            arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as ArrayList<Int>
+            // Armazena o jogo em um array<int>
+            arIntNumsJogo= intent.getIntegerArrayListExtra("JogoPreparado")  as ArrayList<Int>
 
             // Gabarito e/ou jogo inválidos
             if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
@@ -588,13 +601,15 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
                 Log.d(cTAG, "-> Erro: array(s) com menos numeros que o necessário (81)")
 
             }
-            // Gabarito e jogo válido
+            // Gabarito e jogo válidos
             else {
 
+                strCronoInicIntent = strCronoInic
+
                 //--- Acerta crono
-                //--------------
-                acertaCrono()
-                //--------------
+                //--------------------------
+                acertaCrono(strCronoInic)
+                //--------------------------
 
                 tvErros!!.text = intContaErro.toString()
 
@@ -604,7 +619,7 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
                         val intCell = intLinha * 9 + intCol
                         arArIntNums[intLinha][intCol] = arIntNumsJogo[intCell]  // Jogo
-                        arArIntGab[intLinha][intCol] = arIntNumsGab[intCell]  // Gabarito
+                        arArIntGab[intLinha][intCol]  = arIntNumsGab[intCell]   // Gabarito
 
                     }
                 }
@@ -1283,34 +1298,6 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
     }
 
-    //--- preparaCrono
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun preparaCrono(crono: Chronometer) {
-
-        //--- Adiciona o cronometro ao layout
-        crono.setTextColor(Color.BLUE)
-        crono.setTextSize(TypedValue.COMPLEX_UNIT_IN, 0.15f)
-
-        val layoutParams = LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
-        //layoutParams.setMargins(30, 40, 120, 40)
-        crono.layoutParams = layoutParams
-
-        val linearLayout = findViewById<LinearLayout>(R.id.crono_layout)
-        linearLayout?.addView(crono)
-
-        //--- Ajusta o crono
-        crono.stop()
-        timeStopped = 0L
-        crono.base  = SystemClock.elapsedRealtime()
-        //---------------------------
-        crono.text  = strCronoInic
-        //---------------------------
-
-    }
-
     //--- salvaJogo
     @RequiresApi(Build.VERSION_CODES.O)
     private fun salvaJogo() {
@@ -1584,14 +1571,63 @@ class JogarActivity : AppCompatActivity() {   //Activity() {
 
     }
 
-    //--- acertaCrono
-    private fun acertaCrono() {
 
-        crono.text = strCronoInic
-        val intMin = strCronoInic.substring(0, 2).toLong()
-        val intSec = strCronoInic.substring(3, 5).toLong()
-        timeStopped = -((intMin * 60 + intSec) * 1000)
+    //--- preparaCrono
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun preparaCrono(crono: Chronometer) {
+
+        //--- Adiciona o cronometro ao layout
+        crono.setTextColor(Color.BLUE)
+        crono.setTextSize(TypedValue.COMPLEX_UNIT_IN, 0.15f)
+
+        val layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        //layoutParams.setMargins(30, 40, 120, 40)
+        crono.layoutParams = layoutParams
+
+        val linearLayout = findViewById<LinearLayout>(R.id.crono_layout)
+        linearLayout?.addView(crono)
 
     }
 
+    //--- acertaCrono
+    private fun acertaCrono(strCronoInic : String) {
+
+        Log.d(cTAG, "-> Acerta crono.")
+
+        crono.stop()
+
+        crono.text = strCronoInic
+
+        //val intMin = strCronoInic.substring(0, 2).toLong()
+        //val intSec = strCronoInic.substring(3, 5).toLong()
+        //timeStopped = -((intMin * 60 + intSec) * 1000)
+
+    }
+
+    //--- ajustaCrono
+    // https://developer.android.com/reference/android/os/SystemClock
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun parteCrono(strCronoInic :String){
+
+        //--------------------------
+        acertaCrono(strCronoInic)
+        //--------------------------
+
+        Log.d(cTAG, "-> Parte o crono.")
+
+        crono.stop()
+
+        crono.text  = strCronoInic
+        val intMin  = strCronoInic.substring(0, 2).toLong()
+        val intSec  = strCronoInic.substring(3, 5).toLong()
+        val timeLastStopped = ((intMin * 60 + intSec) * 1000)
+
+        crono.base  = SystemClock.elapsedRealtime() - timeLastStopped
+
+        crono.start()
+
+    }
 }

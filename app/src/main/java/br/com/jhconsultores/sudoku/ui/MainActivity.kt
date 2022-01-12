@@ -643,44 +643,54 @@ class MainActivity : AppCompatActivity() {
         edtViewSubNivel.isEnabled = false
 
         //--- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
-        val waitTime = 100L  // milisegundos
-        Handler(Looper.getMainLooper()).postDelayed( {
+        try {
+            val waitTime = 100L  // milisegundos
+            Handler(Looper.getMainLooper()).postDelayed(
+                {
 
-            androidx.appcompat.app.AlertDialog.Builder(this)
+                    androidx.appcompat.app.AlertDialog.Builder(this)
 
-                .setTitle("Sudoku - Adaptar Jogo")
-                .setMessage("Carrega ou Edita jogo?")
+                        .setTitle("Sudoku - Adaptar Jogo")
+                        .setMessage("Carrega ou Edita jogo?")
 
-                .setPositiveButton("Carrega") { _, _ ->
+                        .setPositiveButton("Carrega") { _, _ ->
 
-                    Log.d(cTAG, "-> \"Carrega\" was pressed")
+                            Log.d(cTAG, "-> \"Carrega\" was pressed")
 
-                    //---------------
-                    adaptaPreset()
-                    //---------------
+                            //---------------
+                            adaptaPreset()
+                            //---------------
 
-                }
+                        }
 
-                .setNegativeButton("Edita") { _, _ ->
+                        .setNegativeButton("Edita") { _, _ ->
 
-                    Log.d(cTAG, "-> \"Edita\" was pressed")
-                    strOpcaoJogo = "JogoEditado"
+                            Log.d(cTAG, "-> \"Edita\" was pressed")
+                            strOpcaoJogo = "JogoEditado"
 
-                    //---------------
-                    edicaoPreset()
-                    //---------------
+                            //---------------
+                            edicaoPreset()
+                            //---------------
 
-                }
+                        }
 
-                .setNeutralButton("Cancela") { _, _ ->
+                        .setNeutralButton("Cancela") { _, _ ->
 
-                    Log.d(cTAG, "-> \"Cancela\" was pressed")
+                            Log.d(cTAG, "-> \"Cancela\" was pressed")
 
-                }
-                .show()
+                        }
+                        .show()
 
-            },
-            waitTime ) // value in milliseconds
+                },
+                waitTime
+            ) // value in milliseconds
+        }
+
+        catch (exc : Exception) {
+
+            Log.d(cTAG, "-> adapta Erro: ${exc.message}")
+
+        }
 
     }
 
