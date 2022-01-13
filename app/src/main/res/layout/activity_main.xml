@@ -405,8 +405,7 @@
 
         tools:layout_editor_absoluteX="-1dp">
 
-        <TextView
-            android:id="@+id/txtJogos"
+        <TextView android:id="@+id/txtJogos"
 
             android:layout_width ="wrap_content"
             android:layout_height="wrap_content"
@@ -425,6 +424,8 @@
 
     </ScrollView>
 
+    <!-- 4- Botões -->
+
     <!-- Separador entre resultados e botões -->
     <View android:id="@+id/separador_resultados_botoes"
 
@@ -435,7 +436,6 @@
         android:background="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="@+id/srcTextScrollView" />
 
-    <!-- 4- Botões -->
     <Button android:id="@+id/btn_GerarJogo"
 
         android:layout_width ="@dimen/WidthBotao"
@@ -455,6 +455,7 @@
         android:text         ="@string/gera_novo_jogo"
 
         android:onClick      ="btnGeraJogoClick" />
+
     <Button android:id="@+id/btn_AdaptarJogo"
 
         android:layout_width ="@dimen/WidthBotao"
@@ -469,10 +470,11 @@
         android:textColor    ="@android:color/white"
         android:textAlignment="center"
         android:textAllCaps  ="false"
-        android:textSize     ="@dimen/TamanhoTxt"
+        android:textSize     ="14sp"
         android:text         ="@string/adaptar_jogo"
 
         android:onClick="btnAdaptaJogoClick"/>
+
     <Button android:id="@+id/btn_JogarJogo"
 
         android:layout_width ="@dimen/WidthBotao"

@@ -164,9 +164,6 @@ class MainActivity : AppCompatActivity() {
     private var versAndroid  = ""
 
     //--- Arquivos jogos
-    //private var arStrTags = Array(3) { "" }
-    //private var arArStrTags = Array(3) { Array(9) { "" } }
-
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
 
     private lateinit var previewRequest : ActivityResultLauncher<Intent>
@@ -194,9 +191,8 @@ class MainActivity : AppCompatActivity() {
         //----------------------------------------------------------------------
         //--- Smartphone
         strToast  = "Smartphone: ${Build.MANUFACTURER} - ${Build.MODEL}"
-        strToast += " Build: ${Build.DEVICE}"
-        utilsKt.mToast(this, strToast)
-        Log.d (cTAG, "-> $strToast")
+        strLog    = strToast + "Build: ${Build.DEVICE}"
+        Log.d (cTAG, strLog)
 
         //--- Calcula o fator a ser usado para as diferenças de tamanho dos screens
         // desenv Smartphone JH: Samsung SM-G570M
@@ -226,7 +222,7 @@ class MainActivity : AppCompatActivity() {
         //--- Versão do Android e versão da API
         versAndroid = Build.VERSION.RELEASE    //.BASE_OS  // samsung/on5xelteub/on5xelte:8.0.0/R16NW/G570MUBU4CSB1:user/release-keys
         var strSO = ""
-        try { strSO = "A$versAndroid" } catch (exc : Exception) {
+        try { strSO = "$versAndroid" } catch (exc : Exception) {
 
             //---------------------------------------------------------------
             utilsKt.mToast(this, "-> Erro: ${exc.message}")
@@ -234,11 +230,13 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        utils.flagSO_A11 = (strSO == "A11")
+        utils.flagSO_A11 = (strSO == "11")
 
-        strToast = "BaseOS: $strSO SDK_INT: API${Build.VERSION.SDK_INT}"
-        Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
-        Log.d(cTAG, "-> $strToast")
+        Log.d(cTAG, "-> BaseOS: $strSO SDK_INT: API${Build.VERSION.SDK_INT}")
+        strToast += "\nAndroid $strSO  API ${Build.VERSION.SDK_INT}"
+        //--------------------------------------
+        utilsKt.mToast(this, strToast)
+        //--------------------------------------
 
         //----------------------------------------------------------------------
         // Implementa o o actionBar
@@ -461,6 +459,8 @@ class MainActivity : AppCompatActivity() {
 
             if (flagInstalacao_Ok) Log.d(cTAG, "- Permissão concedida!")
 
+            utilsKt.mToast(this, "Permissão concedida!")
+
             //---------------
             //Instala_App()
             //---------------
@@ -532,7 +532,7 @@ class MainActivity : AppCompatActivity() {
         //progressBar.visibility = VISIBLE
         layout.visibility = VISIBLE
 
-        txtDadosJogo.text       = String.format("%s", "Aguarde ...")
+        txtDadosJogo.text = ""   // String.format("%s", "Aguarde ...")
         txtDadosJogo.bringToFront()
 
         //--- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
@@ -727,7 +727,7 @@ class MainActivity : AppCompatActivity() {
         txtDadosJogo.bringToFront()
 
         // <DEBUG>
-
+        /* Teste 1
         quadMaior [0] = arrayOf (8, 0, 0, 0, 1, 0, 0, 0, 9 )
         quadMaior [1] = arrayOf (0, 9, 0, 0, 2, 0, 0, 8, 0 )
         quadMaior [2] = arrayOf (0, 0, 6, 0, 3, 0, 7, 0, 0 )
@@ -737,9 +737,20 @@ class MainActivity : AppCompatActivity() {
         quadMaior [6] = arrayOf (0, 0, 3, 0, 7, 0, 4, 0, 0 )
         quadMaior [7] = arrayOf (0, 2, 0, 0, 6, 0, 0, 1, 0 )
         quadMaior [8] = arrayOf (1, 0, 0, 0, 4, 0, 0, 0, 2 )
-
         arIntQtiNumDisp = arrayOf (6, 6, 6, 6, 8, 6, 6, 6, 6)
-
+         */
+        /* Teste 2
+        quadMaior [0] = arrayOf (1, 0, 0, 0, 9, 0, 0, 0, 2 )
+        quadMaior [1] = arrayOf (0, 2, 0, 0, 8, 0, 0, 1, 0 )
+        quadMaior [2] = arrayOf (0, 0, 3, 0, 7, 0, 4, 0, 0 )
+        quadMaior [3] = arrayOf (0, 0, 0, 4, 0, 3, 0, 0, 0 )
+        quadMaior [4] = arrayOf (0, 0, 0, 0, 5, 0, 0, 0, 0 )
+        quadMaior [5] = arrayOf (0, 0, 0, 7, 0, 6, 0, 0, 0 )
+        quadMaior [6] = arrayOf (0, 0, 6, 0, 3, 0, 7, 0, 0 )
+        quadMaior [7] = arrayOf (0, 9, 0, 0, 2, 0, 0, 8, 0 )
+        quadMaior [8] = arrayOf (8, 0, 0, 0, 0, 0, 0, 0, 9 )
+        arIntQtiNumDisp = arrayOf (7, 6, 6, 7, 8, 7, 6, 6, 6)
+        */
         // </DEBUG>
 
         //--- Verifica se jogo válido
@@ -747,22 +758,36 @@ class MainActivity : AppCompatActivity() {
         val flagJogoValido = verificaSeJogoValido(quadMaior)
         //-----------------------------------------------------
 
+        when {
+
+            strOpcaoJogo == "JogoGerado" -> flagJogoGeradoOk = flagJogoValido
+            strOpcaoJogo.contains( "JogoPreSetado") -> flagJogoAdaptadoOk = flagJogoValido
+            strOpcaoJogo == "JogoEditado" -> flagJogoEditadoOk = flagJogoValido
+            else -> flagJogoGeradoOk = flagJogoValido
+
+        }
+
         //--- Se não tiver jogo válido, informa ao usuário
-        if (!flagJogoValido || (!flagJogoGeradoOk && !flagJogoEditadoOk)) {
+        if (!flagJogoValido) {
 
             //flagJogoGeradoOk = false
 
-            strToast = "Não há jogo válido!\nv=$flagJogoValido g=$flagJogoGeradoOk"
-            strToast += " e=$flagJogoEditadoOk"
-            //----------------------------------------------------------------
-            Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
-            //----------------------------------------------------------------
-
+            strToast = "Jogo inválido!"  //\nv=$flagJogoValido g=$flagJogoGeradoOk"
+            //strToast += " e=$flagJogoEditadoOk"
+            //--------------------------------------
+            utilsKt.mToast(this, strToast)
+            //--------------------------------------
             Log.d(cTAG, "-> $strToast")
 
         }
         //--- Se tiver jogo válido, finaliza a preparação do jogo
         else {
+
+            strToast = "Jogo válido!"
+            //--------------------------------------
+            utilsKt.mToast(this, strToast)
+            //--------------------------------------
+            Log.d(cTAG, "-> $strToast")
 
             //-----------------------
             finalizaEdicaoPreset()
