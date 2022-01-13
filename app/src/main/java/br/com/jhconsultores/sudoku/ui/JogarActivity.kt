@@ -28,7 +28,6 @@ import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strOpcaoJogo
 import br.com.jhconsultores.utils.*
 
 import java.lang.Exception
-import java.time.Duration
 
 class JogarActivity : AppCompatActivity() {
 
@@ -131,7 +130,7 @@ class JogarActivity : AppCompatActivity() {
     //--------------------------------------------------------------------------
     //--- onCreate MainActivity
     @RequiresApi(Build.VERSION_CODES.R)
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -139,11 +138,11 @@ class JogarActivity : AppCompatActivity() {
         try {
             setContentView(R.layout.activity_jogar)
 
-            tvLegCluesInic = findViewById<TextView>(R.id.tv_LegCluesInic)
-            tvCluesInic = findViewById<TextView>(R.id.tv_CluesInic)
+            tvLegCluesInic = findViewById(R.id.tv_LegCluesInic)
+            tvCluesInic = findViewById(R.id.tv_CluesInic)
 
             tvLegCluesInic!!.visibility = INVISIBLE
-            tvCluesInic!!.visibility = INVISIBLE
+            tvCluesInic!!.visibility    = INVISIBLE
 
             //--- Cronômetro
             strCronoInic = resources.getString(R.string.crono_inic)
@@ -545,9 +544,9 @@ class JogarActivity : AppCompatActivity() {
 
                         Log.d(cTAG, "-> \"Sim\" was pressed")
 
-                        //------------
+                        //============
                         salvaJogo()
-                        //------------
+                        //============
 
                         Log.d(cTAG, "-> Jogos salvos: ")
                         //-----------------------------------------------------------------------
@@ -637,7 +636,7 @@ class JogarActivity : AppCompatActivity() {
                 if (action == "JogoAdaptado") {
 
                     tvLegCluesInic!!.text = " ( Nível inicial: "
-                    tvCluesInic!!.text = "$strNivelJogo / $strSubNivelJogo )"
+                    tvCluesInic!!.text = String.format("%s / %s )", strNivelJogo, strSubNivelJogo )
 
                     tvLegCluesInic!!.visibility = VISIBLE
                     tvCluesInic!!.visibility = VISIBLE
@@ -963,7 +962,7 @@ class JogarActivity : AppCompatActivity() {
             .copy(Bitmap.Config.ARGB_8888, true)
 
         // Canvas
-        canvasMyImage = Canvas(bmpMyImage!!)
+        canvasMyImage     = Canvas(bmpMyImage!!)
         canvasSudokuBoard = Canvas(bmpSudokuBoard!!)
 
         canvasNumDisp = Canvas(bmpNumDisp!!)
@@ -972,7 +971,7 @@ class JogarActivity : AppCompatActivity() {
         // Images Views
         //------------------------------------------------------------------------------------------
         iViewSudokuBoard = findViewById<View>(R.id.ivSudokuBoard) as ImageView
-        iViewNumsDisps   = findViewById<View>(R.id.ivNumDisp) as ImageView
+        iViewNumsDisps   = findViewById<View>(R.id.ivNumDisp)     as ImageView
 
         //-----------------------------
         determinaGrandezasGraficas()
@@ -1367,14 +1366,13 @@ class JogarActivity : AppCompatActivity() {
             // 3- Define o path
             //----------------------------------------------------------------------
             val strArqPath = "/sudoku/jogos"
-            val strArqName = strArqJogo
 
             //------------------------------------------------------------------
             // Salva o arquivo
             //------------------------------------------------------------------
             //--------------------------------------------------------------------------------------
             val flagEscrita = utils.escExtMemTextFile(
-                this, strArqPath, strArqName,
+                this, strArqPath, strArqJogo,
                 strConteudo
             )
             //--------------------------------------------------------------------------------------
@@ -1383,7 +1381,7 @@ class JogarActivity : AppCompatActivity() {
             strToast += if (flagEscrita) "OK!" else "NÃO ok!"
             Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
 
-            strLog = "-> Escrita arquivo storage/emulated/0/Download$strArqPath/$strArqName "
+            strLog = "-> Escrita arquivo storage/emulated/0/Download$strArqPath/$strArqJogo "
             strLog += if (flagEscrita) "OK!" else "NÃO ok!"
             Log.d(cTAG, strLog)
 
@@ -1392,9 +1390,9 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //--- preparaConteudo
-    var strModelo: String = ""
-    var intIdxInic: Int = 0
-    var intIdxFim: Int = 0
+    private var strModelo: String = ""
+    private var intIdxInic: Int = 0
+    private var intIdxFim: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun preparaConteudo(): String {
@@ -1447,10 +1445,11 @@ class JogarActivity : AppCompatActivity() {
         Log.d(cTAG, strModelo)
 
         //-- Preenche os campos
-        var intTag = 0
+        var intTag =  0
+        var strTag : String
         try {
             //- header / id
-            intTag = 0
+            intTag    = 0
             intIdxFim = 0
             //-------------------------------------------------------------
             strConteudo = preencheConteudo("<id>", "3")
@@ -1558,11 +1557,13 @@ class JogarActivity : AppCompatActivity() {
 
             }
 
-            Log.d(cTAG, "-> Conteudo: $strConteudo")
+            strTag = intTag.toString()
+            Log.d(cTAG, "-> Tag: $strTag, Conteudo: $strConteudo")
 
         } catch (exc: Exception) {
 
-            Toast.makeText(this, "Erro $intTag: ${exc.message}", Toast.LENGTH_LONG).show()
+            strTag = intTag.toString()
+            utilsKt.mToast(this, "Erro $strTag: ${exc.message}")
             strConteudo = ""
 
         }
@@ -1598,10 +1599,10 @@ class JogarActivity : AppCompatActivity() {
 
         val layoutParams = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
+            ViewGroup.LayoutParams.MATCH_PARENT,
         )
         //layoutParams.setMargins(30, 40, 120, 40)
-        crono.layoutParams = layoutParams
+        crono.layoutParams  = layoutParams
 
         val linearLayout = findViewById<LinearLayout>(R.id.crono_layout)
         linearLayout?.addView(crono)

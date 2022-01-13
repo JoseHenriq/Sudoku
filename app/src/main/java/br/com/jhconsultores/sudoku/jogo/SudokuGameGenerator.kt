@@ -44,7 +44,7 @@ class SudokuGameGenerator {
         inicQuadMaiorGeracao()
         //-----------------------
 
-        while (!sggFlagJogoGeradoOk && contaTentaJogo < limTentaJogo) {  // && !flagTimeOut) {          //contaTentaJogo < 50) {  // 20) {   // 10) {
+        while (!sggFlagJogoGeradoOk && contaTentaJogo < limTentaJogo) {
 
             //Log.d(cTAG, "-> Gera o jogo ${contaTentaJogo + 1}")
 
@@ -373,124 +373,6 @@ class SudokuGameGenerator {
 
     }
 
-    /*
-    //--- inicQuadMaiorAdaptacao
-    private fun inicQuadMaiorAdaptacao(jogoAdaptar : Int) {
-
-        var quadMaiorAdapta = arrayOf<Array<Int>>()
-        var array : Array <Int>
-
-        //--- Simula os dados iniciais propostos
-        when (jogoAdaptar) {
-
-            1 -> run {
-
-                for (linha in 0..8) {
-
-                    // array = arrayOf<Int>()
-                    array = when (linha) {
-
-                        0 -> arrayOf(0, 0, 4, 6, 0, 5, 8, 0, 0)
-                        1 -> arrayOf(6, 5, 0, 0, 8, 0, 0, 0, 0)
-                        2 -> arrayOf(0, 0, 8, 0, 4, 7, 6, 0, 5)
-                        3 -> arrayOf(2, 8, 0, 3, 5, 6, 0, 0, 0)
-                        4 -> arrayOf(7, 4, 0, 0, 0, 8, 2, 5, 6)
-                        5 -> arrayOf(5, 6, 0, 4, 7, 2, 9, 0, 8)
-                        6 -> arrayOf(8, 2, 5, 7, 0, 4, 3, 6, 0)
-                        7 -> arrayOf(4, 3, 6, 5, 2, 0, 0, 8, 0)
-                        else -> arrayOf(0, 0, 0, 8, 6, 3, 5, 4, 2)
-
-                    }
-                    quadMaiorAdapta += array
-
-                }
-            }
-
-            2 -> run {
-
-                for (linha in 0..8) {
-
-                    // array = arrayOf<Int>()
-                    array = when (linha) {
-
-                        0 -> arrayOf(0, 6, 0, 7, 0, 8, 1, 9, 2)
-                        1 -> arrayOf(1, 0, 5, 2, 0, 0, 0, 0, 7)
-                        2 -> arrayOf(0, 2, 0, 0, 0, 6, 0, 0, 0)
-                        3 -> arrayOf(0, 5, 0, 9, 3, 0, 0, 4, 0)
-                        4 -> arrayOf(0, 0, 6, 5, 0, 2, 7, 8, 0)
-                        5 -> arrayOf(9, 7, 0, 0, 0, 0, 3, 2, 5)
-                        6 -> arrayOf(0, 0, 7, 4, 0, 0, 8, 0, 6)
-                        7 -> arrayOf(8, 9, 4, 0, 7, 0, 0, 0, 0)
-                        else -> arrayOf(0, 1, 0, 3, 0, 0, 0, 7, 4)
-
-                    }
-                    quadMaiorAdapta += array
-                }
-            }
-
-            3 -> run {
-
-                for (linha in 0..8) {
-
-                    // array = arrayOf<Int>()
-                    array = when (linha) {
-
-                        0 -> arrayOf(0, 0, 3, 5, 0, 0, 4, 9, 0)
-                        1 -> arrayOf(7, 6, 0, 0, 0, 0, 5, 0, 1)
-                        2 -> arrayOf(0, 5, 4, 0, 7, 3, 6, 0, 8)
-                        3 -> arrayOf(0, 1, 0, 0, 0, 0, 3, 0, 0)
-                        4 -> arrayOf(0, 0, 7, 2, 6, 1, 0, 0, 0)
-                        5 -> arrayOf(2, 0, 6, 0, 9, 0, 0, 1, 4)
-                        6 -> arrayOf(6, 3, 2, 8, 5, 0, 0, 0, 0)
-                        7 -> arrayOf(4, 0, 0, 0, 0, 2, 8, 0, 6)
-                        else -> arrayOf(8, 0, 5, 0, 0, 7, 2, 0, 0)
-
-                    }
-                    quadMaiorAdapta += array
-                }
-            }
-
-            // 4
-            else -> run {
-
-                for (linha in 0..8) {
-
-                    // array = arrayOf<Int>()
-                    array = when (linha) {
-
-                        0 -> arrayOf(9, 0, 0, 8, 4, 1, 3, 0, 0)
-                        1 -> arrayOf(0, 0, 1, 9, 0, 0, 4, 2, 0)
-                        2 -> arrayOf(0, 0, 0, 2, 0, 0, 0, 1, 0)
-                        3 -> arrayOf(8, 7, 0, 1, 0, 0, 5, 4, 0)
-                        4 -> arrayOf(1, 5, 0, 3, 6, 0, 0, 0, 2)
-                        5 -> arrayOf(2, 0, 0, 0, 0, 0, 7, 6, 0)
-                        6 -> arrayOf(7, 2, 0, 0, 0, 5, 1, 9, 0)
-                        7 -> arrayOf(6, 3, 0, 0, 0, 0, 2, 0, 7)
-                        else -> arrayOf(0, 1, 5, 7, 0, 2, 0, 0, 8)
-
-                    }
-                    quadMaiorAdapta += array
-                }
-            }
-        }
-
-        //--- Prepara o QM com os números propostos
-        quadMaiorRet = arrayOf()
-        for (linha in 0..8) {
-
-            array = arrayOf()
-            for (coluna in 0..8) { array += quadMaiorAdapta[linha][coluna] }
-
-            quadMaiorRet += array
-
-        }
-        //-----------------
-        //listaQuadMaior()
-        //-----------------
-
-    }
-    */
-
     //----------------------------------------------------------------------------------------------
     // Funções gerais
     //----------------------------------------------------------------------------------------------
@@ -719,11 +601,11 @@ class SudokuGameGenerator {
                 }
             }
         }
-        Log.d(cTAG, "-> Jogo após a preparação conforme a R1 (Qm's):")
+        //Log.d(cTAG, "-> Jogo após a preparação conforme a R1 (Qm's):")
         //-------------------------------------
-        listaQM (arArIntNums, false)
+        //listaQM (arArIntNums, false)
         //-------------------------------------
-        Log.d(cTAG, "   - R1: qti clues = $qtiZerosNivel")
+        //Log.d(cTAG, "   - R1: qti clues = $qtiZerosNivel")
 
         //------------------------------------------------------------------------------------------
         // Regra2: cada linha devem conter pelo menos dois zeros
@@ -770,11 +652,11 @@ class SudokuGameGenerator {
             //--- Retorna as células à linha
             for (idxColQM in 0..8) { arArIntNums[intLinha][idxColQM] = arIntCelLin[idxColQM] }
         }
-        Log.d(cTAG, "-> Jogo após a preparação conforme R2 (lin):")
+        //Log.d(cTAG, "-> Jogo após a preparação conforme R2 (lin):")
         //-------------------------------------
-        listaQM (arArIntNums, false)
+        //listaQM (arArIntNums, false)
         //-------------------------------------
-        Log.d(cTAG, "   - R2: qti clues = $qtiZerosNivel")
+        //Log.d(cTAG, "   - R2: qti clues = $qtiZerosNivel")
 
         //------------------------------------------------------------------------------------------
         // Regra3: todas as colunas devem conter pelo menos dois zeros
@@ -823,11 +705,11 @@ class SudokuGameGenerator {
             for (idxLinhaQM in 0..8) { arArIntNums[idxLinhaQM][intCol] = arIntCelCol[idxLinhaQM] }
 
         }
-        Log.d(cTAG, "-> Jogo após a preparação conforme R3 (col):")
+        //Log.d(cTAG, "-> Jogo após a preparação conforme R3 (col):")
         //-------------------------------------
-        listaQM (arArIntNums, false)
+        //listaQM (arArIntNums, false)
         //-------------------------------------
-        Log.d(cTAG, "   - R3: qti clues = $qtiZerosNivel")
+        //Log.d(cTAG, "   - R3: qti clues = $qtiZerosNivel")
 
         //------------------------------------------------------------------------------------------
         // Regra4: para os níveis médios completa as casas com zero conforme o nível do jogo
@@ -873,32 +755,15 @@ class SudokuGameGenerator {
                 }
             }
         }
-        strLog   = "-> Jogo após a preparação conforme R4 (QM):"
-        Log.d(cTAG, strLog)
+        //strLog   = "-> Jogo após a preparação conforme R4 (QM):"
+        //Log.d(cTAG, strLog)
         //------------------------------------
-        listaQM(arArIntNums, false)
+        //listaQM(arArIntNums, false)
         //------------------------------------
-        Log.d(cTAG, "   - R4: qti clues = $intQtiZeros")
+        //Log.d(cTAG, "   - R4: qti clues = $intQtiZeros")
 
         txtDados = "-> Jogo preparado R(1,2,3,4):"
 
     }
-
-    /*
-    //--- quantZeros
-    fun quantZeros(arArIntJogo : Array <Array <Int>>) : Int{
-
-        var intQtiZeros = 0
-        for (idxLin in 0..8) {
-            for (idxCol in 0..8) {
-                if (arArIntJogo[idxLin][idxCol] == 0) intQtiZeros++
-            }
-        }
-        //Log.d(cTAG, "-> Quantidade de Zeros: $intQtiZeros")
-
-        return intQtiZeros
-
-    }
-     */
 
 }

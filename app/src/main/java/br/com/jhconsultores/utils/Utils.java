@@ -369,8 +369,6 @@ public class Utils {
                 myFile = new File(strFilePath, ("/" + strFileName));
                 myFile.createNewFile();
 
-                //myFile.mkdir()
-
                 //--- SO < A10
                 //if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
 
@@ -382,6 +380,7 @@ public class Utils {
                     fOut.close();
 
                 //}
+
                 //--- SO >= A10
                 /*
                 else {

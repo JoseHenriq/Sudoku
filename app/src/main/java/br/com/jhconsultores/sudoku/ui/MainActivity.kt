@@ -1,6 +1,5 @@
 package br.com.jhconsultores.sudoku.ui
 
-import android.Manifest.permission
 import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
@@ -30,23 +29,13 @@ import br.com.jhconsultores.sudoku.R
 import br.com.jhconsultores.sudoku.jogo.SudokuGameGenerator
 import br.com.jhconsultores.utils.*
 import java.lang.Exception
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.AlertDialog
-import android.app.Dialog
-import android.content.DialogInterface
-import android.media.audiofx.BassBoost
 import android.net.Uri
 
-import androidx.core.app.ActivityCompat
-
 import android.os.Build
-import android.os.Build.VERSION
-
-import android.os.Build.VERSION.SDK_INT
 import android.provider.Settings
-import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-import android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
 import br.com.jhconsultores.sudoku.BuildConfig
+import kotlin.math.sqrt
 
 const val ALL_FILES_ACCESS_PERMISSION = 4
 
@@ -61,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#8.5.1"
+        const val strApp = "Sudoku_#8.5.141"
 
         var flagScopedStorage  = false
 
@@ -168,7 +157,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var previewRequest : ActivityResultLauncher<Intent>
 
-    var flagSO_A11 = false
+    //var flagSO_A11 = false
 
     //--- Classes externas
     private var sgg       = SudokuGameGenerator()
@@ -180,6 +169,7 @@ class MainActivity : AppCompatActivity() {
     // Eventos e listeners da MainActivity
     //----------------------------------------------------------------------------------------------
     //--- onCreate
+    @RequiresApi(Build.VERSION_CODES.R)
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -210,7 +200,7 @@ class MainActivity : AppCompatActivity() {
         strLog = String.format("%s %.2f%s","   - altura   : ",metrics.heightPixels.toDouble()," px")
         strLog+= String.format(" (%.2f\")", yInches)
         Log.d(cTAG, strLog)
-        val diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches)
+        val diagonalInches = sqrt(xInches * xInches + yInches * yInches)
         Log.d (cTAG, String.format("%s %.2f%s", "   - Diagonal : ", diagonalInches, "\""))
 
         fatorLargura= xInches / larguraDesenv
@@ -222,7 +212,7 @@ class MainActivity : AppCompatActivity() {
         //--- Versão do Android e versão da API
         versAndroid = Build.VERSION.RELEASE    //.BASE_OS  // samsung/on5xelteub/on5xelte:8.0.0/R16NW/G570MUBU4CSB1:user/release-keys
         var strSO = ""
-        try { strSO = "$versAndroid" } catch (exc : Exception) {
+        try { strSO = versAndroid } catch (exc : Exception) {
 
             //---------------------------------------------------------------
             utilsKt.mToast(this, "-> Erro: ${exc.message}")
@@ -292,9 +282,9 @@ class MainActivity : AppCompatActivity() {
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         //accessing our relative layout where the progressBar will add up
-        layout = findViewById<RelativeLayout>(R.id.relLayoutProgBar)
+        layout = findViewById(R.id.relLayoutProgBar)
         // Add ProgressBar to our layout
-        layout?.addView(progressBar)
+        layout.addView(progressBar)
 
         //progressBar.show()
         progressBar.visibility = VISIBLE
@@ -398,7 +388,7 @@ class MainActivity : AppCompatActivity() {
 
         //------------------------------------------------------------------------------------------
         previewRequest = registerForActivityResult( ActivityResultContracts.
-                                                                 StartActivityForResult() ) { result: ActivityResult ->
+                                             StartActivityForResult() ) { result: ActivityResult ->
         //------------------------------------------------------------------------------------------
 
             Log.d(cTAG, "-> Retorna da activity for result")
@@ -455,9 +445,9 @@ class MainActivity : AppCompatActivity() {
 
             Log.d(cTAG, strLogRes)
 
-            val flagInstalacao_Ok = lstPermNaoOk.isEmpty()
+            val flagInstalacaoOk = lstPermNaoOk.isEmpty()
 
-            if (flagInstalacao_Ok) Log.d(cTAG, "- Permissão concedida!")
+            if (flagInstalacaoOk) Log.d(cTAG, "- Permissão concedida!")
 
             utilsKt.mToast(this, "Permissão concedida!")
 
@@ -907,17 +897,6 @@ class MainActivity : AppCompatActivity() {
         visibilidadeViews(INVISIBLE)
         //-----------------------------
 
-        /*
-        if (!flagAdaptaPreset) {
-
-            //-------------------------
-            btnAdaptaJogoClick(view)
-            //-------------------------
-            flagAdaptaPreset = true
-
-        }
-         */
-
         //---------------
         adaptaPreset()
         //---------------
@@ -1224,8 +1203,8 @@ class MainActivity : AppCompatActivity() {
         //Log.d(cTAG, "viewCoord y: " + viewCoords[1])
 
         //--- Coordenadas reais (???)
-        val imageX = coordX - viewCoords[0] // viewCoords[0] is the X coordinate
-        val imageY = coordY - viewCoords[1] // viewCoords[1] is the y coordinate
+        //val imageX = coordX - viewCoords[0] // viewCoords[0] is the X coordinate
+        //val imageY = coordY - viewCoords[1] // viewCoords[1] is the y coordinate
         //Log.d(cTAG, "Real x: $imageX")
         //Log.d(cTAG, "Real y: $imageY")
 
@@ -1246,7 +1225,7 @@ class MainActivity : AppCompatActivity() {
             if (intNum == 0) {
 
                 //---------------------------
-                editaIVSudokuBoard_c1()
+                editaIvSudokuBoardC1()
                 //---------------------------
 
             }
@@ -1288,7 +1267,7 @@ class MainActivity : AppCompatActivity() {
                 //-------------
                 zeraCelula()
                 //------------------------
-                editaIVSudokuBoard_c1()
+                editaIvSudokuBoardC1()
                 //------------------------
 
             }
@@ -1307,8 +1286,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //--- editaIVSudokuBoard_c1
-    private fun editaIVSudokuBoard_c1() {
+    //--- editaIvSudokuBoard_c1
+    private fun editaIvSudokuBoardC1() {
 
         //-------------------------------------------
         mostraCelAEditar(intLinJogar, intColJogar)
@@ -1686,6 +1665,7 @@ class MainActivity : AppCompatActivity() {
     //---------------------------------------------------------------------
     // Verifica se Permissions do Manifest estão granted
     //---------------------------------------------------------------------
+    @RequiresApi(Build.VERSION_CODES.R)
     private fun verifPermissoesAcessoAPI(): Boolean {
 
         var strMsgDebug = "-> main Verifica permissões"
@@ -1700,7 +1680,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, strMsgDebug)
 
         //--- Se precisar solicita ao jogador que autorize pelo config a utilização do ScopedStorage
-        if (!flagScopedStorage && !utils.permScopedStorage.isEmpty()) {
+        if (!flagScopedStorage && utils.permScopedStorage.isNotEmpty()) {
 
             //--- Solicita ativação no config para o jogador habilitar o Scoped Storage desse App
             val builder = AlertDialog.Builder(this)
@@ -1714,8 +1694,8 @@ class MainActivity : AppCompatActivity() {
                     val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
 
                     val intent = Intent()
-                    intent.setAction(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                    intent.setData(uri)
+                    intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+                    intent.data = uri
                     startActivity(intent)
 
                 }
@@ -1847,7 +1827,6 @@ class MainActivity : AppCompatActivity() {
         visibilidadeViews(VISIBLE)
         //---------------------------
 
-        val flagEdicaoOK : Boolean
         //-------------------------------------------------
         val intQtiZeros = utilsKt.quantZeros(quadMaior)
         //-------------------------------------------------
@@ -1898,18 +1877,18 @@ class MainActivity : AppCompatActivity() {
         edtViewSubNivel.setText(intSubNivel.toString())
         strToast = "Jogo:\n- nível: $strNivelJogo subnível: $intSubNivel"
 
-        flagEdicaoOK = true
+        val flagEdicaoOK = true
 
         utilsKt.mToast(this, strToast)
 
         //--- Se edição OK gera o gabarito para o jogo editado
         if (flagEdicaoOK) {
 
-        sgg.quadMaiorRet = copiaArArInt(quadMaior)
-        arArIntNums      = copiaArArInt(quadMaior)
-        //---------------------------------------
-        quadMaior = sgg.adaptaJogoAlgoritmo2()
-        //---------------------------------------
+            sgg.quadMaiorRet = copiaArArInt(quadMaior)
+            arArIntNums      = copiaArArInt(quadMaior)
+            //---------------------------------------
+            quadMaior = sgg.adaptaJogoAlgoritmo2()
+            //---------------------------------------
 
         }
 

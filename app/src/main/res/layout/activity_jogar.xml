@@ -100,8 +100,8 @@
         android:layout_height="wrap_content"
 
         app:layout_constraintTop_toBottomOf ="@id/tv_Nivel"
-        app:layout_constraintLeft_toRightOf="@id/tv_LegSubNivel"
-        android:layout_marginStart          ="60dp"
+        app:layout_constraintRight_toLeftOf ="@id/tv_Erros"
+        android:layout_marginEnd            ="10dp"
 
         android:textSize ="24sp"
         android:textStyle="bold"
@@ -113,8 +113,8 @@
         android:layout_height="wrap_content"
 
         app:layout_constraintTop_toBottomOf ="@id/tv_Nivel"
-        app:layout_constraintLeft_toRightOf ="@id/tv_LegErros"
-        android:layout_marginStart          ="10dp"
+        app:layout_constraintRight_toLeftOf ="@id/crono_layout"
+        android:layout_marginEnd            ="10dp"
 
         android:textSize="24sp"
         android:text    ="@string/erros_inic" />
@@ -125,10 +125,12 @@
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
-        app:layout_constraintTop_toBottomOf ="@id/tv_Nivel"
-        app:layout_constraintLeft_toRightOf ="@id/tv_Erros"
-        android:layout_marginTop            ="3dp"
-        android:layout_marginStart          ="15dp"
+        app:layout_constraintEnd_toEndOf   ="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_Nivel"
+
+        android:textAlignment    ="@id/tv_Erros"
+        android:gravity          = "center_vertical"
+        android:layout_marginEnd = "10dp"
 
         android:orientation="horizontal">
 
@@ -160,7 +162,6 @@
 
         android:contentDescription="@string/testeCanva3"
         android:src="@drawable/sudoku_board3" />
-
     <!-- Android 6.0.1 (S5Duos):
              1- add Gradle / proguard-rules.pro:
              'keep class android.support.v7.widget.** { *; }'

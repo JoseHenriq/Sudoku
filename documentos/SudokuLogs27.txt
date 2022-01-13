@@ -106,7 +106,7 @@ Commit127- acertos layout
 Commit126- Scoped Storage A10+ - 1
 ================================================================================
 
-- A10 - resolvido com declaração no manifest (versão 8.5.0)
+- A10 - resolvido com declaração no manifest (sudoku_#8.5.0)
 
     <application
         
