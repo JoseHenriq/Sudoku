@@ -78,15 +78,14 @@
         android:text             ="@string/legNivel"/>
 
     <!-- 2- Radio Buttons para escolha do nível do jogo qdo gerar Jogo-->
-    <RadioGroup
-        android:id="@+id/radioGrpNivel"
+    <RadioGroup android:id="@+id/radioGrpNivel"
 
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
-        app:layout_constraintTop_toBottomOf="@id/maintoolbar"
-        app:layout_constraintStart_toStartOf="@id/guide_center_vert"
-        android:layout_marginStart="-139dp"
+        app:layout_constraintTop_toBottomOf ="@id/maintoolbar"
+        app:layout_constraintStart_toEndOf  ="@id/legNivel"
+        android:layout_marginStart="0dp"
 
         android:gravity    ="center_vertical"
         android:orientation="horizontal" >
@@ -178,15 +177,11 @@
         android:orientation="horizontal"
         android:background ="@drawable/moldura_grupo2"
 
-        app:layout_constraintTop_toTopOf ="parent"
-
-        app:layout_constraintLeft_toRightOf="@id/guide_center_vert"
-
-        android:layout_marginTop="95dp"
+        app:layout_constraintBottom_toTopOf ="@id/separador_subnivel_ivJogo"
+        app:layout_constraintLeft_toRightOf ="@id/guide_center_vert"
+        android:layout_marginBottom="5dp"
 
         android:visibility="visible" >
-        <!--android:layout_marginEnd="79dp"
-        app:layout_constraintEnd_toEndOf ="parent"-->
 
         <RadioButton android:id="@+id/preset"
 
