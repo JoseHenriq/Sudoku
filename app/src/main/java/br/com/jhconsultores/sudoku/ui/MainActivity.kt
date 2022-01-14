@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#8.5.141"
+        const val strApp = "Sudoku_#8.5.143"
 
         var flagScopedStorage  = false
 
@@ -447,13 +447,43 @@ class MainActivity : AppCompatActivity() {
 
             val flagInstalacaoOk = lstPermNaoOk.isEmpty()
 
-            if (flagInstalacaoOk) Log.d(cTAG, "- Permissão concedida!")
+            when (flagInstalacaoOk) {
 
-            utilsKt.mToast(this, "Permissão concedida!")
+                true  -> strLog = "- Permissão concedida!"
+                false -> strLog = "- Permissão NÃO concedida!"
+                else ->  strLog = ""
+            }
 
-            //---------------
-            //Instala_App()
-            //---------------
+            Log.d(cTAG, strLog)
+            utilsKt.mToast(this, strLog)
+
+            if (!flagInstalacaoOk && (permissions[0]== "android.permission.WRITE_EXTERNAL_STORAGE"))
+            {
+                var strMsg = "O Android NÃO concedeu acesso ao salvamento de jogos."
+                strMsg += "\nProvável problema: API incompatível."
+                strMsg += "\n\nContinua o App ou pára?"
+                androidx.appcompat.app.AlertDialog.Builder(this)
+
+                    .setTitle("Sudoku - Inicia App")
+                    .setMessage(strMsg)
+
+                    .setPositiveButton("Continua App") { _, _ ->
+
+                        Log.d(cTAG, "-> O usuário optou por continuar sem salvamento.")
+
+                    }
+
+                    .setNegativeButton("Pára App") { _, _ ->
+
+                        Log.d(cTAG, "-> O usuário optou por finalizar o App.")
+
+                        //---------
+                        finish()
+                        //---------
+
+                    }
+                    .show()
+            }
         }
 
     }
@@ -1190,7 +1220,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private var intNum = 0
+    private var intNumAtual = 0
 
     //--- editaIVSudokuBoard
     private fun editaIVSudokuBoard(coordX: Int, coordY: Int) {
@@ -1215,14 +1245,14 @@ class MainActivity : AppCompatActivity() {
         if (intLinJogar < 9 && intColJogar < 9) {
 
             //-----------------------------------------------
-            intNum = arArIntNums[intLinJogar][intColJogar]
+            intNumAtual = arArIntNums[intLinJogar][intColJogar]
             //-----------------------------------------------
             strLog = "-> Celula tocada: linha = " + intLinJogar + ", coluna = " + intColJogar +
-                    ", numero = " + intNum
+                    ", numero = " + intNumAtual
             Log.d(cTAG, strLog)
 
             //--- Tocou numa célula sem número
-            if (intNum == 0) {
+            if (intNumAtual == 0) {
 
                 //---------------------------
                 editaIvSudokuBoardC1()
@@ -1266,9 +1296,9 @@ class MainActivity : AppCompatActivity() {
 
                 //-------------
                 zeraCelula()
-                //------------------------
+                //-----------------------
                 editaIvSudokuBoardC1()
-                //------------------------
+                //-----------------------
 
             }
 
@@ -1299,15 +1329,18 @@ class MainActivity : AppCompatActivity() {
     //--- zeraCelula
     private fun zeraCelula() {
 
-        intNum = arArIntNums[intLinJogar][intColJogar]
+        //--- Limpa a célula
+        // Lê o número atual na célula
+        var intNumAtual = arArIntNums[intLinJogar][intColJogar]
+        // Limpou a célula
         arArIntNums[intLinJogar][intColJogar] = 0
-        arIntQtiNumDisp[intNum - 1]++
-
-        val intQtiZeros = tvContaClues.text.toString().toInt()
+        // Retornou a fichinha para a caixinha
+        if (intNumAtual > 0) arIntQtiNumDisp[intNumAtual - 1]++
+        // Atualiza contadores
+        val intQtiZeros = utilsKt.quantZeros(arArIntNums)
         val intQtiNums  = 81 - intQtiZeros
-
-        tvContaNums.text  = (intQtiNums - 1).toString()
-        tvContaClues.text = (intQtiZeros + 1).toString()
+        tvContaClues.text = intQtiZeros.toString()
+        tvContaNums.text  = intQtiNums.toString()
 
         //--------------
         voltaEdicao()
@@ -1919,7 +1952,8 @@ class MainActivity : AppCompatActivity() {
                     val intNum = arArJogo[idxLin][idxCol]
                     if (intNum > 0) {
 
-                        arArJogo[idxLin][idxCol] = 0
+                        // arArJogo[idxLin][idxCol] = 0
+                        arArIntNums [idxLin][idxCol] = 0
 
                         // Determina a que Qm a célula pertence
                         //---------------------------------------------------------
@@ -1934,7 +1968,8 @@ class MainActivity : AppCompatActivity() {
                                        jogarJogo.verifValidade(intQuadMenor, idxLin, idxCol, intNum)
                         //--------------------------------------------------------------------------
 
-                        arArJogo[idxLin][idxCol] = intNum
+                        //arArJogo[idxLin][idxCol] = intNum
+                        arArIntNums [idxLin][idxCol] = intNum
 
                     }
                 }

@@ -200,7 +200,7 @@ public class Utils {
         //--- Se houver 1+ permissions ungranted: requer permission
         else {
 
-            Log.d(cTAG, "-> SO solicita autorização para permissão:");
+            Log.d(cTAG, "-> Recurso SEM Permissão atual:");
 
             //--- Se tiver uma chamada para Scoped Storage, separa-a para outro comando
             // https://stackoverflow.com/questions/65876736/how-do-you-request-manage-external-storage-permission-in-android
@@ -226,6 +226,7 @@ public class Utils {
             String[] newPermissions = new String[list.size()];
             list.toArray(newPermissions);
 
+            Log.d(cTAG, "-> SO solicita autorização para permissão:");
             for (String strNewPerm : newPermissions) {
                 Log.d(cTAG, "   - " + strNewPerm);
             }
