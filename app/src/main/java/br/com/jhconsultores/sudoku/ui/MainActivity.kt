@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#8.5.143"
+        const val strApp = "Sudoku_#8.5.144"
 
         var flagScopedStorage  = false
 
@@ -371,7 +371,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             //-------------------
-            apresNumsEQtidds()
+            // apresNumsEQtidds()
             //-------------------
 
             false
@@ -1415,7 +1415,7 @@ class MainActivity : AppCompatActivity() {
 
                             arIntQtiNumDisp[cellX]--
 
-                            //--- Adiciona-o ao board
+                            //--- Adiciona-o ao board local
                             arArIntNums[intLinJogar][intColJogar] = intNum
                             //---------------------------------
                             preencheSudokuBoard(arArIntNums)
@@ -1952,8 +1952,7 @@ class MainActivity : AppCompatActivity() {
                     val intNum = arArJogo[idxLin][idxCol]
                     if (intNum > 0) {
 
-                        // arArJogo[idxLin][idxCol] = 0
-                        arArIntNums [idxLin][idxCol] = 0
+                        arArJogo[idxLin][idxCol] = 0
 
                         // Determina a que Qm a célula pertence
                         //---------------------------------------------------------
@@ -1963,23 +1962,33 @@ class MainActivity : AppCompatActivity() {
                         // Verifica se o número dessa célula não existe no seu Qm, na sua linha e na
                         // sua coluna.
 
+                        jogarJogo.arArIntNums = copiaArArInt(arArJogo)  // <<<<<<<<< ATENÇÃO !!!!
                         //--------------------------------------------------------------------------
                         flagJogoValido =
                                        jogarJogo.verifValidade(intQuadMenor, idxLin, idxCol, intNum)
                         //--------------------------------------------------------------------------
 
-                        //arArJogo[idxLin][idxCol] = intNum
-                        arArIntNums [idxLin][idxCol] = intNum
+                        arArJogo[idxLin][idxCol] = intNum
 
                     }
                 }
             }
+
+            /*
+            if (flagJogoValido) {
+
+                quadMaior   = copiaArArInt(arArJogo)
+                arArIntNums = copiaArArInt(arArJogo)
+
+            }
+            */
 
         }
         return flagJogoValido
 
     }
 
+    /*
     //--- apresNumsEQtidds
     private fun apresNumsEQtidds() {
 
@@ -2003,5 +2012,6 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, "   - arArInt : $strLog1")
         Log.d(cTAG, "   - arIntQti: $strLog2")
     }
+     */
 
 }
