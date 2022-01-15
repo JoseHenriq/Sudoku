@@ -14,13 +14,10 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 
-import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import android.view.MotionEvent
 import android.view.View.*
-import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -34,6 +31,8 @@ import android.net.Uri
 
 import android.os.Build
 import android.provider.Settings
+import android.view.*
+import androidx.core.view.MenuCompat
 import br.com.jhconsultores.sudoku.BuildConfig
 import kotlin.math.sqrt
 
@@ -63,6 +62,8 @@ class MainActivity : AppCompatActivity() {
 
         var fatorLargura : Double = 0.0
         var fatorAltura  : Double = 0.0
+
+        var flagMostraNumIguais = true
 
     }
 
@@ -224,13 +225,9 @@ class MainActivity : AppCompatActivity() {
         //----------------------------------------------------------------------
         // Implementa o actionBar
         //----------------------------------------------------------------------
-        toolBar = findViewById(R.id.maintoolbar)
+        toolBar       = findViewById(R.id.maintoolbar)
         toolBar.title = "$strApp - main"
-
-        //----------------------------------------------------------------------
-        // Implementa o "three dots menu"
-        //----------------------------------------------------------------------
-
+        setSupportActionBar(toolBar)
 
         //----------------------------------------------------------------------
         // Instancializações e inicializações
@@ -424,6 +421,125 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //---------------------------------------------------------------------
+    // Action Bar Menu
+    //---------------------------------------------------------------------
+    private lateinit var myMenuItem: MenuItem
+    private lateinit var subMenuLimiteQtiErros: MenuItem
+    private lateinit var subMenuLimiteTempoJogo: MenuItem
+    private lateinit var subMenuMostrarNumsIguais: MenuItem
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+
+        try {
+
+            val infl = menuInflater
+            infl.inflate(R.menu.menu_sudoku, menu)
+
+            MenuCompat.setGroupDividerEnabled(menu, true)
+
+            // https://stackoverflow.com/questions/27627659/android-actionbar-items-as-three-dots/28238747
+            // Find the menuItem to add your SubMenu
+            myMenuItem = menu.findItem(R.id.sudoku)
+
+            // Inflating the sub_menu menu this way, will add its menu items
+            // to the empty SubMenu you created in the xml
+            menuInflater.inflate(R.menu.menu_main_sub, myMenuItem.subMenu)
+
+            subMenuLimiteQtiErros    = myMenuItem.subMenu.findItem(R.id.action_ajustarQtiddErros)
+            subMenuLimiteTempoJogo   = myMenuItem.subMenu.findItem(R.id.action_ajustarTempoDeJogo)
+            subMenuMostrarNumsIguais = myMenuItem.subMenu.findItem(R.id.action_mostrar_numeros_iguais)
+
+            subMenuLimiteQtiErros.isEnabled  = false
+            subMenuLimiteTempoJogo.isEnabled = false
+
+        } catch (exc: Exception) { Log.d(cTAG, "-> Erro: ${exc.message}") }
+
+        return true
+
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // Listener para seleção de opções no menu pop-up do ActionBar (three dots menu )
+    //----------------------------------------------------------------------------------------------
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+
+        //--- Tapping no item 'Ajustar quantidade de erros' do menu do actionBar
+        R.id.action_ajustarQtiddErros -> {
+
+            Log.d(cTAG, "-> Tap em actionBar / Ajusta limite contagem de erros")
+
+            true
+
+        }
+
+        //--- Tapping no item 'Ajustar tempo de jogo' do menu do actionBar
+        R.id.action_ajustarTempoDeJogo -> {
+
+            Log.d(cTAG, "-> Tap em actionBar / Ajusta tempo de jogo")
+
+            true
+
+        }
+
+        //--- Tapping no item 'Deletar selecionados' do menu do actionBar
+        R.id.action_mostrar_numeros_iguais -> {
+
+            if (subMenuMostrarNumsIguais.title.toString() == "Mostrar números iguais") {
+
+                strLog = "Não mostrar números iguais"
+                subMenuMostrarNumsIguais.setTitle(strLog)
+                flagMostraNumIguais = false
+
+            }
+            else {
+
+                strLog = "Mostrar números iguais"
+                subMenuMostrarNumsIguais.setTitle("Mostrar números iguais")
+                flagMostraNumIguais = true
+
+            }
+            Log.d(cTAG, "-> Tap em actionBar / $strLog")
+
+            true
+
+        }
+
+        //--- Tapping no item do menu do actionBar 'Sair'
+        R.id.action_exit -> {
+
+            // User chose the "Favorite" action, mark the current item  as a favorite...
+            Log.d(cTAG, "-> Tap em actionBar / Desligar App")
+            androidx.appcompat.app.AlertDialog.Builder(this)
+
+                .setTitle("Sudoku - Sair do Jogo")
+                .setMessage("Finaliza o App?")
+
+                .setPositiveButton("Sim") { _, _ ->
+
+                    Log.d(cTAG, "-> Confirma que FIM!")
+
+                    //---------
+                    finish()
+                    //---------
+
+                }
+                .setNegativeButton("Não") { _, _ -> Log.d(cTAG, "-> Não finaliza App.") }
+
+                .show()
+
+            true
+
+        }
+
+        else -> {
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            super.onOptionsItemSelected(item)
+
+        }
+
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     override fun onRequestPermissionsResult( requestCode : Int, permissions: Array<String>,
                                                                           grantResults: IntArray) {
@@ -448,11 +564,11 @@ class MainActivity : AppCompatActivity() {
 
             val flagInstalacaoOk = lstPermNaoOk.isEmpty()
 
-            when (flagInstalacaoOk) {
+            strLog = when (flagInstalacaoOk) {
 
-                true  -> strLog = "- Permissão concedida!"
-                false -> strLog = "- Permissão NÃO concedida!"
-                else ->  strLog = ""
+                true  -> "- Permissão concedida!"
+                false -> "- Permissão NÃO concedida!"
+
             }
 
             Log.d(cTAG, strLog)

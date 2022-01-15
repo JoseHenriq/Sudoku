@@ -7,8 +7,8 @@
     tools:context=".ui.AdaptarActivity">
 
     <item
-        android:id    ="@+id/tresmore"
-        android:title ="@string/threedots"
+        android:id    ="@+id/sudoku"
+        android:title ="Sudoku"
         android:orderInCategory="101"
         app:showAsAction="ifRoom"
         android:icon    ="@drawable/ic_morebranco">

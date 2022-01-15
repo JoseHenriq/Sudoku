@@ -70,5 +70,7 @@
     <string name="muito_dif_cil">Muito difícil</string>
     <string name="value_9">9</string>
     <string name="aguarde">Aguarde ...</string>
+    <string name="desliga_app">Desliga App</string>
+    <string name="finalizar_app">Finalizar App</string>
 
 </resources>

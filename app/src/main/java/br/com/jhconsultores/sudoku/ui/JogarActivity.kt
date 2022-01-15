@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
 import br.com.jhconsultores.sudoku.R
+import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.flagMostraNumIguais
 import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strOpcaoJogo
 import br.com.jhconsultores.utils.*
 
@@ -768,34 +769,37 @@ class JogarActivity : AppCompatActivity() {
     //--- mostraNumsIguais (canvas do Sudoku board)
     private fun mostraNumsIguais(intNum: Int) {
 
-        //--- Atualiza a imageView do layout
-        //----------------------------------------------
-        utilsKt.copiaBmpByBuffer(bmpJogo, bmpMyImage)
-        //----------------------------------------------
-        iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
-        //----------------------------------------------
-        for (intLin in 0..8) {
-            for (intColuna in 0..8) {
-                if (arArIntNums[intLin][intColuna] == intNum) {
+        if (flagMostraNumIguais) {
 
-                    //--- Pinta a célula
-                    //------------------------------------------------
-                    pintaCelula(intLin, intColuna, pincelPurple200)
-                    //------------------------------------------------
+            //--- Atualiza a imageView do layout
+            //----------------------------------------------
+            utilsKt.copiaBmpByBuffer(bmpJogo, bmpMyImage)
+            //----------------------------------------------
+            iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
+            //----------------------------------------------
+            for (intLin in 0..8) {
+                for (intColuna in 0..8) {
+                    if (arArIntNums[intLin][intColuna] == intNum) {
 
-                    //--- Escreve o número na célula
-                    pincelBranco.textSize = intTamTxt * scale
-                    //------------------------------------------------------------------
-                    escreveCelula(intLin, intColuna, intNum.toString(), pincelBranco)
-                    //------------------------------------------------------------------
+                        //--- Pinta a célula
+                        //------------------------------------------------
+                        pintaCelula(intLin, intColuna, pincelPurple200)
+                        //------------------------------------------------
+
+                        //--- Escreve o número na célula
+                        pincelBranco.textSize = intTamTxt * scale
+                        //------------------------------------------------------------------
+                        escreveCelula(intLin, intColuna, intNum.toString(), pincelBranco)
+                        //------------------------------------------------------------------
+                    }
                 }
             }
-        }
 
-        //--- Atualiza a imageView do layout
-        //-------------------------------------------
-        iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
-        //-------------------------------------------
+            //--- Atualiza a imageView do layout
+            //-------------------------------------------
+            iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
+            //-------------------------------------------
+        }
 
     }
 

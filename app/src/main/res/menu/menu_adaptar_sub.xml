@@ -6,25 +6,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app    ="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id       ="@+id/action_selecionarTodos"
+    <group android:id="@+id/selecting" >
+
+        <item android:id="@+id/action_selecionarTodos"
         android:title    ="@string/selecionar_todos"
         app:showAsAction ="never" />
 
-    <item
-        android:id       ="@+id/action_desSelecionar"
+        <item android:id="@+id/action_desSelecionar"
         android:title    ="@string/desselecionar"
         app:showAsAction ="never" />
 
-    <item
-        android:id       ="@+id/action_deletar_sels"
+    </group>
+
+    <group android:id="@+id/delecting" >
+
+        <item android:id="@+id/action_deletar_sels"
         android:title    ="@string/deletar_selecionados"
         android:enabled  ="false"
         app:showAsAction ="never" />
 
-    <item
-        android:id       ="@+id/action_cancelar"
-        android:title    ="@string/cancelar"
+    </group>
+
+    <group android:id="@+id/action_cancelar" >
+
+        <item android:id="@+id/action_saindo"
+        android:title    ="Cancelar"
         app:showAsAction ="never" />
 
+    </group>
 </menu>

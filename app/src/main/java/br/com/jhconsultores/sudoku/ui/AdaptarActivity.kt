@@ -13,6 +13,7 @@ import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.text.isDigitsOnly
+import androidx.core.view.MenuCompat
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,7 +40,6 @@ class AdaptarActivity : AppCompatActivity() {
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var customAdapter: JogoAdapter
-    // private val jogoAdapter by lazy { JogoAdapter() }
 
     private var itemsListArq    = ArrayList<String>()
     private var itemsListJogo   = ArrayList<String>()
@@ -47,8 +47,6 @@ class AdaptarActivity : AppCompatActivity() {
 
     private var recyclerView: RecyclerView? = null
     private var chkBtnDelete: CheckBox?     = null
-
-    private lateinit var adaptarToolBar: androidx.appcompat.widget.Toolbar
 
     private var strNivelJogo = "Fácil"
     private var subNivelJogo = 0
@@ -62,6 +60,8 @@ class AdaptarActivity : AppCompatActivity() {
 
     private val utils   = Utils()
     private val utilsKt = UtilsKt()
+
+    private lateinit var adaptarToolBar: androidx.appcompat.widget.Toolbar
 
     private val sgg  = SudokuGameGenerator()
     private val main = MainActivity()
@@ -81,9 +81,16 @@ class AdaptarActivity : AppCompatActivity() {
         // Implementa o tool - action Bar
         //------------------------------------------------------------------------------------------
         adaptarToolBar = findViewById(R.id.adaptartoolbar)
+        setSupportActionBar(adaptarToolBar)
+
+        //------------------------------------------------------------------------------------------
+        // Implementa o tool - action Bar
+        //------------------------------------------------------------------------------------------
+        adaptarToolBar       = findViewById(R.id.adaptartoolbar)
         adaptarToolBar.title = strApp + " - Adaptação"
 
         setSupportActionBar(adaptarToolBar)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         //------------------------------------------------------------------------------------------
@@ -155,25 +162,22 @@ class AdaptarActivity : AppCompatActivity() {
         try {
 
             val infl = getMenuInflater()
+            infl.inflate(R.menu.menu_sudoku, menu)
 
-            infl.inflate(R.menu.menu_adaptar, menu)
+            MenuCompat.setGroupDividerEnabled(menu, true)
 
             // https://stackoverflow.com/questions/27627659/android-actionbar-items-as-three-dots/28238747
             // Find the menuItem to add your SubMenu
-            myMenuItem = menu.findItem(R.id.tresmore)
+            myMenuItem = menu.findItem(R.id.sudoku)
 
             // Inflating the sub_menu menu this way, will add its menu items
             // to the empty SubMenu you created in the xml
-            menuInflater.inflate(R.menu.meu_submenu, myMenuItem.subMenu)
+            menuInflater.inflate(R.menu.menu_adaptar_sub, myMenuItem.subMenu)
 
             subMenuDelSels = myMenuItem.subMenu.findItem(R.id.action_deletar_sels)
             subMenuDelSels.isEnabled = false
 
-        } catch (exc: Exception) {
-
-            Log.d(cTAG, "-> Erro: ${exc.message}")
-
-        }
+        } catch (exc: Exception) { Log.d(cTAG, "-> Erro: ${exc.message}") }
 
         subMenuDelSels.isEnabled = false
 
@@ -186,6 +190,7 @@ class AdaptarActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
+        /*
         //--- Tapping no menu do actionBar
         R.id.tresmore -> {
 
@@ -210,6 +215,7 @@ class AdaptarActivity : AppCompatActivity() {
             true
 
         }
+        */
 
         //--- Tapping no item 'Selecionar todos' do menu do actionBar
         R.id.action_selecionarTodos -> {
@@ -329,7 +335,6 @@ class AdaptarActivity : AppCompatActivity() {
             true
 
         }
-
         else -> {
             // If we got here, the user's action was not recognized.
             // Invoke the superclass to handle it.
