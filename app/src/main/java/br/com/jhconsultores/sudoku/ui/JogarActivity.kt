@@ -135,6 +135,7 @@ class JogarActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
+        var flagAppInicializado = false
         try {
             setContentView(R.layout.activity_jogar)
 
@@ -157,11 +158,11 @@ class JogarActivity : AppCompatActivity() {
             tvErros!!.text = "0"
 
             //--- Instancia objetos locais para os objetos XML
-            tvNivel = findViewById(R.id.tv_Nivel)
+            tvNivel    = findViewById(R.id.tv_Nivel)
             tvSubNivel = findViewById(R.id.tv_Subnivel)
-            tvClues = findViewById(R.id.tv_Clues)
+            tvClues    = findViewById(R.id.tv_Clues)
 
-            val btnReset = findViewById<View> (R.id.btnReset)  as Button
+            val btnReset  = findViewById<View> (R.id.btnReset)  as Button
             val btnInicia = findViewById<View>(R.id.btnInicia) as Button
             val btnSalvar = findViewById<View>(R.id.btnSalvar) as Button
             btnInicia.isEnabled = true
@@ -594,6 +595,8 @@ class JogarActivity : AppCompatActivity() {
             // Armazena o jogo em um array<int>
             arIntNumsJogo= intent.getIntegerArrayListExtra("JogoPreparado")  as ArrayList<Int>
 
+            //--- Verifica a consistência dos dados recebidos
+
             // Gabarito e/ou jogo inválidos
             if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
 
@@ -603,6 +606,7 @@ class JogarActivity : AppCompatActivity() {
             // Gabarito e jogo válidos
             else {
 
+                //--- Prepara a estrutura de dados para o jogo
                 strCronoInicIntent = strCronoInic
 
                 //--- Acerta crono
@@ -628,10 +632,6 @@ class JogarActivity : AppCompatActivity() {
                 //-------------------------------------------------
 
                 arIntNumsDisp = Array(9) { 9 }
-
-                //-------------
-                iniciaJogo()
-                //-------------
 
                 if (action == "JogoAdaptado") {
 
@@ -663,11 +663,24 @@ class JogarActivity : AppCompatActivity() {
 
                 }
 
+                flagAppInicializado = true
+
             } // Fim de gabarito recebido via intent ok
 
         } catch (exc: Exception) {
 
             Log.d(cTAG, "Erro: ${exc.message}")
+
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Se inicialização OK: inicializa o Jogo
+        //--------------------------------------------------------------------------------------
+        if (flagAppInicializado) {
+
+            //-------------
+            iniciaJogo()
+            //-------------
 
         }
 

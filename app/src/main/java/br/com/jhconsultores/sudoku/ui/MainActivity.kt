@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#8.5.144"
+        const val strApp = "Sudoku_#9"
 
         var flagScopedStorage  = false
 
@@ -69,7 +69,6 @@ class MainActivity : AppCompatActivity() {
     //--- Objetos gráficos
     private lateinit var ivSudokuBoardMain: ImageView
     private lateinit var ivNumDisp: ImageView
-    //private lateinit var ivQtiNumDisp: ImageView
 
     private var bmpMyImageInic: Bitmap? = null
     private var bmpMyImageBack: Bitmap? = null
@@ -100,7 +99,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnGeraJogo  : Button
     private lateinit var btnAdaptaJogo: Button
     private lateinit var btnJogaJogo  : Button
-    //private lateinit var btnTestaRV: Button
 
     //--- Radio Buttons
     private lateinit var groupRBnivel  : RadioGroup
@@ -113,13 +111,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rbPreset     : RadioButton
     private lateinit var rbEdicao     : RadioButton
 
-
-    //private lateinit var progressBar : Dialog
     private lateinit var progressBar    : ProgressBar
     private lateinit var edtViewSubNivel: EditText
     private lateinit var layout         : RelativeLayout
 
-        //--- Objetos para o jogo
+    //--- Objetos para o jogo
     private var quadMaior = Array(9) { Array(9) { 0 } }
 
     private var strNivelJogo   = "Fácil"
@@ -138,7 +134,6 @@ class MainActivity : AppCompatActivity() {
     private val DIFICIL       = 40
     private val MUITO_DIFICIL = 50
 
-    //private var quadMaiorAdapta = Array(9) { Array(9) { 0 } }
     private var arArIntNums     = Array(9) { Array(9) { 0 } }
     private var arIntQtiNumDisp = Array(9) { 9 }
     private val arIntNumsDisp   = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
@@ -156,8 +151,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
 
     private lateinit var previewRequest : ActivityResultLauncher<Intent>
-
-    //var flagSO_A11 = false
 
     //--- Classes externas
     private var sgg       = SudokuGameGenerator()
@@ -229,10 +222,15 @@ class MainActivity : AppCompatActivity() {
         //--------------------------------------
 
         //----------------------------------------------------------------------
-        // Implementa o o actionBar
+        // Implementa o actionBar
         //----------------------------------------------------------------------
         toolBar = findViewById(R.id.maintoolbar)
         toolBar.title = "$strApp - main"
+
+        //----------------------------------------------------------------------
+        // Implementa o "three dots menu"
+        //----------------------------------------------------------------------
+
 
         //----------------------------------------------------------------------
         // Instancializações e inicializações
@@ -273,8 +271,6 @@ class MainActivity : AppCompatActivity() {
         // Implementa o Progress Bar
         //----------------------------------------------------------------------
         progressBar = ProgressBar(this)
-        //progressBar = Dialog(this)
-        //progressBar.setTitle("Aguarde ...")
 
         //setting height and width of progressBar
         progressBar.layoutParams = LinearLayout.LayoutParams(
@@ -301,12 +297,10 @@ class MainActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 
-                // tvSample.setText("Text in EditText : $s")
-
                 if (s.isNotEmpty())
-                //-----------------------------
+                    //-----------------------------
                     verifMudancaNivel(nivelJogo)
-                //-----------------------------
+                    //-----------------------------
 
             }
 
@@ -336,13 +330,6 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        //------------------------------------------------------------------------------------------
-        // Listener para os eventos dos buttons: declarados em res/layout/activity_main.xml
-        //------------------------------------------------------------------------------------------
-        // fun btnGeraJogoClick  (view: View?) {}
-        // fun btnAdaptaJogoClick(view: View?) {}
-        // fun btnJogaJogoClick  (view: View?) {}
-
         // https://www.geeksforgeeks.org/add-ontouchlistener-to-imageview-to-perform-speech-to-text-in-android/
         ivNumDisp.setOnTouchListener { _, motionEvent ->
 
@@ -350,13 +337,9 @@ class MainActivity : AppCompatActivity() {
 
             when (motionEvent.action) {
 
-                MotionEvent.ACTION_UP -> {
+                MotionEvent.ACTION_UP   -> { Log.d(cTAG, "   - ACTION_UP") }
 
-                    Log.d(cTAG, "   - ACTION_UP")
-
-                }
-
-                MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_DOWN -> { Log.d(cTAG, "   - ACTION_Down")
 
                     //Log.d(cTAG, "   - ACTION_DOWN")
                     val x = motionEvent.x.toInt()
@@ -370,13 +353,16 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            //-------------------
-            // apresNumsEQtidds()
-            //-------------------
-
             false
 
         }
+
+        //------------------------------------------------------------------------------------------
+        // Listener para os eventos dos buttons: declarados em res/layout/activity_main.xml
+        //------------------------------------------------------------------------------------------
+        // fun btnGeraJogoClick  (view: View?) {}
+        // fun btnAdaptaJogoClick(view: View?) {}
+        // fun btnJogaJogoClick  (view: View?) {}
 
         //-----------------------------------------------------------------------------------
         // Verifica se permitidos os acessos aos recursos do Android (AndroidManifest.xml)
@@ -384,6 +370,10 @@ class MainActivity : AppCompatActivity() {
         //---------------------------
         verifPermissoesAcessoAPI()
         //---------------------------
+
+        //-------------------------------------------------------------------------------------
+        // Prepara retorno da StartActivityForResult() Kotlin; utilizada na DELEÇÃO de Jogos
+        //-------------------------------------------------------------------------------------
         Log.d(cTAG, "-> Registra activity for result")
 
         //------------------------------------------------------------------------------------------
@@ -395,22 +385,32 @@ class MainActivity : AppCompatActivity() {
 
             if (result.resultCode == Activity.RESULT_OK) {
 
-                //  you will get result here in result.data
-                // val list = result.data
+                // you will get result here in result.data
 
                 // do whatever with the data in the callback
                 val strStatus = result.data!!.getStringExtra("Status")
                 Log.d(cTAG, "-> activity results OK! Status: $strStatus")
 
-                //--- Se deletou jogo retorna à adaptação de jogo
+                //--- !!! Se deletou jogo, retorna à adaptação de jogo atualizando o RV !!!
                 if (strStatus == "Deletar Jogo") {
 
-                    //--- Prepara a Intent para chamar AdaptarActivity
-                    val intent    = Intent(this, AdaptarActivity::class.java)
-                    intent.action = "InstanciaRVJogosSalvos"
-                    //------------------------------
-                    previewRequest.launch(intent)
-                    //------------------------------
+                    //--- Aguarda o App acabar a execução do retorno do StartActivityForResult
+                    //    e reativa AdaptarActivity para RV ser atualizado.
+                    val waitTime = 100L  // milisegundos
+                    Handler(Looper.getMainLooper()).postDelayed(
+                        {
+
+                            //--- Prepara a Intent para chamar AdaptarActivity
+                            val intent    = Intent(this, AdaptarActivity::class.java)
+                            intent.action = "InstanciaRVJogosSalvos"
+                            //------------------------------
+                            previewRequest.launch(intent)
+                            //------------------------------
+
+                        },
+                        waitTime
+
+                    )  // value in milliseconds
 
                 }
 
@@ -419,6 +419,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d(cTAG, "-> activity results NÃO OK!")
 
             }
+
         }
 
     }
@@ -1789,12 +1790,13 @@ class MainActivity : AppCompatActivity() {
         try {
 
             //--- Prepara a Intent para chamar AdaptarActivity
-            val intent    = Intent(this, AdaptarActivity::class.java)
-            intent.action = "InstanciaRVJogosSalvos"
-
+            // Versão anterior
             //val intent = Intent(this, PreviewFullscreenActivity::class.java)
             //intent.putStringArrayListExtra(AppConstants.PARAMS.IMAGE_URIS, list)
 
+            // Versão Kotlin
+            val intent    = Intent(this, AdaptarActivity::class.java)
+            intent.action = "InstanciaRVJogosSalvos"
             //------------------------------
             previewRequest.launch(intent)
             //------------------------------
@@ -1908,11 +1910,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         edtViewSubNivel.setText(intSubNivel.toString())
-        strToast = "Jogo:\n- nível: $strNivelJogo subnível: $intSubNivel"
+
+        //strToast = "Jogo:\n- nível: $strNivelJogo subnível: $intSubNivel"
+        //utilsKt.mToast(this, strToast)
 
         val flagEdicaoOK = true
-
-        utilsKt.mToast(this, strToast)
 
         //--- Se edição OK gera o gabarito para o jogo editado
         if (flagEdicaoOK) {

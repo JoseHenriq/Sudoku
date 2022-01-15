@@ -84,7 +84,7 @@ import br.com.jhconsultores.sudoku.ui.MainActivity;
 public class Utils {
 
     int ALL_FILES_ACCESS_PERMISSION = 4;
-    public String permScopedStorage        = "";
+    public String permScopedStorage = "";
 
     //--- Intancializações e inicializações
     private final String TAG_Utils = "Utils";
