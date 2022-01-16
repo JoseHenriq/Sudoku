@@ -6,19 +6,19 @@
 
     <group android:id="@+id/controles" >
 
-        <item android:id="@+id/action_ajustarQtiddErros"
-        android:title    ="Ajuste contagem Erros"
+        <item android:id ="@+id/action_ajustarQtiddErros"
+        android:title    ="@string/limite_erros"
         app:showAsAction ="never" />
 
         <item android:id="@+id/action_ajustarTempoDeJogo"
-        android:title    ="Ajuste do Tempo de Jogo"
+        android:title    ="@string/limite_tempo"
         app:showAsAction ="never" />
 
     </group>
 
-    <group android:id="@+id/ferraentas_auxiliares" >
+    <group android:id="@+id/ferramentas_auxiliares" >
 
-        <item android:id="@+id/action_mostrar_numeros_iguais"
+        <item android:id ="@+id/action_mostrar_numeros_iguais"
         android:title    ="Mostra números iguais"
         app:showAsAction ="never" />
 

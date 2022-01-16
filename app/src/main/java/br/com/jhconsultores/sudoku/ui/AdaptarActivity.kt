@@ -155,8 +155,9 @@ class AdaptarActivity : AppCompatActivity() {
     //---------------------------------------------------------------------
     // Action Bar Menu
     //---------------------------------------------------------------------
+    private lateinit var myMenuItem    : MenuItem
     private lateinit var subMenuDelSels: MenuItem
-    private lateinit var myMenuItem: MenuItem
+    private lateinit var subMenuDessel : MenuItem
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
 
         try {
@@ -176,10 +177,10 @@ class AdaptarActivity : AppCompatActivity() {
 
             subMenuDelSels = myMenuItem.subMenu.findItem(R.id.action_deletar_sels)
             subMenuDelSels.isEnabled = false
+            subMenuDessel   = myMenuItem.subMenu.findItem(R.id.action_desSelecionar)
+            subMenuDessel.isEnabled = false
 
         } catch (exc: Exception) { Log.d(cTAG, "-> Erro: ${exc.message}") }
-
-        subMenuDelSels.isEnabled = false
 
         return true
 
@@ -233,6 +234,7 @@ class AdaptarActivity : AppCompatActivity() {
             atualizaRecyclerView(VISIBLE)
             //------------------------------
             subMenuDelSels.isEnabled = true
+            subMenuDessel.isEnabled  = true
 
             true
 
@@ -255,6 +257,7 @@ class AdaptarActivity : AppCompatActivity() {
             //------------------------------
 
             subMenuDelSels.isEnabled = false
+            subMenuDessel.isEnabled  = false
 
             true
 
@@ -331,6 +334,7 @@ class AdaptarActivity : AppCompatActivity() {
             //------------------------------
 
             subMenuDelSels.isEnabled = false
+            subMenuDessel.isEnabled  = false
 
             true
 
@@ -767,11 +771,14 @@ class AdaptarActivity : AppCompatActivity() {
 
                     //--- Habilita ou desabilita a opção de deleção de jogo(s)
                     subMenuDelSels.isEnabled = false
+                    subMenuDessel.isEnabled  = false
                     for (idxItem in itemsListChkDel.indices) {
 
                         if (itemsListChkDel[idxItem]) {
 
                             subMenuDelSels.isEnabled = true
+                            subMenuDessel.isEnabled  = true
+
                             break
 
                         }

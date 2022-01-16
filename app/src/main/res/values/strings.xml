@@ -73,4 +73,7 @@
     <string name="desliga_app">Desliga App</string>
     <string name="finalizar_app">Finalizar App</string>
 
+    <string name="limite_erros">Limite Erros: </string>
+    <string name="limite_tempo">Limite Tempo: </string>
+
 </resources>

@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9"
+        const val strApp = "Sudoku_#9.0.148"
 
         var flagScopedStorage  = false
 
@@ -63,8 +63,13 @@ class MainActivity : AppCompatActivity() {
         var fatorLargura : Double = 0.0
         var fatorAltura  : Double = 0.0
 
-        var flagMostraNumIguais = true
+        // Complicadores
+        var strTitleErros = ""
+        var strTitleTempo = ""
 
+        var intLimiteTempo = -1
+        var intLimiteErros     = -1
+        var flagMostraNumIguais = true
     }
 
     //--- Objetos gráficos
@@ -174,8 +179,8 @@ class MainActivity : AppCompatActivity() {
         // Device
         //----------------------------------------------------------------------
         //--- Smartphone
-        strToast  = "Smartphone: ${Build.MANUFACTURER} - ${Build.MODEL}"
-        strLog    = strToast + "Build: ${Build.DEVICE}"
+        strToast = "Smartphone: ${Build.MANUFACTURER} - ${Build.MODEL}"
+        strLog   = strToast + "  Build: ${Build.DEVICE}"
         Log.d (cTAG, strLog)
 
         //--- Calcula o fator a ser usado para as diferenças de tamanho dos screens
@@ -183,7 +188,7 @@ class MainActivity : AppCompatActivity() {
         val larguraDesenv = 2.44  // inches
         val alturaDesenv  = 4.33  // inches
 
-        val metrics  = resources.displayMetrics
+        val metrics = resources.displayMetrics
         val yInches = metrics.heightPixels.toDouble() / metrics.ydpi.toDouble()
         val xInches = metrics.widthPixels.toDouble()  / metrics.xdpi.toDouble()
 
@@ -425,8 +430,8 @@ class MainActivity : AppCompatActivity() {
     // Action Bar Menu
     //---------------------------------------------------------------------
     private lateinit var myMenuItem: MenuItem
-    private lateinit var subMenuLimiteQtiErros: MenuItem
-    private lateinit var subMenuLimiteTempoJogo: MenuItem
+    private lateinit var subMenuLimiteQtiErros   : MenuItem
+    private lateinit var subMenuLimiteTempoJogo  : MenuItem
     private lateinit var subMenuMostrarNumsIguais: MenuItem
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
 
@@ -449,8 +454,13 @@ class MainActivity : AppCompatActivity() {
             subMenuLimiteTempoJogo   = myMenuItem.subMenu.findItem(R.id.action_ajustarTempoDeJogo)
             subMenuMostrarNumsIguais = myMenuItem.subMenu.findItem(R.id.action_mostrar_numeros_iguais)
 
-            subMenuLimiteQtiErros.isEnabled  = false
-            subMenuLimiteTempoJogo.isEnabled = false
+            strTitleErros  = getString(R.string.limite_erros)
+            strTitleErros += if (intLimiteErros == -1) "sem" else intLimiteErros.toString()
+            subMenuLimiteQtiErros.title = strTitleErros
+
+            strTitleTempo  = getString(R.string.limite_tempo)
+            strTitleTempo += if (intLimiteTempo == -1) "sem" else intLimiteTempo.toString()
+            subMenuLimiteTempoJogo.title = strTitleTempo
 
         } catch (exc: Exception) { Log.d(cTAG, "-> Erro: ${exc.message}") }
 
@@ -468,6 +478,11 @@ class MainActivity : AppCompatActivity() {
 
             Log.d(cTAG, "-> Tap em actionBar / Ajusta limite contagem de erros")
 
+            // TODO
+            strTitleErros  = getString(R.string.limite_erros)
+            strTitleErros += if (intLimiteErros == -1) " sem" else " ${intLimiteErros.toString()}"
+            subMenuLimiteQtiErros.title = strTitleErros
+
             true
 
         }
@@ -476,6 +491,11 @@ class MainActivity : AppCompatActivity() {
         R.id.action_ajustarTempoDeJogo -> {
 
             Log.d(cTAG, "-> Tap em actionBar / Ajusta tempo de jogo")
+
+            // TODO
+            strTitleTempo  = getString(R.string.limite_tempo)
+            strTitleTempo += if (intLimiteTempo == -1) " sem" else " ${intLimiteTempo.toString()}"
+            subMenuLimiteTempoJogo.title = strTitleTempo
 
             true
 
