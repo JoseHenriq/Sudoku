@@ -19,7 +19,7 @@
     <group android:id="@+id/ferramentas_auxiliares" >
 
         <item android:id ="@+id/action_mostrar_numeros_iguais"
-        android:title    ="Mostra números iguais"
+        android:title    ="Mostrar números iguais"
         app:showAsAction ="never" />
 
     </group>

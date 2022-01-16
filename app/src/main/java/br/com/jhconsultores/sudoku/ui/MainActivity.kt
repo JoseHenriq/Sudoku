@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.148"
+        const val strApp = "Sudoku_#9.0.149"
 
         var flagScopedStorage  = false
 
@@ -68,8 +68,11 @@ class MainActivity : AppCompatActivity() {
         var strTitleTempo = ""
 
         var intLimiteTempo = -1
-        var intLimiteErros     = -1
+        var intLimiteErros = -1
         var flagMostraNumIguais = true
+        var TITLE_ERROS = "Limite Erros: "
+        var TITLE_TEMPO = "Limite Tempo: "
+
     }
 
     //--- Objetos gráficos
@@ -416,11 +419,8 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
-            } else {
-
-                Log.d(cTAG, "-> activity results NÃO OK!")
-
             }
+            else { Log.d(cTAG, "-> activity results NÃO OK!") }
 
         }
 
@@ -454,13 +454,11 @@ class MainActivity : AppCompatActivity() {
             subMenuLimiteTempoJogo   = myMenuItem.subMenu.findItem(R.id.action_ajustarTempoDeJogo)
             subMenuMostrarNumsIguais = myMenuItem.subMenu.findItem(R.id.action_mostrar_numeros_iguais)
 
-            strTitleErros  = getString(R.string.limite_erros)
-            strTitleErros += if (intLimiteErros == -1) "sem" else intLimiteErros.toString()
-            subMenuLimiteQtiErros.title = strTitleErros
-
-            strTitleTempo  = getString(R.string.limite_tempo)
-            strTitleTempo += if (intLimiteTempo == -1) "sem" else intLimiteTempo.toString()
-            subMenuLimiteTempoJogo.title = strTitleTempo
+            //----------------------------------
+            atualizaTitleSubMenu(TITLE_ERROS)
+            //----------------------------------
+            atualizaTitleSubMenu(TITLE_TEMPO)
+            //----------------------------------
 
         } catch (exc: Exception) { Log.d(cTAG, "-> Erro: ${exc.message}") }
 
@@ -479,9 +477,10 @@ class MainActivity : AppCompatActivity() {
             Log.d(cTAG, "-> Tap em actionBar / Ajusta limite contagem de erros")
 
             // TODO
-            strTitleErros  = getString(R.string.limite_erros)
-            strTitleErros += if (intLimiteErros == -1) " sem" else " ${intLimiteErros.toString()}"
-            subMenuLimiteQtiErros.title = strTitleErros
+
+            //----------------------------------
+            atualizaTitleSubMenu(TITLE_ERROS)
+            //----------------------------------
 
             true
 
@@ -493,10 +492,10 @@ class MainActivity : AppCompatActivity() {
             Log.d(cTAG, "-> Tap em actionBar / Ajusta tempo de jogo")
 
             // TODO
-            strTitleTempo  = getString(R.string.limite_tempo)
-            strTitleTempo += if (intLimiteTempo == -1) " sem" else " ${intLimiteTempo.toString()}"
-            subMenuLimiteTempoJogo.title = strTitleTempo
 
+            //----------------------------------
+            atualizaTitleSubMenu(TITLE_TEMPO)
+            //----------------------------------
             true
 
         }
@@ -2126,30 +2125,22 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    /*
-    //--- apresNumsEQtidds
-    private fun apresNumsEQtidds() {
+    //--- atualizaTitleSubMenu
+    private fun atualizaTitleSubMenu(titleSubMenu : String) {
 
-        var strLog1 = ""
-        var strLog2 = ""
-        for (idxLin in 0..8) {
+        if (titleSubMenu == TITLE_ERROS) {
 
-            for (idxCol in 0..8) {
+            strTitleErros  = TITLE_ERROS
+            strTitleErros += if (intLimiteErros == -1) " sem" else " ${intLimiteErros.toString()}"
+            subMenuLimiteQtiErros.title = strTitleErros
 
-                strLog1 += if (idxCol == 0) "\n" else (if (idxCol < 9) ", " else "") //else (if (idxLin < 8) "," else ""))
-                strLog1 += "${arArIntNums[idxLin][idxCol]}"
-
-                if (idxLin == 0) {
-
-                    strLog2 += if (idxCol == 0) "\n" else (if (idxCol < 9) ", " else "")
-                    strLog2 += "${arIntQtiNumDisp[idxCol]}"
-
-                }
-            }
         }
-        Log.d(cTAG, "   - arArInt : $strLog1")
-        Log.d(cTAG, "   - arIntQti: $strLog2")
-    }
-     */
+        else { // TITLE_TEMPO
 
+            strTitleTempo  = TITLE_TEMPO
+            strTitleTempo += if (intLimiteTempo == -1) " sem" else " ${intLimiteTempo.toString()}"
+            subMenuLimiteTempoJogo.title = strTitleTempo
+
+        }
+    }
 }
