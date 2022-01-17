@@ -75,5 +75,10 @@
 
     <string name="limite_erros">Limite Erros: </string>
     <string name="limite_tempo">Limite Tempo: </string>
+    <string name="par_metros_do_jogo">Parâmetros do Jogo</string>
+    <string name="limite_de_erros">Limite de êrros:</string>
+    <string name="limite_de_tempo">Limite de Tempo:</string>
+    <string name="valor_menos1">-1</string>
+    <string name="time_HHss">00:00</string>
 
 </resources>

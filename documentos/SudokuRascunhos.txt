@@ -5,10 +5,11 @@
 //--------------------------------------------------------------------------
 
 1-> envia anúncio
-- Caros colegas: desenvolvi um App Sudoku Android e gostaria de compartilhá-lo 
-com os interessados. 
+- Caros colegas: desenvolvi um App Sudoku Android e gostaria de compartilhá-lo com os interessados. 
 Favor me responder no private se quiser que te envie uma cópia gratuita. 
 Abraços!
+
+- Bom dia Silvana! Tudo bem? Desenvolvi um App Sudoku Android e gostaria de compartilhá-lo com você. Interessa?
 
 2-> aguarda resposta
 
@@ -19,7 +20,10 @@ Abraços!
 Boa diversão! Gostaria muito de seu feedback! 
 Qualquer coisa não pense prá me fazer saber ....
 
-5-> aguardar feedbacks
+5-> verificar se instalou corretamente
+Bom dia! E então? Conseguiu instalar?
+
+6-> aguardar feedbacks
 
 
 

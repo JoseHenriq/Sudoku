@@ -31,6 +31,7 @@ import android.net.Uri
 
 import android.os.Build
 import android.provider.Settings
+import android.text.Layout
 import android.view.*
 import androidx.core.view.MenuCompat
 import br.com.jhconsultores.sudoku.BuildConfig
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.149"
+        const val strApp = "Sudoku_#9.0.150"
 
         var flagScopedStorage  = false
 
@@ -155,6 +156,8 @@ class MainActivity : AppCompatActivity() {
 
     private var flagBoardSel = false
     private var versAndroid  = ""
+
+    private lateinit var layoutAjustes : Layout
 
     //--- Arquivos jogos
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
@@ -423,6 +426,8 @@ class MainActivity : AppCompatActivity() {
             else { Log.d(cTAG, "-> activity results NÃO OK!") }
 
         }
+
+        //layoutAjustes
 
     }
 
