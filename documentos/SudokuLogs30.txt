@@ -2,7 +2,87 @@
 --------------------------------------------------------------------------------
 
 ================================================================================
-Commit9.0.150- Versão 9- 4 px
+Commit9.0.152- Versão 9- 6 px
+================================================================================
+
+================================================================================
+Commit9.0.151- Versão 9- 5
+================================================================================
+
+--------------------------------------------------------------------------------
+2022-01-18 09:12:06.179 D: Smartphone: samsung - SM-G570M  Build: on5xelte
+2022-01-18 09:12:06.179 D: -> Dimensões screen:
+2022-01-18 09:12:06.192 D:    - largura  :  720,00 px (2,44")
+2022-01-18 09:12:06.196 D:    - altura   :  1280,00 px (4,33")
+2022-01-18 09:12:06.198 D:    - Diagonal :  4,97"
+2022-01-18 09:12:06.200 D:    - fatorlargura :  1,00
+2022-01-18 09:12:06.203 D:    - fatorAltura  :  1,00
+2022-01-18 09:12:06.203 D: -> BaseOS: 8.0.0 SDK_INT: API26
+2022-01-18 09:12:06.362 D: -> main Verifica permissões
+2022-01-18 09:12:06.362 D:    - Checa se permissões Ok
+2022-01-18 09:12:06.363 D:      - android.permission.INTERNET: true
+2022-01-18 09:12:06.364 D:      - android.permission.READ_EXTERNAL_STORAGE: false
+2022-01-18 09:12:06.365 D:      - android.permission.WRITE_EXTERNAL_STORAGE: false
+2022-01-18 09:12:06.365 D: -> Recurso SEM Permissão atual:
+2022-01-18 09:12:06.366 D:    - android.permission.READ_EXTERNAL_STORAGE
+2022-01-18 09:12:06.366 D:    - android.permission.WRITE_EXTERNAL_STORAGE
+2022-01-18 09:12:06.366 D: -> SO solicita autorização para permissão:
+2022-01-18 09:12:06.366 D:    - android.permission.READ_EXTERNAL_STORAGE
+2022-01-18 09:12:06.366 D:    - android.permission.WRITE_EXTERNAL_STORAGE
+2022-01-18 09:12:06.663 D: Permission unGranted
+2022-01-18 09:12:06.663 D: -> Registra activity for result
+2022-01-18 09:12:09.386 D: Smartphone: samsung - SM-G570M  Build: on5xelte
+2022-01-18 09:12:09.386 D: -> Dimensões screen:
+2022-01-18 09:12:09.392 D:    - largura  :  720,00 px (2,44")
+2022-01-18 09:12:09.395 D:    - altura   :  1280,00 px (4,33")
+2022-01-18 09:12:09.397 D:    - Diagonal :  4,97"
+2022-01-18 09:12:09.399 D:    - fatorlargura :  1,00
+2022-01-18 09:12:09.401 D:    - fatorAltura  :  1,00
+2022-01-18 09:12:09.401 D: -> BaseOS: 8.0.0 SDK_INT: API26
+2022-01-18 09:12:09.642 D: -> main Verifica permissões
+2022-01-18 09:12:09.642 D:    - Checa se permissões Ok
+2022-01-18 09:12:09.643 D:      - android.permission.INTERNET: true
+2022-01-18 09:12:09.644 D:      - android.permission.READ_EXTERNAL_STORAGE: false
+2022-01-18 09:12:09.646 D:      - android.permission.WRITE_EXTERNAL_STORAGE: false
+2022-01-18 09:12:09.646 D: -> Recurso SEM Permissão atual:
+2022-01-18 09:12:09.646 D:    - android.permission.READ_EXTERNAL_STORAGE
+2022-01-18 09:12:09.646 D:    - android.permission.WRITE_EXTERNAL_STORAGE
+2022-01-18 09:12:09.646 D: -> SO solicita autorização para permissão:
+2022-01-18 09:12:09.646 D:    - android.permission.READ_EXTERNAL_STORAGE
+2022-01-18 09:12:09.646 D:    - android.permission.WRITE_EXTERNAL_STORAGE
+2022-01-18 09:12:09.651 D: Permissions: 
+2022-01-18 09:12:09.651 D: - Permissão concedida!
+2022-01-18 09:12:09.701 D: Permission unGranted
+2022-01-18 09:12:09.701 D: -> Registra activity for result
+2022-01-18 09:12:14.086 D: Permissions: 
+    android.permission.READ_EXTERNAL_STORAGE=0 
+    android.permission.WRITE_EXTERNAL_STORAGE=0 
+2022-01-18 09:12:14.086 D: - Permissão concedida!
+2022-01-18 09:12:24.576 D: -> Tap em actionBar / Ajusta limite contagem de erros
+2022-01-18 09:12:29.277 D: -> Cancelou ajustes dos limites de Erros e Tempo
+2022-01-18 09:13:30.825 D: Smartphone: samsung - SM-G570M  Build: on5xelte
+2022-01-18 09:13:30.825 D: -> Dimensões screen:
+2022-01-18 09:13:30.844 D:    - largura  :  720,00 px (2,44")
+2022-01-18 09:13:30.847 D:    - altura   :  1280,00 px (4,33")
+2022-01-18 09:13:30.849 D:    - Diagonal :  4,97"
+2022-01-18 09:13:30.851 D:    - fatorlargura :  1,00
+2022-01-18 09:13:30.852 D:    - fatorAltura  :  1,00
+2022-01-18 09:13:30.853 D: -> BaseOS: 8.0.0 SDK_INT: API26
+2022-01-18 09:13:31.051 D: -> main Verifica permissões
+2022-01-18 09:13:31.051 D:    - Checa se permissões Ok
+2022-01-18 09:13:31.066 D:      - android.permission.INTERNET: true
+2022-01-18 09:13:31.067 D:      - android.permission.READ_EXTERNAL_STORAGE: true
+2022-01-18 09:13:31.068 D:      - android.permission.WRITE_EXTERNAL_STORAGE: true
+2022-01-18 09:13:31.101 D: Permission Granted!
+2022-01-18 09:13:31.102 D: -> Registra activity for result
+2022-01-18 09:13:39.625 D: -> Tap em actionBar / Ajusta limite contagem de erros
+2022-01-18 09:14:06.940 D: -> Cancelou ajustes dos limites de Erros e Tempo
+2022-01-18 09:14:12.228 D: -> Tap em actionBar / Ajusta tempo de jogo
+2022-01-18 09:14:15.401 D: -> Ajusta limites de Erros e Tempo
+
+
+================================================================================
+Commit9.0.150- Versão 9- 4
 ================================================================================
 - 
 

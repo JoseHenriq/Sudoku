@@ -14,7 +14,7 @@ Abraços!
 2-> aguarda resposta
 
 3-> msg após a resposta
-Ótimo! Tudo bem? Tô te mandando! Qualquer coisa me fala!
+Ótimo! Tô te mandando! Qualquer coisa me fala!
 
 4-> envia os arquivos e a mensagem:
 Boa diversão! Gostaria muito de seu feedback! 

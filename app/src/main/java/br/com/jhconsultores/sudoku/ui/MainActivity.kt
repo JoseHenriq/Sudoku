@@ -5,10 +5,6 @@ import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.os.*
 import android.text.Editable
 import android.text.TextWatcher
@@ -27,6 +23,8 @@ import br.com.jhconsultores.sudoku.jogo.SudokuGameGenerator
 import br.com.jhconsultores.utils.*
 import java.lang.Exception
 import android.app.AlertDialog
+import android.content.DialogInterface
+import android.graphics.*
 import android.net.Uri
 
 import android.os.Build
@@ -50,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.150"
+        const val strApp = "Sudoku_#9.0.151"
 
         var flagScopedStorage  = false
 
@@ -442,8 +440,7 @@ class MainActivity : AppCompatActivity() {
 
         try {
 
-            val infl = menuInflater
-            infl.inflate(R.menu.menu_sudoku, menu)
+            menuInflater.inflate(R.menu.menu_sudoku, menu)
 
             MenuCompat.setGroupDividerEnabled(menu, true)
 
@@ -481,7 +478,9 @@ class MainActivity : AppCompatActivity() {
 
             Log.d(cTAG, "-> Tap em actionBar / Ajusta limite contagem de erros")
 
-            // TODO
+            //--------------------------------------------------
+            implDialogViewAlertDialog(subMenuLimiteQtiErros)
+            //--------------------------------------------------
 
             //----------------------------------
             atualizaTitleSubMenu(TITLE_ERROS)
@@ -496,7 +495,9 @@ class MainActivity : AppCompatActivity() {
 
             Log.d(cTAG, "-> Tap em actionBar / Ajusta tempo de jogo")
 
-            // TODO
+            //---------------------------------------------------
+            implDialogViewAlertDialog(subMenuLimiteTempoJogo)
+            //---------------------------------------------------
 
             //----------------------------------
             atualizaTitleSubMenu(TITLE_TEMPO)
@@ -511,14 +512,14 @@ class MainActivity : AppCompatActivity() {
             if (subMenuMostrarNumsIguais.title.toString() == "Mostrar números iguais") {
 
                 strLog = "Não mostrar números iguais"
-                subMenuMostrarNumsIguais.setTitle(strLog)
+                subMenuMostrarNumsIguais.title = strLog
                 flagMostraNumIguais = false
 
             }
             else {
 
                 strLog = "Mostrar números iguais"
-                subMenuMostrarNumsIguais.setTitle("Mostrar números iguais")
+                subMenuMostrarNumsIguais.title = "Mostrar números iguais"
                 flagMostraNumIguais = true
 
             }
@@ -1472,7 +1473,7 @@ class MainActivity : AppCompatActivity() {
 
         //--- Limpa a célula
         // Lê o número atual na célula
-        var intNumAtual = arArIntNums[intLinJogar][intColJogar]
+        val intNumAtual = arArIntNums[intLinJogar][intColJogar]
         // Limpou a célula
         arArIntNums[intLinJogar][intColJogar] = 0
         // Retornou a fichinha para a caixinha
@@ -2136,16 +2137,65 @@ class MainActivity : AppCompatActivity() {
         if (titleSubMenu == TITLE_ERROS) {
 
             strTitleErros  = TITLE_ERROS
-            strTitleErros += if (intLimiteErros == -1) " sem" else " ${intLimiteErros.toString()}"
+            strTitleErros += if (intLimiteErros == -1) " sem" else "$intLimiteErros"
             subMenuLimiteQtiErros.title = strTitleErros
 
         }
         else { // TITLE_TEMPO
 
             strTitleTempo  = TITLE_TEMPO
-            strTitleTempo += if (intLimiteTempo == -1) " sem" else " ${intLimiteTempo.toString()}"
+            strTitleTempo += if (intLimiteTempo == -1) " sem" else " $intLimiteTempo}"
             subMenuLimiteTempoJogo.title = strTitleTempo
 
         }
     }
+
+    //--- implDialogView_AlertDialog
+    private fun implDialogViewAlertDialog(subMenuLimite : MenuItem) {
+
+        //------------------------------------------------------------------------------------------
+        // Implementa o Dialog View
+        //------------------------------------------------------------------------------------------
+        // Inflate o layout e instancía os controles do layout que farão parte do AlertDialog
+        val dialogView  = layoutInflater.inflate(R.layout.alertdialog_param_jogo, null)
+        val edtLimErros = dialogView.findViewById<EditText>(R.id.edtErros)
+        val edtLimTempo = dialogView.findViewById<EditText>(R.id.edtTempo)
+
+        //---------------------------------------------------------------------
+        // Prepara o AlertDialog
+        //---------------------------------------------------------------------
+        //--- Instancía um objeto AlertDialog
+
+        //---------------------------------------------------------------------
+        // Prepara o AlertDialog
+        //---------------------------------------------------------------------
+        //--- Instancía um objeto AlertDialog
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle("Parâmetros do Jogo")
+            .setView(dialogView)
+            .setCancelable(false)
+            .setPositiveButton("Ok") { _, _ ->
+
+                Log.d(cTAG, "-> Ajusta limites de Erros e Tempo")
+
+            }
+            .setNegativeButton("Cancel") { _, _ ->
+
+                Log.d(cTAG, "-> Cancelou ajustes dos limites de Erros e Tempo")
+
+            }
+
+        // Apresenta o AlertDialog
+        val alert = builder.create()
+        alert.show()
+
+        // Reforça as legendas dos botões de opção
+        val pbuttonPos = alert.getButton(DialogInterface.BUTTON_POSITIVE)
+        pbuttonPos.setTextColor(Color.BLUE)
+
+        val pbuttonNeg = alert.getButton(DialogInterface.BUTTON_NEGATIVE)
+        pbuttonNeg.setTextColor(Color.RED)
+
+    }
+
 }
