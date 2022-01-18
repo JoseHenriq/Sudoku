@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat
 
 import br.com.jhconsultores.sudoku.R
 import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.flagMostraNumIguais
+import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.intLimiteErros
 import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strOpcaoJogo
 import br.com.jhconsultores.utils.*
 
@@ -55,13 +56,14 @@ class JogarActivity : AppCompatActivity() {
     private var iViewSudokuBoard: ImageView? = null
     private var iViewNumsDisps: ImageView? = null
 
-    private var tvNivel: TextView? = null
+    private var tvNivel   : TextView? = null
     private var tvSubNivel: TextView? = null
-    private var tvErros: TextView? = null
-    private var tvClues: TextView? = null
-    private var intContaErro = 0
+    private var tvClues   : TextView? = null
     private var tvLegCluesInic: TextView? = null
-    private var tvCluesInic: TextView? = null
+    private var tvCluesInic   : TextView? = null
+
+    private var tvErros : TextView? = null
+    private var intContaErro = 0
 
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
 
@@ -383,9 +385,44 @@ class JogarActivity : AppCompatActivity() {
                                 }
 
                                 if (!flagNumValido) {
-                                    tvErros!!.text = "${++intContaErro}"
-                                }
 
+                                    //--- Se não tem limite de erros, apenas computa-o
+                                    //--- Se tem limite de erros, ao incrimentá-lo informa qdo =
+                                    tvErros!!.text = "${++intContaErro}"
+                                    if (intContaErro == intLimiteErros) {
+
+                                        var strMsg  = "Você atingiu o limite de erros."
+                                        strMsg     += "\nGostaria de jogar até outro erro?"
+
+                                        val builder = androidx.appcompat.app.AlertDialog.
+                                                                           Builder(this)
+                                        builder.setTitle(strMsg)
+                                            .setPositiveButton("Sim") { _, _ ->
+
+                                                Log.d(cTAG, "-> Tenta mais 1 erro.")
+                                                intLimiteErros ++
+
+                                            }
+                                            .setNegativeButton("Não. Encerre o jogo."){ _, _ ->
+
+                                                Log.d(cTAG, "-> Encerra o jogo.")
+
+                                                Log.d(cTAG, "-> ${crono.text} - Fim")
+
+                                                crono.stop()
+                                                flagJoga = false
+
+                                                btnInicia.text      = strInicia
+                                                btnInicia.isEnabled = false
+
+                                            }
+
+                                        // Apresenta o AlertDialog
+                                        val alert = builder.create()
+                                        alert.show()
+
+                                    }
+                                }
                             }
 
                             //--- Verifica se fim de jogo (todas as qtidds foram zeradas
@@ -403,7 +440,7 @@ class JogarActivity : AppCompatActivity() {
                                 crono.stop()
                                 flagJoga = false
 
-                                btnInicia.text = strInicia
+                                btnInicia.text      = strInicia
                                 btnInicia.isEnabled = false
 
                             }

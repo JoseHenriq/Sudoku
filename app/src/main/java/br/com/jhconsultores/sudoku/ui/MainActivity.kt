@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.152"
+        const val strApp = "Sudoku_#9.0.153"
 
         var flagScopedStorage  = false
 
@@ -155,11 +155,13 @@ class MainActivity : AppCompatActivity() {
     private var flagBoardSel = false
     private var versAndroid  = ""
 
+    //--- Parâmetros do jogo
     private lateinit var layoutAjustes : Layout
+    private lateinit var edtLimErros   : EditText
+    private lateinit var edtLimTempo   : EditText
 
     //--- Arquivos jogos
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
-
     private lateinit var previewRequest : ActivityResultLauncher<Intent>
 
     //--- Classes externas
@@ -425,7 +427,9 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        //layoutAjustes
+        //--- Parâmetros do jogo
+        //edtLimErros : EditView
+        //edtLimErros : EditView
 
     }
 
@@ -455,6 +459,8 @@ class MainActivity : AppCompatActivity() {
             subMenuLimiteQtiErros    = myMenuItem.subMenu.findItem(R.id.action_ajustarQtiddErros)
             subMenuLimiteTempoJogo   = myMenuItem.subMenu.findItem(R.id.action_ajustarTempoDeJogo)
             subMenuMostrarNumsIguais = myMenuItem.subMenu.findItem(R.id.action_mostrar_numeros_iguais)
+
+            subMenuLimiteTempoJogo.isEnabled = false
 
             //----------------------------------
             atualizaTitleSubMenu(TITLE_ERROS)
@@ -2144,7 +2150,7 @@ class MainActivity : AppCompatActivity() {
         else { // TITLE_TEMPO
 
             strTitleTempo  = TITLE_TEMPO
-            strTitleTempo += if (strLimiteTempo == "00:00") " sem" else " $strLimiteTempo}"
+            strTitleTempo += if (strLimiteTempo == "00:00") " sem" else " $strLimiteTempo"
             subMenuLimiteTempoJogo.title = strTitleTempo
 
         }
@@ -2158,8 +2164,8 @@ class MainActivity : AppCompatActivity() {
         //------------------------------------------------------------------------------------------
         // Inflate o layout e instancía os controles do layout que farão parte do AlertDialog
         val dialogView  = layoutInflater.inflate(R.layout.alertdialog_param_jogo, null)
-        val edtLimErros = dialogView.findViewById<EditText>(R.id.edtErros)
-        val edtLimTempo = dialogView.findViewById<EditText>(R.id.edtTempo)
+        edtLimErros = dialogView.findViewById<EditText>(R.id.edtErros)
+        edtLimTempo = dialogView.findViewById<EditText>(R.id.edtTempo)
 
         //---------------------------------------------------------------------
         // Prepara o AlertDialog
@@ -2173,20 +2179,20 @@ class MainActivity : AppCompatActivity() {
         customTitle.textSize = 20f
 
         val builder = androidx.appcompat.app.AlertDialog.Builder(this)
-        //builder.setTitle("Parâmetros do Jogo")
         builder.setCustomTitle(customTitle)
             .setView(dialogView)
             .setCancelable(false)
             .setPositiveButton("Ok") { _, _ ->
 
-                //Log.d(cTAG, "-> Ajusta limites de Erros e Tempo")
                 Log.d(cTAG, "-> Novos ajustes:")
-                //intLimiteErros = edtLimErros.text.toString().toInt()
+                intLimiteErros = edtLimErros.text.toString().toInt()
                 Log.d(cTAG, "   - limite de erros: $intLimiteErros")
+                //----------------------------------
+                atualizaTitleSubMenu(TITLE_ERROS)
+                //----------------------------------
 
-                //strLimiteTempo = edtLimTempo.text.toString()
+                strLimiteTempo = edtLimTempo.text.toString()
                 Log.d(cTAG, "   - limite de tempo: $strLimiteTempo")
-
                 //----------------------------------
                 atualizaTitleSubMenu(TITLE_TEMPO)
                 //----------------------------------

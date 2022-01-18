@@ -16,14 +16,16 @@ Abraços!
 3-> msg após a resposta
 Ótimo! Tô te mandando! Qualquer coisa me fala!
 
-4-> envia os arquivos e a mensagem:
+4-> envia os arquivos
+
+5-> verificar se instalou corretamente
+E então? Conseguiu instalar?
+
+6-> assim que rodar, envia a mensagem:
 Boa diversão! Gostaria muito de seu feedback! 
 Qualquer coisa não pense prá me fazer saber ....
 
-5-> verificar se instalou corretamente
-Bom dia! E então? Conseguiu instalar?
-
-6-> aguardar feedbacks
+7-> aguardar feedbacks
 
 
 
