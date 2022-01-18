@@ -11,33 +11,13 @@
 
     app:layout_constraintEnd_toEndOf ="parent">
 
-    <!-- 1- Título -->
-    <TextView
-        android:id="@+id/tv_titulo"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_marginTop="20dp"
-        android:gravity="center_horizontal"
-
-        android:paddingStart="10dp"
-        android:paddingEnd  ="10dp"
-
-        android:text="@string/par_metros_do_jogo"
-
-        android:textSize ="20sp"
-        app:layout_constraintEnd_toEndOf    ="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf    ="parent" />
-
-    <!-- 2- Erros -->
+    <!-- 1- Erros -->
     <TextView android:id="@+id/tvLegErros"
 
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
-        app:layout_constraintTop_toBottomOf="@+id/tv_titulo"
+        app:layout_constraintTop_toTopOf    ="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart ="10dp"
         android:layout_marginTop   ="30dp"
@@ -53,21 +33,21 @@
         android:layout_marginTop   ="15dp"
         android:gravity            ="center_horizontal"
 
-        app:layout_constraintTop_toBottomOf ="@+id/tv_titulo"
-        app:layout_constraintStart_toEndOf  ="@+id/tvLegErros"
-        app:layout_constraintEnd_toEndOf    ="parent"
+        app:layout_constraintTop_toTopOf   ="parent"
+        app:layout_constraintStart_toEndOf ="@+id/tvLegErros"
+        app:layout_constraintEnd_toEndOf   ="parent"
 
         android:inputType="number"
         android:hint = "@string/valor_menos1"
         tools:ignore="Autofill" />
 
-    <!-- 3- Tempo -->
+    <!-- 2- Tempo -->
     <TextView android:id="@+id/tvLegTempo"
 
         android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
 
-        app:layout_constraintTop_toBottomOf ="@+id/edtErros"
+        app:layout_constraintTop_toBottomOf ="@+id/tvLegErros"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart ="10dp"
         android:layout_marginTop   ="30dp"

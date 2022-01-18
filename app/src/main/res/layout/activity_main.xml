@@ -166,7 +166,8 @@
         android:text    ="@string/valor0"
         android:textSize="@dimen/TamanhoTxt"
         app:layout_constraintStart_toEndOf="@id/legSubNivel"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="Autofill,LabelFor" />
 
     <!-- Radio Buttons para escolha se adapta preset ou edição -->
     <RadioGroup android:id="@+id/radioGrpAdapta"

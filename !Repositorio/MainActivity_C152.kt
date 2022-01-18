@@ -29,11 +29,13 @@ import android.net.Uri
 
 import android.os.Build
 import android.provider.Settings
-import android.text.Layout
 import android.view.*
 import androidx.core.view.MenuCompat
 import br.com.jhconsultores.sudoku.BuildConfig
 import kotlin.math.sqrt
+import android.view.Gravity
+
+import android.widget.TextView
 
 const val ALL_FILES_ACCESS_PERMISSION = 4
 
@@ -62,15 +64,15 @@ class MainActivity : AppCompatActivity() {
         var fatorLargura : Double = 0.0
         var fatorAltura  : Double = 0.0
 
-        // Complicadores
+        // Parâmetros complicadores
         var TITLE_ERROS   = "Limite Erros: "
         var TITLE_TEMPO   = "Limite Tempo: "
         var strTitleErros = ""
         var strTitleTempo = ""
 
-        var strLimiteTempo = "00:00"
-        var intLimiteErros = -1
-        var flagMostraNumIguais = true
+        var intLimiteErros = -1              // Default: Sem controle
+        var strLimiteTempo = "00:00"         // Default: sem controle
+        var flagMostraNumIguais = true       // Default: mostrar os números iguais no tabuleiro
 
     }
 
@@ -155,11 +157,12 @@ class MainActivity : AppCompatActivity() {
     private var flagBoardSel = false
     private var versAndroid  = ""
 
-    private lateinit var layoutAjustes : Layout
+    // Parâmetros complicadores
+    private var edtLimErros = findViewById<EditText>(R.id.edtErros)
+    private var edtLimTempo = findViewById<EditText>(R.id.edtTempo)
 
     //--- Arquivos jogos
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
-
     private lateinit var previewRequest : ActivityResultLauncher<Intent>
 
     //--- Classes externas
@@ -476,6 +479,7 @@ class MainActivity : AppCompatActivity() {
         //--- Tapping no item 'Ajustar quantidade de erros' do menu do actionBar
         R.id.action_ajustarQtiddErros -> {
 
+
             Log.d(cTAG, "-> Tap em actionBar / Ajusta limite contagem de erros")
 
             //--------------------------------------------------
@@ -495,9 +499,9 @@ class MainActivity : AppCompatActivity() {
 
             Log.d(cTAG, "-> Tap em actionBar / Ajusta tempo de jogo")
 
-            //---------------------------------------------------
+            //--------------------------------------------------
             implDialogViewAlertDialog(subMenuLimiteTempoJogo)
-            //---------------------------------------------------
+            //--------------------------------------------------
 
             //----------------------------------
             atualizaTitleSubMenu(TITLE_TEMPO)
@@ -2144,13 +2148,14 @@ class MainActivity : AppCompatActivity() {
         else { // TITLE_TEMPO
 
             strTitleTempo  = TITLE_TEMPO
-            strTitleTempo += if (strLimiteTempo == "00:00") " sem" else " $strLimiteTempo}"
+            strTitleTempo += if (strLimiteTempo == "00:00") " sem" else strLimiteTempo
             subMenuLimiteTempoJogo.title = strTitleTempo
 
         }
     }
 
     //--- implDialogView_AlertDialog
+    @SuppressLint("SetTextI18n")
     private fun implDialogViewAlertDialog(subMenuLimite : MenuItem) {
 
         //------------------------------------------------------------------------------------------
@@ -2164,37 +2169,31 @@ class MainActivity : AppCompatActivity() {
         //---------------------------------------------------------------------
         // Prepara o AlertDialog
         //---------------------------------------------------------------------
-        val customTitle  = TextView(this)
-        customTitle.text = "Parâmetros do Jogo"
-        customTitle.setBackgroundColor(Color.DKGRAY)
-        customTitle.setPadding(10, 10, 10, 10)
-        customTitle.gravity = Gravity.CENTER
-        customTitle.setTextColor(Color.WHITE)
-        customTitle.textSize = 20f
+        val title  = TextView(this)
+        title.text = "Parâmetros do Jogo"
+        title.setBackgroundColor(Color.DKGRAY)
+        title.setPadding(10, 10, 10, 10)
+        title.gravity = Gravity.CENTER
+        title.setTextColor(Color.WHITE)
+        title.textSize = 20f
 
         val builder = androidx.appcompat.app.AlertDialog.Builder(this)
-        //builder.setTitle("Parâmetros do Jogo")
-        builder.setCustomTitle(customTitle)
+        builder.setCustomTitle(title)
             .setView(dialogView)
             .setCancelable(false)
             .setPositiveButton("Ok") { _, _ ->
 
-                //Log.d(cTAG, "-> Ajusta limites de Erros e Tempo")
                 Log.d(cTAG, "-> Novos ajustes:")
-                //intLimiteErros = edtLimErros.text.toString().toInt()
+                intLimiteErros = edtLimErros.text.toString().toInt()
                 Log.d(cTAG, "   - limite de erros: $intLimiteErros")
 
-                //strLimiteTempo = edtLimTempo.text.toString()
+                strLimiteTempo = edtLimTempo.text.toString()
                 Log.d(cTAG, "   - limite de tempo: $strLimiteTempo")
-
-                //----------------------------------
-                atualizaTitleSubMenu(TITLE_TEMPO)
-                //----------------------------------
 
             }
             .setNegativeButton("Cancel") { _, _ ->
 
-                Log.d(cTAG, "-> Cancelou ajustes dos limites de Erros e Tempo")
+                Log.d(cTAG, "-> Cancel: cancelou ajustes dos limites de Erros e Tempo")
 
             }
 
