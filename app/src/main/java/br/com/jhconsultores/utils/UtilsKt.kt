@@ -17,6 +17,8 @@ import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.cTAG
 import java.io.BufferedOutputStream
 import java.io.File
 import java.nio.IntBuffer
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 import kotlin.concurrent.thread
 
 class UtilsKt {
@@ -193,6 +195,42 @@ class UtilsKt {
         //Log.d(cTAG, "-> Quantidade de Zeros: $intQtiZeros")
 
         return intQtiZeros
+
+    }
+
+}
+//--------------------------------------------------------------------------------------------------
+//                               Classes auxiliarees
+//--------------------------------------------------------------------------------------------------
+//class Time24HoursValidator {
+class TimeValidator {
+
+    private val pattern: Pattern
+    private var matcher: Matcher? = null
+
+    /**
+     * Validate time in 24 hours format with regular expression
+     * @param  time time address for validation
+     * @return true valid time format; false invalid time format
+     */
+    fun validate(time: String?): Boolean {
+
+        matcher = pattern.matcher(time)
+        return matcher!!.matches()
+
+    }
+
+    companion object {
+
+        //private const val TIME24HOURS_PATTERN = "([01]?[0-9]|2[0-3]):[0-5][0-9]"
+        private const val TIMEMINSECPATTERN = "[0-5][0-9]:[0-5][0-9]"
+
+    }
+
+    init {
+
+        //pattern = Pattern.compile(TIME24HOURS_PATTERN)
+        pattern = Pattern.compile(TIMEMINSECPATTERN)
 
     }
 

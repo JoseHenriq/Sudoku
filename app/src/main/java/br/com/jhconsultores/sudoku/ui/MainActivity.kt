@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.155"
+        const val strApp = "Sudoku_#9.0.156"
 
         var flagScopedStorage  = false
 
@@ -169,6 +169,7 @@ class MainActivity : AppCompatActivity() {
     private var jogarJogo = JogarActivity()
     private val utils     = Utils()
     private val utilsKt   = UtilsKt()
+    private val timeVal   = TimeValidator()
 
     //----------------------------------------------------------------------------------------------
     // Eventos e listeners da MainActivity
@@ -463,7 +464,7 @@ class MainActivity : AppCompatActivity() {
             subMenuLimiteTempoJogo   = myMenuItem.subMenu.findItem(R.id.action_ajustarTempoDeJogo)
             subMenuMostrarNumsIguais = myMenuItem.subMenu.findItem(R.id.action_mostrar_numeros_iguais)
 
-            subMenuLimiteTempoJogo.isEnabled = false
+            //subMenuLimiteTempoJogo.isEnabled = false
 
             //------------------------
             atualizaTitlesSubMenus()
@@ -2213,12 +2214,36 @@ class MainActivity : AppCompatActivity() {
                 Log.d(cTAG, "   - limite de erros: $intLimiteErros")
 
                 ajusteLim = edtLimTempo.text.toString()
-                if (ajusteLim.isNotEmpty()) strLimiteTempo = ajusteLim
-                Log.d(cTAG, "   - limite de tempo: $strLimiteTempo")
+                if (timeVal.validate(ajusteLim)) {
 
-                //-------------------------
-                atualizaTitlesSubMenus()
-                //-------------------------
+                    if (ajusteLim.isNotEmpty()) strLimiteTempo = ajusteLim
+                    Log.d(cTAG, "   - limite de tempo: $strLimiteTempo")
+
+                    //-------------------------
+                    atualizaTitlesSubMenus()
+                    //-------------------------
+
+                }
+
+                else {
+
+                    /*
+                    val builder2 = androidx.appcompat.app.AlertDialog.Builder(this)
+                    builder2.setTitle("Formato incorreto.\nEntre com \"MM:ss\"")
+                        .setView(dialogView)
+                        .setPositiveButton("Ok") { _, _ -> }
+
+                    // Apresenta o AlertDialog
+                    val alert2 = builder2.create()
+                    alert2.show()
+                    */
+                    strToast = "Formato incorreto. Entre com \"MM:ss\""
+
+                    utilsKt.mToast(this, strToast)
+
+                    Log.d(cTAG, "-> $strToast")
+
+                }
 
             }
             .setNegativeButton("Cancel") { _, _ ->

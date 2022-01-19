@@ -32,6 +32,8 @@ import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strOpcaoJogo
 import br.com.jhconsultores.utils.*
 
 import java.lang.Exception
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 class JogarActivity : AppCompatActivity() {
 
@@ -123,11 +125,15 @@ class JogarActivity : AppCompatActivity() {
 
     private var intContaErroInic = 0
 
+    lateinit var btnInicia : Button
+
     private var strInicia   = ""
     private var strPause    = ""
     private var strReInicia = ""
 
     lateinit var ctimer: CountDownTimer
+    private var timeOut  = (10 * 60 * 60 * 1000).toLong()   // 10'
+    private var timeTick = 1000                             //  1"
 
     //--- Classes externas
     private val utils   = Utils()
@@ -170,8 +176,8 @@ class JogarActivity : AppCompatActivity() {
             tvSubNivel = findViewById(R.id.tv_Subnivel)
             tvClues    = findViewById(R.id.tv_Clues)
 
-            val btnReset  = findViewById<View> (R.id.btnReset)  as Button
-            val btnInicia = findViewById<View>(R.id.btnInicia) as Button
+            val btnReset  = findViewById<View> (R.id.btnReset) as Button
+            btnInicia     = findViewById<View>(R.id.btnInicia) as Button
             val btnSalvar = findViewById<View>(R.id.btnSalvar) as Button
             btnInicia.isEnabled = true
 
@@ -414,16 +420,9 @@ class JogarActivity : AppCompatActivity() {
 
                                                 Log.d(cTAG, "-> ${crono.text} - Fim")
 
-                                                crono.stop()
-
-                                                //---------------
-                                                cancelTimer()
-                                                //---------------
-
-                                                flagJoga = false
-
-                                                btnInicia.text      = strInicia
-                                                btnInicia.isEnabled = false
+                                                //------------
+                                                fimDeJogo()
+                                                //------------
 
                                             }
 
@@ -447,16 +446,9 @@ class JogarActivity : AppCompatActivity() {
 
                                 Log.d(cTAG, "-> ${crono.text} - Fim")
 
-                                crono.stop()
-
-                                //---------------
-                                cancelTimer()
-                                //---------------
-
-                                flagJoga = false
-
-                                btnInicia.text      = strInicia
-                                btnInicia.isEnabled = false
+                                //------------
+                                fimDeJogo()
+                                //------------
 
                             }
                         }
@@ -513,9 +505,11 @@ class JogarActivity : AppCompatActivity() {
 
                     btnInicia.text = strPause
 
-                    //----------------------------------------------------
-                    startTimer(20000, 1000)
-                    //----------------------------------------------------
+                    //--- Se considerará limite de tempo, parte o timer CounterDown
+                    if (strLimiteTempo != "00:00")
+                        //------------------------------
+                        startTimer(timeOut, timeTick)
+                        //------------------------------
 
                 }
 
@@ -1363,13 +1357,9 @@ class JogarActivity : AppCompatActivity() {
 
             Log.d(cTAG, "-> ${crono.text} - Fim")
 
-            crono.stop()
-
-            //---------------
-            cancelTimer()
-            //---------------
-
-            flagJoga = false
+            //------------
+            fimDeJogo()
+            //------------
 
         }
     }
@@ -1482,9 +1472,9 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //--- preparaConteudo
-    private var strModelo: String = ""
+    private var strModelo : String = ""
     private var intIdxInic: Int = 0
-    private var intIdxFim: Int = 0
+    private var intIdxFim : Int = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun preparaConteudo(): String {
@@ -1680,7 +1670,9 @@ class JogarActivity : AppCompatActivity() {
 
     }
 
-
+    //----------------------------------------------------------------------------------------------
+    //                                  Crono
+    //----------------------------------------------------------------------------------------------
     //--- preparaCrono
     @RequiresApi(Build.VERSION_CODES.N)
     private fun preparaCrono(crono: Chronometer) {
@@ -1705,14 +1697,8 @@ class JogarActivity : AppCompatActivity() {
     private fun acertaCrono(strCronoInic : String) {
 
         Log.d(cTAG, "-> Acerta crono.")
-
         crono.stop()
-
         crono.text = strCronoInic
-
-        //---------------
-        cancelTimer()
-        //---------------
 
     }
 
@@ -1729,18 +1715,20 @@ class JogarActivity : AppCompatActivity() {
 
         crono.stop()
 
+        crono.text = strCronoInic
+        val intMin = strCronoInic.substring(0, 2).toLong()
+        val intSec = strCronoInic.substring(3, 5).toLong()
 
-        crono.text  = strCronoInic
-        val intMin  = strCronoInic.substring(0, 2).toLong()
-        val intSec  = strCronoInic.substring(3, 5).toLong()
         val timeLastStopped = ((intMin * 60 + intSec) * 1000)
-
-        crono.base  = SystemClock.elapsedRealtime() - timeLastStopped
+        crono.base          = SystemClock.elapsedRealtime() - timeLastStopped
 
         crono.start()
 
     }
 
+    //----------------------------------------------------------------------------------------------
+    //                             CounterDown Timer
+    //----------------------------------------------------------------------------------------------
     //--- startTimer
     fun startTimer(lgTimeOutMs: Long, intTimeTicksMs: Int) {
 
@@ -1751,9 +1739,9 @@ class JogarActivity : AppCompatActivity() {
 
                 if (crono.text == strLimiteTempo) {
 
-                    //-----------------------
-                    finalizaJogoPorTempo()
-                    //-----------------------
+                    //------------------
+                    verificaFimJogo()
+                    //------------------
 
                 }
 
@@ -1764,9 +1752,9 @@ class JogarActivity : AppCompatActivity() {
 
                 Log.d(cTAG, "-> TimeOut de ${(lgTimeOutMs / 1000L)} seg")
 
-                //----------------------
-                timeOutJogoPorTempo()
-                //----------------------
+                //--------------
+                timeOutJogo()
+                //--------------
 
             }
 
@@ -1780,15 +1768,55 @@ class JogarActivity : AppCompatActivity() {
     //cancel timer
     fun cancelTimer() { if (ctimer != null) ctimer.cancel() }
 
-
-    //val intMin = strCronoInic.substring(0, 2).toLong()
-    //val intSec = strCronoInic.substring(3, 5).toLong()
-    //timeStopped = -((intMin * 60 + intSec) * 1000)
-
     //--- finalizaJogoPorTemp
-    private fun finalizaJogoPorTempo() {}
+    private fun verificaFimJogo() {
+
+        if (crono.text == strLimiteTempo) {
+
+            utilsKt.mToast(this, "TimeOut de $strLimiteTempo !")
+
+            //------------
+            fimDeJogo()
+            //------------
+
+        }
+    }
 
     //--- timeOutJogoPorTempo
-    private fun timeOutJogoPorTempo() {}
+    private fun timeOutJogo() {
+
+        //--- Loop infinito para os tiques enqto estiver havendo jogo
+
+        // "Mata" o objeto atual
+        //----------------
+        ctimer.cancel()
+        //----------------
+
+        // Instancia novo objeto CounterDown (TimeOUt 10' = 10 * 60 * 60 * 1000)
+        //------------------------------
+        startTimer(timeOut, timeTick)
+        //------------------------------
+
+    }
+
+    //--- Final de jogo
+    private fun fimDeJogo() {
+
+        Log.d(cTAG, "-> ${crono.text} - Fim de jogo!")
+
+        utilsKt.mToast(this, "Fim de jogo!")
+
+        crono.stop()
+
+        //---------------
+        cancelTimer()
+        //---------------
+
+        flagJoga = false
+
+        btnInicia.text      = strInicia
+        btnInicia.isEnabled = false
+
+    }
 
 }
