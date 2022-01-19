@@ -14,6 +14,7 @@ import android.util.TypedValue
 import android.view.View
 
 import android.annotation.SuppressLint
+import android.os.CountDownTimer
 import android.os.SystemClock
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -26,6 +27,7 @@ import androidx.core.content.ContextCompat
 import br.com.jhconsultores.sudoku.R
 import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.flagMostraNumIguais
 import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.intLimiteErros
+import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strLimiteTempo
 import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strOpcaoJogo
 import br.com.jhconsultores.utils.*
 
@@ -46,7 +48,7 @@ class JogarActivity : AppCompatActivity() {
 
     private var bmpMyImage: Bitmap? = null             // Preset ou jogo gerado e novos números
 
-    private var bmpNumDisp: Bitmap? = null             // Números disponíveis
+    private var bmpNumDisp: Bitmap?     = null             // Números disponíveis
     private var bmpSudokuBoard: Bitmap? = null             // Jogo
 
     private var canvasMyImage: Canvas? = null
@@ -54,7 +56,7 @@ class JogarActivity : AppCompatActivity() {
     private var canvasSudokuBoard: Canvas? = null
 
     private var iViewSudokuBoard: ImageView? = null
-    private var iViewNumsDisps: ImageView? = null
+    private var iViewNumsDisps: ImageView?   = null
 
     private var tvNivel   : TextView? = null
     private var tvSubNivel: TextView? = null
@@ -70,26 +72,26 @@ class JogarActivity : AppCompatActivity() {
     private var intTamTxt = 25 // 50 // 200 //
     private var scale = 0f
 
-    private var pincelVerde = Paint()
-    private var pincelBranco = Paint()
-    private var pincelPreto = Paint()
-    private var pincelAzul = Paint()
-    private var pincelLaranja = Paint()
+    private var pincelVerde     = Paint()
+    private var pincelBranco    = Paint()
+    private var pincelPreto     = Paint()
+    private var pincelAzul      = Paint()
+    private var pincelLaranja   = Paint()
     private var pincelPurple200 = Paint()
 
     //--- Medidas
     //- Células do board
-    private var intCellwidth = 0
+    private var intCellwidth  = 0
     private var intCellheight = 0
 
     //- Margens do board
-    private var intmargTopDp = 0
+    private var intmargTopDp  = 0
     private var intMargleftdp = 0
-    private var intMargtoppx = 0
+    private var intMargtoppx  = 0
     private var intMargleftpx = 0
 
     //- Imagem Sudoku board
-    private var intImgwidth = 0
+    private var intImgwidth  = 0
     private var intImgheight = 0
 
     //--- Controle de jogadas
@@ -102,7 +104,7 @@ class JogarActivity : AppCompatActivity() {
 
     var arArIntNums = Array(9) { Array(9) { 0 } }
 
-    private var arArIntCopia = Array(9) { Array(9) { 0 } }
+    private var arArIntCopia  = Array(9) { Array(9) { 0 } }
 
     private var arIntNumsGab  = ArrayList<Int>()   // Gabarito
     private var arIntNumsJogo = ArrayList<Int>()   // Jogo
@@ -115,15 +117,17 @@ class JogarActivity : AppCompatActivity() {
     private var strSubNivelJogoInic = "0"
 
     private lateinit var crono: Chronometer
-    private var strCronoInic = ""
+    private var strCronoInic       = ""
     private var strCronoInicIntent = ""
-    //private var timeStopped: Long = 0L
+
 
     private var intContaErroInic = 0
 
     private var strInicia   = ""
     private var strPause    = ""
     private var strReInicia = ""
+
+    lateinit var ctimer: CountDownTimer
 
     //--- Classes externas
     private val utils   = Utils()
@@ -230,7 +234,7 @@ class JogarActivity : AppCompatActivity() {
                         //--- Se a célula tocada contiver um número, "pinta" todas as células que contiverem
                         //    o mesmo número.
                         if (intNum > 0) {
-                            flagJoga = false    // Não quer jogar; só quer analisar ...
+                            flagJoga    = false    // Não quer jogar; só quer analisar ...
                             intLinJogar = 0
                             intColJogar = 0
                             //------------------------------------------------
@@ -239,7 +243,7 @@ class JogarActivity : AppCompatActivity() {
                         }
                         //--- Se não contiver um número, quer jogar
                         else {
-                            flagJoga = true     // Vamos ao jogo!
+                            flagJoga    = true     // Vamos ao jogo!
                             intLinJogar = intLinha
                             intColJogar = intCol
                             //------------------------------------------
@@ -403,10 +407,6 @@ class JogarActivity : AppCompatActivity() {
                                                 Log.d(cTAG, "-> Tenta mais 1 erro.")
                                                 intLimiteErros ++
 
-                                                //------------------------------
-                                                //main.atualizaTitlesSubMenus()
-                                                //------------------------------
-
                                             }
                                             .setNegativeButton("Não. Encerre o jogo."){ _, _ ->
 
@@ -415,6 +415,11 @@ class JogarActivity : AppCompatActivity() {
                                                 Log.d(cTAG, "-> ${crono.text} - Fim")
 
                                                 crono.stop()
+
+                                                //---------------
+                                                cancelTimer()
+                                                //---------------
+
                                                 flagJoga = false
 
                                                 btnInicia.text      = strInicia
@@ -443,6 +448,11 @@ class JogarActivity : AppCompatActivity() {
                                 Log.d(cTAG, "-> ${crono.text} - Fim")
 
                                 crono.stop()
+
+                                //---------------
+                                cancelTimer()
+                                //---------------
+
                                 flagJoga = false
 
                                 btnInicia.text      = strInicia
@@ -503,6 +513,10 @@ class JogarActivity : AppCompatActivity() {
 
                     btnInicia.text = strPause
 
+                    //----------------------------------------------------
+                    startTimer(20000, 1000)
+                    //----------------------------------------------------
+
                 }
 
                 //--------------------------------------------------------------------------------------
@@ -517,8 +531,9 @@ class JogarActivity : AppCompatActivity() {
                     crono.stop()
                     strCronoInic = crono.text.toString()
 
-//                    iViewSudokuBoard!!.isEnabled = false
-//                    iViewNumsDisps!!.isEnabled = false
+                    //---------------
+                    cancelTimer()
+                    //---------------
 
                     btnInicia.text = strReInicia
 
@@ -548,15 +563,6 @@ class JogarActivity : AppCompatActivity() {
 
                         Log.d(cTAG, "-> ${crono.text} - Reset")
 
-                        //-------------
-                        //crono.stop()
-                        //-------------
-                        //if (action.contains ("JogoPressetado")) timeStopped = 0
-                        //if (action == "JogoGerado" || action == "JogoEditado") timeStopped = 0
-                        //crono.text  = strCronoInic
-                        //Log.d(cTAG, "d: strCronoInic = $strCronoInic")
-                        //Log.d(cTAG, "d: crono.text   = ${crono.text}")
-
                         strCronoInic = strCronoInicIntent
                         //--------------------------
                         acertaCrono(strCronoInic)
@@ -571,9 +577,6 @@ class JogarActivity : AppCompatActivity() {
                         //-------------
                         iniciaJogo()
                         //-------------
-
-//                        iViewSudokuBoard!!.isEnabled = false
-//                        iViewNumsDisps!!.isEnabled = false
 
                         btnInicia.isEnabled = true
                         btnInicia.text = resources.getString(R.string.inicia)
@@ -1361,6 +1364,11 @@ class JogarActivity : AppCompatActivity() {
             Log.d(cTAG, "-> ${crono.text} - Fim")
 
             crono.stop()
+
+            //---------------
+            cancelTimer()
+            //---------------
+
             flagJoga = false
 
         }
@@ -1702,9 +1710,9 @@ class JogarActivity : AppCompatActivity() {
 
         crono.text = strCronoInic
 
-        //val intMin = strCronoInic.substring(0, 2).toLong()
-        //val intSec = strCronoInic.substring(3, 5).toLong()
-        //timeStopped = -((intMin * 60 + intSec) * 1000)
+        //---------------
+        cancelTimer()
+        //---------------
 
     }
 
@@ -1721,6 +1729,7 @@ class JogarActivity : AppCompatActivity() {
 
         crono.stop()
 
+
         crono.text  = strCronoInic
         val intMin  = strCronoInic.substring(0, 2).toLong()
         val intSec  = strCronoInic.substring(3, 5).toLong()
@@ -1731,4 +1740,55 @@ class JogarActivity : AppCompatActivity() {
         crono.start()
 
     }
+
+    //--- startTimer
+    fun startTimer(lgTimeOutMs: Long, intTimeTicksMs: Int) {
+
+        ctimer = object : CountDownTimer(lgTimeOutMs, intTimeTicksMs.toLong()) {
+
+            //--- Ticks
+            override fun onTick(millisUntilFinished: Long) {
+
+                if (crono.text == strLimiteTempo) {
+
+                    //-----------------------
+                    finalizaJogoPorTempo()
+                    //-----------------------
+
+                }
+
+            }
+
+            //--- Finish
+            override fun onFinish() {
+
+                Log.d(cTAG, "-> TimeOut de ${(lgTimeOutMs / 1000L)} seg")
+
+                //----------------------
+                timeOutJogoPorTempo()
+                //----------------------
+
+            }
+
+        }
+
+        //----------------
+        ctimer.start()
+        //----------------
+    }
+
+    //cancel timer
+    fun cancelTimer() { if (ctimer != null) ctimer.cancel() }
+
+
+    //val intMin = strCronoInic.substring(0, 2).toLong()
+    //val intSec = strCronoInic.substring(3, 5).toLong()
+    //timeStopped = -((intMin * 60 + intSec) * 1000)
+
+    //--- finalizaJogoPorTemp
+    private fun finalizaJogoPorTempo() {}
+
+    //--- timeOutJogoPorTempo
+    private fun timeOutJogoPorTempo() {}
+
 }
