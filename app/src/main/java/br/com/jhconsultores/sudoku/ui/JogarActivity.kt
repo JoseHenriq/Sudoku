@@ -1808,9 +1808,9 @@ class JogarActivity : AppCompatActivity() {
 
         crono.stop()
 
-        //---------------
+        //--------------
         cancelTimer()
-        //---------------
+        //--------------
 
         flagJoga = false
 

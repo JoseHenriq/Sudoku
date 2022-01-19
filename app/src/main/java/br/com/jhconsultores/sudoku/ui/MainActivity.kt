@@ -2161,7 +2161,7 @@ class MainActivity : AppCompatActivity() {
 
             //--- Tempo de Jogo
             strTitleTempo  = TITLE_TEMPO
-            strTitleTempo += if (strLimiteTempo == "00:00") " sem (00:00)" else " $strLimiteTempo}"
+            strTitleTempo += if (strLimiteTempo == "00:00") " sem (00:00)" else " $strLimiteTempo"
             subMenuLimiteTempoJogo.title = strTitleTempo
 
             if (strLimiteTempoAtual != strLimiteTempo) {
