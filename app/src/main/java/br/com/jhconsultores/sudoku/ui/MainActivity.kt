@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.153"
+        const val strApp = "Sudoku_#9.0.154"
 
         var flagScopedStorage  = false
 
@@ -431,6 +431,9 @@ class MainActivity : AppCompatActivity() {
         //edtLimErros : EditView
         //edtLimErros : EditView
 
+        //subMenuLimiteQtiErros.title  = "-1"
+        //subMenuLimiteTempoJogo.title = "00:00"
+
     }
 
     //---------------------------------------------------------------------
@@ -462,11 +465,9 @@ class MainActivity : AppCompatActivity() {
 
             subMenuLimiteTempoJogo.isEnabled = false
 
-            //----------------------------------
-            atualizaTitleSubMenu(TITLE_ERROS)
-            //----------------------------------
-            atualizaTitleSubMenu(TITLE_TEMPO)
-            //----------------------------------
+            //------------------------
+            atualizaTitlesSubMenus()
+            //------------------------
 
         } catch (exc: Exception) { Log.d(cTAG, "-> Erro: ${exc.message}") }
 
@@ -484,13 +485,13 @@ class MainActivity : AppCompatActivity() {
 
             Log.d(cTAG, "-> Tap em actionBar / Ajusta limite contagem de erros")
 
-            //--------------------------------------------------
+            //-------------------------------------------------
             implDialogViewAlertDialog(subMenuLimiteQtiErros)
-            //--------------------------------------------------
+            //-------------------------------------------------
 
-            //----------------------------------
-            atualizaTitleSubMenu(TITLE_ERROS)
-            //----------------------------------
+            //-------------------------
+            atualizaTitlesSubMenus()
+            //-------------------------
 
             true
 
@@ -505,9 +506,10 @@ class MainActivity : AppCompatActivity() {
             implDialogViewAlertDialog(subMenuLimiteTempoJogo)
             //---------------------------------------------------
 
-            //----------------------------------
-            atualizaTitleSubMenu(TITLE_TEMPO)
-            //----------------------------------
+            //-------------------------
+            atualizaTitlesSubMenus()
+            //-------------------------
+
             true
 
         }
@@ -641,9 +643,7 @@ class MainActivity : AppCompatActivity() {
 
         super.onResume()
 
-        if (rbEdicao.isChecked) {
-            txtDadosJogo.text = ""
-        }
+        if (rbEdicao.isChecked) { txtDadosJogo.text = "" }
 
         //--- Ativa o progress bar
         //progressBar.show()
@@ -679,6 +679,10 @@ class MainActivity : AppCompatActivity() {
         //-----------------------------
         visibilidadeViews(INVISIBLE)
         //-----------------------------
+
+        //------------------------
+        atualizaTitlesSubMenus()
+        //------------------------
 
     }
 
@@ -2009,9 +2013,9 @@ class MainActivity : AppCompatActivity() {
         visibilidadeViews(VISIBLE)
         //---------------------------
 
-        //-------------------------------------------------
+        //------------------------------------------------
         val intQtiZeros = utilsKt.quantZeros(quadMaior)
-        //-------------------------------------------------
+        //------------------------------------------------
 
         val intNivel    = intQtiZeros / 10
         val intSubNivel = intQtiZeros % 10
@@ -2091,8 +2095,6 @@ class MainActivity : AppCompatActivity() {
         // Quantidade de zeros entre 20 e 59
         else {
 
-            Log.d(cTAG, "Qm Lin Col Num val")
-
             //--- Confere números nos Qm, linhas e colunas
             for (idxLin in 0..8) {
 
@@ -2137,23 +2139,44 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //--- atualizaTitleSubMenu
-    private fun atualizaTitleSubMenu(titleSubMenu : String) {
+    //--- atualizaTitlesSubMenus
+    var intLimiteErrosAtual = -1
+    var strLimiteTempoAtual = "00:00"
+    fun atualizaTitlesSubMenus() {
 
-        if (titleSubMenu == TITLE_ERROS) {
+        try {
 
+            //--- Erros
             strTitleErros  = TITLE_ERROS
-            strTitleErros += if (intLimiteErros == -1) " sem" else "$intLimiteErros"
+            strTitleErros += if (intLimiteErros == -1) " sem (-1)" else "$intLimiteErros"
             subMenuLimiteQtiErros.title = strTitleErros
 
-        }
-        else { // TITLE_TEMPO
+            if (intLimiteErros != intLimiteErrosAtual) {
 
+                utilsKt.mToast(this, "Novo limite de erros:\n$strTitleErros")
+                intLimiteErrosAtual = intLimiteErros
+
+            }
+
+            //--- Tempo de Jogo
             strTitleTempo  = TITLE_TEMPO
-            strTitleTempo += if (strLimiteTempo == "00:00") " sem" else " $strLimiteTempo"
+            strTitleTempo += if (strLimiteTempo == "00:00") " sem (00:00)" else " $strLimiteTempo}"
             subMenuLimiteTempoJogo.title = strTitleTempo
 
+            if (strLimiteTempoAtual != strLimiteTempo) {
+
+                utilsKt.mToast(this, "Novo limite de Tempo:\n$strLimiteTempo")
+                strLimiteTempoAtual = strLimiteTempo
+
+            }
+
         }
+        catch (exc : Exception) {
+
+            Log.d(cTAG, "-> Erro: ${exc.message}")
+
+        }
+
     }
 
     //--- implDialogView_AlertDialog
@@ -2185,17 +2208,17 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton("Ok") { _, _ ->
 
                 Log.d(cTAG, "-> Novos ajustes:")
-                intLimiteErros = edtLimErros.text.toString().toInt()
+                var ajusteLim = edtLimErros.text.toString()
+                if (ajusteLim.isNotEmpty()) intLimiteErros = ajusteLim.toInt()
                 Log.d(cTAG, "   - limite de erros: $intLimiteErros")
-                //----------------------------------
-                atualizaTitleSubMenu(TITLE_ERROS)
-                //----------------------------------
 
-                strLimiteTempo = edtLimTempo.text.toString()
+                ajusteLim = edtLimTempo.text.toString()
+                if (ajusteLim.isNotEmpty()) strLimiteTempo = ajusteLim
                 Log.d(cTAG, "   - limite de tempo: $strLimiteTempo")
-                //----------------------------------
-                atualizaTitleSubMenu(TITLE_TEMPO)
-                //----------------------------------
+
+                //-------------------------
+                atualizaTitlesSubMenus()
+                //-------------------------
 
             }
             .setNegativeButton("Cancel") { _, _ ->

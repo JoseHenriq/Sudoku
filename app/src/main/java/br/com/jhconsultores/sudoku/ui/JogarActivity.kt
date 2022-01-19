@@ -36,8 +36,8 @@ class JogarActivity : AppCompatActivity() {
     //--------------------------------------------------------------------------
     //                    Instancializações e inicializações
     //--------------------------------------------------------------------------
-    private var cTAG = "Sudoku"
-    private var strLog = ""
+    private var cTAG     = "Sudoku"
+    private var strLog   = ""
     private var strToast = ""
 
     private var intImageResource = 0
@@ -125,6 +125,7 @@ class JogarActivity : AppCompatActivity() {
     private var strPause    = ""
     private var strReInicia = ""
 
+    //--- Classes externas
     private val utils   = Utils()
     private val utilsKt = UtilsKt()
 
@@ -401,6 +402,10 @@ class JogarActivity : AppCompatActivity() {
 
                                                 Log.d(cTAG, "-> Tenta mais 1 erro.")
                                                 intLimiteErros ++
+
+                                                //------------------------------
+                                                //main.atualizaTitlesSubMenus()
+                                                //------------------------------
 
                                             }
                                             .setNegativeButton("Não. Encerre o jogo."){ _, _ ->

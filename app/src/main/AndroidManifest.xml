@@ -31,12 +31,16 @@
                 <action   android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            android:screenOrientation="portrait"
         </activity>
 
         <activity android:name=".ui.JogarActivity"
-            android:parentActivityName=".ui.MainActivity" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".ui.MainActivity"
+            tools:ignore="LockedOrientationActivity" />
 
         <activity android:name=".ui.AdaptarActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".ui.MainActivity" />
 
         <!-- FileProvider a ContentProvider for making the file securely available to the other end-->
