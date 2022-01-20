@@ -32,8 +32,6 @@ import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strOpcaoJogo
 import br.com.jhconsultores.utils.*
 
 import java.lang.Exception
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 class JogarActivity : AppCompatActivity() {
 
@@ -112,9 +110,9 @@ class JogarActivity : AppCompatActivity() {
     private var arIntNumsJogo = ArrayList<Int>()   // Jogo
 
     private var action          = "JogoGerado"
+
     private var strNivelJogo    = "Fácil"
     private var strSubNivelJogo = "0"
-
     private var strNivelJogoInic    = "Fácil"
     private var strSubNivelJogoInic = "0"
 
@@ -122,16 +120,15 @@ class JogarActivity : AppCompatActivity() {
     private var strCronoInic       = ""
     private var strCronoInicIntent = ""
 
-
     private var intContaErroInic = 0
 
-    lateinit var btnInicia : Button
+    private lateinit var btnInicia : Button
 
     private var strInicia   = ""
     private var strPause    = ""
     private var strReInicia = ""
 
-    lateinit var ctimer: CountDownTimer
+    private lateinit var ctimer: CountDownTimer
     private var timeOut  = (10 * 60 * 60 * 1000).toLong()   // 10'
     private var timeTick = 1000                             //  1"
 
@@ -157,7 +154,7 @@ class JogarActivity : AppCompatActivity() {
             tvCluesInic = findViewById(R.id.tv_CluesInic)
 
             tvLegCluesInic!!.visibility = INVISIBLE
-            tvCluesInic!!.visibility    = INVISIBLE
+            tvCluesInic!!.visibility = INVISIBLE
 
             //--- Cronômetro
             strCronoInic = resources.getString(R.string.crono_inic)
@@ -176,9 +173,9 @@ class JogarActivity : AppCompatActivity() {
             tvSubNivel = findViewById(R.id.tv_Subnivel)
             tvClues    = findViewById(R.id.tv_Clues)
 
-            val btnReset  = findViewById<View> (R.id.btnReset) as Button
-            btnInicia     = findViewById<View>(R.id.btnInicia) as Button
+            val btnReset  = findViewById<View>(R.id.btnReset) as Button
             val btnSalvar = findViewById<View>(R.id.btnSalvar) as Button
+            btnInicia     = findViewById<View>(R.id.btnInicia) as Button
             btnInicia.isEnabled = true
 
             //--- Implementa o actionBar
@@ -228,7 +225,7 @@ class JogarActivity : AppCompatActivity() {
                         //Log.d(cTAG, "Real y: $imageY")
 
                         //--- Coordenadas da célula tocada
-                        val intCol   = x / intCellwidth
+                        val intCol = x / intCellwidth
                         val intLinha = y / intCellheight
                         //-------------------------------------------
                         val intNum = arArIntNums[intLinha][intCol]
@@ -240,7 +237,7 @@ class JogarActivity : AppCompatActivity() {
                         //--- Se a célula tocada contiver um número, "pinta" todas as células que contiverem
                         //    o mesmo número.
                         if (intNum > 0) {
-                            flagJoga    = false    // Não quer jogar; só quer analisar ...
+                            flagJoga = false    // Não quer jogar; só quer analisar ...
                             intLinJogar = 0
                             intColJogar = 0
                             //------------------------------------------------
@@ -249,7 +246,7 @@ class JogarActivity : AppCompatActivity() {
                         }
                         //--- Se não contiver um número, quer jogar
                         else {
-                            flagJoga    = true     // Vamos ao jogo!
+                            flagJoga = true     // Vamos ao jogo!
                             intLinJogar = intLinha
                             intColJogar = intCol
                             //------------------------------------------
@@ -277,8 +274,7 @@ class JogarActivity : AppCompatActivity() {
 
                     utilsKt.mToast(this, "Jogo não iniciado!")
 
-                }
-                else {
+                } else {
 
                     try {
 
@@ -402,19 +398,19 @@ class JogarActivity : AppCompatActivity() {
                                     tvErros!!.text = "${++intContaErro}"
                                     if (intContaErro == intLimiteErros) {
 
-                                        var strMsg  = "Você atingiu o limite de erros."
-                                        strMsg     += "\nGostaria de jogar até outro erro?"
+                                        var strMsg = "Você atingiu o limite de erros."
+                                        strMsg += "\nGostaria de jogar até outro erro?"
 
-                                        val builder = androidx.appcompat.app.AlertDialog.
-                                                                           Builder(this)
+                                        val builder =
+                                            androidx.appcompat.app.AlertDialog.Builder(this)
                                         builder.setTitle(strMsg)
                                             .setPositiveButton("Sim") { _, _ ->
 
                                                 Log.d(cTAG, "-> Tenta mais 1 erro.")
-                                                intLimiteErros ++
+                                                intLimiteErros++
 
                                             }
-                                            .setNegativeButton("Não. Encerre o jogo."){ _, _ ->
+                                            .setNegativeButton("Não. Encerre o jogo.") { _, _ ->
 
                                                 Log.d(cTAG, "-> Encerra o jogo.")
 
@@ -507,9 +503,9 @@ class JogarActivity : AppCompatActivity() {
 
                     //--- Se considerará limite de tempo, parte o timer CounterDown
                     if (strLimiteTempo != "00:00")
-                        //------------------------------
+                    //------------------------------
                         startTimer(timeOut, timeTick)
-                        //------------------------------
+                    //------------------------------
 
                 }
 
@@ -523,11 +519,12 @@ class JogarActivity : AppCompatActivity() {
                     //timeStopped = crono.base - SystemClock.elapsedRealtime()
 
                     crono.stop()
-                    strCronoInic = crono.text.toString()
 
-                    //---------------
-                    cancelTimer()
-                    //---------------
+                    //-------------------------------------------------
+                    try { cancelTimer() } catch (exc : Exception) {}
+                    //-------------------------------------------------
+
+                    strCronoInic = crono.text.toString()
 
                     btnInicia.text = strReInicia
 
@@ -552,7 +549,7 @@ class JogarActivity : AppCompatActivity() {
                         tvNivel!!.text    = ""
                         tvSubNivel!!.text = ""
 
-                        intContaErro   = intContaErroInic
+                        intContaErro = intContaErroInic
                         tvErros!!.text = "$intContaErro"
 
                         Log.d(cTAG, "-> ${crono.text} - Reset")
@@ -634,22 +631,22 @@ class JogarActivity : AppCompatActivity() {
             }
 
             //--------------------------------------------------------------------------------------
-            // Dados enviados pelo MainActivity e pelo AdaptarActivity
+            // Dados enviados pelo MainActivity ou pelo AdaptarActivity
             //--------------------------------------------------------------------------------------
             //--- Ação à ser executada
             action = intent.action.toString()        // Main:
 
             //--- Recupera os dados recebidos via intent
-            strNivelJogoInic    = intent.getStringExtra("strNivelJogo")    as String
+            strNivelJogoInic    = intent.getStringExtra("strNivelJogo") as String
             strSubNivelJogoInic = intent.getStringExtra("strSubNivelJogo") as String
 
             strCronoInic     = intent.getStringExtra("strCronoConta") as String
-            intContaErroInic = (intent.getStringExtra("strErro")      as String).toInt()
+            intContaErroInic = (intent.getStringExtra("strErro") as String).toInt()
 
             // Armazena o gabarito em um array<int>
-            arIntNumsGab = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
+            arIntNumsGab  = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
             // Armazena o jogo em um array<int>
-            arIntNumsJogo= intent.getIntegerArrayListExtra("JogoPreparado")  as ArrayList<Int>
+            arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as ArrayList<Int>
 
             //--- Verifica a consistência dos dados recebidos
 
@@ -678,7 +675,7 @@ class JogarActivity : AppCompatActivity() {
 
                         val intCell = intLinha * 9 + intCol
                         arArIntNums[intLinha][intCol] = arIntNumsJogo[intCell]  // Jogo
-                        arArIntGab[intLinha][intCol]  = arIntNumsGab[intCell]   // Gabarito
+                        arArIntGab[intLinha][intCol] = arIntNumsGab[intCell]   // Gabarito
 
                     }
                 }
@@ -689,35 +686,46 @@ class JogarActivity : AppCompatActivity() {
 
                 arIntNumsDisp = Array(9) { 9 }
 
-                if (action == "JogoAdaptado") {
+                if (action.contains("JogoPresetado")) {
 
+                    //--- Apresenta as infos do jogo carregado (atuais)
+                    val qtiddZeros = utilsKt.quantZeros(arArIntNums)
+                    strNivelJogo = MainActivity.Companion.arStrNivelJogo[(qtiddZeros / 10 - 2)]
+                    // ex: Fácil de 20 a 29
+                    tvNivel!!.text = strNivelJogo
+
+                    strSubNivelJogo = (qtiddZeros % 10).toString()
+                    tvSubNivel!!.text = strSubNivelJogo
+
+                    //--- Apresenta as info do jogo inicial
                     tvLegCluesInic!!.text = " ( Nível inicial: "
-                    tvCluesInic!!.text = String.format("%s / %s )", strNivelJogo, strSubNivelJogo )
+                    tvCluesInic!!.text = String.format("%s / %s )", strNivelJogoInic,
+                        strSubNivelJogoInic)
 
-                    tvLegCluesInic!!.visibility = VISIBLE
-                    tvCluesInic!!.visibility = VISIBLE
+                    if ((strNivelJogo != strNivelJogoInic) || (strSubNivelJogo != strSubNivelJogoInic)){
 
-                    var intQtiClues = tvClues!!.text.toString().toInt()
-                    if ((intQtiClues / 10) < 2) {
+                        tvLegCluesInic!!.visibility = VISIBLE
+                        tvCluesInic!!.visibility    = VISIBLE
 
-                        tvNivel!!.text = "Fácil"
-                        intQtiClues = 0
+                    }
+                    else {
 
-                    } else {
-                        tvNivel!!.text = when (intQtiClues / 10) {
+                        tvLegCluesInic!!.visibility = INVISIBLE
+                        tvCluesInic!!.visibility    = INVISIBLE
 
-                            2 -> "Fácil"
-                            3 -> "Médio"
-                            4 -> "Difícil"
-                            5 -> "Muito difícil"
-                            else -> ""
-
-                        }
                     }
 
-                    tvSubNivel!!.text = (intQtiClues % 10).toString()
+                }
+                //--- "JogoGerado"
+                else {
+
+                    strNivelJogo    = strNivelJogoInic
+                    strSubNivelJogo = strSubNivelJogoInic
 
                 }
+
+                tvNivel!!.text    = strNivelJogo
+                tvSubNivel!!.text = strSubNivelJogo
 
                 flagAppInicializado = true
 
@@ -1293,11 +1301,11 @@ class JogarActivity : AppCompatActivity() {
 
         //*** Nesse ponto, arArIntNums (rascunho do jogo) e arArIntGab (gabarito) deverão estar Ok.
 
-        intContaErro = intContaErroInic
+        intContaErro   = intContaErroInic
         tvErros!!.text = "$intContaErro"
 
-        strNivelJogo = strNivelJogoInic
-        strSubNivelJogo = strSubNivelJogoInic
+        //strNivelJogo    = strNivelJogoInic
+        //strSubNivelJogo = strSubNivelJogoInic
 
         Log.d(cTAG, "-> Jogo:")
         //----------------------
@@ -1341,8 +1349,9 @@ class JogarActivity : AppCompatActivity() {
         //------------------
 
         //--- Inicializa variáveis locais
-        tvNivel!!.text = strNivelJogo
+        tvNivel!!.text    = strNivelJogo
         tvSubNivel!!.text = strSubNivelJogo
+
         tvClues!!.text = utilsKt.quantZeros(arArIntNums).toString()
 
         //--- Verifica se fim de jogo
@@ -1730,7 +1739,7 @@ class JogarActivity : AppCompatActivity() {
     //                             CounterDown Timer
     //----------------------------------------------------------------------------------------------
     //--- startTimer
-    fun startTimer(lgTimeOutMs: Long, intTimeTicksMs: Int) {
+    private fun startTimer(lgTimeOutMs: Long, intTimeTicksMs: Int) {
 
         ctimer = object : CountDownTimer(lgTimeOutMs, intTimeTicksMs.toLong()) {
 
@@ -1766,7 +1775,7 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //cancel timer
-    fun cancelTimer() { if (ctimer != null) ctimer.cancel() }
+    private fun cancelTimer() { if (ctimer != null) ctimer.cancel() }
 
     //--- finalizaJogoPorTemp
     private fun verificaFimJogo() {
@@ -1808,9 +1817,9 @@ class JogarActivity : AppCompatActivity() {
 
         crono.stop()
 
-        //--------------
-        cancelTimer()
-        //--------------
+        //-------------------------------------------------
+        try { cancelTimer() } catch (exc : Exception) {}
+        //-------------------------------------------------
 
         flagJoga = false
 

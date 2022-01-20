@@ -91,7 +91,7 @@
         android:textSize="24sp"
         app:layout_constraintLeft_toRightOf="@id/tv_LegSubNivel"
         app:layout_constraintTop_toBottomOf="@id/toolbar2"
-        tools:ignore="LabelFor,TextFields" />
+        tools:ignore="Autofill,LabelFor,TextFields" />
 
     <!--- Contador de erros -->
     <TextView android:id="@+id/tv_LegErros"
@@ -162,6 +162,7 @@
 
         android:contentDescription="@string/testeCanva3"
         android:src="@drawable/sudoku_board3" />
+
     <!-- Android 6.0.1 (S5Duos):
              1- add Gradle / proguard-rules.pro:
              'keep class android.support.v7.widget.** { *; }'
@@ -175,8 +176,8 @@
 
         app:layout_constraintTop_toBottomOf ="@id/ivSudokuBoard"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop  ="3dp"
-        android:layout_marginLeft ="10dp"
+        android:layout_marginTop   ="3dp"
+        android:layout_marginStart ="10dp"
 
         android:textSize="15sp"
         android:text    ="@string/legClues" />
@@ -188,8 +189,8 @@
 
         app:layout_constraintTop_toBottomOf = "@id/ivSudokuBoard"
         app:layout_constraintLeft_toRightOf = "@id/tv_LegClues"
-        android:layout_marginTop  ="3dp"
-        android:layout_marginLeft ="10dp"
+        android:layout_marginTop   ="3dp"
+        android:layout_marginStart ="10dp"
 
         android:textSize="15sp"
         android:text    ="@string/clues_inic" />
@@ -202,11 +203,11 @@
 
         app:layout_constraintTop_toBottomOf = "@id/ivSudokuBoard"
         app:layout_constraintLeft_toRightOf = "@id/tv_Clues"
-        android:layout_marginTop  ="3dp"
-        android:layout_marginLeft ="10dp"
+        android:layout_marginTop   ="3dp"
+        android:layout_marginStart ="10dp"
 
         android:textSize="15sp"
-        android:text    =" - Nivel inicial: " />
+        android:text    ="@string/nivel_inicial" />
 
     <TextView android:id="@+id/tv_CluesInic"
 
@@ -216,7 +217,7 @@
         app:layout_constraintTop_toBottomOf = "@id/ivSudokuBoard"
         app:layout_constraintLeft_toRightOf = "@id/tv_LegCluesInic"
         android:layout_marginTop  ="3dp"
-        android:layout_marginLeft ="10dp"
+        android:layout_marginStart ="10dp"
 
         android:textSize="15sp"
         android:text    ="@string/clues_inic" />
@@ -241,7 +242,7 @@
          2- os jpgs devem ser copiados para res/drawable /-->
 
     <!-- Separador entre as informações do board e os buttons -->
-    <View android:id="@+id/separador_infosBoard_Buttons"
+    <View android:id="@+id/separador_infosBoard_sudokuBoard"
 
         android:layout_width ="match_parent"
         android:layout_height="1dp"
@@ -251,7 +252,7 @@
         app:layout_constraintBottom_toTopOf ="@id/btnSalvar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf    ="parent"
-        android:layout_marginTop="10dp" />
+        android:layout_marginBottom="3dp" />
 
     <!-- Buttons -->
     <Button android:id="@+id/btnSalvar"
@@ -263,8 +264,8 @@
 
         app:layout_constraintBottom_toBottomOf = "parent"
         app:layout_constraintStart_toStartOf   = "parent"
-        android:layout_marginTop  = "10dp"
-        android:layout_marginLeft = "10dp"
+        android:layout_marginTop   = "10dp"
+        android:layout_marginStart = "10dp"
 
         android:textAllCaps="false"
         android:text       ="@string/salvar" />
@@ -278,7 +279,7 @@
 
         app:layout_constraintBottom_toBottomOf = "parent"
         app:layout_constraintRight_toLeftOf    = "@id/btnReset"
-        android:layout_marginRight             = "0dp"
+        android:layout_marginEnd               = "0dp"
 
         android:textAllCaps="false"
         android:text="@string/inicia"  />

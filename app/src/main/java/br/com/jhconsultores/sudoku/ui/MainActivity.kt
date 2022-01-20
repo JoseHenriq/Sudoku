@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.157"
+        const val strApp = "Sudoku_#9.0.158"
 
         var flagScopedStorage  = false
 
@@ -57,7 +57,13 @@ class MainActivity : AppCompatActivity() {
         var flagJogoAdaptadoOk = false
 
         // Opções de jogo: "JogoGerado", "JogoAdaptado", "JogoPresetado", "JogoEditado"
-        var strOpcaoJogo = "JogoGerado"
+        var strOpcaoJogo   = "JogoGerado"
+
+        val arStrNivelJogo = arrayOf ("Fácil", "Médio", "Difícil", "Muito difícil")
+        val idxFACIL = 0
+        val idxMEDIO = 1
+        val idxDIFICIL       = 2
+        val idxMUITO_DIFICIL = 3
 
         var fatorLargura : Double = 0.0
         var fatorAltura  : Double = 0.0
@@ -735,21 +741,21 @@ class MainActivity : AppCompatActivity() {
                 nivelJogo = when {
 
                     rbFacil.isChecked -> {
-                        strNivelJogo = "Fácil"
+                        strNivelJogo = arStrNivelJogo[idxFACIL]
                         FACIL
                     }
 
                     rbMedio.isChecked -> {
-                        strNivelJogo = "Médio"
+                        strNivelJogo = arStrNivelJogo[idxMEDIO]
                         MEDIO
                     }
                     rbDificil.isChecked -> {
-                        strNivelJogo = "Difícil"
+                        strNivelJogo = arStrNivelJogo[idxDIFICIL]
                         DIFICIL
                     }
 
                     rbMuitoDificil.isChecked -> {
-                        strNivelJogo = "Muito Difícil"
+                        strNivelJogo = arStrNivelJogo[idxMUITO_DIFICIL]
                         MUITO_DIFICIL
                     }
 
@@ -2042,19 +2048,19 @@ class MainActivity : AppCompatActivity() {
 
                     2 -> {
                         rbFacil.isChecked = true
-                        "Fácil"
+                        arStrNivelJogo[idxFACIL]
                     }
                     3 -> {
                         rbMedio.isChecked = true
-                        "Médio"
+                        arStrNivelJogo[idxMEDIO]
                     }
                     4 -> {
                         rbDificil.isChecked = true
-                        "Difícil"
+                        arStrNivelJogo[idxDIFICIL]
                     }
                     else -> {
                         rbMuitoDificil.isChecked = true
-                        "Muito Difícil"
+                        arStrNivelJogo[idxMUITO_DIFICIL]
                     }
                 }
             }
@@ -2180,7 +2186,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //--- implDialogView_AlertDialog
+    //--- implDialogView_AlertDialog para o ajuste dos parâmetros do Jogo
     private fun implDialogViewAlertDialog(subMenuLimite : MenuItem) {
 
         //------------------------------------------------------------------------------------------
@@ -2214,36 +2220,30 @@ class MainActivity : AppCompatActivity() {
                 Log.d(cTAG, "   - limite de erros: $intLimiteErros")
 
                 ajusteLim = edtLimTempo.text.toString()
-                if (timeVal.validate(ajusteLim)) {
+                if (ajusteLim.isNotEmpty()) {
 
-                    if (ajusteLim.isNotEmpty()) strLimiteTempo = ajusteLim
-                    Log.d(cTAG, "   - limite de tempo: $strLimiteTempo")
+                    if (timeVal.validate(ajusteLim)) {
 
-                    //-------------------------
-                    atualizaTitlesSubMenus()
-                    //-------------------------
+                        if (ajusteLim.isNotEmpty()) strLimiteTempo = ajusteLim
+                        Log.d(cTAG, "   - limite de tempo: $strLimiteTempo")
 
-                }
+                    }
 
-                else {
+                    else {
 
-                    /*
-                    val builder2 = androidx.appcompat.app.AlertDialog.Builder(this)
-                    builder2.setTitle("Formato incorreto.\nEntre com \"MM:ss\"")
-                        .setView(dialogView)
-                        .setPositiveButton("Ok") { _, _ -> }
+                        strToast = "Formato incorreto. Entre com \"MM:ss\""
 
-                    // Apresenta o AlertDialog
-                    val alert2 = builder2.create()
-                    alert2.show()
-                    */
-                    strToast = "Formato incorreto. Entre com \"MM:ss\""
+                        utilsKt.mToast(this, strToast)
 
-                    utilsKt.mToast(this, strToast)
+                        Log.d(cTAG, "-> $strToast")
 
-                    Log.d(cTAG, "-> $strToast")
+                    }
 
                 }
+
+                //-------------------------
+                atualizaTitlesSubMenus()
+                //-------------------------
 
             }
             .setNegativeButton("Cancel") { _, _ ->

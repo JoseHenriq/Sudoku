@@ -1,33 +1,8 @@
-
-
-
-
 //--------------------------------------------------------------------------
-15/01/22 12:40
+20/01/22 10:09:00
 //--------------------------------------------------------------------------
+// sudoku_#9.0.158
 
-1-> envia anúncio
-- Caros colegas: desenvolvi um App Sudoku Android e gostaria de compartilhá-lo com os interessados. 
-Favor me responder no private se quiser que te envie uma cópia gratuita. 
-Abraços!
-
-- Bom dia Silvana! Tudo bem? Desenvolvi um App Sudoku Android e gostaria de compartilhá-lo com você. Interessa?
-
-2-> aguarda resposta
-
-3-> msg após a resposta
-Ótimo! Tô te mandando! Qualquer coisa me fala!
-
-4-> envia os arquivos
-
-5-> verificar se instalou corretamente
-E então? Conseguiu instalar?
-
-6-> assim que rodar, envia a mensagem:
-Boa diversão! Gostaria muito de seu feedback! 
-Qualquer coisa não pense prá me fazer saber ....
-
-7-> aguardar feedbacks
 
 
 

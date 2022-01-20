@@ -41,8 +41,8 @@ class AdaptarActivity : AppCompatActivity() {
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var customAdapter: JogoAdapter
 
-    private var itemsListArq    = ArrayList<String>()
-    private var itemsListJogo   = ArrayList<String>()
+    private var itemsListArq    = ArrayList<String> ()
+    private var itemsListJogo   = ArrayList<String> ()
     private var itemsListChkDel = ArrayList<Boolean>()
 
     private var recyclerView: RecyclerView? = null
