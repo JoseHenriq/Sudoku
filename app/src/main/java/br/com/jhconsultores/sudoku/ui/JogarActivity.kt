@@ -132,6 +132,8 @@ class JogarActivity : AppCompatActivity() {
     private var timeOut  = (10 * 60 * 60 * 1000).toLong()   // 10'
     private var timeTick = 1000                             //  1"
 
+    private var strFinalJogo = ""
+
     //--- Classes externas
     private val utils   = Utils()
     private val utilsKt = UtilsKt()
@@ -482,30 +484,36 @@ class JogarActivity : AppCompatActivity() {
 
                     Log.d(cTAG, "-> ${crono.text} - $strLog")
 
-//                    iViewSudokuBoard!!.isEnabled = true
-//                    iViewNumsDisps!!.isEnabled   = true
-
-                    //crono.base = SystemClock.elapsedRealtime() + timeStopped
-
-                    //Log.d(cTAG, "SystemClock = ${SystemClock.elapsedRealtime()}  Display: ${crono.text}")
-                    //Log.d(cTAG, "timeStopped = $timeStopped")
-                    //Log.d(cTAG, "crono.base  = ${crono.base}")
-
-                    //--------------
-                    //crono.start()
-                    //--------------
-
                     //-------------------------
                     parteCrono(strCronoInic)
                     //-------------------------
 
-                    btnInicia.text = strPause
-
                     //--- Se considerará limite de tempo, parte o timer CounterDown
-                    if (strLimiteTempo != "00:00")
+                    if ((btnInicia.text == strInicia) && (strLimiteTempo != "00:00")) {
+
+                        //--- Calcula a indicação do crono para o limite ajustado
+                        val intCrMin = strCronoInic.substring(0, 2).toInt()
+                        val intCrSeg = strCronoInic.substring(3, 5).toInt()
+
+                        val intAjMin = strLimiteTempo.substring(0, 2).toInt()
+                        val intAjSeg = strLimiteTempo.substring(3, 5).toInt()
+
+                        var intFinal = (intCrMin*60 + intCrSeg) + (intAjMin*60 + intAjSeg)
+                        // Limita o tempo a 59'59"
+                        if (intFinal > (59*60 + 59)) intFinal = (59*60 + 59)
+
+                        //--------------------------------------------------------------------------
+                        strFinalJogo = String.format("%02d:%02d", (intFinal / 60), (intFinal % 60))
+                        //--------------------------------------------------------------------------
+
+                    }
+
                     //------------------------------
-                        startTimer(timeOut, timeTick)
+                    startTimer(timeOut, timeTick)
                     //------------------------------
+                    Log.d(cTAG, "-> Final crono: $strFinalJogo")
+
+                    btnInicia.text = strPause
 
                 }
 
@@ -1746,7 +1754,7 @@ class JogarActivity : AppCompatActivity() {
             //--- Ticks
             override fun onTick(millisUntilFinished: Long) {
 
-                if (crono.text == strLimiteTempo) {
+                if (crono.text == strFinalJogo) {
 
                     //------------------
                     verificaFimJogo()
@@ -1777,10 +1785,10 @@ class JogarActivity : AppCompatActivity() {
     //cancel timer
     private fun cancelTimer() { if (ctimer != null) ctimer.cancel() }
 
-    //--- finalizaJogoPorTemp
+    //--- Finaliza jogo por tempo
     private fun verificaFimJogo() {
 
-        if (crono.text == strLimiteTempo) {
+        if (crono.text == strFinalJogo) {
 
             utilsKt.mToast(this, "TimeOut de $strLimiteTempo !")
 

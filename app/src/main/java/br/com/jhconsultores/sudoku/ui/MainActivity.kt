@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.158"
+        const val strApp = "Sudoku_#9.0.159"
 
         var flagScopedStorage  = false
 
@@ -962,7 +962,9 @@ class MainActivity : AppCompatActivity() {
         //--- Se tiver jogo válido, finaliza a preparação do jogo
         else {
 
-            strToast = "Jogo válido!"
+            strToast  = "Jogo válido! Limites:\n"
+            strToast += "Erro: ${if(intLimiteErros ==      -1) " sem" else " $intLimiteErros"}"
+            strToast += " Tempo: ${if(strLimiteTempo == "00:00") " sem" else " $strLimiteTempo"}"
             //--------------------------------------
             utilsKt.mToast(this, strToast)
             //--------------------------------------
