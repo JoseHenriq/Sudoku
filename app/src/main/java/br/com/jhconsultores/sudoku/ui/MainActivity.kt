@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.159"
+        const val strApp = "Sudoku_#9.0.160"
 
         var flagScopedStorage  = false
 
@@ -68,14 +68,18 @@ class MainActivity : AppCompatActivity() {
         var fatorLargura : Double = 0.0
         var fatorAltura  : Double = 0.0
 
-        // Complicadores
-        var TITLE_ERROS   = "Limite Erros: "
-        var TITLE_TEMPO   = "Limite Tempo: "
-        var strTitleErros = ""
-        var strTitleTempo = ""
+        //--- Params
 
-        var strLimiteTempo = "00:00"
-        var intLimiteErros = -1
+        const val TITLE_ERROS   = "Limite Erros: "
+        var strTitleErros  = ""
+        var intLimiteErros = -1          // Default; significa "sem limite"
+        var intLimiteErrosAtual = -1
+
+        const val TITLE_TEMPO   = "Limite Tempo: "
+        var strTitleTempo  = ""
+        var strLimiteTempo = "00:00"    // Default; significa "sem limite"
+        var strLimiteTempoAtual = "00:00"
+
         var flagMostraNumIguais = true
 
     }
@@ -434,22 +438,22 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        //--- Parâmetros do jogo
-        //edtLimErros : EditView
-        //edtLimErros : EditView
-
-        //subMenuLimiteQtiErros.title  = "-1"
-        //subMenuLimiteTempoJogo.title = "00:00"
+        //--- Finaliza a inicialização
+        //-------------------------
+        atualizaTitlesSubMenus()
+        //-------------------------
 
     }
 
     //---------------------------------------------------------------------
     // Action Bar Menu
     //---------------------------------------------------------------------
-    private lateinit var myMenuItem: MenuItem
-    private lateinit var subMenuLimiteQtiErros   : MenuItem
-    private lateinit var subMenuLimiteTempoJogo  : MenuItem
+    lateinit var myMenuItem: MenuItem
+
+    lateinit var subMenuLimiteQtiErros  : MenuItem
+    lateinit var subMenuLimiteTempoJogo : MenuItem
     private lateinit var subMenuMostrarNumsIguais: MenuItem
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
 
         try {
@@ -470,11 +474,10 @@ class MainActivity : AppCompatActivity() {
             subMenuLimiteTempoJogo   = myMenuItem.subMenu.findItem(R.id.action_ajustarTempoDeJogo)
             subMenuMostrarNumsIguais = myMenuItem.subMenu.findItem(R.id.action_mostrar_numeros_iguais)
 
-            //subMenuLimiteTempoJogo.isEnabled = false
+            subMenuLimiteQtiErros.title  = "$TITLE_ERROS -1 (sem)"
+            subMenuLimiteTempoJogo.title = "$TITLE_TEMPO 00:00"
 
-            //------------------------
-            atualizaTitlesSubMenus()
-            //------------------------
+            //subMenuLimiteTempoJogo.isEnabled = false
 
         } catch (exc: Exception) { Log.d(cTAG, "-> Erro: ${exc.message}") }
 
@@ -2149,16 +2152,61 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- atualizaTitlesSubMenus
-    var intLimiteErrosAtual = -1
-    var strLimiteTempoAtual = "00:00"
     fun atualizaTitlesSubMenus() {
 
         try {
 
+            //--- Lê os parâmetros no arquivo de setup
+            Log.d(cTAG, "-> leitura arquivo setup")
+            //- Leitura do Arquivo
+            val strDir     = "sudoku/setup/"
+            val strArqName = "sudokusetup.xml"
+            //-----------------------------------------------------
+            val strLeitArq = utilsKt.leitArq(strDir, strArqName)
+            //-----------------------------------------------------
+
+            //- 1- obtém limite de erros:
+            var strTagInic = "limite_erros"
+            var strTagFim  = "/" + strTagInic
+            //--------------------------------------------------------------------------------------
+            var strCampo = (utilsKt.leCampo(strLeitArq, "<$strTagInic>",
+                                                                      "<$strTagFim>")).trim()
+            //---------------------------------------------------------------------------===========
+            strLog = "   - limite: $strCampo"
+            Log.d(cTAG, strLog)
+
+            intLimiteErros = strCampo.toInt()
+
+            //- 2- obtém tempo de jogo:
+            strTagInic   = "limite_tempo"
+            strTagFim  = "/" + strTagInic
+            //--------------------------------------------------------------------------------------
+            strCampo = (utilsKt.leCampo(strLeitArq, "<$strTagInic>",
+                                                                      "<$strTagFim>")).trim()
+            //--------------------------------------------------------------------------------------
+            strLog = "   - limite: $strCampo"
+            Log.d(cTAG, strLog)
+
+            strLimiteTempo = strCampo
+
+            //- 3- obtém flag se mostra números iguais:
+            strTagInic   = "mostra_nums_iguais"
+            strTagFim  = "/" + strTagInic
+            //--------------------------------------------------------------------------------------
+            strCampo = (utilsKt.leCampo(strLeitArq, "<$strTagInic>",
+                                                                      "<$strTagFim>")).trim()
+            //--------------------------------------------------------------------------------------
+            strLog = "   - mostr nums iguais: $strCampo"
+            Log.d(cTAG, strLog)
+
+            flagMostraNumIguais = (strCampo == "true")
+
             //--- Erros
             strTitleErros  = TITLE_ERROS
             strTitleErros += if (intLimiteErros == -1) " sem (-1)" else "$intLimiteErros"
+            //--------------------------------------------
             subMenuLimiteQtiErros.title = strTitleErros
+            //--------------------------------------------
 
             if (intLimiteErros != intLimiteErrosAtual) {
 
@@ -2167,10 +2215,12 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            //--- Tempo de Jogo
+            //--- Tempo de jogo
             strTitleTempo  = TITLE_TEMPO
             strTitleTempo += if (strLimiteTempo == "00:00") " sem (00:00)" else " $strLimiteTempo"
+            //---------------------------------------------
             subMenuLimiteTempoJogo.title = strTitleTempo
+            //---------------------------------------------
 
             if (strLimiteTempoAtual != strLimiteTempo) {
 
@@ -2178,6 +2228,10 @@ class MainActivity : AppCompatActivity() {
                 strLimiteTempoAtual = strLimiteTempo
 
             }
+
+            //--- Mostrar os números iguais
+            val strMostra = "${if (flagMostraNumIguais) "M" else "Não m"}ostra nums iguais"
+            subMenuMostrarNumsIguais.title = strMostra
 
         }
         catch (exc : Exception) {
@@ -2219,7 +2273,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d(cTAG, "-> Novos ajustes:")
                 var ajusteLim = edtLimErros.text.toString()
                 if (ajusteLim.isNotEmpty()) intLimiteErros = ajusteLim.toInt()
-                Log.d(cTAG, "   - limite de erros: $intLimiteErros")
+                Log.d(cTAG, "   - limite: $intLimiteErros erros")
 
                 ajusteLim = edtLimTempo.text.toString()
                 if (ajusteLim.isNotEmpty()) {
@@ -2258,7 +2312,7 @@ class MainActivity : AppCompatActivity() {
         val alert = builder.create()
         alert.show()
 
-        // Reforça as legendas dos botões de opção
+        // Colore as legendas dos botões de opção
         val pbuttonPos = alert.getButton(DialogInterface.BUTTON_POSITIVE)
         pbuttonPos.setTextColor(Color.BLUE)
 

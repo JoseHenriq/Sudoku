@@ -1,27 +1,18 @@
 package br.com.jhconsultores.utils
 
-import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
-import android.os.Build
-import android.os.Environment
-import android.provider.MediaStore
-import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat.startActivityForResult
-import br.com.jhconsultores.sudoku.ui.MainActivity
 import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.cTAG
-import java.io.BufferedOutputStream
-import java.io.File
 import java.nio.IntBuffer
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import kotlin.concurrent.thread
 
 class UtilsKt {
+
+    //--- Classes externas
+    private val utils = Utils()
 
     /*
     //--- requestAllFilesAccessPermission para Android >= A11
@@ -195,6 +186,48 @@ class UtilsKt {
         //Log.d(cTAG, "-> Quantidade de Zeros: $intQtiZeros")
 
         return intQtiZeros
+
+    }
+
+    //--- Leitura de Arquivo no diretório download/sudoku/
+    fun leitArq(strDirName : String, strArqName: String): String {
+
+        //--- Lê o arquivo
+        //------------------------------------------------
+        //val strNomeComPath = "sudoku/setup/$strArqName"
+        val strNomeComPath = "$strDirName$strArqName"
+        //--------------------------------------------------------------------------------
+        val arStrsLeitArq: ArrayList<String> = utils.leitExtMemTextFile(strNomeComPath)
+        //--------------------------------------------------------------------------------
+
+        //--- Converte o arq de ArrayList para String
+        var strLeitArq = ""
+        for (strLidaArq in arStrsLeitArq) {
+            strLeitArq += strLidaArq
+        }
+
+        //--- Retorna
+        return strLeitArq.trimStart()
+
+    }
+
+    //--- leCampo
+    fun leCampo(strSrc: String, tagInic: String, tagFim: String): String {
+
+        var strRetorno = ""
+
+        try {
+            val intIdxInic = strSrc.indexOf(tagInic) + tagInic.length
+            val intIdxFim = if (tagFim.isEmpty()) strSrc.length else strSrc.indexOf(tagFim)
+
+            strRetorno = strSrc.substring(intIdxInic, intIdxFim)
+        } catch (exc: Exception) {
+
+            Log.d(cTAG, "-> Não existe esse campo!")
+            strRetorno = ""
+
+        }
+        return strRetorno
 
     }
 

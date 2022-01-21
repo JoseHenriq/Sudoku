@@ -14,6 +14,7 @@ import android.util.TypedValue
 import android.view.View
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.os.CountDownTimer
 import android.os.SystemClock
 import android.view.View.INVISIBLE
@@ -48,8 +49,8 @@ class JogarActivity : AppCompatActivity() {
 
     private var bmpMyImage: Bitmap? = null             // Preset ou jogo gerado e novos números
 
-    private var bmpNumDisp: Bitmap?     = null             // Números disponíveis
-    private var bmpSudokuBoard: Bitmap? = null             // Jogo
+    private var bmpNumDisp: Bitmap?     = null         // Números disponíveis
+    private var bmpSudokuBoard: Bitmap? = null         // Jogo
 
     private var canvasMyImage: Canvas? = null
     private var canvasNumDisp: Canvas? = null
@@ -396,12 +397,12 @@ class JogarActivity : AppCompatActivity() {
                                 if (!flagNumValido) {
 
                                     //--- Se não tem limite de erros, apenas computa-o
-                                    //--- Se tem limite de erros, ao incrimentá-lo informa qdo =
+                                    //--- Se tem limite de erros, ao incrementá-lo informa qdo = lim
                                     tvErros!!.text = "${++intContaErro}"
                                     if (intContaErro == intLimiteErros) {
 
                                         var strMsg = "Você atingiu o limite de erros."
-                                        strMsg += "\nGostaria de jogar até outro erro?"
+                                        strMsg    += "\nTenta até outro erro?"
 
                                         val builder =
                                             androidx.appcompat.app.AlertDialog.Builder(this)
@@ -410,9 +411,15 @@ class JogarActivity : AppCompatActivity() {
 
                                                 Log.d(cTAG, "-> Tenta mais 1 erro.")
                                                 intLimiteErros++
+                                                MainActivity.strTitleErros = "$intLimiteErros"
+
+                                                strLog = "Novo limite: $intLimiteErros erros"
+                                                utilsKt.mToast(this, strLog)
+
+                                                MainActivity.intLimiteErrosAtual = intLimiteErros
 
                                             }
-                                            .setNegativeButton("Não. Encerre o jogo.") { _, _ ->
+                                            .setNegativeButton("Não") { _, _ ->
 
                                                 Log.d(cTAG, "-> Encerra o jogo.")
 
@@ -427,6 +434,13 @@ class JogarActivity : AppCompatActivity() {
                                         // Apresenta o AlertDialog
                                         val alert = builder.create()
                                         alert.show()
+
+                                        // Colore as legendas dos botões de opção
+                                        val pbuttonPos = alert.getButton(DialogInterface.BUTTON_POSITIVE)
+                                        pbuttonPos.setTextColor(Color.BLUE)
+
+                                        val pbuttonNeg = alert.getButton(DialogInterface.BUTTON_NEGATIVE)
+                                        pbuttonNeg.setTextColor(Color.RED)
 
                                     }
                                 }
