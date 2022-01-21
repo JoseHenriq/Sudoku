@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.160"
+        const val strApp = "Sudoku_#9.0.161"
 
         var flagScopedStorage  = false
 
@@ -438,11 +438,6 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        //--- Finaliza a inicialização
-        //-------------------------
-        atualizaTitlesSubMenus()
-        //-------------------------
-
     }
 
     //---------------------------------------------------------------------
@@ -480,6 +475,11 @@ class MainActivity : AppCompatActivity() {
             //subMenuLimiteTempoJogo.isEnabled = false
 
         } catch (exc: Exception) { Log.d(cTAG, "-> Erro: ${exc.message}") }
+
+        //--- Finaliza a inicialização
+        //-------------------------
+        atualizaTitlesSubMenus()
+        //-------------------------
 
         return true
 
