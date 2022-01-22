@@ -528,7 +528,7 @@ class AdaptarActivity : AppCompatActivity() {
         //---------------------------------------
         quadMaior = sgg.adaptaJogoAlgoritmo2()
         //---------------------------------------
-        //--- Prepara o gabarito, em um array unidimensional
+        //--- GABARITO em array unidimensional
         val arIntNumsGab = ArrayList<Int>()
         for (idxLin in 0..8) {
             Log.d(cTAG, "idxLin = $idxLin")
@@ -539,7 +539,7 @@ class AdaptarActivity : AppCompatActivity() {
             }
         }
 
-        //--- Prepara o jogo à ser jogado, em um array unidimensional
+        //--- JOGO à ser jogado em array unidimensional
         val arIntNumsJogo = ArrayList<Int>()
         for (idxLin in 0..8) {
             for (idxCol in 0..8) {
@@ -550,7 +550,7 @@ class AdaptarActivity : AppCompatActivity() {
         }
 
         //----------------------------------------------------------
-        val flagJogoValido = main.verificaSeJogoValido(quadMaior)
+        var flagJogoValido = main.verificaSeJogoValido(quadMaior)
         //----------------------------------------------------------
 
         if (!flagJogoValido) {
@@ -561,22 +561,42 @@ class AdaptarActivity : AppCompatActivity() {
 
         } else {
 
-            strOpcaoJogo = "JogoPresetado: $salvaFileName"
+            flagJogoValido = (utilsKt.quantZeros(sgg.quadMaiorRet) == 0)
 
-            //--- Prepara a Intent para chamar JogarActivity
-            val intent = Intent(this, JogarActivity::class.java)
-            intent.action = strOpcaoJogo
+            if (!flagJogoValido) {
 
-            intent.putExtra("strNivelJogo", strNivelJogo)
-            intent.putExtra("strSubNivelJogo", strSubNivelJogo)
-            intent.putExtra("strCronoConta", strCronoConta)
-            intent.putExtra("strErro", strErro)
-            intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
-            intent.putIntegerArrayListExtra("JogoPreparado", arIntNumsJogo)
-            //----------------------
-            startActivity(intent)
-            //----------------------
+                //------------------------------------------------------------------
+                utilsKt.mToast(this, "Jogo inválido: gabarito!")
+                //------------------------------------------------------------------
+                Log.d(cTAG, "-> Jogo inválido: gabarito!")
+            }
+            else {
 
+                strOpcaoJogo = "JogoPresetado: $salvaFileName"
+
+                strToast = "Jogo válido! Limites:\n"
+                strToast += "Erro: ${if (MainActivity.intLimiteErros == -1) " sem" else " ${MainActivity.intLimiteErros}"}"
+                strToast += " Tempo: ${if (MainActivity.strLimiteTempo == "00:00") " sem" else " ${MainActivity.strLimiteTempo}"}"
+                //--------------------------------------
+                utilsKt.mToast(this, strToast)
+                //--------------------------------------
+                Log.d(cTAG, "-> $strToast")
+
+                //--- Prepara a Intent para chamar JogarActivity
+                val intent = Intent(this, JogarActivity::class.java)
+                intent.action = strOpcaoJogo
+
+                intent.putExtra("strNivelJogo", strNivelJogo)
+                intent.putExtra("strSubNivelJogo", strSubNivelJogo)
+                intent.putExtra("strCronoConta", strCronoConta)
+                intent.putExtra("strErro", strErro)
+                intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
+                intent.putIntegerArrayListExtra("JogoPreparado", arIntNumsJogo)
+                //----------------------
+                startActivity(intent)
+                //----------------------
+
+            }
         }
 
     }

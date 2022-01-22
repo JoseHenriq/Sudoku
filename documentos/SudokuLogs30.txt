@@ -2,12 +2,347 @@
 --------------------------------------------------------------------------------
 
 ================================================================================
-Commit9.0.162- Versão 9- QA px
+Commit9.0.164- px
 ================================================================================
 
+================================================================================
+Commit9.0.163- Versão 9- QA
+================================================================================
+2022-01-22 16:18:09.138 D: Smartphone: samsung - SM-G570M  Build: on5xelte
+2022-01-22 16:18:09.138 D: -> Dimensões screen:
+2022-01-22 16:18:09.143 D:    - largura  :  720,00 px (2,44")
+2022-01-22 16:18:09.146 D:    - altura   :  1280,00 px (4,33")
+2022-01-22 16:18:09.148 D:    - Diagonal :  4,97"
+2022-01-22 16:18:09.149 D:    - fatorlargura :  1,00
+2022-01-22 16:18:09.151 D:    - fatorAltura  :  1,00
+2022-01-22 16:18:09.151 D: -> BaseOS: 8.0.0 SDK_INT: API26
+--------------------------------------------------------------------------------
+2022-01-22 16:18:09.259 D: -> main Verifica permissões
+2022-01-22 16:18:09.260 D:    - Checa se permissões Ok
+2022-01-22 16:18:09.260 D:      - android.permission.INTERNET: true
+2022-01-22 16:18:09.261 D:      - android.permission.READ_EXTERNAL_STORAGE: true
+2022-01-22 16:18:09.261 D:      - android.permission.WRITE_EXTERNAL_STORAGE: true
+2022-01-22 16:18:09.276 D: Permission Granted!
+--------------------------------------------------------------------------------
+2022-01-22 16:18:09.276 D: -> Registra activity for result
+2022-01-22 16:18:09.293 D: -> leitura arquivo setup
+2022-01-22 16:18:09.302 D:    - limite: -1
+2022-01-22 16:18:09.302 D:    - limite: 00:00
+2022-01-22 16:18:09.302 D:    - mostra nums iguais: true
+--------------------------------------------------------------------------------
+2022-01-22 16:18:09.303 D: -> atualiza titles dos submenus Ok!
+2022-01-22 16:18:09.751 D: -> atualiza submenus Ok!
+2022-01-22 16:18:09.751 D: -> Atualiza arquivo de setup
+2022-01-22 16:18:09.751 D:    - lê arquivo modelo modelo_arq_xml_sudoku_setup
+2022-01-22 16:18:09.754 D:      <?xml version="1.0" encoding="utf-8"?><setup><header><id></id></header><body><limite_erros></limite_erros><limite_tempo></limite_tempo><mostra_nums_iguais></mostra_nums_iguais></body></setup>
+2022-01-22 16:18:09.754 D: -> Prepara conteudo a salvar conforme o modelo lido.
+2022-01-22 16:18:09.754 D:    <?xml version="1.0" encoding="utf-8"?><setup><header><id>modeloArqXmlSudokuSetUp.txt</id></header><body><limite_erros>-1</limite_erros><limite_tempo>00:00</limite_tempo><mostra_nums_iguais>true</mostra_nums_iguais></body></setup>
+2022-01-22 16:18:09.773 D: -> Escrita arquivo storage/emulated/0/Download/sudoku/documentos/SudokuSetUp.txt OK!
+--------------------------------------------------------------------------------
 
+2022-01-22 16:13:05.132 D: Smartphone: samsung - SM-G570M  Build: on5xelte
+2022-01-22 16:13:05.132 D: -> Dimensões screen:
+2022-01-22 16:13:05.142 D:    - largura  :  720,00 px (2,44")
+2022-01-22 16:13:05.145 D:    - altura   :  1280,00 px (4,33")
+2022-01-22 16:13:05.148 D:    - Diagonal :  4,97"
+2022-01-22 16:13:05.150 D:    - fatorlargura :  1,00
+2022-01-22 16:13:05.152 D:    - fatorAltura  :  1,00
+2022-01-22 16:13:05.152 D: -> BaseOS: 8.0.0 SDK_INT: API26
+2022-01-22 16:13:05.363 D: -> main Verifica permissões
+2022-01-22 16:13:05.363 D:    - Checa se permissões Ok
+2022-01-22 16:13:05.364 D:      - android.permission.INTERNET: true
+2022-01-22 16:13:05.365 D:      - android.permission.READ_EXTERNAL_STORAGE: true
+2022-01-22 16:13:05.366 D:      - android.permission.WRITE_EXTERNAL_STORAGE: true
+2022-01-22 16:13:05.392 D: Permission Granted!
+2022-01-22 16:13:05.392 D: -> Registra activity for result
+2022-01-22 16:13:05.419 D: -> leitura arquivo setup
+2022-01-22 16:13:05.433 D:    - limite: -1
+2022-01-22 16:13:05.433 D:    - limite: 00:00
+2022-01-22 16:13:05.434 D:    - mostra nums iguais: true
+2022-01-22 16:13:05.434 D: -> atualiza titles dos submenus Ok!
+2022-01-22 16:13:06.318 D: -> atualiza submenus Ok!
+2022-01-22 16:13:06.319 D: -> Atualiza arquivo de setup
+2022-01-22 16:13:06.319 D:    - lê arquivo modelo modelo_arq_xml_sudoku_setup
+2022-01-22 16:13:06.325 D:      <?xml version="1.0" encoding="utf-8"?><setup><header><id></id></header><body><limite_erros></limite_erros><limite_tempo></limite_tempo><mostra_nums_iguais></mostra_nums_iguais></body></setup>
+2022-01-22 16:13:06.325 D: -> Prepara conteudo a salvar conforme o modelo lido.
+2022-01-22 16:13:06.326 D:    <?xml version="1.0" encoding="utf-8"?><setup><header><id>modeloArqXmlSudokuSetUp.txt</id></header><body><limite_erros>-1</limite_erros><limite_tempo>00:00</limite_tempo><mostra_nums_iguais>true</mostra_nums_iguais></body></setup>
+2022-01-22 16:13:06.366 D: -> Escrita arquivo storage/emulated/0/Download/sudoku/documentos/SudokuSetUp.txt OK!
+2022-01-22 16:13:21.830 D: -> Tap em actionBar / Ajusta limite contagem de erros
+2022-01-22 16:13:38.872 D: -> Novos ajustes:
+2022-01-22 16:13:38.873 D:    - erros: 2
+2022-01-22 16:13:38.876 D:    - tempo: 10:00
+2022-01-22 16:13:38.877 D: -> atualiza submenus Ok!
+2022-01-22 16:13:38.877 D: -> Atualiza arquivo de setup
+2022-01-22 16:13:38.877 D:    - lê arquivo modelo modelo_arq_xml_sudoku_setup
+2022-01-22 16:13:38.881 D:      <?xml version="1.0" encoding="utf-8"?><setup><header><id></id></header><body><limite_erros></limite_erros><limite_tempo></limite_tempo><mostra_nums_iguais></mostra_nums_iguais></body></setup>
+    <?xml version="1.0" encoding="utf-8"?><setup><header><id></id></header><body><limite_erros></limite_erros><limite_tempo></limite_tempo><mostra_nums_iguais></mostra_nums_iguais></body></setup>
+2022-01-22 16:13:38.881 D: -> Prepara conteudo a salvar conforme o modelo lido.
+2022-01-22 16:13:38.882 D:    <?xml version="1.0" encoding="utf-8"?><setup><header><id>modeloArqXmlSudokuSetUp.txt</id></header><body><limite_erros>2</limite_erros><limite_tempo>10:00</limite_tempo><mostra_nums_iguais>true</mostra_nums_iguais></body></setup>
+    <?xml version="1.0" encoding="utf-8"?><setup><header><id></id></header><body><limite_erros></limite_erros><limite_tempo></limite_tempo><mostra_nums_iguais></mostra_nums_iguais></body></setup>
+2022-01-22 16:13:38.908 D: -> Escrita arquivo storage/emulated/0/Download/sudoku/documentos/SudokuSetUp.txt OK!
+2022-01-22 16:13:47.169 D: -> Tap no btnGeraJogo
+2022-01-22 16:13:47.281 D:    - Nível: Fácil (20) Subnível: 0
+2022-01-22 16:13:47.346 D: -> Jogo 1: válido!
+2022-01-22 16:13:47.347 D: linha 0 : 3, 5, 6, 4, 8, 2, 7, 9, 1
+2022-01-22 16:13:47.347 D: linha 1 : 9, 7, 1, 5, 6, 3, 4, 2, 8
+2022-01-22 16:13:47.348 D: linha 2 : 2, 4, 8, 9, 1, 7, 3, 5, 6
+2022-01-22 16:13:47.348 D: linha 3 : 7, 2, 4, 1, 5, 6, 9, 8, 3
+2022-01-22 16:13:47.349 D: linha 4 : 1, 6, 9, 7, 3, 8, 2, 4, 5
+2022-01-22 16:13:47.349 D: linha 5 : 8, 3, 5, 2, 4, 9, 1, 6, 7
+2022-01-22 16:13:47.349 D: linha 6 : 6, 8, 2, 3, 7, 4, 5, 1, 9
+2022-01-22 16:13:47.350 D: linha 7 : 4, 1, 3, 8, 9, 5, 6, 7, 2
+2022-01-22 16:13:47.350 D: linha 8 : 5, 9, 7, 6, 2, 1, 8, 3, 4
+2022-01-22 16:13:47.353 D: -> Jogo gerado preparado:
+2022-01-22 16:13:47.353 D: linha 0 : 3, 5, 6, 4, 0, 2, 7, 9, 0
+2022-01-22 16:13:47.353 D: linha 1 : 9, 7, 0, 5, 6, 3, 0, 2, 8
+2022-01-22 16:13:47.353 D: linha 2 : 0, 4, 8, 0, 1, 7, 0, 5, 6
+2022-01-22 16:13:47.353 D: linha 3 : 0, 2, 4, 1, 5, 6, 9, 8, 0
+2022-01-22 16:13:47.353 D: linha 4 : 1, 0, 9, 0, 3, 8, 2, 4, 5
+2022-01-22 16:13:47.353 D: linha 5 : 0, 3, 5, 2, 4, 0, 1, 0, 7
+2022-01-22 16:13:47.353 D: linha 6 : 0, 8, 2, 3, 7, 0, 5, 1, 9
+2022-01-22 16:13:47.353 D: linha 7 : 4, 1, 0, 8, 0, 5, 6, 0, 0
+2022-01-22 16:13:47.353 D: linha 8 : 5, 9, 7, 6, 2, 1, 8, 3, 4
+2022-01-22 16:13:47.358 D: -> Gabarito gerado pelo Backtracking:
+2022-01-22 16:13:47.358 D: linha 0 : 3, 5, 6, 4, 8, 2, 7, 9, 1
+2022-01-22 16:13:47.358 D: linha 1 : 9, 7, 1, 5, 6, 3, 4, 2, 8
+2022-01-22 16:13:47.358 D: linha 2 : 2, 4, 8, 9, 1, 7, 3, 5, 6
+2022-01-22 16:13:47.358 D: linha 3 : 7, 2, 4, 1, 5, 6, 9, 8, 3
+2022-01-22 16:13:47.358 D: linha 4 : 1, 6, 9, 7, 3, 8, 2, 4, 5
+2022-01-22 16:13:47.358 D: linha 5 : 8, 3, 5, 2, 4, 9, 1, 6, 7
+2022-01-22 16:13:47.358 D: linha 6 : 6, 8, 2, 3, 7, 4, 5, 1, 9
+2022-01-22 16:13:47.358 D: linha 7 : 4, 1, 3, 8, 9, 5, 6, 7, 2
+2022-01-22 16:13:47.358 D: linha 8 : 5, 9, 7, 6, 2, 1, 8, 3, 4
+2022-01-22 16:13:47.360 D: -> Quantidade de clues:   20
+2022-01-22 16:13:47.360 D: -> Nível jogo gerado: Fácil
+2022-01-22 16:13:47.360 D:     - subnível: 0
+2022-01-22 16:13:51.207 D: -> onClick rbJogoMuitoDificil
+2022-01-22 16:13:53.527 D: -> Tap no btnAdaptaJogo
+2022-01-22 16:13:53.530 D:    - rbAdapta: Preset
+2022-01-22 16:13:57.707 D: -> "Cancela" was pressed
+2022-01-22 16:13:58.491 D: -> Tap no btnGeraJogo
+2022-01-22 16:13:58.626 D:    - Nível: Muito difícil (50) Subnível: 0
+2022-01-22 16:13:58.637 D: -> Jogo 1: válido!
+2022-01-22 16:13:58.638 D: linha 0 : 6, 3, 7, 4, 8, 1, 2, 9, 5
+2022-01-22 16:13:58.638 D: linha 1 : 2, 5, 8, 6, 9, 7, 1, 4, 3
+2022-01-22 16:13:58.638 D: linha 2 : 1, 9, 4, 3, 2, 5, 7, 8, 6
+2022-01-22 16:13:58.638 D: linha 3 : 4, 1, 5, 2, 3, 6, 8, 7, 9
+2022-01-22 16:13:58.638 D: linha 4 : 8, 7, 9, 5, 1, 4, 3, 6, 2
+2022-01-22 16:13:58.638 D: linha 5 : 3, 6, 2, 8, 7, 9, 4, 5, 1
+2022-01-22 16:13:58.638 D: linha 6 : 7, 4, 6, 1, 5, 3, 9, 2, 8
+2022-01-22 16:13:58.638 D: linha 7 : 5, 2, 3, 9, 4, 8, 6, 1, 7
+2022-01-22 16:13:58.638 D: linha 8 : 9, 8, 1, 7, 6, 2, 5, 3, 4
+2022-01-22 16:13:58.639 D: -> Jogo gerado preparado:
+2022-01-22 16:13:58.639 D: linha 0 : 0, 0, 7, 0, 8, 0, 2, 0, 0
+2022-01-22 16:13:58.639 D: linha 1 : 0, 5, 8, 6, 9, 0, 0, 0, 0
+2022-01-22 16:13:58.639 D: linha 2 : 0, 0, 4, 0, 0, 0, 7, 0, 6
+2022-01-22 16:13:58.639 D: linha 3 : 0, 1, 0, 0, 0, 0, 0, 7, 9
+2022-01-22 16:13:58.640 D: linha 4 : 8, 0, 0, 0, 0, 0, 0, 6, 0
+2022-01-22 16:13:58.640 D: linha 5 : 3, 0, 2, 0, 7, 9, 4, 0, 0
+2022-01-22 16:13:58.640 D: linha 6 : 7, 4, 0, 1, 5, 3, 0, 0, 8
+2022-01-22 16:13:58.640 D: linha 7 : 0, 0, 3, 9, 0, 0, 0, 1, 7
+2022-01-22 16:13:58.640 D: linha 8 : 0, 0, 0, 7, 0, 0, 0, 0, 0
+2022-01-22 16:13:58.647 D: -> Gabarito gerado pelo Backtracking:
+2022-01-22 16:13:58.648 D: linha 0 : 6, 3, 7, 4, 8, 1, 2, 9, 5
+2022-01-22 16:13:58.648 D: linha 1 : 2, 5, 8, 6, 9, 7, 1, 3, 4
+2022-01-22 16:13:58.648 D: linha 2 : 1, 9, 4, 2, 3, 5, 7, 8, 6
+2022-01-22 16:13:58.648 D: linha 3 : 4, 1, 5, 3, 2, 6, 8, 7, 9
+2022-01-22 16:13:58.648 D: linha 4 : 8, 7, 9, 5, 1, 4, 3, 6, 2
+2022-01-22 16:13:58.648 D: linha 5 : 3, 6, 2, 8, 7, 9, 4, 5, 1
+2022-01-22 16:13:58.648 D: linha 6 : 7, 4, 6, 1, 5, 3, 9, 2, 8
+2022-01-22 16:13:58.648 D: linha 7 : 5, 2, 3, 9, 4, 8, 6, 1, 7
+2022-01-22 16:13:58.648 D: linha 8 : 9, 8, 1, 7, 6, 2, 5, 4, 3
+2022-01-22 16:13:58.649 D: -> Quantidade de clues:   50
+2022-01-22 16:13:58.649 D: -> Nível jogo gerado: Muito difícil
+2022-01-22 16:13:58.649 D:     - subnível: 0
+2022-01-22 16:14:00.109 D: -> Tap no btnJogaJogo
+2022-01-22 16:14:00.140 D: -> Jogo válido! Limites:
+    Erro:  2 Tempo:  10:00
+2022-01-22 16:14:00.169 D: -> Preset 0
+2022-01-22 16:14:00.169 D:    - tenta adaptar o jogo (1)
+2022-01-22 16:14:00.169 D: linha 0 : 0, 0, 7, 0, 8, 0, 2, 0, 0
+2022-01-22 16:14:00.169 D: linha 1 : 0, 5, 8, 6, 9, 0, 0, 0, 0
+2022-01-22 16:14:00.169 D: linha 2 : 0, 0, 4, 0, 0, 0, 7, 0, 6
+2022-01-22 16:14:00.169 D: linha 3 : 0, 1, 0, 0, 0, 0, 0, 7, 9
+2022-01-22 16:14:00.169 D: linha 4 : 8, 0, 0, 0, 0, 0, 0, 6, 0
+2022-01-22 16:14:00.169 D: linha 5 : 3, 0, 2, 0, 7, 9, 4, 0, 0
+2022-01-22 16:14:00.170 D: linha 6 : 7, 4, 0, 1, 5, 3, 0, 0, 8
+2022-01-22 16:14:00.170 D: linha 7 : 0, 0, 3, 9, 0, 0, 0, 1, 7
+2022-01-22 16:14:00.170 D: linha 8 : 0, 0, 0, 7, 0, 0, 0, 0, 0
+2022-01-22 16:14:00.177 D: -> Jogo com preset 0 adaptado
+2022-01-22 16:14:00.177 D: -> Gabarito do jogo (adaptação do preset):
+2022-01-22 16:14:00.177 D: linha 0 : 6, 3, 7, 4, 8, 1, 2, 9, 5
+2022-01-22 16:14:00.177 D: linha 1 : 2, 5, 8, 6, 9, 7, 1, 3, 4
+2022-01-22 16:14:00.178 D: linha 2 : 1, 9, 4, 2, 3, 5, 7, 8, 6
+2022-01-22 16:14:00.178 D: linha 3 : 4, 1, 5, 3, 2, 6, 8, 7, 9
+2022-01-22 16:14:00.178 D: linha 4 : 8, 7, 9, 5, 1, 4, 3, 6, 2
+2022-01-22 16:14:00.178 D: linha 5 : 3, 6, 2, 8, 7, 9, 4, 5, 1
+2022-01-22 16:14:00.178 D: linha 6 : 7, 4, 6, 1, 5, 3, 9, 2, 8
+2022-01-22 16:14:00.178 D: linha 7 : 5, 2, 3, 9, 4, 8, 6, 1, 7
+2022-01-22 16:14:00.178 D: linha 8 : 9, 8, 1, 7, 6, 2, 5, 4, 3
+2022-01-22 16:14:00.178 D: -> Jogo (preset):
+2022-01-22 16:14:00.178 D: linha 0 : 0, 0, 7, 0, 8, 0, 2, 0, 0
+2022-01-22 16:14:00.178 D: linha 1 : 0, 5, 8, 6, 9, 0, 0, 0, 0
+2022-01-22 16:14:00.178 D: linha 2 : 0, 0, 4, 0, 0, 0, 7, 0, 6
+2022-01-22 16:14:00.178 D: linha 3 : 0, 1, 0, 0, 0, 0, 0, 7, 9
+2022-01-22 16:14:00.179 D: linha 4 : 8, 0, 0, 0, 0, 0, 0, 6, 0
+2022-01-22 16:14:00.179 D: linha 5 : 3, 0, 2, 0, 7, 9, 4, 0, 0
+2022-01-22 16:14:00.179 D: linha 6 : 7, 4, 0, 1, 5, 3, 0, 0, 8
+2022-01-22 16:14:00.179 D: linha 7 : 0, 0, 3, 9, 0, 0, 0, 1, 7
+2022-01-22 16:14:00.179 D: linha 8 : 0, 0, 0, 7, 0, 0, 0, 0, 0
+2022-01-22 16:14:00.180 D: -> Quantidade de clues:   50
+2022-01-22 16:14:00.180 D: -> Nível jogo adaptado: Muito difícil
+2022-01-22 16:14:00.180 D:     - subnível: 0
+2022-01-22 16:14:00.777 D: -> Acerta crono.
+2022-01-22 16:14:00.782 D: -> Jogo:
+2022-01-22 16:14:00.782 D: linha 0 : 0, 0, 7, 0, 8, 0, 2, 0, 0
+2022-01-22 16:14:00.782 D: linha 1 : 0, 5, 8, 6, 9, 0, 0, 0, 0
+2022-01-22 16:14:00.783 D: linha 2 : 0, 0, 4, 0, 0, 0, 7, 0, 6
+2022-01-22 16:14:00.783 D: linha 3 : 0, 1, 0, 0, 0, 0, 0, 7, 9
+2022-01-22 16:14:00.783 D: linha 4 : 8, 0, 0, 0, 0, 0, 0, 6, 0
+2022-01-22 16:14:00.784 D: linha 5 : 3, 0, 2, 0, 7, 9, 4, 0, 0
+2022-01-22 16:14:00.784 D: linha 6 : 7, 4, 0, 1, 5, 3, 0, 0, 8
+2022-01-22 16:14:00.784 D: linha 7 : 0, 0, 3, 9, 0, 0, 0, 1, 7
+2022-01-22 16:14:00.785 D: linha 8 : 0, 0, 0, 7, 0, 0, 0, 0, 0
+2022-01-22 16:14:00.785 D: -> Gabarito:
+2022-01-22 16:14:00.785 D: linha 0 : 6, 3, 7, 4, 8, 1, 2, 9, 5
+2022-01-22 16:14:00.785 D: linha 1 : 2, 5, 8, 6, 9, 7, 1, 3, 4
+2022-01-22 16:14:00.785 D: linha 2 : 1, 9, 4, 2, 3, 5, 7, 8, 6
+2022-01-22 16:14:00.786 D: linha 3 : 4, 1, 5, 3, 2, 6, 8, 7, 9
+2022-01-22 16:14:00.786 D: linha 4 : 8, 7, 9, 5, 1, 4, 3, 6, 2
+2022-01-22 16:14:00.786 D: linha 5 : 3, 6, 2, 8, 7, 9, 4, 5, 1
+2022-01-22 16:14:00.787 D: linha 6 : 7, 4, 6, 1, 5, 3, 9, 2, 8
+2022-01-22 16:14:00.787 D: linha 7 : 5, 2, 3, 9, 4, 8, 6, 1, 7
+2022-01-22 16:14:00.787 D: linha 8 : 9, 8, 1, 7, 6, 2, 5, 4, 3
+2022-01-22 16:14:00.837 D: -> Array qtidd de jogos disponível por número:
+2022-01-22 16:14:00.839 D:    Num 1 6
+2022-01-22 16:14:00.840 D:    Num 2 7
+2022-01-22 16:14:00.842 D:    Num 3 6
+2022-01-22 16:14:00.844 D:    Num 4 6
+2022-01-22 16:14:00.845 D:    Num 5 7
+2022-01-22 16:14:00.847 D:    Num 6 6
+2022-01-22 16:14:00.848 D:    Num 7 2
+2022-01-22 16:14:00.849 D:    Num 8 5
+2022-01-22 16:14:00.851 D:    Num 9 5
+2022-01-22 16:14:06.704 D: -> 00:00 - Inicia
+2022-01-22 16:14:06.704 D: -> Acerta crono.
+2022-01-22 16:14:06.710 D: -> Parte o crono.
+2022-01-22 16:14:06.718 D: -> Final crono: 10:00
+2022-01-22 16:16:06.844 D: -> 01:59 - Pause
+2022-01-22 16:16:09.895 D: -> Tap no btn "Salvar" 
+2022-01-22 16:16:11.656 D: -> "Sim" was pressed
+2022-01-22 16:16:11.658 D: -> Arquivos raw (listRaw):
+2022-01-22 16:16:11.658 D: 0: modelo_arq_xml_sudoku1
+2022-01-22 16:16:11.658 D: -> Arquivo modelo_arq_xml_sudoku1:
+2022-01-22 16:16:11.664 D:    0: <?xml version="1.0" encoding="utf-8"?><presets><header><id></id><nivel></nivel><subnivel></subnivel></header><body><linha0></linha0><linha1></linha1><linha2></linha2><linha3></linha3><linha4></linha4><linha5></linha5><linha6></linha6><linha7></linha7><linha8></linha8></body><jogos><id></id><opcaoJogo></opcaoJogo><dataHora></dataHora><tempoJogo></tempoJogo><erros></erros><status></status></jogos></presets>
+2022-01-22 16:16:11.664 D: -> modelo arq Sudoku xml
+2022-01-22 16:16:11.664 D: <?xml version="1.0" encoding="utf-8"?><presets><header><id></id><nivel></nivel><subnivel></subnivel></header><body><linha0></linha0><linha1></linha1><linha2></linha2><linha3></linha3><linha4></linha4><linha5></linha5><linha6></linha6><linha7></linha7><linha8></linha8></body><jogos><id></id><opcaoJogo></opcaoJogo><dataHora></dataHora><tempoJogo></tempoJogo><erros></erros><status></status></jogos></presets>
+2022-01-22 16:16:11.768 D: -> Tag: 11, Conteudo: <?xml version="1.0" encoding="utf-8"?><presets><header><id>3</id><nivel>Muito difícil</nivel><subnivel>0</subnivel></header><body><linha0>0, 0, 7, 0, 8, 0, 2, 0, 0</linha0><linha1>0, 5, 8, 6, 9, 0, 0, 0, 0</linha1><linha2>0, 0, 4, 0, 0, 0, 7, 0, 6</linha2><linha3>0, 1, 0, 0, 0, 0, 0, 7, 9</linha3><linha4>8, 0, 0, 0, 0, 0, 0, 6, 0</linha4><linha5>3, 0, 2, 0, 7, 9, 4, 0, 0</linha5><linha6>7, 4, 0, 1, 5, 3, 0, 0, 8</linha6><linha7>0, 0, 3, 9, 0, 0, 0, 1, 7</linha7><linha8>0, 0, 0, 7, 0, 0, 0, 0, 0</linha8></body><jogos><id>1</id><opcaoJogo>JogoGerado</opcaoJogo><dataHora>22/01/2022 16:16:11</dataHora><tempoJogo>01:59</tempoJogo><erros>0</erros><status>ativo</status></jogos><body2><linha0>0, 0, 7, 0, 8, 0, 2, 9, 0</linha0><linha1>0, 5, 8, 6, 9, 7, 0, 0, 0</linha1><linha2>0, 0, 4, 0, 0, 0, 7, 8, 6</linha2><linha3>4, 1, 0, 0, 0, 0, 8, 7, 9</linha3><linha4>8, 7, 9, 0, 0, 0, 0, 6, 0</linha4><linha5>3, 0, 2, 0, 7, 9, 4, 0, 0</linha5><linha6>7, 4, 0, 1, 5, 3, 0, 0, 8</linha6><linha7>0, 0, 3, 9, 0, 0, 0, 1, 7</linha7><linha8>0, 0, 0, 7, 0, 0, 0, 0, 0</linha8></body2></presets>
+2022-01-22 16:16:11.801 D: -> Escrita arquivo storage/emulated/0/Download/sudoku/jogos/jogo_63.xml OK!
+2022-01-22 16:16:11.801 D: -> Jogos salvos: 
+2022-01-22 16:16:11.807 D:    - jogo_63.xml
+2022-01-22 16:16:11.808 D:    - jogo_62.xml
+2022-01-22 16:16:11.808 D:    - jogo_61.xml
+2022-01-22 16:16:11.808 D:    - jogo_60.xml
+2022-01-22 16:16:11.808 D:    - jogo_59.xml
+2022-01-22 16:16:11.808 D:    - jogo_58.xml
+2022-01-22 16:16:11.808 D:    - jogo_57.xml
+2022-01-22 16:16:11.808 D:    - jogo_56.xml
+2022-01-22 16:16:11.808 D:    - jogo_55.xml
+2022-01-22 16:16:11.808 D:    - jogo_54.xml
+2022-01-22 16:16:11.808 D:    - jogo_53.xml
+2022-01-22 16:16:11.808 D:    - jogo_52.xml
+2022-01-22 16:16:11.808 D:    - jogo_51.xml
+2022-01-22 16:16:27.633 D: -> 01:59 - ReInicia
+2022-01-22 16:16:27.633 D: -> Acerta crono.
+2022-01-22 16:16:27.638 D: -> Parte o crono.
+2022-01-22 16:16:27.640 D: -> Final crono: 10:00
+2022-01-22 16:16:32.645 D:    - invalido Qm: Qm=8; lin=7; col=7 num=1
+2022-01-22 16:16:38.139 D:  - invalido col: linha=0; col=6; num=2
+2022-01-22 16:16:41.415 D: -> Tenta mais 1 erro.
+2022-01-22 16:16:47.775 D: -> leitura arquivo setup
+2022-01-22 16:16:47.781 D:    - limite: -1
+2022-01-22 16:16:47.781 D:    - limite: 00:00
+2022-01-22 16:16:47.782 D:    - mostra nums iguais: true
+2022-01-22 16:16:47.796 D: -> atualiza submenus Ok!
+2022-01-22 16:16:47.796 D: -> Atualiza arquivo de setup
+2022-01-22 16:16:47.796 D:    - lê arquivo modelo modelo_arq_xml_sudoku_setup
+2022-01-22 16:16:47.799 D:      <?xml version="1.0" encoding="utf-8"?><setup><header><id></id></header><body><limite_erros></limite_erros><limite_tempo></limite_tempo><mostra_nums_iguais></mostra_nums_iguais></body></setup>
+    <?xml version="1.0" encoding="utf-8"?><setup><header><id></id></header><body><limite_erros></limite_erros><limite_tempo></limite_tempo><mostra_nums_iguais></mostra_nums_iguais></body></setup>
+    <?xml version="1.0" encoding="utf-8"?><setup><header><id></id></header><body><limite_erros></limite_erros><limite_tempo></limite_tempo><mostra_nums_iguais></mostra_nums_iguais></body></setup>
+2022-01-22 16:16:47.799 D: -> Prepara conteudo a salvar conforme o modelo lido.
+2022-01-22 16:16:47.799 D:    <?xml version="1.0" encoding="utf-8"?><setup><header><id>modeloArqXmlSudokuSetUp.txt</id></header><body><limite_erros>3</limite_erros><limite_tempo>10:00</limite_tempo><mostra_nums_iguais>true</mostra_nums_iguais></body></setup>
+    <?xml version="1.0" encoding="utf-8"?><setup><header><id></id></header><body><limite_erros></limite_erros><limite_tempo></limite_tempo><mostra_nums_iguais></mostra_nums_iguais></body></setup>
+    <?xml version="1.0" encoding="utf-8"?><setup><header><id></id></header><body><limite_erros></limite_erros><limite_tempo></limite_tempo><mostra_nums_iguais></mostra_nums_iguais></body></setup>
+2022-01-22 16:16:47.816 D: -> Escrita arquivo storage/emulated/0/Download/sudoku/documentos/SudokuSetUp.txt OK!
+2022-01-22 16:16:47.816 D: -> atualiza titles dos submenus Ok!
+--------------------------------------------------------------------------------
+2022-01-22 15:59:08.772 D: Smartphone: samsung - SM-G570M  Build: on5xelte
+2022-01-22 15:59:08.773 D: -> Dimensões screen:
+2022-01-22 15:59:08.787 D:    - largura  :  720,00 px (2,44")
+2022-01-22 15:59:08.791 D:    - altura   :  1280,00 px (4,33")
+2022-01-22 15:59:08.794 D:    - Diagonal :  4,97"
+2022-01-22 15:59:08.796 D:    - fatorlargura :  1,00
+2022-01-22 15:59:08.798 D:    - fatorAltura  :  1,00
+2022-01-22 15:59:08.798 D: -> BaseOS: 8.0.0 SDK_INT: API26
+--------------------------------------------------------------------------------
+2022-01-22 15:59:08.989 D: -> main Verifica permissões
+2022-01-22 15:59:08.989 D:    - Checa se permissões Ok
+2022-01-22 15:59:08.997 D:      - android.permission.INTERNET: true
+2022-01-22 15:59:08.999 D:      - android.permission.READ_EXTERNAL_STORAGE: true
+2022-01-22 15:59:09.000 D:      - android.permission.WRITE_EXTERNAL_STORAGE: true
+2022-01-22 15:59:09.024 D: Permission Granted!
+--------------------------------------------------------------------------------
+2022-01-22 15:59:09.025 D: -> Registra activity for result
+--------------------------------------------------------------------------------
+2022-01-22 15:59:09.098 D: -> leitura arquivo setup
+2022-01-22 15:59:09.120 D:    - limite: -1
+2022-01-22 15:59:09.120 D:    - limite: 00:00
+2022-01-22 15:59:09.121 D:    - mostra nums iguais: true
+--------------------------------------------------------------------------------
+2022-01-22 15:59:09.121 D: -> atualiza titles dos submenus Ok!
+--------------------------------------------------------------------------------
+2022-01-22 15:59:10.045 D: -> atualiza submenus Ok!
+--------------------------------------------------------------------------------
+2022-01-22 15:59:10.045 D: -> Atualiza arquivo de setup
+2022-01-22 15:59:10.045 D:    - lê arquivo modelo modelo_arq_xml_sudoku_setup
+2022-01-22 15:59:10.049 D:      <?xml version="1.0" encoding="utf-8"?><setup><header><id></id></header><body><limite_erros></limite_erros><limite_tempo></limite_tempo><mostra_nums_iguais></mostra_nums_iguais></body></setup>
+2022-01-22 15:59:10.049 D: -> Prepara conteudo a salvar conforme o modelo lido.
+2022-01-22 15:59:10.050 D:    <?xml version="1.0" encoding="utf-8"?><setup><header><id>modeloArqXmlSudokuSetUp.txt</id></header><body><limite_erros>-1</limite_erros><limite_tempo>00:00</limite_tempo><mostra_nums_iguais>true</mostra_nums_iguais></body></setup>
+--------------------------------------------------------------------------------
+2022-01-22 15:34:19.915 D: Smartphone: samsung - SM-G570M  Build: on5xelte
+2022-01-22 15:34:19.915 D: -> Dimensões screen:
+2022-01-22 15:34:19.933 D:    - largura  :  720,00 px (2,44")
+2022-01-22 15:34:19.938 D:    - altura   :  1280,00 px (4,33")
+2022-01-22 15:34:19.941 D:    - Diagonal :  4,97"
+2022-01-22 15:34:19.944 D:    - fatorlargura :  1,00
+2022-01-22 15:34:19.948 D:    - fatorAltura  :  1,00
+2022-01-22 15:34:19.949 D: -> BaseOS: 8.0.0 SDK_INT: API26
+--------------------------------------------------------------------------------
+2022-01-22 15:34:20.168 D: -> main Verifica permissões
+2022-01-22 15:34:20.170 D:    - Checa se permissões Ok
+2022-01-22 15:34:20.171 D:      - android.permission.INTERNET: true
+2022-01-22 15:34:20.173 D:      - android.permission.READ_EXTERNAL_STORAGE: true
+2022-01-22 15:34:20.173 D:      - android.permission.WRITE_EXTERNAL_STORAGE: true
+2022-01-22 15:34:20.208 D: Permission Granted!
+--------------------------------------------------------------------------------
+2022-01-22 15:34:20.208 D: -> Registra activity for result
+--------------------------------------------------------------------------------
+2022-01-22 15:34:20.250 D: -> leitura arquivo setup
+2022-01-22 15:34:20.283 D:    - limite: -1
+2022-01-22 15:34:20.283 D:    - limite: 00:00
+2022-01-22 15:34:20.283 D:    - mostra nums iguais: true
+--------------------------------------------------------------------------------
+2022-01-22 15:34:20.284 D: -> atualiza titles dos submenus Ok!
+2022-01-22 15:34:21.891 D: -> atualiza submenus Ok!
+2022-01-22 15:34:21.891 D: -> Atualiza arquivo de setup
+2022-01-22 15:34:21.891 D:    - lê arquivo modelo modelo_arq_xml_sudoku_setup
+2022-01-22 15:34:21.896 D:      <?xml version="1.0" encoding="utf-8"?><setup><header><id></id></header><body><limite_erros></limite_erros><limite_tempo></limite_tempo><mostra_nums_iguais></mostra_nums_iguais></body></setup>
+--------------------------------------------------------------------------------
+2022-01-22 15:34:21.896 D: -> Prepara conteudo a salvar conforme o modelo lido.
+--------------------------------------------------------------------------------
 
-
+================================================================================
+Commit9.0.162- Versão 9- QA
 ================================================================================
 Commit9.0.161- Versão 9- QA
 ================================================================================

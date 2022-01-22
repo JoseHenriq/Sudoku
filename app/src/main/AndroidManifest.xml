@@ -36,8 +36,7 @@
 
         <activity android:name=".ui.JogarActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".ui.MainActivity"
-            tools:ignore="LockedOrientationActivity" />
+            android:parentActivityName=".ui.MainActivity" />
 
         <activity android:name=".ui.AdaptarActivity"
             android:screenOrientation="portrait"

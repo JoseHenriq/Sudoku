@@ -423,7 +423,7 @@ class JogarActivity : AppCompatActivity() {
                                                 strLog = "Novo limite: $intLimiteErros erros"
                                                 utilsKt.mToast(this, strLog)
 
-                                                MainActivity.intLimiteErrosAtual = intLimiteErros
+                                                //MainActivity.intLimiteErrosAtual = intLimiteErros
 
                                             }
                                             .setNegativeButton("Não") { _, _ ->
@@ -1512,10 +1512,10 @@ class JogarActivity : AppCompatActivity() {
     //--- preparaConteudo
     private var intIdxInic: Int = 0
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun preparaConteudo(strNomeArq : String): String {
+    //--- preparaConteudo
+    private fun preparaConteudo(strNomeArq : String): String {
 
-        var strConteudo: String
+        var strConteudo = ""
 
         //-- Lê o modelo para a formatação xml : modelo_arq_xml_sudoku1.txt
         val strNomeArqSemExt = strNomeArq    // SÓ a-z 0-9 _
@@ -1618,9 +1618,13 @@ class JogarActivity : AppCompatActivity() {
 
                 //- jogos / dataHora
                 intTag = 6
-                //-------------------------------------------------------------------------
-                val strDataHora = utils.LeDataHora("dd/MM/yyyy HH:mm:ss")
-                //-------------------------------------------------------------------------
+                val strDataHora = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    //------------------------------------------------------
+                    utils.LeDataHora("dd/MM/yyyy HH:mm:ss")
+                    //------------------------------------------------------
+                } else {
+                    TODO("VERSION.SDK_INT < O")
+                }
 
                 intTag = 7
                 //------------------------------------------------------------------
@@ -1689,47 +1693,7 @@ class JogarActivity : AppCompatActivity() {
 
         else {
 
-            Log.d(cTAG, "-> modelo arq Sudoku xml setup")
-
-            for (idxDecl in arStrLeitArqRaw.indices) { strModelo += arStrLeitArqRaw[idxDecl] }
-
-            Log.d(cTAG, strModelo)
-
-            //-- Preenche os campos
-            var intTag = 0
-            var strTag: String
-            try {
-                //- header / id
-                intTag    = 0
-                intIdxFim = 0
-                //----------------------------------------------------------------------------------
-                strConteudo = preencheConteudo("<id>", "modeloArqXmlSudokuSetUp.txt")
-                //----------------------------------------------------------------------------------
-
-                //-	<body> / <limite_erros>
-                intTag = 1
-                //----------------------------------------------------------------------------------
-                strConteudo += preencheConteudo("<limite_erros>", intLimiteErros.toString())
-                //----------------------------------------------------------------------------------
-
-                //-	<body> / <limite_tempo>
-                intTag = 2
-                //------------------------------------------------------------------------
-                strConteudo += preencheConteudo("<limite_limite_tempo>", strLimiteTempo)
-                //------------------------------------------------------------------------
-
-                //-	<body> / <mostra_nums_iguais>true</mostra_nums_iguais>
-                intTag = 3
-                //------------------------------------------------------------------------
-                strConteudo += preencheConteudo("<limite_limite_tempo>", strLimiteTempo)
-                //------------------------------------------------------------------------
-
-            } catch (exc: Exception) {
-
-                strTag = intTag.toString()
-                utilsKt.mToast(this, "Erro $strTag: ${exc.message}")
-                strConteudo = ""
-            }
+            // TODO
 
         }
 

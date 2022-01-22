@@ -14,7 +14,6 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import android.view.View.*
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -30,6 +29,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.view.*
+import androidx.activity.result.ActivityResult
 import androidx.core.view.MenuCompat
 import br.com.jhconsultores.sudoku.BuildConfig
 import kotlin.math.sqrt
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.162"
+        const val strApp = "Sudoku_#9.0.163"
 
         var flagScopedStorage = false
 
@@ -75,13 +75,13 @@ class MainActivity : AppCompatActivity() {
         var intLimiteErrosAtual = -1
 
         // Tempo do Jogo
-        const val TITLE_TEMPO = "Limite Tempo: "
-        var strTitleTempo = ""
-        var strLimiteTempo = "00:00"    // Default; significa "sem limite"
+        const val TITLE_TEMPO   = "Limite Tempo: "
+        var strTitleTempo       = ""
+        var strLimiteTempo      = "00:00"    // Default; significa "sem limite"
         var strLimiteTempoAtual = "00:00"
 
         // Mostrar números iguais
-        var flagMostraNumIguais = true
+        var flagMostraNumIguais      = true
         var flagMostraNumIguaisAtual = true
 
     }
@@ -409,46 +409,46 @@ class MainActivity : AppCompatActivity() {
         previewRequest = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result: ActivityResult ->
-            //------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------
 
             Log.d(cTAG, "-> Retorna da activity for result")
 
             if (result.resultCode == Activity.RESULT_OK) {
 
-                // you will get result here in result.data
+                //  you will get result here in result.data
+                // val list = result.data
 
                 // do whatever with the data in the callback
                 val strStatus = result.data!!.getStringExtra("Status")
                 Log.d(cTAG, "-> activity results OK! Status: $strStatus")
 
-                //--- !!! Se deletou jogo, retorna à adaptação de jogo atualizando o RV !!!
+                //--- Se deletou jogo retorna à adaptação de jogo
                 if (strStatus == "Deletar Jogo") {
 
-                    //--- Aguarda o App acabar a execução do retorno do StartActivityForResult
-                    //    e reativa AdaptarActivity para RV ser atualizado.
-                    val waitTime = 100L  // milisegundos
-                    Handler(Looper.getMainLooper()).postDelayed(
-                        {
-
-                            //--- Prepara a Intent para chamar AdaptarActivity
-                            val intent = Intent(this, AdaptarActivity::class.java)
-                            intent.action = "InstanciaRVJogosSalvos"
-                            //------------------------------
-                            previewRequest.launch(intent)
-                            //------------------------------
-
-                        },
-                        waitTime
-
-                    )  // value in milliseconds
+                    //--- Prepara a Intent para chamar AdaptarActivity
+                    val intent    = Intent(this, AdaptarActivity::class.java)
+                    intent.action = "InstanciaRVJogosSalvos"
+                    //------------------------------
+                    previewRequest.launch(intent)
+                    //------------------------------
 
                 }
 
             } else {
-                Log.d(cTAG, "-> activity results NÃO OK!")
-            }
 
+                Log.d(cTAG, "-> activity results NÃO OK!")
+
+            }
         }
+
+
+        //--- Inicialização dos parametros conforme salvos no arquivo setupr
+        //-------------
+        leArqSetUp()
+        //-------------
+        intLimiteErros      = intLimiteErrosAtual
+        strLimiteTempo      = strLimiteTempoAtual
+        flagMostraNumIguais = flagMostraNumIguaisAtual
 
     }
 
@@ -472,23 +472,9 @@ class MainActivity : AppCompatActivity() {
             // to the empty SubMenu you created in the xml
             menuInflater.inflate(R.menu.menu_main_sub, myMenuItem.subMenu)
 
-            //--- Inicializa parametros
-            intLimiteErros = -1
-            strLimiteTempo = "00:00"
-            flagMostraNumIguais = true
-
-            //---------------------------------------------------------------------
-            atualizaSubMenu(intLimiteErros, strLimiteTempo, flagMostraNumIguais)
-            //---------------------------------------------------------------------
-
         } catch (exc: Exception) {
             Log.d(cTAG, "-> Erro02: ${exc.message}")
         }
-
-        //--- Finaliza a inicialização
-        //-------------------------
-        //atualizaTitlesSubMenus()
-        //-------------------------
 
         return true
 
@@ -504,9 +490,9 @@ class MainActivity : AppCompatActivity() {
 
             Log.d(cTAG, "-> Tap em actionBar / Ajusta limite contagem de erros")
 
-            //-------------------------------------------------
-            implDialogViewAlertDialog()  //subMenuLimiteQtiErros)
-            //-------------------------------------------------
+            //----------------------------
+            implDialogViewAlertDialog()
+            //----------------------------
 
             true
 
@@ -517,9 +503,9 @@ class MainActivity : AppCompatActivity() {
 
             Log.d(cTAG, "-> Tap em actionBar / Ajusta tempo de jogo")
 
-            //---------------------------------------------------
-            implDialogViewAlertDialog()  //subMenuLimiteTempoJogo)
-            //---------------------------------------------------
+            //----------------------------
+            implDialogViewAlertDialog()
+            //----------------------------
 
             true
 
@@ -533,21 +519,17 @@ class MainActivity : AppCompatActivity() {
                 strLog = "Não mostrar números iguais"
                 flagMostraNumIguais = false
 
-                //---------------------------------------------------------------------
-                atualizaSubMenu(intLimiteErros, strLimiteTempo, flagMostraNumIguais)
-                //---------------------------------------------------------------------
-
             } else {
 
                 strLog = "Mostrar números iguais"
                 flagMostraNumIguais = true
 
-                //---------------------------------------------------------------------
-                atualizaSubMenu(intLimiteErros, strLimiteTempo, flagMostraNumIguais)
-                //---------------------------------------------------------------------
-
             }
             Log.d(cTAG, "-> Tap em actionBar / $strLog")
+
+            //---------------------------------------------------------------------
+            atualizaSubMenu()  //intLimiteErros, strLimiteTempo, flagMostraNumIguais)
+            //---------------------------------------------------------------------
 
             true
 
@@ -679,12 +661,18 @@ class MainActivity : AppCompatActivity() {
                 //progressBar.visibility = INVISIBLE
                 layout.visibility = INVISIBLE
 
-
                 //--- Esconde o teclado
                 //----------------------------------
                 utils.EscondeTeclado(this)
                 //----------------------------------
 
+                //------------------------
+                atualizaTitlesSubMenus()
+                //------------------------
+
+                //------------------
+                atualizaSubMenu()
+                //------------------
             },
             waitTime
         )  // value in milliseconds
@@ -699,10 +687,6 @@ class MainActivity : AppCompatActivity() {
         visibilidadeViews(INVISIBLE)
         //-----------------------------
 
-        //------------------------
-        atualizaTitlesSubMenus()
-        //------------------------
-
     }
 
     //----------------------------------------------------------------------------------------------
@@ -711,6 +695,7 @@ class MainActivity : AppCompatActivity() {
     //--- Evento tapping no botão de geração de jogo
     @Suppress("UNUSED_PARAMETER")
     fun btnGeraJogoClick(view: View?) {
+
 
         strLog = "-> Tap no btnGeraJogo"
         Log.d(cTAG, strLog)
@@ -826,7 +811,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- Evento tapping no botão de adaptação de jogo
-    @RequiresApi(Build.VERSION_CODES.O)
     @Suppress("UNUSED_PARAMETER")
     fun btnAdaptaJogoClick(view: View?) {
 
@@ -942,9 +926,9 @@ class MainActivity : AppCompatActivity() {
         */
         // </DEBUG>
 
-        //--- Verifica se jogo válido
+        //--- Verifica se jogo válido quanto a repetição de nuúmeros em Qm e/ou Lin e/ou Col.
         //-----------------------------------------------------
-        val flagJogoValido = verificaSeJogoValido(quadMaior)
+        var flagJogoValido = verificaSeJogoValido(quadMaior)
         //-----------------------------------------------------
 
         when {
@@ -961,30 +945,21 @@ class MainActivity : AppCompatActivity() {
 
             //flagJogoGeradoOk = false
 
-            strToast = "Jogo inválido!"  //\nv=$flagJogoValido g=$flagJogoGeradoOk"
-            //strToast += " e=$flagJogoEditadoOk"
+            strToast = "Jogo inválido!"
             //--------------------------------------
             utilsKt.mToast(this, strToast)
             //--------------------------------------
             Log.d(cTAG, "-> $strToast")
 
         }
-        //--- Se tiver jogo válido, finaliza a preparação do jogo
+        //--- Se tiver jogo válido, gera o GABARTIO e tenta finalizar a preparação do jogo
         else {
-
-            strToast = "Jogo válido! Limites:\n"
-            strToast += "Erro: ${if (intLimiteErros == -1) " sem" else " $intLimiteErros"}"
-            strToast += " Tempo: ${if (strLimiteTempo == "00:00") " sem" else " $strLimiteTempo"}"
-            //--------------------------------------
-            utilsKt.mToast(this, strToast)
-            //--------------------------------------
-            Log.d(cTAG, "-> $strToast")
 
             //-----------------------
             finalizaEdicaoPreset()
             //-----------------------
 
-            //--- Envia o jogo gerado para ser usado como gabarito
+            //--- GABARITO: jogo gerado
             val arIntNumsGab = ArrayList<Int>()
             for (idxLin in 0..8) {
                 for (idxCol in 0..8) {
@@ -994,31 +969,52 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            //--- Envia o jogo preparado para ser jogado
-            val arIntNumsJogo = ArrayList<Int>()
-            for (idxLin in 0..8) {
-                for (idxCol in 0..8) {
-                    //-------------------------------------------
-                    arIntNumsJogo += quadMaior[idxLin][idxCol]
-                    //-------------------------------------------
-                }
+            flagJogoValido = (utilsKt.quantZeros(sgg.quadMaiorRet) == 0)
+
+            if (!flagJogoValido) {
+
+                //------------------------------------------------------------------
+                utilsKt.mToast(this, "Jogo inválido: gabarito!")
+                //------------------------------------------------------------------
+                Log.d(cTAG, "-> Jogo inválido: gabarito!")
+
             }
+            else {
 
-            //--- Prepara a Intent para chamar JogarActivity para JogosGerados e para JogosEditados
-            val intent = Intent(this, JogarActivity::class.java)
-            intent.action = strOpcaoJogo
+                //--- JOGO: envia o jogo preparado para ser jogado
+                val arIntNumsJogo = ArrayList<Int>()
+                for (idxLin in 0..8) {
+                    for (idxCol in 0..8) {
+                        //-------------------------------------------
+                        arIntNumsJogo += quadMaior[idxLin][idxCol]
+                        //-------------------------------------------
+                    }
+                }
 
-            intent.putExtra("strNivelJogo", strNivelJogo)
-            intent.putExtra("strSubNivelJogo", edtViewSubNivel.text.toString())
-            intent.putExtra("strCronoConta", "00:00")
-            intent.putExtra("strErro", "0")
+                strToast  = "Jogo válido! Limites:\n"
+                strToast += "Erro: ${if (intLimiteErros == -1) " sem" else " $intLimiteErros"}"
+                strToast += " Tempo: ${if (strLimiteTempo == "00:00") " sem" else " $strLimiteTempo"}"
+                //--------------------------------------
+                utilsKt.mToast(this, strToast)
+                //--------------------------------------
+                Log.d(cTAG, "-> $strToast")
 
-            intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
-            intent.putIntegerArrayListExtra("JogoPreparado", arIntNumsJogo)
+                //--- Prepara a Intent para chamar JogarActivity para JogosGerados e para JogosEditados
+                val intent = Intent(this, JogarActivity::class.java)
+                intent.action = strOpcaoJogo
 
-            //----------------------
-            startActivity(intent)
-            //----------------------
+                intent.putExtra("strNivelJogo", strNivelJogo)
+                intent.putExtra("strSubNivelJogo", edtViewSubNivel.text.toString())
+                intent.putExtra("strCronoConta", "00:00")
+                intent.putExtra("strErro", "0")
+
+                intent.putIntegerArrayListExtra("GabaritoDoJogo", arIntNumsGab)
+                intent.putIntegerArrayListExtra("JogoPreparado", arIntNumsJogo)
+
+                //----------------------
+                startActivity(intent)
+                //----------------------
+            }
 
         }
     }
@@ -1086,7 +1082,6 @@ class MainActivity : AppCompatActivity() {
     // Funções para o atendimento de tapping nos radioButtons de escolha da adaptação de jogo
     //----------------------------------------------------------------------------------------------
     //--- RBpresetClick
-    @RequiresApi(Build.VERSION_CODES.O)
     fun RBpresetClick(view: View?) {
 
         strLog = "-> onClick rbPreset"
@@ -1687,7 +1682,6 @@ class MainActivity : AppCompatActivity() {
     //lateinit var document : Document
 
     //--- inicQuadMaiorAdaptacao
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun inicQuadMaiorAdaptacao(jogoAdaptar: Int) {
 
         var array: Array<Int>
@@ -2040,7 +2034,7 @@ class MainActivity : AppCompatActivity() {
         val intQtiZeros = utilsKt.quantZeros(quadMaior)
         //------------------------------------------------
 
-        val intNivel = intQtiZeros / 10
+        val intNivel    = intQtiZeros / 10
         val intSubNivel = intQtiZeros % 10
         //---------- ---------- ----------------------
         // intNivel     Nivel      números / Zeros
@@ -2094,7 +2088,7 @@ class MainActivity : AppCompatActivity() {
         if (flagEdicaoOK) {
 
             sgg.quadMaiorRet = copiaArArInt(quadMaior)
-            arArIntNums = copiaArArInt(quadMaior)
+            arArIntNums      = copiaArArInt(quadMaior)
             //---------------------------------------
             quadMaior = sgg.adaptaJogoAlgoritmo2()
             //---------------------------------------
@@ -2222,12 +2216,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 //-------------------------
-                //atualizaTitlesSubMenus()
+                atualizaTitlesSubMenus()
                 //-------------------------
-
-                //--------------------------------------------------------------------
-                atualizaSubMenu(intLimiteErros, strLimiteTempo, flagMostraNumIguais)
-                //--------------------------------------------------------------------
 
             }
             .setNegativeButton("Cancel") { _, _ ->
@@ -2250,7 +2240,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- atualizaTitlesSubMenus
-    private fun atualizaTitlesSubMenus() {
+    private fun atualizaTitlesSubMenus() { //(salvaParams: Boolean) {
 
         try {
 
@@ -2258,55 +2248,9 @@ class MainActivity : AppCompatActivity() {
             //                    Leitura dos parâmetros no arquivo de setup
             //--------------------------------------------------------------------------------------
             //--- Lê o arquivo de setup
-            Log.d(cTAG, "-> leitura arquivo setup")
-            //- Leitura do Arquivo
-            val strDir = "sudoku/setup/"
-            val strArqName = "sudokusetup.xml"
-            //-----------------------------------------------------
-            val strLeitArq = utilsKt.leitArq(strDir, strArqName)
-            //-----------------------------------------------------
-
-            //- 1- obtém limite de erros:
-            var strTagInic = "limite_erros"
-            var strTagFim = "/$strTagInic"
-            //--------------------------------------------------------------------------------------
-            var strCampo = (utilsKt.leCampo(
-                strLeitArq, "<$strTagInic>",
-                "<$strTagFim>"
-            )).trim()
-            //---------------------------------------------------------------------------===========
-            strLog = "   - limite: $strCampo"
-            Log.d(cTAG, strLog)
-
-            intLimiteErrosAtual = strCampo.toInt()
-
-            //- 2- obtém tempo de jogo:
-            strTagInic = "limite_tempo"
-            strTagFim = "/$strTagInic"
-            //--------------------------------------------------------------------------------------
-            strCampo = (utilsKt.leCampo(
-                strLeitArq, "<$strTagInic>",
-                "<$strTagFim>"
-            )).trim()
-            //--------------------------------------------------------------------------------------
-            strLog = "   - limite: $strCampo"
-            Log.d(cTAG, strLog)
-
-            strLimiteTempoAtual = strCampo
-
-            //- 3- obtém flag se mostra números iguais:
-            strTagInic = "mostra_nums_iguais"
-            strTagFim = "/$strTagInic"
-            //--------------------------------------------------------------------------------------
-            strCampo = (utilsKt.leCampo(
-                strLeitArq, "<$strTagInic>",
-                "<$strTagFim>"
-            )).trim()
-            //--------------------------------------------------------------------------------------
-            strLog = "   - mostr nums iguais: $strCampo"
-            Log.d(cTAG, strLog)
-
-            flagMostraNumIguaisAtual = (strCampo == "true")
+            //-------------
+            //leArqSetUp()
+            //-------------
 
             //--------------------------------------------------------------------------------------
             //                           Atualiza os submenus
@@ -2342,12 +2286,13 @@ class MainActivity : AppCompatActivity() {
                 //flagMostraNumIguaisAtual = flagMostraNumIguais
             }
 
+            // Se há novos ajustes, atualiza o arquivo de parâmetros
             if (strToast.isNotEmpty()) {
 
                 utilsKt.mToast(this, "Novos ajustes:\n$strToast")
 
                 //---------------------------------------------------------------------
-                atualizaSubMenu(intLimiteErros, strLimiteTempo, flagMostraNumIguais)
+                atualizaSubMenu()  //intLimiteErros, strLimiteTempo, flagMostraNumIguais)
                 //---------------------------------------------------------------------
 
             }
@@ -2363,62 +2308,195 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- atualizaMenu
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun atualizaSubMenu(ajLimErros: Int, ajLimTempo: String, ajMostra: Boolean) {
+    private fun atualizaSubMenu() {
 
-        var strTmp = "$TITLE_ERROS${if (ajLimErros == -1) " -1 (sem)" else "$intLimiteErros"}"
+        var strTmp = "$TITLE_ERROS${if (intLimiteErros == -1) " -1 (sem)" else "$intLimiteErros"}"
         val subMenuLimiteQtiErros = myMenuItem.subMenu.findItem(R.id.action_ajustarQtiddErros)
         //-------------------------------------
         subMenuLimiteQtiErros.title = strTmp
         //-------------------------------------
-        intLimiteErrosAtual = ajLimErros
 
-        strTmp = "$TITLE_TEMPO${if (ajLimTempo == "00:00") "00:00 (sem)" else strLimiteTempo}"
+        strTmp = "$TITLE_TEMPO${if (strLimiteTempo == "00:00") "00:00 (sem)" else strLimiteTempo}"
         val subMenuLimiteTempoJogo = myMenuItem.subMenu.findItem(R.id.action_ajustarTempoDeJogo)
         //--------------------------------------
         subMenuLimiteTempoJogo.title = strTmp
         //--------------------------------------
-        strLimiteTempoAtual = ajLimTempo
 
-        strTmp = if (ajMostra) "Mostrar números iguais" else "Não Mostrar números iguais"
-        val subMenuMostrarNumsIguais =
-            myMenuItem.subMenu.findItem(R.id.action_mostrar_numeros_iguais)
+        strTmp = if (flagMostraNumIguais) "Mostrar números iguais" else "Não Mostrar números iguais"
+        val subMenuMostrarNumsIguais = myMenuItem.subMenu.findItem(R.id.action_mostrar_numeros_iguais)
         //----------------------------------------
         subMenuMostrarNumsIguais.title = strTmp
         //----------------------------------------
-        flagMostraNumIguaisAtual = ajMostra
 
         Log.d(cTAG, "-> atualiza submenus Ok!")
 
-        //-------------------
-        //atualizaArqSetUp()
-        //-------------------
+        if ((intLimiteErrosAtual != intLimiteErros) || (strLimiteTempoAtual != strLimiteTempo) ||
+            (flagMostraNumIguaisAtual != flagMostraNumIguais)) {
 
+            //-------------------
+            atualizaArqSetUp()
+            //-------------------
+
+            intLimiteErrosAtual      = intLimiteErros
+            strLimiteTempoAtual      = strLimiteTempo
+            flagMostraNumIguaisAtual = flagMostraNumIguais
+
+        }
     }
 
     //--- atualizaArqSetUp
-    @RequiresApi(Build.VERSION_CODES.O)
+    var strModelo = ""
     private fun atualizaArqSetUp() {
+
+        var strConteudo: String
 
         Log.d(cTAG, "-> Atualiza arquivo de setup")
 
+        //--- Lê o arquivo modelo do setup
+        val strNomeArqSemExt = "modelo_arq_xml_sudoku_setup"
+        val arStrLeitArqRaw : ArrayList<String>
+        Log.d(cTAG, "   - lê arquivo modelo $strNomeArqSemExt")
+
+        //----------------------------------------------------------------------
+        arStrLeitArqRaw = utils.LeituraFileRaw(this, strNomeArqSemExt)
+        //----------------------------------------------------------------------
+        for (idxDecl in 0 until arStrLeitArqRaw.size) { strModelo += arStrLeitArqRaw[idxDecl] }
+
+        Log.d(cTAG, "     $strModelo")
+
         //--- Prepara o conteúdo do arquivo
-        // Lê o conteúdo do arquivo modelo
-        val strDir     = "sudoku/documentos/"
-        val strArqName = "modeloArqXmlSudokuSetUp.txt"
+        Log.d(cTAG, "-> Prepara conteudo a salvar conforme o modelo lido.")
+
+        // Preenche os campos
+        var intTag = 0
+        val strTag: String
+        try {
+
+            //- header / id
+            intTag    = 0
+            intIdxFim = 0
+            //----------------------------------------------------------------------
+            strConteudo = preencheConteudo("<id>", "modeloArqXmlSudokuSetUp.txt")
+            //----------------------------------------------------------------------
+
+            //-	<body> / <limite_erros>
+            intTag = 1
+            //----------------------------------------------------------------------------------
+            strConteudo += preencheConteudo("<limite_erros>", intLimiteErros.toString())
+            //----------------------------------------------------------------------------------
+
+            //-	<body> / <limite_tempo>
+            intTag = 2
+            //------------------------------------------------------------------------
+            strConteudo += preencheConteudo("<limite_tempo>", strLimiteTempo)
+            //------------------------------------------------------------------------
+
+            //-	<body> / <mostra_nums_iguais>true</mostra_nums_iguais>
+            intTag = 3
+            //--------------------------------------------------------------------------------------
+            strConteudo += preencheConteudo("<mostra_nums_iguais>",
+                                                    if (flagMostraNumIguais) "true" else "false")
+            //--------------------------------------------------------------------------------------
+
+            //-- Finaliza a preparação do conteúdo
+            intTag = 4
+            strConteudo += strModelo.substring(intIdxFim, strModelo.length)
+
+        } catch (exc: Exception) {
+
+            strTag = intTag.toString()
+            utilsKt.mToast(this, "Erro $strTag: ${exc.message}")
+            strConteudo = ""
+        }
+
+        Log.d(cTAG, "   $strConteudo")
+
+        //--- Salva o arquivo setup
+        val strArqPath  = "/sudoku/setup"
+        val strArqSetUp = "SudokuSetUp.xml"
+        //------------------------------------------------------------------------------------------
+        val flagEscrita = utils.escExtMemTextFile(this, strArqPath, strArqSetUp, strConteudo)
+        //------------------------------------------------------------------------------------------
+
+        strToast = "Escrita arquivo $strArqSetUp ${if (flagEscrita) "OK!" else "NÃO ok!"}"
+        utilsKt.mToast(this, strToast)
+
+        strLog  = "-> Escrita arquivo storage/emulated/0/Download$strArqPath/$strArqSetUp "
+        strLog += if (flagEscrita) "OK!" else "NÃO ok!"
+        Log.d(cTAG, strLog)
+
+    }
+
+    //--- preencheConteudo
+    var intIdxFim = 0
+    fun preencheConteudo(strTag: String,strConteudoTag: String): String {
+
+        var strConteudoPreenchido = ""
+
+        var intIdxInic = intIdxFim
+        intIdxFim      = strModelo.indexOf(strTag, intIdxInic, false)
+        intIdxFim     += strTag.length
+
+        strConteudoPreenchido += strModelo.substring(intIdxInic, intIdxFim )
+        strConteudoPreenchido += strConteudoTag
+
+        return strConteudoPreenchido
+
+    }
+
+    //--- leArqSetUp
+    private fun leArqSetUp() {
+
+        Log.d(cTAG, "-> leitura arquivo setup")
+
+        //- Leitura do Arquivo
+        val strDir     = "sudoku/setup/"
+        val strArqName = "sudokusetup.xml"
         //-----------------------------------------------------
         val strLeitArq = utilsKt.leitArq(strDir, strArqName)
         //-----------------------------------------------------
-        Log.d(cTAG, "-> Modelo: $strLeitArq")
 
-        //----------------------------------------------------------------------
-        // 1- Prepara o conteúdo
-        //----------------------------------------------------------------------
-        //---------------------------------------------------------------------------------
-        val strConteudo = jogarJogo.preparaConteudo("modeloArqXmlSudokuSetUp")
-        //---------------------------------------------------------------------------------
+        //- 1- obtém limite de erros:
+        var strTagInic = "limite_erros"
+        var strTagFim = "/$strTagInic"
+        //--------------------------------------------------------------------------------------//////
+        var strCampo = (utilsKt.leCampo(
+            strLeitArq, "<$strTagInic>",
+            "<$strTagFim>"
+        )).trim()
+        //---------------------------------------------------------------------------===========
+        strLog = "   - limite: $strCampo"
+        Log.d(cTAG, strLog)
 
-        Log.d(cTAG, "-> Conteudo: $strConteudo")
+        intLimiteErrosAtual = strCampo.toInt()
+
+        //- 2- obtém tempo de jogo:
+        strTagInic = "limite_tempo"
+        strTagFim = "/$strTagInic"
+        //--------------------------------------------------------------------------------------
+        strCampo = (utilsKt.leCampo(
+            strLeitArq, "<$strTagInic>",
+            "<$strTagFim>"
+        )).trim()
+        //--------------------------------------------------------------------------------------
+        strLog = "   - limite: $strCampo"
+        Log.d(cTAG, strLog)
+
+        strLimiteTempoAtual = strCampo
+
+        //- 3- obtém flag se mostra números iguais:
+        strTagInic = "mostra_nums_iguais"
+        strTagFim = "/$strTagInic"
+        //--------------------------------------------------------------------------------------
+        strCampo = (utilsKt.leCampo(
+            strLeitArq, "<$strTagInic>",
+            "<$strTagFim>"
+        )).trim()
+        //--------------------------------------------------------------------------------------
+        strLog = "   - mostra nums iguais: $strCampo"
+        Log.d(cTAG, strLog)
+
+        flagMostraNumIguaisAtual = (strCampo == "true")
 
     }
 
