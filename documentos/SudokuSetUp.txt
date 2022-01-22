@@ -6,6 +6,6 @@
 	<body>
 		<limite_erros>-1</limite_erros>
 		<limite_tempo>00:00</limite_tempo>
-		<mostra_nums_iguais>false</mostra_nums_iguais>
+		<mostra_nums_iguais>true</mostra_nums_iguais>
 	</body>
 </setup>

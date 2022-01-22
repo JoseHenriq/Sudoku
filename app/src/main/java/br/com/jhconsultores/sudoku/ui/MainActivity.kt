@@ -47,39 +47,41 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.161"
+        const val strApp = "Sudoku_#9.0.162"
 
-        var flagScopedStorage  = false
+        var flagScopedStorage = false
 
         var flagJogoGeradoOk   = false
         var flagJogoEditadoOk  = false
         var flagJogoAdaptadoOk = false
 
         // Opções de jogo: "JogoGerado", "JogoAdaptado", "JogoPresetado", "JogoEditado"
-        var strOpcaoJogo   = "JogoGerado"
+        var strOpcaoJogo = "JogoGerado"
 
-        val arStrNivelJogo = arrayOf ("Fácil", "Médio", "Difícil", "Muito difícil")
+        val arStrNivelJogo = arrayOf("Fácil", "Médio", "Difícil", "Muito difícil")
         const val idxFACIL = 0
         const val idxMEDIO = 1
-        const val idxDIFICIL   = 2
+        const val idxDIFICIL = 2
         const val idxMUITO_DIFICIL = 3
 
-        var fatorLargura : Double = 0.0
-        var fatorAltura  : Double = 0.0
+        var fatorLargura: Double = 0.0
+        var fatorAltura: Double = 0.0
 
         //--- Params
         // Erros
-        const val TITLE_ERROS   = "Limite Erros: "
-        var strTitleErros       = ""
-        var intLimiteErros      = -1          // Default; significa "sem limite"
+        const val TITLE_ERROS = "Limite Erros: "
+        var strTitleErros  = ""
+        var intLimiteErros = -1          // Default; significa "sem limite"
         var intLimiteErrosAtual = -1
+
         // Tempo do Jogo
-        const val TITLE_TEMPO   = "Limite Tempo: "
-        var strTitleTempo       = ""
-        var strLimiteTempo      = "00:00"    // Default; significa "sem limite"
+        const val TITLE_TEMPO = "Limite Tempo: "
+        var strTitleTempo = ""
+        var strLimiteTempo = "00:00"    // Default; significa "sem limite"
         var strLimiteTempoAtual = "00:00"
+
         // Mostrar números iguais
-        var flagMostraNumIguais      = true
+        var flagMostraNumIguais = true
         var flagMostraNumIguaisAtual = true
 
     }
@@ -90,55 +92,55 @@ class MainActivity : AppCompatActivity() {
 
     private var bmpMyImageInic: Bitmap? = null
     private var bmpMyImageBack: Bitmap? = null
-    private var bmpMyImage    : Bitmap? = null
+    private var bmpMyImage: Bitmap? = null
 
     private var bmpNumDisp: Bitmap? = null
 
-    private var intCellwidth  = 0
+    private var intCellwidth = 0
     private var intCellheight = 0
 
-    private var pincelVerde   = Paint()
-    private var pincelBranco  = Paint()
-    private var pincelPreto   = Paint()
-    private var pincelAzul    = Paint()
+    private var pincelVerde = Paint()
+    private var pincelBranco = Paint()
+    private var pincelPreto = Paint()
+    private var pincelAzul = Paint()
     private var pincelLaranja = Paint()
 
     private var intTamTxt = 25
-    private var scale     = 0f
+    private var scale = 0f
 
     private var canvasMyImage: Canvas? = null
     private var canvasNumDisp: Canvas? = null
 
     //--- Textos
-    private lateinit var tvContaNums : TextView
+    private lateinit var tvContaNums: TextView
     private lateinit var tvContaClues: TextView
 
     //--- Botões principais
-    private lateinit var btnGeraJogo  : Button
+    private lateinit var btnGeraJogo: Button
     private lateinit var btnAdaptaJogo: Button
-    private lateinit var btnJogaJogo  : Button
+    private lateinit var btnJogaJogo: Button
 
     //--- Radio Buttons
-    private lateinit var groupRBnivel  : RadioGroup
-    private lateinit var rbFacil       : RadioButton
-    private lateinit var rbMedio       : RadioButton
-    private lateinit var rbDificil     : RadioButton
+    private lateinit var groupRBnivel: RadioGroup
+    private lateinit var rbFacil: RadioButton
+    private lateinit var rbMedio: RadioButton
+    private lateinit var rbDificil: RadioButton
     private lateinit var rbMuitoDificil: RadioButton
 
     private lateinit var groupRBadapta: RadioGroup
-    private lateinit var rbPreset     : RadioButton
-    private lateinit var rbEdicao     : RadioButton
+    private lateinit var rbPreset: RadioButton
+    private lateinit var rbEdicao: RadioButton
 
-    private lateinit var progressBar    : ProgressBar
+    private lateinit var progressBar: ProgressBar
     private lateinit var edtViewSubNivel: EditText
-    private lateinit var layout         : RelativeLayout
+    private lateinit var layout: RelativeLayout
 
     //--- Objetos para o jogo
     private var quadMaior = Array(9) { Array(9) { 0 } }
 
-    private var strNivelJogo   = "Fácil"
-    private var nivelJogo      = 0
-    private var subNivelJogo   = 0
+    private var strNivelJogo = "Fácil"
+    private var nivelJogo = 0
+    private var subNivelJogo = 0
     private var nivelTotalJogo = 0
 
     // Núm     0   22               31        41          51       61     81
@@ -149,12 +151,12 @@ class MainActivity : AppCompatActivity() {
 
     private val FACIL = 20
     private val MEDIO = 30
-    private val DIFICIL       = 40
+    private val DIFICIL = 40
     private val MUITO_DIFICIL = 50
 
-    private var arArIntNums     = Array(9) { Array(9) { 0 } }
+    private var arArIntNums = Array(9) { Array(9) { 0 } }
     private var arIntQtiNumDisp = Array(9) { 9 }
-    private val arIntNumsDisp   = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    private val arIntNumsDisp = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
 
     private lateinit var txtDadosJogo: TextView
 
@@ -163,23 +165,23 @@ class MainActivity : AppCompatActivity() {
     private var intLinJogar = 0
 
     private var flagBoardSel = false
-    private var versAndroid  = ""
+    private var versAndroid = ""
 
     //--- Parâmetros do jogo
     //private lateinit var layoutAjustes : Layout
-    private lateinit var edtLimErros   : EditText
-    private lateinit var edtLimTempo   : EditText
+    private lateinit var edtLimErros: EditText
+    private lateinit var edtLimTempo: EditText
 
     //--- Arquivos jogos
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
-    private lateinit var previewRequest : ActivityResultLauncher<Intent>
+    private lateinit var previewRequest: ActivityResultLauncher<Intent>
 
     //--- Classes externas
-    private var sgg       = SudokuGameGenerator()
+    private var sgg = SudokuGameGenerator()
     private var jogarJogo = JogarActivity()
-    private val utils     = Utils()
-    private val utilsKt   = UtilsKt()
-    private val timeVal   = TimeValidator()
+    private val utils = Utils()
+    private val utilsKt = UtilsKt()
+    private val timeVal = TimeValidator()
 
     //----------------------------------------------------------------------------------------------
     // Eventos e listeners da MainActivity
@@ -197,38 +199,43 @@ class MainActivity : AppCompatActivity() {
         //----------------------------------------------------------------------
         //--- Smartphone
         strToast = "Smartphone: ${Build.MANUFACTURER} - ${Build.MODEL}"
-        strLog   = strToast + "  Build: ${Build.DEVICE}"
-        Log.d (cTAG, strLog)
+        strLog = strToast + "  Build: ${Build.DEVICE}"
+        Log.d(cTAG, strLog)
 
         //--- Calcula o fator a ser usado para as diferenças de tamanho dos screens
         // desenv Smartphone JH: Samsung SM-G570M
         val larguraDesenv = 2.44  // inches
-        val alturaDesenv  = 4.33  // inches
+        val alturaDesenv = 4.33  // inches
 
         val metrics = resources.displayMetrics
         val yInches = metrics.heightPixels.toDouble() / metrics.ydpi.toDouble()
-        val xInches = metrics.widthPixels.toDouble()  / metrics.xdpi.toDouble()
+        val xInches = metrics.widthPixels.toDouble() / metrics.xdpi.toDouble()
 
-        Log.d (cTAG, "-> Dimensões screen:")
-        strLog = String.format("%s %.2f%s","   - largura  : ",metrics.widthPixels.toDouble()," px")
-        strLog+= String.format(" (%.2f\")", xInches)
+        Log.d(cTAG, "-> Dimensões screen:")
+        strLog =
+            String.format("%s %.2f%s", "   - largura  : ", metrics.widthPixels.toDouble(), " px")
+        strLog += String.format(" (%.2f\")", xInches)
         Log.d(cTAG, strLog)
-        strLog = String.format("%s %.2f%s","   - altura   : ",metrics.heightPixels.toDouble()," px")
-        strLog+= String.format(" (%.2f\")", yInches)
+        strLog =
+            String.format("%s %.2f%s", "   - altura   : ", metrics.heightPixels.toDouble(), " px")
+        strLog += String.format(" (%.2f\")", yInches)
         Log.d(cTAG, strLog)
         val diagonalInches = sqrt(xInches * xInches + yInches * yInches)
-        Log.d (cTAG, String.format("%s %.2f%s", "   - Diagonal : ", diagonalInches, "\""))
+        Log.d(cTAG, String.format("%s %.2f%s", "   - Diagonal : ", diagonalInches, "\""))
 
-        fatorLargura= xInches / larguraDesenv
+        fatorLargura = xInches / larguraDesenv
         fatorAltura = yInches / alturaDesenv
 
-        Log.d(cTAG, String.format("%s %.2f","   - fatorlargura : ", fatorLargura))
-        Log.d(cTAG, String.format("%s %.2f","   - fatorAltura  : ", fatorAltura))
+        Log.d(cTAG, String.format("%s %.2f", "   - fatorlargura : ", fatorLargura))
+        Log.d(cTAG, String.format("%s %.2f", "   - fatorAltura  : ", fatorAltura))
 
         //--- Versão do Android e versão da API
-        versAndroid = Build.VERSION.RELEASE    //.BASE_OS  // samsung/on5xelteub/on5xelte:8.0.0/R16NW/G570MUBU4CSB1:user/release-keys
+        versAndroid =
+            Build.VERSION.RELEASE    //.BASE_OS  // samsung/on5xelteub/on5xelte:8.0.0/R16NW/G570MUBU4CSB1:user/release-keys
         var strSO = ""
-        try { strSO = versAndroid } catch (exc : Exception) {
+        try {
+            strSO = versAndroid
+        } catch (exc: Exception) {
 
             //---------------------------------------------------------------
             utilsKt.mToast(this, "-> Erro01: ${exc.message}")
@@ -247,24 +254,24 @@ class MainActivity : AppCompatActivity() {
         //----------------------------------------------------------------------
         // Implementa o actionBar
         //----------------------------------------------------------------------
-        toolBar       = findViewById(R.id.maintoolbar)
+        toolBar = findViewById(R.id.maintoolbar)
         toolBar.title = "$strApp - main"
         setSupportActionBar(toolBar)
 
         //----------------------------------------------------------------------
         // Instancializações e inicializações
         //----------------------------------------------------------------------
-        tvContaNums  = findViewById(R.id.ContaNums)
+        tvContaNums = findViewById(R.id.ContaNums)
         tvContaClues = findViewById(R.id.ContaClues)
 
-        btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
+        btnGeraJogo = findViewById(R.id.btn_GerarJogo)
         btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
-        btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
+        btnJogaJogo = findViewById(R.id.btn_JogarJogo)
 
         groupRBnivel = findViewById(R.id.radioGrpNivel)
-        rbFacil      = findViewById(R.id.nivelFacil)
-        rbMedio      = findViewById(R.id.nivelMédio)
-        rbDificil    = findViewById(R.id.nivelDifícil)
+        rbFacil = findViewById(R.id.nivelFacil)
+        rbMedio = findViewById(R.id.nivelMédio)
+        rbDificil = findViewById(R.id.nivelDifícil)
         rbMuitoDificil = findViewById(R.id.nivelMuitoDifícil)
         //-----------------------------
         prepRBniveis(true)
@@ -272,13 +279,13 @@ class MainActivity : AppCompatActivity() {
         edtViewSubNivel = findViewById(R.id.edtViewSubNivel)
 
         groupRBadapta = findViewById(R.id.radioGrpAdapta)
-        rbPreset      = findViewById(R.id.preset)
-        rbEdicao      = findViewById(R.id.edicao)
-        txtDadosJogo  = findViewById(R.id.txtJogos)
+        rbPreset = findViewById(R.id.preset)
+        rbEdicao = findViewById(R.id.edicao)
+        txtDadosJogo = findViewById(R.id.txtJogos)
 
         groupRBadapta.visibility = INVISIBLE
 
-        tvContaNums.text  = "0"
+        tvContaNums.text = "0"
         tvContaClues.text = getString(R.string.valor81)
 
         //--- Objetos gráficos
@@ -317,9 +324,9 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 
                 if (s.isNotEmpty())
-                    //-----------------------------
+                //-----------------------------
                     verifMudancaNivel(nivelJogo)
-                    //-----------------------------
+                //-----------------------------
 
             }
 
@@ -356,9 +363,12 @@ class MainActivity : AppCompatActivity() {
 
             when (motionEvent.action) {
 
-                MotionEvent.ACTION_UP   -> { Log.d(cTAG, "   - ACTION_UP") }
+                MotionEvent.ACTION_UP -> {
+                    Log.d(cTAG, "   - ACTION_UP")
+                }
 
-                MotionEvent.ACTION_DOWN -> { Log.d(cTAG, "   - ACTION_Down")
+                MotionEvent.ACTION_DOWN -> {
+                    Log.d(cTAG, "   - ACTION_Down")
 
                     //Log.d(cTAG, "   - ACTION_DOWN")
                     val x = motionEvent.x.toInt()
@@ -396,9 +406,10 @@ class MainActivity : AppCompatActivity() {
         Log.d(cTAG, "-> Registra activity for result")
 
         //------------------------------------------------------------------------------------------
-        previewRequest = registerForActivityResult( ActivityResultContracts.
-                                             StartActivityForResult() ) { result: ActivityResult ->
-        //------------------------------------------------------------------------------------------
+        previewRequest = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
+            //------------------------------------------------------------------------------------------
 
             Log.d(cTAG, "-> Retorna da activity for result")
 
@@ -420,7 +431,7 @@ class MainActivity : AppCompatActivity() {
                         {
 
                             //--- Prepara a Intent para chamar AdaptarActivity
-                            val intent    = Intent(this, AdaptarActivity::class.java)
+                            val intent = Intent(this, AdaptarActivity::class.java)
                             intent.action = "InstanciaRVJogosSalvos"
                             //------------------------------
                             previewRequest.launch(intent)
@@ -433,8 +444,9 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
+            } else {
+                Log.d(cTAG, "-> activity results NÃO OK!")
             }
-            else { Log.d(cTAG, "-> activity results NÃO OK!") }
 
         }
 
@@ -461,15 +473,17 @@ class MainActivity : AppCompatActivity() {
             menuInflater.inflate(R.menu.menu_main_sub, myMenuItem.subMenu)
 
             //--- Inicializa parametros
-            intLimiteErros      = -1
-            strLimiteTempo      = "00:00"
+            intLimiteErros = -1
+            strLimiteTempo = "00:00"
             flagMostraNumIguais = true
 
             //---------------------------------------------------------------------
             atualizaSubMenu(intLimiteErros, strLimiteTempo, flagMostraNumIguais)
             //---------------------------------------------------------------------
 
-        } catch (exc: Exception) { Log.d(cTAG, "-> Erro02: ${exc.message}") }
+        } catch (exc: Exception) {
+            Log.d(cTAG, "-> Erro02: ${exc.message}")
+        }
 
         //--- Finaliza a inicialização
         //-------------------------
@@ -494,10 +508,6 @@ class MainActivity : AppCompatActivity() {
             implDialogViewAlertDialog()  //subMenuLimiteQtiErros)
             //-------------------------------------------------
 
-            //-------------------------
-            atualizaTitlesSubMenus()
-            //-------------------------
-
             true
 
         }
@@ -510,10 +520,6 @@ class MainActivity : AppCompatActivity() {
             //---------------------------------------------------
             implDialogViewAlertDialog()  //subMenuLimiteTempoJogo)
             //---------------------------------------------------
-
-            //-------------------------
-            atualizaTitlesSubMenus()
-            //-------------------------
 
             true
 
@@ -531,8 +537,7 @@ class MainActivity : AppCompatActivity() {
                 atualizaSubMenu(intLimiteErros, strLimiteTempo, flagMostraNumIguais)
                 //---------------------------------------------------------------------
 
-            }
-            else {
+            } else {
 
                 strLog = "Mostrar números iguais"
                 flagMostraNumIguais = true
@@ -585,8 +590,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    override fun onRequestPermissionsResult( requestCode : Int, permissions: Array<String>,
-                                                                          grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>,
+        grantResults: IntArray
+    ) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -610,7 +617,7 @@ class MainActivity : AppCompatActivity() {
 
             strLog = when (flagInstalacaoOk) {
 
-                true  -> "- Permissão concedida!"
+                true -> "- Permissão concedida!"
                 false -> "- Permissão NÃO concedida!"
 
             }
@@ -618,8 +625,7 @@ class MainActivity : AppCompatActivity() {
             Log.d(cTAG, strLog)
             utilsKt.mToast(this, strLog)
 
-            if (!flagInstalacaoOk && (permissions[0]== "android.permission.WRITE_EXTERNAL_STORAGE"))
-            {
+            if (!flagInstalacaoOk && (permissions[0] == "android.permission.WRITE_EXTERNAL_STORAGE")) {
                 var strMsg = "O Android NÃO concedeu acesso ao salvamento de jogos."
                 strMsg += "\nProvável problema: API incompatível."
                 strMsg += "\n\nContinua o App ou pára?"
@@ -654,7 +660,9 @@ class MainActivity : AppCompatActivity() {
 
         super.onResume()
 
-        if (rbEdicao.isChecked) { txtDadosJogo.text = "" }
+        if (rbEdicao.isChecked) {
+            txtDadosJogo.text = ""
+        }
 
         //--- Ativa o progress bar
         //progressBar.show()
@@ -707,7 +715,7 @@ class MainActivity : AppCompatActivity() {
         strLog = "-> Tap no btnGeraJogo"
         Log.d(cTAG, strLog)
 
-        strOpcaoJogo     = "JogoGerado"
+        strOpcaoJogo = "JogoGerado"
         flagJogoGeradoOk = false
 
         //--- Ativa o progress bar
@@ -805,7 +813,7 @@ class MainActivity : AppCompatActivity() {
 
                     strLog = "Não é possível gerar o jogo sem subnivel!"
                     //------------------------------------------
-                    utilsKt.mToast (this, strLog)
+                    utilsKt.mToast(this, strLog)
                     //------------------------------------------
                     Log.d(cTAG, "-> $strLog")
 
@@ -890,9 +898,7 @@ class MainActivity : AppCompatActivity() {
                 },
                 waitTime
             ) // value in milliseconds
-        }
-
-        catch (exc : Exception) {
+        } catch (exc: Exception) {
 
             Log.d(cTAG, "-> adapta Erro: ${exc.message}")
 
@@ -944,7 +950,7 @@ class MainActivity : AppCompatActivity() {
         when {
 
             strOpcaoJogo == "JogoGerado" -> flagJogoGeradoOk = flagJogoValido
-            strOpcaoJogo.contains( "JogoPreSetado") -> flagJogoAdaptadoOk = flagJogoValido
+            strOpcaoJogo.contains("JogoPreSetado") -> flagJogoAdaptadoOk = flagJogoValido
             strOpcaoJogo == "JogoEditado" -> flagJogoEditadoOk = flagJogoValido
             else -> flagJogoGeradoOk = flagJogoValido
 
@@ -966,9 +972,9 @@ class MainActivity : AppCompatActivity() {
         //--- Se tiver jogo válido, finaliza a preparação do jogo
         else {
 
-            strToast  = "Jogo válido! Limites:\n"
-            strToast += "Erro: ${if(intLimiteErros ==      -1) " sem" else " $intLimiteErros"}"
-            strToast += " Tempo: ${if(strLimiteTempo == "00:00") " sem" else " $strLimiteTempo"}"
+            strToast = "Jogo válido! Limites:\n"
+            strToast += "Erro: ${if (intLimiteErros == -1) " sem" else " $intLimiteErros"}"
+            strToast += " Tempo: ${if (strLimiteTempo == "00:00") " sem" else " $strLimiteTempo"}"
             //--------------------------------------
             utilsKt.mToast(this, strToast)
             //--------------------------------------
@@ -1288,7 +1294,7 @@ class MainActivity : AppCompatActivity() {
         scale = resources.displayMetrics.density
 
         ivSudokuBoardMain = findViewById(R.id.ivSudokuBoardMain)
-        ivNumDisp         = findViewById(R.id.imageView3)
+        ivNumDisp = findViewById(R.id.imageView3)
         //ivQtiNumDisp         = findViewById(R.id.imageView4)
 
         //-----------------------------
@@ -1503,9 +1509,9 @@ class MainActivity : AppCompatActivity() {
         if (intNumAtual > 0) arIntQtiNumDisp[intNumAtual - 1]++
         // Atualiza contadores
         val intQtiZeros = utilsKt.quantZeros(arArIntNums)
-        val intQtiNums  = 81 - intQtiZeros
+        val intQtiNums = 81 - intQtiZeros
         tvContaClues.text = intQtiZeros.toString()
-        tvContaNums.text  = intQtiNums.toString()
+        tvContaNums.text = intQtiNums.toString()
 
         //--------------
         voltaEdicao()
@@ -1545,7 +1551,7 @@ class MainActivity : AppCompatActivity() {
 
             //--- Se tem célula selecionada no Sudoku Board, trata a edição da célula
             //--- Determina a célula e o número tocado
-            val cellX  = coordX / intCellwidth
+            val cellX = coordX / intCellwidth
             val intNum = arIntNumsDisp[cellX]
 
             //--- Célula válida
@@ -1572,7 +1578,7 @@ class MainActivity : AppCompatActivity() {
                         val Qm = jogarJogo.determinaQm(intLinJogar, intColJogar)
                         //--------------------------------------------------------------------------
                         val flagNumVal =
-                                      jogarJogo.verifValidade(Qm, intLinJogar, intColJogar, intNum)
+                            jogarJogo.verifValidade(Qm, intLinJogar, intColJogar, intNum)
                         //--------------------------------------------------------------------------
 
                         //--- Se válido e ainda tem número desse disponível escreve-o no board
@@ -1855,7 +1861,9 @@ class MainActivity : AppCompatActivity() {
     //                                      Debug
     //----------------------------------------------------------------------------------------------
     //--- Converte um valor em dp para pixels (px)
-    private fun toPx(dip: Float): Float { return (dip) }
+    private fun toPx(dip: Float): Float {
+        return (dip)
+    }
 
     //----------------------------------------------------------------------------------------------
     //                                        Permissões
@@ -1919,27 +1927,29 @@ class MainActivity : AppCompatActivity() {
         // --- Prepara o preset para se conseguir o gabarito do jogo
         //- Continua a adaptação após um tempo para atualização da UI (progress bar e txtDadosJogo)
         val waitTime = 100L  // milisegundos
-        Handler(Looper.getMainLooper()).postDelayed( {
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
 
-            //-----------------------------
-            visibilidadeViews(INVISIBLE)
-            //-----------------------------
-            groupRBadapta.visibility = VISIBLE
+                //-----------------------------
+                visibilidadeViews(INVISIBLE)
+                //-----------------------------
+                groupRBadapta.visibility = VISIBLE
 
-            rbPreset.isChecked = true
+                rbPreset.isChecked = true
 
-            //--- Desativa o progress bar
-            //progressBar.dismiss()
-            //progressBar.visibility = INVISIBLE
-            layout.visibility = INVISIBLE
+                //--- Desativa o progress bar
+                //progressBar.dismiss()
+                //progressBar.visibility = INVISIBLE
+                layout.visibility = INVISIBLE
 
-            //--- Ativa a activity de adaptação de jogos
-            //-----------------------
-            ativaAdaptarActivity()
-            //-----------------------
+                //--- Ativa a activity de adaptação de jogos
+                //-----------------------
+                ativaAdaptarActivity()
+                //-----------------------
 
             },
-            waitTime )  // value in milliseconds
+            waitTime
+        )  // value in milliseconds
     }
 
     //--- ativaAdaptarActivity
@@ -1959,7 +1969,7 @@ class MainActivity : AppCompatActivity() {
             //intent.putStringArrayListExtra(AppConstants.PARAMS.IMAGE_URIS, list)
 
             // Versão Kotlin
-            val intent    = Intent(this, AdaptarActivity::class.java)
+            val intent = Intent(this, AdaptarActivity::class.java)
             intent.action = "InstanciaRVJogosSalvos"
             //------------------------------
             previewRequest.launch(intent)
@@ -1967,7 +1977,7 @@ class MainActivity : AppCompatActivity() {
 
             Log.d(cTAG, "-> Launch AdaptarActivity")
 
-        } catch (exc : Exception) {
+        } catch (exc: Exception) {
 
             Log.d(cTAG, "-> Erro03: ${exc.message}")
 
@@ -1978,20 +1988,20 @@ class MainActivity : AppCompatActivity() {
     //--- edicaoPreset()
     private fun edicaoPreset() {
 
-        rbEdicao.isChecked      = true
+        rbEdicao.isChecked = true
 
-        flagJogoGeradoOk  = false
+        flagJogoGeradoOk = false
         flagJogoEditadoOk = false
 
         txtDadosJogo.text = ""
 
-        tvContaNums.text  = "0"
+        tvContaNums.text = "0"
         tvContaClues.text = resources.getString(R.string.valor81)
 
-        arArIntNums     = Array(9) { Array(9) { 0 } }
+        arArIntNums = Array(9) { Array(9) { 0 } }
         arIntQtiNumDisp = Array(9) { 9 }
 
-        ivNumDisp.isEnabled         = true
+        ivNumDisp.isEnabled = true
         ivSudokuBoardMain.isEnabled = true
 
         //------------------------------------------------------------------------------------------
@@ -2005,7 +2015,7 @@ class MainActivity : AppCompatActivity() {
         // Image view do jogo
         //------------------------------------------------------------------------------------------
         bmpMyImage = BitmapFactory.decodeResource(resources, R.drawable.sudoku_board3)
-                                                      .copy(Bitmap.Config.ARGB_8888, true)
+            .copy(Bitmap.Config.ARGB_8888, true)
         ivSudokuBoardMain.setImageBitmap(bmpMyImage)
 
         //-----------------------------------------------------
@@ -2030,7 +2040,7 @@ class MainActivity : AppCompatActivity() {
         val intQtiZeros = utilsKt.quantZeros(quadMaior)
         //------------------------------------------------
 
-        val intNivel    = intQtiZeros / 10
+        val intNivel = intQtiZeros / 10
         val intSubNivel = intQtiZeros % 10
         //---------- ---------- ----------------------
         // intNivel     Nivel      números / Zeros
@@ -2043,10 +2053,10 @@ class MainActivity : AppCompatActivity() {
         when {
 
             intQtiZeros > 59 -> {
-            strToast = "Para gerar jogo editar mais do que 21 números!"
+                strToast = "Para gerar jogo editar mais do que 21 números!"
             }
             intQtiZeros < 20 -> {
-            strToast = "Para gerar jogo editar menos do que 62 números!"
+                strToast = "Para gerar jogo editar menos do que 62 números!"
             }
             else -> {
 
@@ -2084,27 +2094,28 @@ class MainActivity : AppCompatActivity() {
         if (flagEdicaoOK) {
 
             sgg.quadMaiorRet = copiaArArInt(quadMaior)
-            arArIntNums      = copiaArArInt(quadMaior)
+            arArIntNums = copiaArArInt(quadMaior)
             //---------------------------------------
             quadMaior = sgg.adaptaJogoAlgoritmo2()
             //---------------------------------------
 
         }
 
-    // **** O array preparado (quadMaior) e o gabarito (sgg.quadMaiorRet) serão enviados
-    // **** pelo listener do botão JogaJogo.
+        // **** O array preparado (quadMaior) e o gabarito (sgg.quadMaiorRet) serão enviados
+        // **** pelo listener do botão JogaJogo.
     }
 
     //--- verificaSeJogoValido
-    fun verificaSeJogoValido(arArJogo : Array<Array<Int>>): Boolean {
+    fun verificaSeJogoValido(arArJogo: Array<Array<Int>>): Boolean {
 
         var flagJogoValido = false
 
         //--- Quantidade de clues entre 20 e 59   (Fácil: 2.0 e MuitoDifícil: 5.9)
         val qtizeros = utilsKt.quantZeros(arArJogo)
         // Quantidade de zeros menos que 20 ou mais do que 59
-        if ((strOpcaoJogo == "JogoGerado" || strOpcaoJogo == "JogoEditado")  &&
-                                                    (qtizeros < 20 || qtizeros > 59)) return false
+        if ((strOpcaoJogo == "JogoGerado" || strOpcaoJogo == "JogoEditado") &&
+            (qtizeros < 20 || qtizeros > 59)
+        ) return false
         // Quantidade de zeros entre 20 e 59
         else {
 
@@ -2129,7 +2140,7 @@ class MainActivity : AppCompatActivity() {
                         jogarJogo.arArIntNums = copiaArArInt(arArJogo)  // <<<<<<<<< ATENÇÃO !!!!
                         //--------------------------------------------------------------------------
                         flagJogoValido =
-                                       jogarJogo.verifValidade(intQuadMenor, idxLin, idxCol, intNum)
+                            jogarJogo.verifValidade(intQuadMenor, idxLin, idxCol, intNum)
                         //--------------------------------------------------------------------------
 
                         arArJogo[idxLin][idxCol] = intNum
@@ -2152,103 +2163,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //--- atualizaTitlesSubMenus
-    private fun atualizaTitlesSubMenus() {
-
-        try {
-
-            /*
-            val subMenuLimiteQtiErros    = myMenuItem.subMenu.findItem(R.id.action_ajustarQtiddErros)
-            val subMenuLimiteTempoJogo   = myMenuItem.subMenu.findItem(R.id.action_ajustarTempoDeJogo)
-            val subMenuMostrarNumsIguais = myMenuItem.subMenu.findItem(R.id.action_mostrar_numeros_iguais)
-            */
-
-            //--- Lê os parâmetros no arquivo de setup
-            Log.d(cTAG, "-> leitura arquivo setup")
-            //- Leitura do Arquivo
-            val strDir     = "sudoku/setup/"
-            val strArqName = "sudokusetup.xml"
-            //-----------------------------------------------------
-            val strLeitArq = utilsKt.leitArq(strDir, strArqName)
-            //-----------------------------------------------------
-
-            //- 1- obtém limite de erros:
-            var strTagInic = "limite_erros"
-            var strTagFim  = "/$strTagInic"
-            //--------------------------------------------------------------------------------------
-            var strCampo = (utilsKt.leCampo(strLeitArq, "<$strTagInic>",
-                                                                      "<$strTagFim>")).trim()
-            //---------------------------------------------------------------------------===========
-            strLog = "   - limite: $strCampo"
-            Log.d(cTAG, strLog)
-
-            intLimiteErros = strCampo.toInt()
-
-            //- 2- obtém tempo de jogo:
-            strTagInic = "limite_tempo"
-            strTagFim  = "/$strTagInic"
-            //--------------------------------------------------------------------------------------
-            strCampo = (utilsKt.leCampo(strLeitArq, "<$strTagInic>",
-                                                                      "<$strTagFim>")).trim()
-            //--------------------------------------------------------------------------------------
-            strLog = "   - limite: $strCampo"
-            Log.d(cTAG, strLog)
-
-            strLimiteTempo = strCampo
-
-            //- 3- obtém flag se mostra números iguais:
-            strTagInic   = "mostra_nums_iguais"
-            strTagFim  = "/$strTagInic"
-            //--------------------------------------------------------------------------------------
-            strCampo = (utilsKt.leCampo(strLeitArq, "<$strTagInic>",
-                                                                      "<$strTagFim>")).trim()
-            //--------------------------------------------------------------------------------------
-            strLog = "   - mostr nums iguais: $strCampo"
-            Log.d(cTAG, strLog)
-
-            flagMostraNumIguais = (strCampo == "true")
-
-            //--- Erros
-            strTitleErros  = TITLE_ERROS
-            strTitleErros += if (intLimiteErros == -1) " sem (-1)" else "$intLimiteErros"
-            //--------------------------------------------
-            //subMenuLimiteQtiErros.title = strTitleErros
-            //--------------------------------------------
-
-            if (intLimiteErros != intLimiteErrosAtual) {
-
-                utilsKt.mToast(this, "Novo limite de erros:\n$strTitleErros")
-                intLimiteErrosAtual = intLimiteErros
-
-            }
-
-            //--- Tempo de jogo
-            strTitleTempo  = TITLE_TEMPO
-            strTitleTempo += if (strLimiteTempo == "00:00") " sem (00:00)" else " $strLimiteTempo"
-            //---------------------------------------------
-            //subMenuLimiteTempoJogo.title = strTitleTempo
-            //---------------------------------------------
-
-            if (strLimiteTempoAtual != strLimiteTempo) {
-
-                utilsKt.mToast(this, "Novo limite de Tempo:\n$strLimiteTempo")
-                strLimiteTempoAtual = strLimiteTempo
-
-            }
-
-            //---------------------------------------------------------------------
-            //atualizaSubMenu(intLimiteErros, strLimiteTempo, flagMostraNumIguais)
-            //---------------------------------------------------------------------
-
-        }
-        catch (exc : Exception) {
-
-            Log.d(cTAG, "-> Erro04: ${exc.message}")
-
-        }
-
-    }
-
     //--- implDialogView_AlertDialog para o ajuste dos parâmetros do Jogo
     @SuppressLint("SetTextI18n")
     private fun implDialogViewAlertDialog() { //subMenuLimite : MenuItem) {
@@ -2257,14 +2171,17 @@ class MainActivity : AppCompatActivity() {
         // Implementa o Dialog View
         //------------------------------------------------------------------------------------------
         // Inflate o layout e instancía os controles do layout que farão parte do AlertDialog
-        val dialogView  = layoutInflater.inflate(R.layout.alertdialog_param_jogo, null)
+        val dialogView = layoutInflater.inflate(R.layout.alertdialog_param_jogo, null)
         edtLimErros = dialogView.findViewById(R.id.edtErros)
         edtLimTempo = dialogView.findViewById(R.id.edtTempo)
+
+        edtLimErros.setText(intLimiteErros.toString())
+        edtLimTempo.setText(strLimiteTempo)
 
         //---------------------------------------------------------------------
         // Prepara o AlertDialog
         //---------------------------------------------------------------------
-        val customTitle  = TextView(this)
+        val customTitle = TextView(this)
         customTitle.text = "Parâmetros do Jogo"
         customTitle.setBackgroundColor(Color.DKGRAY)
         customTitle.setPadding(10, 10, 10, 10)
@@ -2282,7 +2199,7 @@ class MainActivity : AppCompatActivity() {
 
                 var ajusteLim = edtLimErros.text.toString()
                 if (ajusteLim.isNotEmpty()) intLimiteErros = ajusteLim.toInt()
-                Log.d(cTAG, "   - limite: $intLimiteErros erros")
+                Log.d(cTAG, "   - erros: $intLimiteErros")
 
                 ajusteLim = edtLimTempo.text.toString()
                 if (ajusteLim.isNotEmpty()) {
@@ -2290,11 +2207,9 @@ class MainActivity : AppCompatActivity() {
                     if (timeVal.validate(ajusteLim)) {
 
                         if (ajusteLim.isNotEmpty()) strLimiteTempo = ajusteLim
-                        Log.d(cTAG, "   - limite de tempo: $strLimiteTempo")
+                        Log.d(cTAG, "   - tempo: $strLimiteTempo")
 
-                    }
-
-                    else {
+                    } else {
 
                         strToast = "Formato incorreto. Entre com \"MM:ss\""
 
@@ -2307,8 +2222,12 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 //-------------------------
-                atualizaTitlesSubMenus()
+                //atualizaTitlesSubMenus()
                 //-------------------------
+
+                //--------------------------------------------------------------------
+                atualizaSubMenu(intLimiteErros, strLimiteTempo, flagMostraNumIguais)
+                //--------------------------------------------------------------------
 
             }
             .setNegativeButton("Cancel") { _, _ ->
@@ -2330,26 +2249,176 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //--- atualizaTitlesSubMenus
+    private fun atualizaTitlesSubMenus() {
+
+        try {
+
+            //--------------------------------------------------------------------------------------
+            //                    Leitura dos parâmetros no arquivo de setup
+            //--------------------------------------------------------------------------------------
+            //--- Lê o arquivo de setup
+            Log.d(cTAG, "-> leitura arquivo setup")
+            //- Leitura do Arquivo
+            val strDir = "sudoku/setup/"
+            val strArqName = "sudokusetup.xml"
+            //-----------------------------------------------------
+            val strLeitArq = utilsKt.leitArq(strDir, strArqName)
+            //-----------------------------------------------------
+
+            //- 1- obtém limite de erros:
+            var strTagInic = "limite_erros"
+            var strTagFim = "/$strTagInic"
+            //--------------------------------------------------------------------------------------
+            var strCampo = (utilsKt.leCampo(
+                strLeitArq, "<$strTagInic>",
+                "<$strTagFim>"
+            )).trim()
+            //---------------------------------------------------------------------------===========
+            strLog = "   - limite: $strCampo"
+            Log.d(cTAG, strLog)
+
+            intLimiteErrosAtual = strCampo.toInt()
+
+            //- 2- obtém tempo de jogo:
+            strTagInic = "limite_tempo"
+            strTagFim = "/$strTagInic"
+            //--------------------------------------------------------------------------------------
+            strCampo = (utilsKt.leCampo(
+                strLeitArq, "<$strTagInic>",
+                "<$strTagFim>"
+            )).trim()
+            //--------------------------------------------------------------------------------------
+            strLog = "   - limite: $strCampo"
+            Log.d(cTAG, strLog)
+
+            strLimiteTempoAtual = strCampo
+
+            //- 3- obtém flag se mostra números iguais:
+            strTagInic = "mostra_nums_iguais"
+            strTagFim = "/$strTagInic"
+            //--------------------------------------------------------------------------------------
+            strCampo = (utilsKt.leCampo(
+                strLeitArq, "<$strTagInic>",
+                "<$strTagFim>"
+            )).trim()
+            //--------------------------------------------------------------------------------------
+            strLog = "   - mostr nums iguais: $strCampo"
+            Log.d(cTAG, strLog)
+
+            flagMostraNumIguaisAtual = (strCampo == "true")
+
+            //--------------------------------------------------------------------------------------
+            //                           Atualiza os submenus
+            //--------------------------------------------------------------------------------------
+            strToast = ""
+
+            //--- Erros
+            strTitleErros = TITLE_ERROS
+
+            if (intLimiteErros != intLimiteErrosAtual) {
+
+                strToast += "   - erros: $intLimiteErros"
+                //intLimiteErrosAtual = intLimiteErros
+
+            }
+            strTitleErros += if (intLimiteErros == -1) " sem (-1)" else "$intLimiteErros"
+
+            //--- Tempo de jogo
+            strTitleTempo = TITLE_TEMPO
+            if (strLimiteTempoAtual != strLimiteTempo) {
+
+                strToast += "${if (strToast.isNotEmpty()) "\n" else ""}   - tempo: $strLimiteTempo"
+                //strLimiteTempoAtual = strLimiteTempo
+
+            }
+            strTitleTempo += if (strLimiteTempo == "00:00") " sem (00:00)" else " $strLimiteTempo"
+
+            //--- Mostrar números iguais
+            if (flagMostraNumIguaisAtual != flagMostraNumIguais) {
+
+                strToast += if (strToast.isNotEmpty()) "\n" else ""
+                strToast += "   - mostrar nºs =s: ${flagMostraNumIguais == true}"
+                //flagMostraNumIguaisAtual = flagMostraNumIguais
+            }
+
+            if (strToast.isNotEmpty()) {
+
+                utilsKt.mToast(this, "Novos ajustes:\n$strToast")
+
+                //---------------------------------------------------------------------
+                atualizaSubMenu(intLimiteErros, strLimiteTempo, flagMostraNumIguais)
+                //---------------------------------------------------------------------
+
+            }
+
+            Log.d(cTAG, "-> atualiza titles dos submenus Ok!")
+
+        } catch (exc: Exception) {
+
+            Log.d(cTAG, "-> Erro04: ${exc.message}")
+
+        }
+
+    }
+
     //--- atualizaMenu
-    private fun atualizaSubMenu(ajLimErros : Int, ajLimTempo: String, ajMostra : Boolean) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun atualizaSubMenu(ajLimErros: Int, ajLimTempo: String, ajMostra: Boolean) {
 
-        /*
-        lateinit var subMenuLimiteQtiErros  : MenuItem
-        lateinit var subMenuLimiteTempoJogo : MenuItem
-        private lateinit var subMenuMostrarNumsIguais: MenuItem
-        */
-
-        val subMenuLimiteQtiErros   = myMenuItem.subMenu.findItem(R.id.action_ajustarQtiddErros)
-        subMenuLimiteQtiErros.title = if (ajLimErros == -1) "$TITLE_ERROS -1 (sem)" else "$intLimiteErros"
+        var strTmp = "$TITLE_ERROS${if (ajLimErros == -1) " -1 (sem)" else "$intLimiteErros"}"
+        val subMenuLimiteQtiErros = myMenuItem.subMenu.findItem(R.id.action_ajustarQtiddErros)
+        //-------------------------------------
+        subMenuLimiteQtiErros.title = strTmp
+        //-------------------------------------
         intLimiteErrosAtual = ajLimErros
 
-        val subMenuLimiteTempoJogo   = myMenuItem.subMenu.findItem(R.id.action_ajustarTempoDeJogo)
-        subMenuLimiteTempoJogo.title = if (ajLimTempo == "00:00") "$TITLE_TEMPO 00:00 (sem)" else strLimiteTempo
+        strTmp = "$TITLE_TEMPO${if (ajLimTempo == "00:00") "00:00 (sem)" else strLimiteTempo}"
+        val subMenuLimiteTempoJogo = myMenuItem.subMenu.findItem(R.id.action_ajustarTempoDeJogo)
+        //--------------------------------------
+        subMenuLimiteTempoJogo.title = strTmp
+        //--------------------------------------
         strLimiteTempoAtual = ajLimTempo
 
-        val subMenuMostrarNumsIguais = myMenuItem.subMenu.findItem(R.id.action_mostrar_numeros_iguais)
-        subMenuMostrarNumsIguais.title = if (ajMostra) "Mostrar números iguais" else "Não Mostrar números iguais"
+        strTmp = if (ajMostra) "Mostrar números iguais" else "Não Mostrar números iguais"
+        val subMenuMostrarNumsIguais =
+            myMenuItem.subMenu.findItem(R.id.action_mostrar_numeros_iguais)
+        //----------------------------------------
+        subMenuMostrarNumsIguais.title = strTmp
+        //----------------------------------------
         flagMostraNumIguaisAtual = ajMostra
+
+        Log.d(cTAG, "-> atualiza submenus Ok!")
+
+        //-------------------
+        //atualizaArqSetUp()
+        //-------------------
+
+    }
+
+    //--- atualizaArqSetUp
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun atualizaArqSetUp() {
+
+        Log.d(cTAG, "-> Atualiza arquivo de setup")
+
+        //--- Prepara o conteúdo do arquivo
+        // Lê o conteúdo do arquivo modelo
+        val strDir     = "sudoku/documentos/"
+        val strArqName = "modeloArqXmlSudokuSetUp.txt"
+        //-----------------------------------------------------
+        val strLeitArq = utilsKt.leitArq(strDir, strArqName)
+        //-----------------------------------------------------
+        Log.d(cTAG, "-> Modelo: $strLeitArq")
+
+        //----------------------------------------------------------------------
+        // 1- Prepara o conteúdo
+        //----------------------------------------------------------------------
+        //---------------------------------------------------------------------------------
+        val strConteudo = jogarJogo.preparaConteudo("modeloArqXmlSudokuSetUp")
+        //---------------------------------------------------------------------------------
+
+        Log.d(cTAG, "-> Conteudo: $strConteudo")
 
     }
 

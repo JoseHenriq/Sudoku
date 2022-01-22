@@ -43,6 +43,13 @@ class JogarActivity : AppCompatActivity() {
     private var strLog   = ""
     private var strToast = ""
 
+    companion object {
+
+        private var strModelo: String = ""
+        private var intIdxFim: Int    = 0
+
+    }
+
     private var intImageResource = 0
     private var bmpInic: Bitmap? = null // Board vazio Lido a partir do resource/drawable
     private var bmpJogo: Bitmap? = null // Preset ou jogo gerado ANTES dos novos números
@@ -1433,9 +1440,9 @@ class JogarActivity : AppCompatActivity() {
         //----------------------------------------------------------------------
         // 1- Prepara o conteúdo
         //----------------------------------------------------------------------
-        //------------------------------------
-        val strConteudo = preparaConteudo()
-        //------------------------------------
+        //----------------------------------------------------------------------
+        val strConteudo = preparaConteudo("modelo_arq_xml_sudoku1")
+        //----------------------------------------------------------------------
 
         //----------------------------------------------------------------------
         // 2- Define um nome para o arquivo
@@ -1503,17 +1510,15 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //--- preparaConteudo
-    private var strModelo : String = ""
     private var intIdxInic: Int = 0
-    private var intIdxFim : Int = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun preparaConteudo(): String {
+    fun preparaConteudo(strNomeArq : String): String {
 
         var strConteudo: String
 
         //-- Lê o modelo para a formatação xml : modelo_arq_xml_sudoku1.txt
-        val strNomeArqSemExt = "modelo_arq_xml_sudoku1"    // SÓ a-z 0-9 _
+        val strNomeArqSemExt = strNomeArq    // SÓ a-z 0-9 _
 
         //--- Obtém lista de arquivos em resource / raw
         //-----------------------------------------------------
@@ -1550,134 +1555,181 @@ class JogarActivity : AppCompatActivity() {
         }
 
         //-- Converte o modelo de ArrayList para String
-        Log.d(cTAG, "-> modelo arq Sudoku xml")
-        for (idxDecl in arStrLeitArqRaw.indices) {
-            strModelo += arStrLeitArqRaw[idxDecl]
-        }
+        if (strNomeArq == "modelo_arq_xml_sudoku1") {
 
-        Log.d(cTAG, strModelo)
+            Log.d(cTAG, "-> modelo arq Sudoku xml")
+            for (idxDecl in arStrLeitArqRaw.indices) { strModelo += arStrLeitArqRaw[idxDecl] }
 
-        //-- Preenche os campos
-        var intTag =  0
-        var strTag : String
-        try {
-            //- header / id
-            intTag    = 0
-            intIdxFim = 0
-            //-------------------------------------------------------------
-            strConteudo = preencheConteudo("<id>", "3")
-            //-------------------------------------------------------------
+            Log.d(cTAG, strModelo)
 
-            //- header / nivel
-            intTag = 1
-            //---------------------------------------------------------------
-            strConteudo += preencheConteudo("<nivel>", strNivelJogo)
-            //---------------------------------------------------------------
+            //-- Preenche os campos
+            var intTag = 0
+            var strTag: String
+            try {
+                //- header / id
+                intTag    = 0
+                intIdxFim = 0
+                //-------------------------------------------------------------
+                strConteudo = preencheConteudo("<id>", "3")
+                //-------------------------------------------------------------
 
-            //- header / subnivel
-            intTag = 2
-            //---------------------------------------------------------------------
-            strConteudo += preencheConteudo("<subnivel>", strSubNivelJogo)
-            //---------------------------------------------------------------------
+                //- header / nivel
+                intTag = 1
+                //---------------------------------------------------------------
+                strConteudo += preencheConteudo("<nivel>", strNivelJogo)
+                //---------------------------------------------------------------
 
-            //- body / linha0 até linha8 : jogo preparado
-            intTag = 3
-            for (idxLinha in 0 until 9) {
+                //- header / subnivel
+                intTag = 2
+                //---------------------------------------------------------------------
+                strConteudo += preencheConteudo("<subnivel>", strSubNivelJogo)
+                //---------------------------------------------------------------------
 
-                var strConteudoTmp = ""
-
-                for (idxCol in 0 until 9) {
-
-                    strConteudoTmp += arArIntCopia[idxLinha][idxCol].toString()
-                    if (idxCol < 8) strConteudoTmp += ", "
-
-                }
-
-                //--------------------------------------------------------------------------
-                strConteudo += preencheConteudo("<linha$idxLinha>", strConteudoTmp)
-                //--------------------------------------------------------------------------
-
-            }
-
-            //- jogos / id
-            intTag = 4
-            //----------------------------------------------------------------
-            strConteudo += preencheConteudo("<id>", "1")
-            //----------------------------------------------------------------
-
-            //- opção de jogo - 02/01/2022 - versão 8.4
-            intTag = 5
-            //-------------------------------------------------------------------
-            strConteudo += preencheConteudo("<opcaoJogo>", strOpcaoJogo)
-            //-------------------------------------------------------------------
-
-            //- jogos / dataHora
-            intTag = 6
-            //-------------------------------------------------------------------------
-            val strDataHora = utils.LeDataHora("dd/MM/yyyy HH:mm:ss")
-            //-------------------------------------------------------------------------
-
-            intTag = 7
-            //------------------------------------------------------------------
-            strConteudo += preencheConteudo("<dataHora>", strDataHora)
-            //------------------------------------------------------------------
-
-            //- jogos / tempoJogo
-            intTag = 8
-            //--------------------------------------------------------------------------
-            strConteudo += preencheConteudo("<tempoJogo>", crono.text.toString())
-            //--------------------------------------------------------------------------
-
-            //- jogos / erros
-            intTag = 9
-            //----------------------------------------------------------------------------
-            strConteudo += preencheConteudo("<erros>", tvErros!!.text.toString())
-            //----------------------------------------------------------------------------
-
-            //- jogos / status
-            intTag = 10
-            //------------------------------------------------------------------------------------
-            val strStatus = if (utilsKt.quantZeros(arArIntNums) == 0) "finalizado" else "ativo"
-            //------------------------------------------------------------------------------------
-            strConteudo += preencheConteudo("<status>", strStatus)
-            //-------------------------------------------------------------
-
-            //- body2 / linha0 até linha8 : jogo no momento do salvamento se ainda ativo
-            intTag = 11
-            if (strStatus == "ativo") {
-
-                strConteudo += "</status></jogos><body2>"
-                var strConteudoTmp = ""
+                //- body / linha0 até linha8 : jogo preparado
+                intTag = 3
                 for (idxLinha in 0 until 9) {
 
-                    strConteudoTmp += "<linha$idxLinha>"
+                    var strConteudoTmp = ""
+
                     for (idxCol in 0 until 9) {
 
-                        strConteudoTmp += arArIntNums[idxLinha][idxCol].toString()
+                        strConteudoTmp += arArIntCopia[idxLinha][idxCol].toString()
                         if (idxCol < 8) strConteudoTmp += ", "
 
                     }
-                    strConteudoTmp += "</linha$idxLinha>"
+
+                    //--------------------------------------------------------------------
+                    strConteudo += preencheConteudo("<linha$idxLinha>", strConteudoTmp)
+                    //--------------------------------------------------------------------
+
                 }
-                strConteudo += strConteudoTmp
-                strConteudo += "</body2></presets>"
 
-            } else {
+                //- jogos / id
+                intTag = 4
+                //----------------------------------------------------------------
+                strConteudo += preencheConteudo("<id>", "1")
+                //----------------------------------------------------------------
 
-                //-- Finaliza a preparação do conteúdo
-                intTag = 12
-                strConteudo += strModelo.substring(intIdxFim, strModelo.length)
+                //- opção de jogo - 02/01/2022 - versão 8.4
+                intTag = 5
+                //-------------------------------------------------------------------
+                strConteudo += preencheConteudo("<opcaoJogo>", strOpcaoJogo)
+                //-------------------------------------------------------------------
 
+                //- jogos / dataHora
+                intTag = 6
+                //-------------------------------------------------------------------------
+                val strDataHora = utils.LeDataHora("dd/MM/yyyy HH:mm:ss")
+                //-------------------------------------------------------------------------
+
+                intTag = 7
+                //------------------------------------------------------------------
+                strConteudo += preencheConteudo("<dataHora>", strDataHora)
+                //------------------------------------------------------------------
+
+                //- jogos / tempoJogo
+                intTag = 8
+                //--------------------------------------------------------------------------
+                strConteudo += preencheConteudo("<tempoJogo>", crono.text.toString())
+                //--------------------------------------------------------------------------
+
+                //- jogos / erros
+                intTag = 9
+                //----------------------------------------------------------------------------
+                strConteudo += preencheConteudo("<erros>", tvErros!!.text.toString())
+                //----------------------------------------------------------------------------
+
+                //- jogos / status
+                intTag = 10
+                //------------------------------------------------------------------------------------
+                val strStatus = if (utilsKt.quantZeros(arArIntNums) == 0) "finalizado" else "ativo"
+                //------------------------------------------------------------------------------------
+                strConteudo += preencheConteudo("<status>", strStatus)
+                //-------------------------------------------------------------
+
+                //- body2 / linha0 até linha8 : jogo no momento do salvamento se ainda ativo
+                intTag = 11
+                if (strStatus == "ativo") {
+
+                    strConteudo += "</status></jogos><body2>"
+                    var strConteudoTmp = ""
+                    for (idxLinha in 0 until 9) {
+
+                        strConteudoTmp += "<linha$idxLinha>"
+                        for (idxCol in 0 until 9) {
+
+                            strConteudoTmp += arArIntNums[idxLinha][idxCol].toString()
+                            if (idxCol < 8) strConteudoTmp += ", "
+
+                        }
+                        strConteudoTmp += "</linha$idxLinha>"
+                    }
+                    strConteudo += strConteudoTmp
+                    strConteudo += "</body2></presets>"
+
+                } else {
+
+                    //-- Finaliza a preparação do conteúdo
+                    intTag = 12
+                    strConteudo += strModelo.substring(intIdxFim, strModelo.length)
+
+                }
+
+                strTag = intTag.toString()
+                Log.d(cTAG, "-> Tag: $strTag, Conteudo: $strConteudo")
+
+            } catch (exc: Exception) {
+
+                strTag = intTag.toString()
+                utilsKt.mToast(this, "Erro $strTag: ${exc.message}")
+                strConteudo = ""
             }
 
-            strTag = intTag.toString()
-            Log.d(cTAG, "-> Tag: $strTag, Conteudo: $strConteudo")
+        }
 
-        } catch (exc: Exception) {
+        else {
 
-            strTag = intTag.toString()
-            utilsKt.mToast(this, "Erro $strTag: ${exc.message}")
-            strConteudo = ""
+            Log.d(cTAG, "-> modelo arq Sudoku xml setup")
+
+            for (idxDecl in arStrLeitArqRaw.indices) { strModelo += arStrLeitArqRaw[idxDecl] }
+
+            Log.d(cTAG, strModelo)
+
+            //-- Preenche os campos
+            var intTag = 0
+            var strTag: String
+            try {
+                //- header / id
+                intTag    = 0
+                intIdxFim = 0
+                //----------------------------------------------------------------------------------
+                strConteudo = preencheConteudo("<id>", "modeloArqXmlSudokuSetUp.txt")
+                //----------------------------------------------------------------------------------
+
+                //-	<body> / <limite_erros>
+                intTag = 1
+                //----------------------------------------------------------------------------------
+                strConteudo += preencheConteudo("<limite_erros>", intLimiteErros.toString())
+                //----------------------------------------------------------------------------------
+
+                //-	<body> / <limite_tempo>
+                intTag = 2
+                //------------------------------------------------------------------------
+                strConteudo += preencheConteudo("<limite_limite_tempo>", strLimiteTempo)
+                //------------------------------------------------------------------------
+
+                //-	<body> / <mostra_nums_iguais>true</mostra_nums_iguais>
+                intTag = 3
+                //------------------------------------------------------------------------
+                strConteudo += preencheConteudo("<limite_limite_tempo>", strLimiteTempo)
+                //------------------------------------------------------------------------
+
+            } catch (exc: Exception) {
+
+                strTag = intTag.toString()
+                utilsKt.mToast(this, "Erro $strTag: ${exc.message}")
+                strConteudo = ""
+            }
 
         }
 
@@ -1686,13 +1738,13 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //--- preencheConteudo
-    private fun preencheConteudo(strTag: String, strConteudoTag: String): String {
+    fun preencheConteudo(strTag: String,strConteudoTag: String): String {
 
         var strConteudoPreenchido = ""
 
-        intIdxInic = intIdxFim
-        intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
-        intIdxFim += strTag.length
+        var intIdxInic = intIdxFim
+        intIdxFim      = strModelo.indexOf(strTag, intIdxInic, false)
+        intIdxFim     += strTag.length
 
         strConteudoPreenchido += strModelo.substring(intIdxInic, intIdxFim)
         strConteudoPreenchido += strConteudoTag
