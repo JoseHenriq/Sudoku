@@ -29,7 +29,6 @@ import android.net.Uri
 
 import android.os.Build
 import android.provider.Settings
-import android.text.Layout
 import android.view.*
 import androidx.core.view.MenuCompat
 import br.com.jhconsultores.sudoku.BuildConfig
@@ -60,27 +59,28 @@ class MainActivity : AppCompatActivity() {
         var strOpcaoJogo   = "JogoGerado"
 
         val arStrNivelJogo = arrayOf ("Fácil", "Médio", "Difícil", "Muito difícil")
-        val idxFACIL = 0
-        val idxMEDIO = 1
-        val idxDIFICIL       = 2
-        val idxMUITO_DIFICIL = 3
+        const val idxFACIL = 0
+        const val idxMEDIO = 1
+        const val idxDIFICIL   = 2
+        const val idxMUITO_DIFICIL = 3
 
         var fatorLargura : Double = 0.0
         var fatorAltura  : Double = 0.0
 
         //--- Params
-
+        // Erros
         const val TITLE_ERROS   = "Limite Erros: "
-        var strTitleErros  = ""
-        var intLimiteErros = -1          // Default; significa "sem limite"
+        var strTitleErros       = ""
+        var intLimiteErros      = -1          // Default; significa "sem limite"
         var intLimiteErrosAtual = -1
-
+        // Tempo do Jogo
         const val TITLE_TEMPO   = "Limite Tempo: "
-        var strTitleTempo  = ""
-        var strLimiteTempo = "00:00"    // Default; significa "sem limite"
+        var strTitleTempo       = ""
+        var strLimiteTempo      = "00:00"    // Default; significa "sem limite"
         var strLimiteTempoAtual = "00:00"
-
-        var flagMostraNumIguais = true
+        // Mostrar números iguais
+        var flagMostraNumIguais      = true
+        var flagMostraNumIguaisAtual = true
 
     }
 
@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity() {
     private var versAndroid  = ""
 
     //--- Parâmetros do jogo
-    private lateinit var layoutAjustes : Layout
+    //private lateinit var layoutAjustes : Layout
     private lateinit var edtLimErros   : EditText
     private lateinit var edtLimTempo   : EditText
 
@@ -231,7 +231,7 @@ class MainActivity : AppCompatActivity() {
         try { strSO = versAndroid } catch (exc : Exception) {
 
             //---------------------------------------------------------------
-            utilsKt.mToast(this, "-> Erro: ${exc.message}")
+            utilsKt.mToast(this, "-> Erro01: ${exc.message}")
             //---------------------------------------------------------------
 
         }
@@ -443,12 +443,7 @@ class MainActivity : AppCompatActivity() {
     //---------------------------------------------------------------------
     // Action Bar Menu
     //---------------------------------------------------------------------
-    lateinit var myMenuItem: MenuItem
-
-    lateinit var subMenuLimiteQtiErros  : MenuItem
-    lateinit var subMenuLimiteTempoJogo : MenuItem
-    private lateinit var subMenuMostrarNumsIguais: MenuItem
-
+    private lateinit var myMenuItem: MenuItem
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
 
         try {
@@ -465,20 +460,20 @@ class MainActivity : AppCompatActivity() {
             // to the empty SubMenu you created in the xml
             menuInflater.inflate(R.menu.menu_main_sub, myMenuItem.subMenu)
 
-            subMenuLimiteQtiErros    = myMenuItem.subMenu.findItem(R.id.action_ajustarQtiddErros)
-            subMenuLimiteTempoJogo   = myMenuItem.subMenu.findItem(R.id.action_ajustarTempoDeJogo)
-            subMenuMostrarNumsIguais = myMenuItem.subMenu.findItem(R.id.action_mostrar_numeros_iguais)
+            //--- Inicializa parametros
+            intLimiteErros      = -1
+            strLimiteTempo      = "00:00"
+            flagMostraNumIguais = true
 
-            subMenuLimiteQtiErros.title  = "$TITLE_ERROS -1 (sem)"
-            subMenuLimiteTempoJogo.title = "$TITLE_TEMPO 00:00"
+            //---------------------------------------------------------------------
+            atualizaSubMenu(intLimiteErros, strLimiteTempo, flagMostraNumIguais)
+            //---------------------------------------------------------------------
 
-            //subMenuLimiteTempoJogo.isEnabled = false
-
-        } catch (exc: Exception) { Log.d(cTAG, "-> Erro: ${exc.message}") }
+        } catch (exc: Exception) { Log.d(cTAG, "-> Erro02: ${exc.message}") }
 
         //--- Finaliza a inicialização
         //-------------------------
-        atualizaTitlesSubMenus()
+        //atualizaTitlesSubMenus()
         //-------------------------
 
         return true
@@ -496,7 +491,7 @@ class MainActivity : AppCompatActivity() {
             Log.d(cTAG, "-> Tap em actionBar / Ajusta limite contagem de erros")
 
             //-------------------------------------------------
-            implDialogViewAlertDialog(subMenuLimiteQtiErros)
+            implDialogViewAlertDialog()  //subMenuLimiteQtiErros)
             //-------------------------------------------------
 
             //-------------------------
@@ -513,7 +508,7 @@ class MainActivity : AppCompatActivity() {
             Log.d(cTAG, "-> Tap em actionBar / Ajusta tempo de jogo")
 
             //---------------------------------------------------
-            implDialogViewAlertDialog(subMenuLimiteTempoJogo)
+            implDialogViewAlertDialog()  //subMenuLimiteTempoJogo)
             //---------------------------------------------------
 
             //-------------------------
@@ -527,18 +522,24 @@ class MainActivity : AppCompatActivity() {
         //--- Tapping no item 'Deletar selecionados' do menu do actionBar
         R.id.action_mostrar_numeros_iguais -> {
 
-            if (subMenuMostrarNumsIguais.title.toString() == "Mostrar números iguais") {
+            if (flagMostraNumIguais) {
 
                 strLog = "Não mostrar números iguais"
-                subMenuMostrarNumsIguais.title = strLog
                 flagMostraNumIguais = false
+
+                //---------------------------------------------------------------------
+                atualizaSubMenu(intLimiteErros, strLimiteTempo, flagMostraNumIguais)
+                //---------------------------------------------------------------------
 
             }
             else {
 
                 strLog = "Mostrar números iguais"
-                subMenuMostrarNumsIguais.title = "Mostrar números iguais"
                 flagMostraNumIguais = true
+
+                //---------------------------------------------------------------------
+                atualizaSubMenu(intLimiteErros, strLimiteTempo, flagMostraNumIguais)
+                //---------------------------------------------------------------------
 
             }
             Log.d(cTAG, "-> Tap em actionBar / $strLog")
@@ -1968,7 +1969,7 @@ class MainActivity : AppCompatActivity() {
 
         } catch (exc : Exception) {
 
-            Log.d(cTAG, "-> Erro: ${exc.message}")
+            Log.d(cTAG, "-> Erro03: ${exc.message}")
 
         }
 
@@ -2152,9 +2153,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- atualizaTitlesSubMenus
-    fun atualizaTitlesSubMenus() {
+    private fun atualizaTitlesSubMenus() {
 
         try {
+
+            /*
+            val subMenuLimiteQtiErros    = myMenuItem.subMenu.findItem(R.id.action_ajustarQtiddErros)
+            val subMenuLimiteTempoJogo   = myMenuItem.subMenu.findItem(R.id.action_ajustarTempoDeJogo)
+            val subMenuMostrarNumsIguais = myMenuItem.subMenu.findItem(R.id.action_mostrar_numeros_iguais)
+            */
 
             //--- Lê os parâmetros no arquivo de setup
             Log.d(cTAG, "-> leitura arquivo setup")
@@ -2167,7 +2174,7 @@ class MainActivity : AppCompatActivity() {
 
             //- 1- obtém limite de erros:
             var strTagInic = "limite_erros"
-            var strTagFim  = "/" + strTagInic
+            var strTagFim  = "/$strTagInic"
             //--------------------------------------------------------------------------------------
             var strCampo = (utilsKt.leCampo(strLeitArq, "<$strTagInic>",
                                                                       "<$strTagFim>")).trim()
@@ -2178,8 +2185,8 @@ class MainActivity : AppCompatActivity() {
             intLimiteErros = strCampo.toInt()
 
             //- 2- obtém tempo de jogo:
-            strTagInic   = "limite_tempo"
-            strTagFim  = "/" + strTagInic
+            strTagInic = "limite_tempo"
+            strTagFim  = "/$strTagInic"
             //--------------------------------------------------------------------------------------
             strCampo = (utilsKt.leCampo(strLeitArq, "<$strTagInic>",
                                                                       "<$strTagFim>")).trim()
@@ -2191,7 +2198,7 @@ class MainActivity : AppCompatActivity() {
 
             //- 3- obtém flag se mostra números iguais:
             strTagInic   = "mostra_nums_iguais"
-            strTagFim  = "/" + strTagInic
+            strTagFim  = "/$strTagInic"
             //--------------------------------------------------------------------------------------
             strCampo = (utilsKt.leCampo(strLeitArq, "<$strTagInic>",
                                                                       "<$strTagFim>")).trim()
@@ -2205,7 +2212,7 @@ class MainActivity : AppCompatActivity() {
             strTitleErros  = TITLE_ERROS
             strTitleErros += if (intLimiteErros == -1) " sem (-1)" else "$intLimiteErros"
             //--------------------------------------------
-            subMenuLimiteQtiErros.title = strTitleErros
+            //subMenuLimiteQtiErros.title = strTitleErros
             //--------------------------------------------
 
             if (intLimiteErros != intLimiteErrosAtual) {
@@ -2219,7 +2226,7 @@ class MainActivity : AppCompatActivity() {
             strTitleTempo  = TITLE_TEMPO
             strTitleTempo += if (strLimiteTempo == "00:00") " sem (00:00)" else " $strLimiteTempo"
             //---------------------------------------------
-            subMenuLimiteTempoJogo.title = strTitleTempo
+            //subMenuLimiteTempoJogo.title = strTitleTempo
             //---------------------------------------------
 
             if (strLimiteTempoAtual != strLimiteTempo) {
@@ -2229,29 +2236,30 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            //--- Mostrar os números iguais
-            val strMostra = "${if (flagMostraNumIguais) "M" else "Não m"}ostra nums iguais"
-            subMenuMostrarNumsIguais.title = strMostra
+            //---------------------------------------------------------------------
+            //atualizaSubMenu(intLimiteErros, strLimiteTempo, flagMostraNumIguais)
+            //---------------------------------------------------------------------
 
         }
         catch (exc : Exception) {
 
-            Log.d(cTAG, "-> Erro: ${exc.message}")
+            Log.d(cTAG, "-> Erro04: ${exc.message}")
 
         }
 
     }
 
     //--- implDialogView_AlertDialog para o ajuste dos parâmetros do Jogo
-    private fun implDialogViewAlertDialog(subMenuLimite : MenuItem) {
+    @SuppressLint("SetTextI18n")
+    private fun implDialogViewAlertDialog() { //subMenuLimite : MenuItem) {
 
         //------------------------------------------------------------------------------------------
         // Implementa o Dialog View
         //------------------------------------------------------------------------------------------
         // Inflate o layout e instancía os controles do layout que farão parte do AlertDialog
         val dialogView  = layoutInflater.inflate(R.layout.alertdialog_param_jogo, null)
-        edtLimErros = dialogView.findViewById<EditText>(R.id.edtErros)
-        edtLimTempo = dialogView.findViewById<EditText>(R.id.edtTempo)
+        edtLimErros = dialogView.findViewById(R.id.edtErros)
+        edtLimTempo = dialogView.findViewById(R.id.edtTempo)
 
         //---------------------------------------------------------------------
         // Prepara o AlertDialog
@@ -2271,6 +2279,7 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton("Ok") { _, _ ->
 
                 Log.d(cTAG, "-> Novos ajustes:")
+
                 var ajusteLim = edtLimErros.text.toString()
                 if (ajusteLim.isNotEmpty()) intLimiteErros = ajusteLim.toInt()
                 Log.d(cTAG, "   - limite: $intLimiteErros erros")
@@ -2318,6 +2327,29 @@ class MainActivity : AppCompatActivity() {
 
         val pbuttonNeg = alert.getButton(DialogInterface.BUTTON_NEGATIVE)
         pbuttonNeg.setTextColor(Color.RED)
+
+    }
+
+    //--- atualizaMenu
+    private fun atualizaSubMenu(ajLimErros : Int, ajLimTempo: String, ajMostra : Boolean) {
+
+        /*
+        lateinit var subMenuLimiteQtiErros  : MenuItem
+        lateinit var subMenuLimiteTempoJogo : MenuItem
+        private lateinit var subMenuMostrarNumsIguais: MenuItem
+        */
+
+        val subMenuLimiteQtiErros   = myMenuItem.subMenu.findItem(R.id.action_ajustarQtiddErros)
+        subMenuLimiteQtiErros.title = if (ajLimErros == -1) "$TITLE_ERROS -1 (sem)" else "$intLimiteErros"
+        intLimiteErrosAtual = ajLimErros
+
+        val subMenuLimiteTempoJogo   = myMenuItem.subMenu.findItem(R.id.action_ajustarTempoDeJogo)
+        subMenuLimiteTempoJogo.title = if (ajLimTempo == "00:00") "$TITLE_TEMPO 00:00 (sem)" else strLimiteTempo
+        strLimiteTempoAtual = ajLimTempo
+
+        val subMenuMostrarNumsIguais = myMenuItem.subMenu.findItem(R.id.action_mostrar_numeros_iguais)
+        subMenuMostrarNumsIguais.title = if (ajMostra) "Mostrar números iguais" else "Não Mostrar números iguais"
+        flagMostraNumIguaisAtual = ajMostra
 
     }
 
