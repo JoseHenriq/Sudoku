@@ -333,10 +333,10 @@ public class Utils {
     public boolean escExtMemTextFile(Context context, String strPath, String strFileName, String strConteudo) {
 
         boolean flagEsc = false;
-        File fpath = null;
-        File file = null;
-        File myFile = null;
-        String[] files = null;
+        File fpath      = null;
+        File file       = null;
+        File myFile     = null;
+        String[] files  = null;
 
         //https://stackoverflow.com/questions/19853401/saving-to-sd-card-as-text-file
         // ScopedStorage

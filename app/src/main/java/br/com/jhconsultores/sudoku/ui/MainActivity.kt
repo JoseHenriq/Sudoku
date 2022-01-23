@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.163"
+        const val strApp = "Sudoku_#9.0.164"
 
         var flagScopedStorage = false
 
@@ -441,15 +441,57 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        //--- Leitura Não OK: usa defaults e tenta criar diretório e/ou arquivo setup
+        //---------------------
+        if (!leArqSetUp()) {
+        //---------------------
 
-        //--- Inicialização dos parametros conforme salvos no arquivo setupr
-        //-------------
-        leArqSetUp()
-        //-------------
-        intLimiteErros      = intLimiteErrosAtual
-        strLimiteTempo      = strLimiteTempoAtual
-        flagMostraNumIguais = flagMostraNumIguaisAtual
+            Log.d(cTAG, "-> Leitura do arquivo setup não Ok! Usa valores default")
 
+            //------------------------------------------------------------------
+            // Salva o arquivo
+            //------------------------------------------------------------------
+            val strArqPath  = "/sudoku/setup"
+            val strArqSetUp = "sudokusetup.xml"
+            var strConteudo = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+            strConteudo    += "<setup><header><id>modeloArqXmlSudokuSetUp.txt</id></header>"
+            strConteudo    += "<body><limite_erros>-1</limite_erros>"
+            strConteudo    += "<limite_tempo>00:00</limite_tempo>"
+            strConteudo    += "<mostra_nums_iguais>true</mostra_nums_iguais></body></setup>"
+
+            //--------------------------------------------------------------------------------------
+            val flagEscrita = utils.escExtMemTextFile(
+                this, strArqPath, strArqSetUp,
+                strConteudo
+            )
+            //--------------------------------------------------------------------------------------
+
+            strToast = "Escrita arquivo $strArqSetUp "
+            strToast += if (flagEscrita) "OK!" else "NÃO ok!"
+            utilsKt.mToast(this, strToast)
+
+            strLog = "-> Escrita arquivo storage/emulated/0/Download$strArqPath/$strArqSetUp "
+            strLog += if (flagEscrita) "OK!" else "NÃO ok!"
+            Log.d(cTAG, strLog)
+
+            intLimiteErrosAtual = -1
+            intLimiteErros      = intLimiteErrosAtual
+
+            strLimiteTempoAtual = "00:00"
+            strLimiteTempo      = strLimiteTempoAtual
+
+            flagMostraNumIguaisAtual = true
+            flagMostraNumIguais      = flagMostraNumIguaisAtual
+
+        }
+        //--- Leitura Ok: usa os valores lidos
+        else {
+
+            intLimiteErros      = intLimiteErrosAtual
+            strLimiteTempo      = strLimiteTempoAtual
+            flagMostraNumIguais = flagMostraNumIguaisAtual
+
+        }
     }
 
     //---------------------------------------------------------------------
@@ -2445,58 +2487,100 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- leArqSetUp
-    private fun leArqSetUp() {
+    private fun leArqSetUp() : Boolean {
 
         Log.d(cTAG, "-> leitura arquivo setup")
 
-        //- Leitura do Arquivo
-        val strDir     = "sudoku/setup/"
-        val strArqName = "sudokusetup.xml"
-        //-----------------------------------------------------
-        val strLeitArq = utilsKt.leitArq(strDir, strArqName)
-        //-----------------------------------------------------
+        var flagLeitOk = true
 
-        //- 1- obtém limite de erros:
-        var strTagInic = "limite_erros"
-        var strTagFim = "/$strTagInic"
-        //--------------------------------------------------------------------------------------//////
-        var strCampo = (utilsKt.leCampo(
-            strLeitArq, "<$strTagInic>",
-            "<$strTagFim>"
-        )).trim()
-        //---------------------------------------------------------------------------===========
-        strLog = "   - limite: $strCampo"
-        Log.d(cTAG, strLog)
+        try {
 
-        intLimiteErrosAtual = strCampo.toInt()
+            //- Leitura do Arquivo
+            val strDir     = "sudoku/setup/"
+            val strArqName = "sudokusetup.xml"
+            //-----------------------------------------------------
+            val strLeitArq = utilsKt.leitArq(strDir, strArqName)
+            //-----------------------------------------------------
 
-        //- 2- obtém tempo de jogo:
-        strTagInic = "limite_tempo"
-        strTagFim = "/$strTagInic"
-        //--------------------------------------------------------------------------------------
-        strCampo = (utilsKt.leCampo(
-            strLeitArq, "<$strTagInic>",
-            "<$strTagFim>"
-        )).trim()
-        //--------------------------------------------------------------------------------------
-        strLog = "   - limite: $strCampo"
-        Log.d(cTAG, strLog)
+            //- 1- obtém limite de erros:
+            var strTagInic = "limite_erros"
+            var strTagFim = "/$strTagInic"
+            //--------------------------------------------------------------------------------------//////
+            var strCampo = (utilsKt.leCampo(
+                strLeitArq, "<$strTagInic>",
+                "<$strTagFim>"
+            )).trim()
+            //---------------------------------------------------------------------------===========
+            strLog = "   - limite: $strCampo"
+            Log.d(cTAG, strLog)
 
-        strLimiteTempoAtual = strCampo
+            intLimiteErrosAtual = strCampo.toInt()
 
-        //- 3- obtém flag se mostra números iguais:
-        strTagInic = "mostra_nums_iguais"
-        strTagFim = "/$strTagInic"
-        //--------------------------------------------------------------------------------------
-        strCampo = (utilsKt.leCampo(
-            strLeitArq, "<$strTagInic>",
-            "<$strTagFim>"
-        )).trim()
-        //--------------------------------------------------------------------------------------
-        strLog = "   - mostra nums iguais: $strCampo"
-        Log.d(cTAG, strLog)
+            //- 2- obtém tempo de jogo:
+            strTagInic = "limite_tempo"
+            strTagFim = "/$strTagInic"
+            //--------------------------------------------------------------------------------------
+            strCampo = (utilsKt.leCampo(
+                strLeitArq, "<$strTagInic>",
+                "<$strTagFim>"
+            )).trim()
+            //--------------------------------------------------------------------------------------
+            strLog = "   - limite: $strCampo"
+            Log.d(cTAG, strLog)
 
-        flagMostraNumIguaisAtual = (strCampo == "true")
+            strLimiteTempoAtual = strCampo
+
+            //- 3- obtém flag se mostra números iguais:
+            strTagInic = "mostra_nums_iguais"
+            strTagFim = "/$strTagInic"
+            //--------------------------------------------------------------------------------------
+            strCampo = (utilsKt.leCampo(
+                strLeitArq, "<$strTagInic>",
+                "<$strTagFim>"
+            )).trim()
+            //--------------------------------------------------------------------------------------
+            strLog = "   - mostra nums iguais: $strCampo"
+            Log.d(cTAG, strLog)
+
+            flagMostraNumIguaisAtual = (strCampo == "true")
+
+        } catch (exc : Exception) {
+
+            Log.d(cTAG, "-> Erro na leitura do arquivo!")
+
+            utilsKt.mToast (this, "Erro na leitura do arquivo!\nPor favor aguarde ...")
+
+            flagLeitOk = false
+
+            /*
+            //------------------------------------------------------------------
+            // Salva o arquivo
+            //------------------------------------------------------------------
+            val strArqPath  = "/sudoku/setup"
+            val strArqSetUp = "sudokusetup.xml"
+            var strConteudo = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+            strConteudo    += "<setup><header><id>modeloArqXmlSudokuSetUp.txt</id></header>"
+            strConteudo    += "<body><limite_erros>-1</limite_erros>"
+            strConteudo    += "<limite_tempo>00:00</limite_tempo>"
+            strConteudo    += "<mostra_nums_iguais>true</mostra_nums_iguais></body></setup>"
+            //--------------------------------------------------------------------------------------
+            val flagEscrita = utils.escExtMemTextFile(
+                this, strArqPath, strArqSetUp,
+                strConteudo
+            )
+            //--------------------------------------------------------------------------------------
+
+            strToast = "Escrita arquivo $strArqSetUp "
+            strToast += if (flagEscrita) "OK!" else "NÃO ok!"
+            utilsKt.mToast(this, strToast)
+
+            strLog = "-> Escrita arquivo storage/emulated/0/Download$strArqPath/$strArqSetUp "
+            strLog += if (flagEscrita) "OK!" else "NÃO ok!"
+            Log.d(cTAG, strLog)
+            */
+        }
+
+        return flagLeitOk
 
     }
 
