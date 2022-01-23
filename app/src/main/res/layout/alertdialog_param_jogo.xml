@@ -23,22 +23,23 @@
         android:layout_marginTop   ="30dp"
         android:text="@string/limite_de_erros" />
 
-    <EditText android:id="@+id/edtErros"
+    <EditText
+        android:id="@+id/edtErros"
 
-        android:layout_width ="0dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
 
-        android:layout_marginStart ="20dp"
-        android:layout_marginEnd   ="10dp"
-        android:layout_marginTop   ="15dp"
-        android:gravity            ="center_horizontal"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center_horizontal"
 
-        app:layout_constraintTop_toTopOf   ="parent"
-        app:layout_constraintStart_toEndOf ="@+id/tvLegErros"
-        app:layout_constraintEnd_toEndOf   ="parent"
+        android:hint="@string/valor_menos1"
+        android:inputType="numberSigned"
+        app:layout_constraintEnd_toEndOf="parent"
 
-        android:inputType="number"
-        android:hint = "@string/valor_menos1"
+        app:layout_constraintStart_toEndOf="@+id/tvLegErros"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="Autofill" />
 
     <!-- 2- Tempo -->

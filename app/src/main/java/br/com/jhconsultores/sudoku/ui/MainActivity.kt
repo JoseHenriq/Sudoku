@@ -47,9 +47,9 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.164"
+        const val strApp = "Sudoku_#9.0.165"
 
-        var flagScopedStorage = false
+        var flagScopedStorage  = false
 
         var flagJogoGeradoOk   = false
         var flagJogoEditadoOk  = false
@@ -2233,33 +2233,50 @@ class MainActivity : AppCompatActivity() {
 
                 Log.d(cTAG, "-> Novos ajustes:")
 
+                // Erros
                 var ajusteLim = edtLimErros.text.toString()
-                if (ajusteLim.isNotEmpty()) intLimiteErros = ajusteLim.toInt()
-                Log.d(cTAG, "   - erros: $intLimiteErros")
+                var intLimTmp = 0
+                if (ajusteLim.isNotEmpty()) intLimTmp = ajusteLim.toInt()
+                // Erro = 0 não é válido
+                if (intLimTmp == 0) {
 
-                ajusteLim = edtLimTempo.text.toString()
-                if (ajusteLim.isNotEmpty()) {
+                    strToast = "Limite de erros = 0 é inválido!"
+                    utilsKt.mToast(this, strToast)
+                    Log.d(cTAG, "-> $strToast")
 
-                    if (timeVal.validate(ajusteLim)) {
+                }
+                // Erro diferente de 0 é válido
+                else {
 
-                        if (ajusteLim.isNotEmpty()) strLimiteTempo = ajusteLim
-                        Log.d(cTAG, "   - tempo: $strLimiteTempo")
+                    intLimiteErros = intLimTmp
+                    Log.d(cTAG, "   - erros: $intLimiteErros")
 
-                    } else {
+                    // Tempo de jogo
+                    ajusteLim = edtLimTempo.text.toString()
+                    if (ajusteLim.isNotEmpty()) {
 
-                        strToast = "Formato incorreto. Entre com \"MM:ss\""
+                        if (timeVal.validate(ajusteLim)) {
 
-                        utilsKt.mToast(this, strToast)
+                            if (ajusteLim.isNotEmpty()) strLimiteTempo = ajusteLim
+                            Log.d(cTAG, "   - tempo: $strLimiteTempo")
 
-                        Log.d(cTAG, "-> $strToast")
+                        } else {
+
+                            strToast = "Formato incorreto. Entre com \"MM:ss\""
+
+                            utilsKt.mToast(this, strToast)
+
+                            Log.d(cTAG, "-> $strToast")
+
+                        }
 
                     }
 
-                }
+                    //-------------------------
+                    atualizaTitlesSubMenus()
+                    //-------------------------
 
-                //-------------------------
-                atualizaTitlesSubMenus()
-                //-------------------------
+                }
 
             }
             .setNegativeButton("Cancel") { _, _ ->
