@@ -47,8 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.165"
-
+        const val strApp = "Sudoku_#9.0.167"
         var flagScopedStorage  = false
 
         var flagJogoGeradoOk   = false
@@ -1230,7 +1229,7 @@ class MainActivity : AppCompatActivity() {
         //------------------------------------------------------------------------------------------
 
         //--- Desenha-o
-        val pincelFino = 2.toFloat()
+        val pincelFino   = 2.toFloat()
         val pincelGrosso = 6.toFloat()
         // Linha horizontal superior
         pincelPreto.strokeWidth = pincelGrosso
