@@ -47,7 +47,8 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.167"
+        const val strApp = "Sudoku_#9.0.168"
+
         var flagScopedStorage  = false
 
         var flagJogoGeradoOk   = false
@@ -170,6 +171,10 @@ class MainActivity : AppCompatActivity() {
     //private lateinit var layoutAjustes : Layout
     private lateinit var edtLimErros: EditText
     private lateinit var edtLimTempo: EditText
+
+    private lateinit var ctimer: CountDownTimer
+    private var timeOut  = (10 * 60 * 60 * 1000).toLong()   // 10'
+    private var timeTick = 1000                             //  1"
 
     //--- Arquivos jogos
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
@@ -392,13 +397,6 @@ class MainActivity : AppCompatActivity() {
         // fun btnAdaptaJogoClick(view: View?) {}
         // fun btnJogaJogoClick  (view: View?) {}
 
-        //-----------------------------------------------------------------------------------
-        // Verifica se permitidos os acessos aos recursos do Android (AndroidManifest.xml)
-        //-----------------------------------------------------------------------------------
-        //---------------------------
-        verifPermissoesAcessoAPI()
-        //---------------------------
-
         //-------------------------------------------------------------------------------------
         // Prepara retorno da StartActivityForResult() Kotlin; utilizada na DELEÇÃO de Jogos
         //-------------------------------------------------------------------------------------
@@ -440,10 +438,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        //--- Leitura Não OK: usa defaults e tenta criar diretório e/ou arquivo setup
-        //---------------------
-        if (!leArqSetUp()) {
-        //---------------------
+        //-----------------------------------------------------------------------------------
+        // Verifica se permitidos os acessos aos recursos do Android (AndroidManifest.xml)
+        //-----------------------------------------------------------------------------------
+        //---------------------------
+        verifPermissoesAcessoAPI()
+        //---------------------------
+
+    }
+
+    //--- finalizaInicialização
+    // Ativada por verifPermissoesAcessoAPI()
+    private fun finalizaInicializacao () {
+
+        //--- Leitura do arquivo de setup
+        //----------------------------------------------------------------------
+        if (!flagPermissoesOk || !leArqSetUp()) {
+
+            strToast = "Arquivo setup não Ok! Usa valores default"
+
+            utilsKt.mToast(this, strToast)
 
             Log.d(cTAG, "-> Leitura do arquivo setup não Ok! Usa valores default")
 
@@ -491,6 +505,8 @@ class MainActivity : AppCompatActivity() {
             flagMostraNumIguais = flagMostraNumIguaisAtual
 
         }
+        //----------------------------------------------------------------------
+
     }
 
     //---------------------------------------------------------------------
@@ -640,8 +656,14 @@ class MainActivity : AppCompatActivity() {
 
             strLog = when (flagInstalacaoOk) {
 
-                true -> "- Permissão concedida!"
-                false -> "- Permissão NÃO concedida!"
+                true -> {
+                    flagPermissoesOk = true
+                    "- Permissão concedida!"
+                }
+                false -> {
+                    flagPermissoesOk = false
+                    "- Permissão NÃO concedida!"
+                }
 
             }
 
@@ -1229,7 +1251,7 @@ class MainActivity : AppCompatActivity() {
         //------------------------------------------------------------------------------------------
 
         //--- Desenha-o
-        val pincelFino   = 2.toFloat()
+        val pincelFino = 2.toFloat()
         val pincelGrosso = 6.toFloat()
         // Linha horizontal superior
         pincelPreto.strokeWidth = pincelGrosso
@@ -1906,19 +1928,32 @@ class MainActivity : AppCompatActivity() {
     //---------------------------------------------------------------------
     // Verifica se Permissions do Manifest estão granted
     //---------------------------------------------------------------------
+    var flagPermissoesOk = false
     @RequiresApi(Build.VERSION_CODES.R)
-    private fun verifPermissoesAcessoAPI(): Boolean {
+    //private fun verifPermissoesAcessoAPI(): Boolean {
+    private fun verifPermissoesAcessoAPI() {
 
         var strMsgDebug = "-> main Verifica permissões"
         Log.d(cTAG, strMsgDebug)
 
-        //-----------------------------------------------------------------------
-        val flagPermissoesOk: Boolean = utils.VerificaPermissoes(this)
-        //-----------------------------------------------------------------------
-        strMsgDebug = if (flagPermissoesOk) "Permission Granted!" else "Permission unGranted"
+        //---------------------------------------------------------
+        flagPermissoesOk = utils.VerificaPermissoes(this)
+        //---------------------------------------------------------
 
-        utilsKt.mToast(this, strMsgDebug)
-        Log.d(cTAG, strMsgDebug)
+        if (!flagPermissoesOk) {
+
+            strMsgDebug = "Permission unGranted\nAguarde ..."
+
+            utilsKt.mToast(this, strMsgDebug)
+
+        }
+
+        else {
+
+            strMsgDebug = "Permission Granted!"
+            Log.d(cTAG, strMsgDebug)
+
+        }
 
         //--- Se precisar solicita ao jogador que autorize pelo config a utilização do ScopedStorage
         if (!flagScopedStorage && utils.permScopedStorage.isNotEmpty()) {
@@ -1948,7 +1983,19 @@ class MainActivity : AppCompatActivity() {
             builder.show()
         }
 
-        return flagPermissoesOk
+        //--- Se ainda não foi concedida a permissão, aguarda permissões Ok
+        val waitTime = if (flagPermissoesOk) 3000L else 100L  // milisegundos
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
+                //------------------------
+                finalizaInicializacao()
+                //------------------------
+            },
+            waitTime
+
+        )  // value in milliseconds
+
+        //return flagPermissoesOk
 
     }
 
@@ -2597,6 +2644,47 @@ class MainActivity : AppCompatActivity() {
         }
 
         return flagLeitOk
+
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //                             CounterDown Timer
+    //----------------------------------------------------------------------------------------------
+    //--- startTimer
+    private fun startTimer(lgTimeOutMs: Long, intTimeTicksMs: Int) {
+
+        ctimer = object : CountDownTimer(lgTimeOutMs, intTimeTicksMs.toLong()) {
+
+            //--- Ticks
+            override fun onTick(millisUntilFinished: Long) {
+
+
+            }
+
+            //--- Finish
+            override fun onFinish() {
+
+                Log.d(cTAG, "-> TimeOut de ${(lgTimeOutMs / 1000L)} seg")
+
+                //--------------------
+                timeOutPermissoes()
+                //--------------------
+
+            }
+
+        }
+
+        //----------------
+        ctimer.start()
+        //----------------
+    }
+
+    //cancel timer
+    private fun cancelTimer() { if (ctimer != null) ctimer.cancel() }
+
+    //--- timeOutPermissoes
+    private fun timeOutPermissoes() {
+
 
     }
 

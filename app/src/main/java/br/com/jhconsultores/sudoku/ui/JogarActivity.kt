@@ -679,7 +679,7 @@ class JogarActivity : AppCompatActivity() {
 
             //--- Verifica a consistência dos dados recebidos
 
-            // Gabarito e/ou jogo inválidos
+            // Gabarito e/ou 7jogo inválidos
             if (arIntNumsGab.size != 81 || arIntNumsJogo.size != 81) {
 
                 Log.d(cTAG, "-> Erro: array(s) com menos numeros que o necessário (81)")
@@ -696,7 +696,7 @@ class JogarActivity : AppCompatActivity() {
                 acertaCrono(strCronoInic)
                 //--------------------------
 
-                tvErros!!.text = intContaErro.toString()
+                tvErros!!.text = intContaErroInic.toString()
 
                 // Armazena o gabarito e o jogo em Array<Array<Int>> para processamento local
                 for (intLinha in 0..8) {
@@ -719,11 +719,32 @@ class JogarActivity : AppCompatActivity() {
 
                     //--- Apresenta as infos do jogo carregado (atuais)
                     val qtiddZeros = utilsKt.quantZeros(arArIntNums)
-                    strNivelJogo = MainActivity.Companion.arStrNivelJogo[(qtiddZeros / 10 - 2)]
-                    // ex: Fácil de 20 a 29
-                    tvNivel!!.text = strNivelJogo
+                    // Limita o índice de 0 à 3 (Fácil, Médio, Difícil e Muito difícil)
+                    //val idxNivel   = if ((qtiddZeros / 10 - 2) < 0) 0 else
+                    //                  (if ((qtiddZeros / 10 - 2) > 3) 3 else (qtiddZeros / 10 - 2))
 
-                    strSubNivelJogo = (qtiddZeros % 10).toString()
+                    val idxNivel = when {
+
+                        (qtiddZeros / 10 - 2) < 0 -> {
+                            strSubNivelJogo = "0"
+                            0
+                        }
+                        (qtiddZeros / 10 - 2) < 4 -> {
+                            strSubNivelJogo = (qtiddZeros % 10).toString()
+                            (qtiddZeros / 10 - 2)
+                        }
+                        else -> {
+
+                            strSubNivelJogo = "0"
+                            3
+                        }
+
+                    }
+
+                    strNivelJogo = MainActivity.Companion.arStrNivelJogo[idxNivel]
+
+                    // ex: Fácil de 20 a 29
+                    tvNivel!!.text    = strNivelJogo
                     tvSubNivel!!.text = strSubNivelJogo
 
                     //--- Apresenta as info do jogo inicial
