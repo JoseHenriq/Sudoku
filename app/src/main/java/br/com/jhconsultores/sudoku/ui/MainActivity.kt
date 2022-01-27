@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.169"
+        const val strApp = "Sudoku_#9.0.170"
 
         var flagScopedStorage  = false
 
@@ -58,14 +58,14 @@ class MainActivity : AppCompatActivity() {
         // Opções de jogo: "JogoGerado", "JogoAdaptado", "JogoPresetado", "JogoEditado"
         var strOpcaoJogo = "JogoGerado"
 
-        val arStrNivelJogo = arrayOf("Fácil", "Médio", "Difícil", "Muito difícil")
-        const val idxFACIL = 0
-        const val idxMEDIO = 1
+        val arStrNivelJogo   = arrayOf("Fácil", "Médio", "Difícil", "Muito difícil")
+        const val idxFACIL   = 0
+        const val idxMEDIO   = 1
         const val idxDIFICIL = 2
         const val idxMUITO_DIFICIL = 3
 
         var fatorLargura: Double = 0.0
-        var fatorAltura: Double = 0.0
+        var fatorAltura : Double = 0.0
 
         //--- Params
         // Erros
@@ -92,17 +92,17 @@ class MainActivity : AppCompatActivity() {
 
     private var bmpMyImageInic: Bitmap? = null
     private var bmpMyImageBack: Bitmap? = null
-    private var bmpMyImage: Bitmap? = null
+    private var bmpMyImage    : Bitmap? = null
 
     private var bmpNumDisp: Bitmap? = null
 
-    private var intCellwidth = 0
+    private var intCellwidth  = 0
     private var intCellheight = 0
 
-    private var pincelVerde = Paint()
-    private var pincelBranco = Paint()
-    private var pincelPreto = Paint()
-    private var pincelAzul = Paint()
+    private var pincelVerde   = Paint()
+    private var pincelBranco  = Paint()
+    private var pincelPreto   = Paint()
+    private var pincelAzul    = Paint()
     private var pincelLaranja = Paint()
 
     private var intTamTxt = 25
@@ -112,19 +112,19 @@ class MainActivity : AppCompatActivity() {
     private var canvasNumDisp: Canvas? = null
 
     //--- Textos
-    private lateinit var tvContaNums: TextView
+    private lateinit var tvContaNums : TextView
     private lateinit var tvContaClues: TextView
 
     //--- Botões principais
-    private lateinit var btnGeraJogo: Button
+    private lateinit var btnGeraJogo  : Button
     private lateinit var btnAdaptaJogo: Button
-    private lateinit var btnJogaJogo: Button
+    private lateinit var btnJogaJogo  : Button
 
     //--- Radio Buttons
     private lateinit var groupRBnivel: RadioGroup
-    private lateinit var rbFacil: RadioButton
-    private lateinit var rbMedio: RadioButton
-    private lateinit var rbDificil: RadioButton
+    private lateinit var rbFacil     : RadioButton
+    private lateinit var rbMedio     : RadioButton
+    private lateinit var rbDificil   : RadioButton
     private lateinit var rbMuitoDificil: RadioButton
 
     private lateinit var groupRBadapta: RadioGroup
@@ -149,8 +149,8 @@ class MainActivity : AppCompatActivity() {
     //        |xxxx|  MUITO DIFÍCIL | DIFÍCIL |   MÉDIO   |  FÁCIL |xxxxxxx|
     //        |----|----------------|---------|-----------|--------|-------|
 
-    private val FACIL = 20
-    private val MEDIO = 30
+    private val FACIL   = 20
+    private val MEDIO   = 30
     private val DIFICIL = 40
     private val MUITO_DIFICIL = 50
 
@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity() {
     private var intLinJogar = 0
 
     private var flagBoardSel = false
-    private var versAndroid = ""
+    private var versAndroid  = ""
 
     //--- Parâmetros do jogo
     //private lateinit var layoutAjustes : Layout
@@ -173,10 +173,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var edtLimTempo: EditText
 
     //private lateinit var ctimer: CountDownTimer
-    private var timeOut  = (10 * 60 * 60 * 1000).toLong()   // 10'
-    private var timeTick = 1000                             //  1"
+    //private var timeOut  = (10 * 60 * 60 * 1000).toLong()   // 10'
+    //private var timeTick = 1000                             //  1"
 
-    var flagPermissoesOk = false
+    private var flagPermissoesOk = false
 
     //--- Arquivos jogos
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
@@ -205,13 +205,13 @@ class MainActivity : AppCompatActivity() {
         //----------------------------------------------------------------------
         //--- Smartphone
         strToast = "Smartphone: ${Build.MANUFACTURER} - ${Build.MODEL}"
-        strLog = strToast + "  Build: ${Build.DEVICE}"
+        strLog   = strToast + "  Build: ${Build.DEVICE}"
         Log.d(cTAG, strLog)
 
         //--- Calcula o fator a ser usado para as diferenças de tamanho dos screens
         // desenv Smartphone JH: Samsung SM-G570M
         val larguraDesenv = 2.44  // inches
-        val alturaDesenv = 4.33  // inches
+        val alturaDesenv  = 4.33  // inches
 
         val metrics = resources.displayMetrics
         val yInches = metrics.heightPixels.toDouble() / metrics.ydpi.toDouble()
@@ -453,21 +453,50 @@ class MainActivity : AppCompatActivity() {
     // Ativada por verifPermissoesAcessoAPI()
     private fun finalizaInicializacao () {
 
-        //--- Leitura do arquivo de setup
-        //----------------------------------------------------------------------
         var flagLeitSetUpOK = false
 
-        if (flagPermissoesOk) { flagLeitSetUpOK = leArqSetUp() }
+        // Acessos Granted
+        if (flagPermissoesOk) {
 
-        if (!flagPermissoesOk || !flagLeitSetUpOK) {
+            //-------------------------------
+            flagLeitSetUpOK = leArqSetUp()
+            //-------------------------------
 
-            strToast  = if (!flagPermissoesOk) "Permissões" else "Leitura do setup"
-            strToast += " não Ok! Usa default"
+            //--- Leitura Ok, usa os valores lidos
+            if (flagLeitSetUpOK) {
 
+                intLimiteErros      = intLimiteErrosAtual
+                strLimiteTempo      = strLimiteTempoAtual
+                flagMostraNumIguais = flagMostraNumIguaisAtual
+
+            }
+            //--- Leitura NÃO ok, usa valores default
+            else {
+
+                strToast  = "Leitura set up não Ok! Usa default"
+                utilsKt.mToast(this, strToast)
+                Log.d(cTAG, "-> $strToast")
+
+                intLimiteErrosAtual = -1
+                intLimiteErros      = intLimiteErrosAtual
+
+                strLimiteTempoAtual = "00:00"
+                strLimiteTempo      = strLimiteTempoAtual
+
+                flagMostraNumIguaisAtual = true
+                flagMostraNumIguais      = flagMostraNumIguaisAtual
+
+            }
+
+        }
+        // Acessos não-Granted
+        else {
+
+            strToast  = " Permissões não Ok! Usa default"
             utilsKt.mToast(this, strToast)
-
             Log.d(cTAG, "-> $strToast")
 
+            /*
             //------------------------------------------------------------------
             // Salva o arquivo
             //------------------------------------------------------------------
@@ -493,6 +522,7 @@ class MainActivity : AppCompatActivity() {
             strLog = "-> Escrita arquivo storage/emulated/0/Download$strArqPath/$strArqSetUp "
             strLog += if (flagEscrita) "OK!" else "NÃO ok!"
             Log.d(cTAG, strLog)
+             */
 
             intLimiteErrosAtual = -1
             intLimiteErros      = intLimiteErrosAtual
@@ -504,15 +534,6 @@ class MainActivity : AppCompatActivity() {
             flagMostraNumIguais      = flagMostraNumIguaisAtual
 
         }
-        //--- Leitura Ok: usa os valores lidos
-        else {
-
-            intLimiteErros      = intLimiteErrosAtual
-            strLimiteTempo      = strLimiteTempoAtual
-            flagMostraNumIguais = flagMostraNumIguaisAtual
-
-        }
-        //----------------------------------------------------------------------
 
     }
 
@@ -660,12 +681,48 @@ class MainActivity : AppCompatActivity() {
             Log.d(cTAG, strLogRes)
 
             val flagInstalacaoOk = lstPermNaoOk.isEmpty()
-
+            var flagDefault      = false
             strLog = when (flagInstalacaoOk) {
+            //if  (flagInstalacaoOk) {
 
                 true -> {
+
                     flagPermissoesOk = true
-                    "- Permissão concedida!"
+
+                    //-------------------------------
+                    //flagLeitSetUpOK = leArqSetUp()
+                    //-------------------------------
+
+                    //--- Leitura Ok, usa os valores lidos
+                    if (leArqSetUp()) {
+
+                        intLimiteErros      = intLimiteErrosAtual
+                        strLimiteTempo      = strLimiteTempoAtual
+                        flagMostraNumIguais = flagMostraNumIguaisAtual
+
+                    }
+                    //--- Leitura NÃO ok, usa valores default
+                    else {
+
+                        flagDefault = true
+
+                        strToast  = "Leitura set up não Ok! Usa default"
+                        utilsKt.mToast(this, strToast)
+                        Log.d(cTAG, "-> $strToast")
+
+                        intLimiteErrosAtual = -1
+                        intLimiteErros      = intLimiteErrosAtual
+
+                        strLimiteTempoAtual = "00:00"
+                        strLimiteTempo      = strLimiteTempoAtual
+
+                        flagMostraNumIguaisAtual = true
+                        flagMostraNumIguais      = flagMostraNumIguaisAtual
+
+                    }
+
+                    "- Permissão concedida! Params: ${if (flagDefault) "default" else "setup"}"
+
                 }
                 false -> {
                     flagPermissoesOk = false
@@ -996,7 +1053,7 @@ class MainActivity : AppCompatActivity() {
         */
         // </DEBUG>
 
-        //--- Verifica se jogo válido quanto a repetição de nuúmeros em Qm e/ou Lin e/ou Col.
+        //--- Verifica se jogo válido quanto a repetição de números em Qm e/ou Lin e/ou Col.
         //-----------------------------------------------------
         var flagJogoValido = verificaSeJogoValido(quadMaior)
         //-----------------------------------------------------
@@ -1022,7 +1079,7 @@ class MainActivity : AppCompatActivity() {
             Log.d(cTAG, "-> $strToast")
 
         }
-        //--- Se tiver jogo válido, gera o GABARTIO e tenta finalizar a preparação do jogo
+        //--- Se tiver jogo válido, gera o GABARITO e tenta finalizar a preparação do jogo
         else {
 
             //-----------------------
@@ -1952,6 +2009,8 @@ class MainActivity : AppCompatActivity() {
 
             utilsKt.mToast(this, strMsgDebug)
 
+            Log.d(cTAG, "-> $strMsgDebug")
+
         }
 
         else {
@@ -1990,7 +2049,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         //--- Se ainda não foi concedida a permissão, aguarda permissões Ok
-        val waitTime = if (flagPermissoesOk) 3000L else 100L  // milisegundos
+        val waitTime = if (!flagPermissoesOk) 10000L else 100L  // milisegundos
         Handler(Looper.getMainLooper()).postDelayed(
             {
                 //------------------------
@@ -2006,7 +2065,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //----------------------------------------------------------------------------------------------
-    //                                 Funções Jogo selecionado
+    //                               Funções Jogo selecionado
     //----------------------------------------------------------------------------------------------
 
     //--- adaptaPreset
@@ -2393,7 +2452,7 @@ class MainActivity : AppCompatActivity() {
             if (flagMostraNumIguaisAtual != flagMostraNumIguais) {
 
                 strToast += if (strToast.isNotEmpty()) "\n" else ""
-                strToast += "   - mostrar nºs =s: ${flagMostraNumIguais == true}"
+                strToast += "   - mostrar nºs =s: $flagMostraNumIguais"
                 //flagMostraNumIguaisAtual = flagMostraNumIguais
             }
 
@@ -2456,7 +2515,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- atualizaArqSetUp
-    var strModelo = ""
+    private var strModelo = ""
     private fun atualizaArqSetUp() {
 
         var strConteudo: String
@@ -2465,11 +2524,10 @@ class MainActivity : AppCompatActivity() {
 
         //--- Lê o arquivo modelo do setup
         val strNomeArqSemExt = "modelo_arq_xml_sudoku_setup"
-        val arStrLeitArqRaw : ArrayList<String>
         Log.d(cTAG, "   - lê arquivo modelo $strNomeArqSemExt")
 
         //----------------------------------------------------------------------
-        arStrLeitArqRaw = utils.LeituraFileRaw(this, strNomeArqSemExt)
+        val arStrLeitArqRaw : ArrayList<String> = utils.LeituraFileRaw(this, strNomeArqSemExt)
         //----------------------------------------------------------------------
         for (idxDecl in 0 until arStrLeitArqRaw.size) { strModelo += arStrLeitArqRaw[idxDecl] }
 
@@ -2539,12 +2597,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     //--- preencheConteudo
-    var intIdxFim = 0
-    fun preencheConteudo(strTag: String,strConteudoTag: String): String {
+    private var intIdxFim = 0
+    private fun preencheConteudo(strTag: String, strConteudoTag: String): String {
 
         var strConteudoPreenchido = ""
 
-        var intIdxInic = intIdxFim
+        val intIdxInic = intIdxFim
         intIdxFim      = strModelo.indexOf(strTag, intIdxInic, false)
         intIdxFim     += strTag.length
 

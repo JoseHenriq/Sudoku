@@ -6,19 +6,14 @@ package br.com.jhconsultores.utils;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -41,23 +36,26 @@ import androidx.core.content.FileProvider;
 
 import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
+/*
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.provider.MediaStore;
+import android.provider.Settings;
+ */
+
 //=============================================================================
 //                           Biblioteca Java
 //=============================================================================
 import static br.com.jhconsultores.sudoku.ui.MainActivity.cTAG;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -69,12 +67,22 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+/*
+import java.io.BufferedOutputStream;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.io.OutputStream;
+import java.net.URI;
+
+import br.com.jhconsultores.sudoku.BuildConfig;
+import br.com.jhconsultores.sudoku.ui.MainActivity;
+ */
+
+
 //=============================================================================
 //                           Biblioteca JH
 //=============================================================================
-import br.com.jhconsultores.sudoku.BuildConfig;
 import br.com.jhconsultores.sudoku.R;
-import br.com.jhconsultores.sudoku.ui.MainActivity;
 
 /*==============================================================================
  * Sistemas de permissão do Android 6.0
@@ -83,7 +91,7 @@ import br.com.jhconsultores.sudoku.ui.MainActivity;
 //public class Utils<EnumStorage> {
 public class Utils {
 
-    int ALL_FILES_ACCESS_PERMISSION = 4;
+    //int ALL_FILES_ACCESS_PERMISSION = 4;
     public String permScopedStorage = "";
 
     //--- Intancializações e inicializações
@@ -97,6 +105,7 @@ public class Utils {
     //--------------------------------------------------------------------------
     //                             Inner class
     //--------------------------------------------------------------------------
+    /*
     public enum EnumStorage {
 
         EXTERNAL_STORAGE("externalStorage", 0),
@@ -125,6 +134,7 @@ public class Utils {
 
         }
     }
+    */
 
     //--------------------------------------------------------------------------
     //                             Permissions
@@ -164,6 +174,7 @@ public class Utils {
         //------------------------------------------------------------------------
         boolean flagValidatePerm = validate(activity, 0, permissoes);
         //------------------------------------------------------------------------
+        Log.d(cTAG, "-> Ret 'validate': " + ((flagValidatePerm)? "true":"false"));
 
         return (flagValidatePerm);
 
