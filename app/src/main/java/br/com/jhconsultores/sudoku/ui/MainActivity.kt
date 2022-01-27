@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.168"
+        const val strApp = "Sudoku_#9.0.169"
 
         var flagScopedStorage  = false
 
@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
     private var quadMaior = Array(9) { Array(9) { 0 } }
 
     private var strNivelJogo = "Fácil"
-    private var nivelJogo = 0
+    private var nivelJogo    = 0
     private var subNivelJogo = 0
     private var nivelTotalJogo = 0
 
@@ -172,9 +172,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var edtLimErros: EditText
     private lateinit var edtLimTempo: EditText
 
-    private lateinit var ctimer: CountDownTimer
+    //private lateinit var ctimer: CountDownTimer
     private var timeOut  = (10 * 60 * 60 * 1000).toLong()   // 10'
     private var timeTick = 1000                             //  1"
+
+    var flagPermissoesOk = false
 
     //--- Arquivos jogos
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
@@ -183,7 +185,7 @@ class MainActivity : AppCompatActivity() {
     //--- Classes externas
     private var sgg = SudokuGameGenerator()
     private var jogarJogo = JogarActivity()
-    private val utils = Utils()
+    private val utils   = Utils()
     private val utilsKt = UtilsKt()
     private val timeVal = TimeValidator()
 
@@ -453,13 +455,18 @@ class MainActivity : AppCompatActivity() {
 
         //--- Leitura do arquivo de setup
         //----------------------------------------------------------------------
-        if (!flagPermissoesOk || !leArqSetUp()) {
+        var flagLeitSetUpOK = false
 
-            strToast = "Arquivo setup não Ok! Usa valores default"
+        if (flagPermissoesOk) { flagLeitSetUpOK = leArqSetUp() }
+
+        if (!flagPermissoesOk || !flagLeitSetUpOK) {
+
+            strToast  = if (!flagPermissoesOk) "Permissões" else "Leitura do setup"
+            strToast += " não Ok! Usa default"
 
             utilsKt.mToast(this, strToast)
 
-            Log.d(cTAG, "-> Leitura do arquivo setup não Ok! Usa valores default")
+            Log.d(cTAG, "-> $strToast")
 
             //------------------------------------------------------------------
             // Salva o arquivo
@@ -1928,7 +1935,6 @@ class MainActivity : AppCompatActivity() {
     //---------------------------------------------------------------------
     // Verifica se Permissions do Manifest estão granted
     //---------------------------------------------------------------------
-    var flagPermissoesOk = false
     @RequiresApi(Build.VERSION_CODES.R)
     //private fun verifPermissoesAcessoAPI(): Boolean {
     private fun verifPermissoesAcessoAPI() {
@@ -2650,6 +2656,7 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     //                             CounterDown Timer
     //----------------------------------------------------------------------------------------------
+    /*
     //--- startTimer
     private fun startTimer(lgTimeOutMs: Long, intTimeTicksMs: Int) {
 
@@ -2685,7 +2692,9 @@ class MainActivity : AppCompatActivity() {
     //--- timeOutPermissoes
     private fun timeOutPermissoes() {
 
+        // ToDo
 
     }
+     */
 
 }
