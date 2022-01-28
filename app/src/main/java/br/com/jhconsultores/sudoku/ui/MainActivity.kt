@@ -32,6 +32,7 @@ import android.view.*
 import androidx.activity.result.ActivityResult
 import androidx.core.view.MenuCompat
 import br.com.jhconsultores.sudoku.BuildConfig
+import br.com.jhconsultores.sudoku.jogo.SudokuBoard
 import kotlin.math.sqrt
 
 const val ALL_FILES_ACCESS_PERMISSION = 4
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.170"
+        const val strApp = "Sudoku_#9.0.171"
 
         var flagScopedStorage  = false
 
@@ -67,6 +68,10 @@ class MainActivity : AppCompatActivity() {
         var fatorLargura: Double = 0.0
         var fatorAltura : Double = 0.0
 
+        //--- Algoritmos do jogo
+        const val ALGORITMO_JH    = "AlgoritmoJH"
+        const val ALGORITMO_SCOTT = "AlgoritmoScott"
+
         //--- Params
         // Erros
         const val TITLE_ERROS = "Limite Erros: "
@@ -79,7 +84,6 @@ class MainActivity : AppCompatActivity() {
         var strTitleTempo       = ""
         var strLimiteTempo      = "00:00"    // Default; significa "sem limite"
         var strLimiteTempoAtual = "00:00"
-
         // Mostrar números iguais
         var flagMostraNumIguais      = true
         var flagMostraNumIguaisAtual = true
@@ -189,6 +193,8 @@ class MainActivity : AppCompatActivity() {
     private val utilsKt = UtilsKt()
     private val timeVal = TimeValidator()
 
+    //private val sudokuBoard = SudokuBoard()
+
     //----------------------------------------------------------------------------------------------
     // Eventos e listeners da MainActivity
     //----------------------------------------------------------------------------------------------
@@ -267,16 +273,16 @@ class MainActivity : AppCompatActivity() {
         //----------------------------------------------------------------------
         // Instancializações e inicializações
         //----------------------------------------------------------------------
-        tvContaNums = findViewById(R.id.ContaNums)
+        tvContaNums  = findViewById(R.id.ContaNums)
         tvContaClues = findViewById(R.id.ContaClues)
 
-        btnGeraJogo = findViewById(R.id.btn_GerarJogo)
+        btnGeraJogo   = findViewById(R.id.btn_GerarJogo)
         btnAdaptaJogo = findViewById(R.id.btn_AdaptarJogo)
-        btnJogaJogo = findViewById(R.id.btn_JogarJogo)
+        btnJogaJogo   = findViewById(R.id.btn_JogarJogo)
 
         groupRBnivel = findViewById(R.id.radioGrpNivel)
-        rbFacil = findViewById(R.id.nivelFacil)
-        rbMedio = findViewById(R.id.nivelMédio)
+        rbFacil   = findViewById(R.id.nivelFacil)
+        rbMedio   = findViewById(R.id.nivelMédio)
         rbDificil = findViewById(R.id.nivelDifícil)
         rbMuitoDificil = findViewById(R.id.nivelMuitoDifícil)
         //-----------------------------
@@ -856,7 +862,7 @@ class MainActivity : AppCompatActivity() {
                 //--------------------------
                 edtViewSubNivel.isEnabled = true
 
-                groupRBadapta.visibility = INVISIBLE
+                groupRBadapta.visibility  = INVISIBLE
 
                 txtDadosJogo.text = ""
                 sgg.txtDados = ""
@@ -897,9 +903,15 @@ class MainActivity : AppCompatActivity() {
                     subNivelJogo = edtViewSubNivel.text.toString().toInt()
                     nivelTotalJogo = nivelJogo + subNivelJogo
 
-                    //=========================================
-                    quadMaior = sgg.geraJogo(nivelTotalJogo)
-                    //=========================================
+                    //=======================================================
+                    // quadMaior = sgg.geraJogo(nivelTotalJogo, ALGORITMO_JH)
+                    //=======================================================
+
+                    //==========================================================
+                    quadMaior = sgg.geraJogo(nivelTotalJogo, ALGORITMO_SCOTT)
+                    //==========================================================
+
+                    //-------------------------------
                     preencheSudokuBoard(quadMaior)
                     //-------------------------------
 

@@ -5,6 +5,10 @@ import android.util.Log
 import br.com.jhconsultores.sudoku.jogo.SudokuBackTracking.intNumBackTracking
 import br.com.jhconsultores.utils.UtilsKt
 
+import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.ALGORITMO_JH
+import br.com.jhconsultores.sudoku.jogo.SudokuBoard
+import java.util.*
+
 class SudokuGameGenerator {
 
     //--------------------------------------------------------------------------
@@ -26,13 +30,14 @@ class SudokuGameGenerator {
 
     //--- Classes externas
     private val utilsKt = UtilsKt ()
+    //private val sudokuBoard = SudokuBoard()
 
     //--------------------------------------------------------------------------
     //             Gera Jogos (preset int[9][9] = { 0, 0, ..., 0 })
     //--------------------------------------------------------------------------
     //--- GeraJogo
     @SuppressLint("SetTextI18n")
-    fun geraJogo(nivelJogo : Int) : Array<Array<Int>> {
+    fun geraJogo(nivelJogo : Int, strAlgoritmo : String) : Array<Array<Int>> {
 
         sggFlagJogoGeradoOk = false
 
@@ -41,38 +46,60 @@ class SudokuGameGenerator {
         var flagQuadMenorOk : Boolean
 
         //-----------------------
-        inicQuadMaiorGeracao()
+        zeraQuadMaiorGeracao()
         //-----------------------
 
         while (!sggFlagJogoGeradoOk && contaTentaJogo < limTentaJogo) {
 
             //Log.d(cTAG, "-> Gera o jogo ${contaTentaJogo + 1}")
 
-            for (quad in 0..8) {
+            //------------------------------------------------------------------
+            //                         Gera o jogo
+            //------------------------------------------------------------------
+            if (strAlgoritmo == ALGORITMO_JH) {
 
-                var array = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
+                for (quad in 0..8) {
 
-                flagQuadMenorOk     = false
-                var numTentaGeracao = 0
-                while (!flagQuadMenorOk && numTentaGeracao < 50) {
+                    var array = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-                    //----------------------------
-                    array = geraQuadMenor(quad)
-                    //----------------------------
+                    flagQuadMenorOk = false
+                    var numTentaGeracao = 0
+                    while (!flagQuadMenorOk && numTentaGeracao < 50) {
 
-                    if (!array.contains(0) && !array.contains(-1)) flagQuadMenorOk = true
+                        //============================
+                        array = geraQuadMenor(quad)
+                        //============================
 
-                    else { numTentaGeracao++ }
+                        if (!array.contains(0) && !array.contains(-1)) flagQuadMenorOk = true
+                        else {
+                            numTentaGeracao++
+                        }
+
+                    }
+
+                    //--- Insere esse Qm em 'quadMaiorRet'
+                    //==========================
+                    insereQmEmQM(quad, array)
+                    //==========================
 
                 }
 
-                //--------------------------
-                insereQmEmQM(quad, array)
-                //--------------------------
+            }
+
+            //--- ALGORITMO_SCOTT
+            else {
+
+                //==================================
+                quadMaiorRet = geraJogoAlgScott()
+                //==================================
+
+                return quadMaiorRet
 
             }
 
-            //--- Verifica se o jogo Gerado é válido
+            //------------------------------------------------------------------
+            //         Verifica se o jogo Gerado (quadMaiorRet) é válido
+            //------------------------------------------------------------------
             var flagJogoVal = true
             for (idxLinhaQM in 0..8) {
 
@@ -255,7 +282,7 @@ class SudokuGameGenerator {
     }
 
     //--- inicquadMaiorRetGeracao
-    private fun inicQuadMaiorGeracao() {
+    private fun zeraQuadMaiorGeracao() {
 
         quadMaiorRet = arrayOf()
 
@@ -397,6 +424,7 @@ class SudokuGameGenerator {
     }
 
     //--- insere Qm no QM
+    // Retorna na global 'quadMaiorRet'
     private fun insereQmEmQM (quadMenor : Int, array : Array <Int>) {
 
         // Converte os quadrados menores no quadMaiorRet
@@ -763,6 +791,93 @@ class SudokuGameGenerator {
         //Log.d(cTAG, "   - R4: qti clues = $intQtiZeros")
 
         txtDados = "-> Jogo preparado R(1,2,3,4):"
+
+    }
+
+    //--- geraJogoAlgScott()
+    private fun geraJogoAlgScott() : Array<Array<Int>> {
+
+        var arArIntJogoScott = Array(9) { Array(9) {0} }
+
+        //--- Instancializações e inicializações
+        var k1: Int
+        var k2: Int
+        var counter = 1
+
+        //----------------------------------------------------------------------
+        // 1- Gera o tabuleiro
+        //----------------------------------------------------------------------
+        val board = SudokuBoard()
+
+        //==================
+        board.generate()
+        //==================
+
+        var myBoard = board.board
+
+        //--- Apresenta o tabuleiro gerado
+        //println("Original board: \n")
+        Log.d(cTAG, "-> Original board:")
+        for (i in 0..8) {
+            strLog = ""
+            for (j in 0..8) {
+
+                //print(myBoard[i][j].toString() + "\t")
+                strLog += "${myBoard[i][j]}   "
+
+            }
+            //println()
+            Log.d(cTAG, strLog)
+        }
+
+        //----------------------------------------------------------------------
+        // 2- Swaps
+        //----------------------------------------------------------------------
+        // Swap singles
+        SudokuBoard.gen_rand(1) // rows
+        SudokuBoard.gen_rand(0) // cols
+
+        // Swap groups
+        val rand = Random()
+        val n = intArrayOf(0, 3, 6)
+        for (i in 0..1) {
+            k1 = n[rand.nextInt(n.size)]
+            do {
+                k2 = n[rand.nextInt(n.size)]
+            } while (k1 === k2)
+            if (counter == 1) SudokuBoard.swap_row_group(k1, k2) else SudokuBoard.swap_col_group(
+                k1,
+                k2
+            )
+            counter++
+        }
+
+        //--- Apresenta o tabuleiro após swaps
+        Log.d(cTAG, "-> Swapped board:")
+        myBoard = board.board
+        for (x in 0..8) {
+            strLog = ""
+            for (y in 0..8) {
+
+                strLog += "${myBoard[x][y]}   "
+
+            }
+            Log.d(cTAG, strLog)
+
+        }
+
+        for (x in 0..8) {
+
+            for (y in 0..8) {
+
+                val intNumBoard = "${myBoard[x][y]}".toInt()
+                arArIntJogoScott[x][y] = intNumBoard
+
+            }
+
+        }
+
+        return arArIntJogoScott
 
     }
 

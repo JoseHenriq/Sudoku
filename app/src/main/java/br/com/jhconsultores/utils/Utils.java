@@ -88,10 +88,8 @@ import br.com.jhconsultores.sudoku.R;
  * Sistemas de permissão do Android 6.0
  * http://developer.android.com/preview/features/runtime-permissions.html
  *============================================================================*/
-//public class Utils<EnumStorage> {
 public class Utils {
 
-    //int ALL_FILES_ACCESS_PERMISSION = 4;
     public String permScopedStorage = "";
 
     //--- Intancializações e inicializações
@@ -99,42 +97,6 @@ public class Utils {
     String strLog = "";
 
     public Boolean flagSO_A11 = false;
-
-    //private val utilsKt = UtilsKt()
-
-    //--------------------------------------------------------------------------
-    //                             Inner class
-    //--------------------------------------------------------------------------
-    /*
-    public enum EnumStorage {
-
-        EXTERNAL_STORAGE("externalStorage", 0),
-        INTERNAL_STORAGE("internalStorage", 1),
-        EXTERNAL_PUBLIC_STORAGE("externalPublicStorage", 2),
-        INTERNAL_PUBLIC_STORAGE("externalPublicStorage", 3),
-
-        SD_MEMORY("sdMemory", 4),
-        SD_PUBLIC_MEMORY("sdPublicMemory", 5);
-
-        //--- Construtor
-        private String stringValue;
-        private int intValue;
-
-        private EnumStorage(String toString, int value) {
-
-            stringValue = toString;
-            intValue = value;
-        }
-
-        //--- Método
-        @Override
-        public String toString() {
-
-            return stringValue;
-
-        }
-    }
-    */
 
     //--------------------------------------------------------------------------
     //                             Permissions
