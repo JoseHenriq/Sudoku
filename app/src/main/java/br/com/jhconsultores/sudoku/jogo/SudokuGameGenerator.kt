@@ -6,7 +6,7 @@ import br.com.jhconsultores.sudoku.jogo.SudokuBackTracking.intNumBackTracking
 import br.com.jhconsultores.utils.UtilsKt
 
 import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.ALGORITMO_JH
-import br.com.jhconsultores.sudoku.jogo.SudokuBoard
+import br.com.jhconsultores.utils.GFG
 import java.util.*
 
 class SudokuGameGenerator {
@@ -19,9 +19,9 @@ class SudokuGameGenerator {
     
     var txtDados = ""
 
-    var quadMaiorRet   = arrayOf<Array<Int>>()
-    var intJogoAdaptar = 0
-    var intQtiZeros    = 0
+    var quadMaiorRet = arrayOf<Array<Int>>()
+    private var intJogoAdaptar = 0
+    private var intQtiZeros    = 0
 
     private var sggFlagJogoGeradoOk   = false
     private var sggFlagJogoAdaptadoOk = false
@@ -30,7 +30,6 @@ class SudokuGameGenerator {
 
     //--- Classes externas
     private val utilsKt = UtilsKt ()
-    //private val sudokuBoard = SudokuBoard()
 
     //--------------------------------------------------------------------------
     //             Gera Jogos (preset int[9][9] = { 0, 0, ..., 0 })
@@ -149,6 +148,26 @@ class SudokuGameGenerator {
             //-----------------------
             preparaJogo(nivelJogo)      // arArIntNums: jogo preparado para ser jogado
             //-----------------------
+
+            Log.d(cTAG, "-> Jogo preparado:")
+            strLog = ""
+            for (x in 0..8) { for (y in 0..8) { strLog += arArIntNums[x][y].toString() }}
+            Log.d(cTAG, strLog)
+
+            // sudoku_#9.0.172
+            //--- Checa se jogo Válido (regras do Sudoku + Solução UNIQUE)
+
+            val myGFG = GFG.boardGFG
+            for (x in 0..8) { for (y in 0..8) { myGFG[x][y] = arArIntNums[x][y] } }
+            //-------------------------------------
+            val flagValGFG = GFG.isValidSudoku()
+            //-------------------------------------
+            if (!flagValGFG) {
+
+                val strToast = "Jogo com MAIS do que uma solução!"
+                Log.d(cTAG, "-> $strToast")
+
+            }
 
             Log.d(cTAG, "-> Jogo gerado preparado:")
             //-----------------------------------
@@ -797,7 +816,7 @@ class SudokuGameGenerator {
     //--- geraJogoAlgScott()
     private fun geraJogoAlgScott() : Array<Array<Int>> {
 
-        var arArIntJogoScott = Array(9) { Array(9) {0} }
+        val arArIntJogoScott = Array(9) { Array(9) {0} }
 
         //--- Instancializações e inicializações
         var k1: Int
@@ -812,21 +831,13 @@ class SudokuGameGenerator {
         //==================
         board.generate()
         //==================
-
         var myBoard = board.board
 
         //--- Apresenta o tabuleiro gerado
-        //println("Original board: \n")
         Log.d(cTAG, "-> Original board:")
         for (i in 0..8) {
             strLog = ""
-            for (j in 0..8) {
-
-                //print(myBoard[i][j].toString() + "\t")
-                strLog += "${myBoard[i][j]}   "
-
-            }
-            //println()
+            for (j in 0..8) { strLog += "${myBoard[i][j]}   " }
             Log.d(cTAG, strLog)
         }
 
@@ -844,7 +855,7 @@ class SudokuGameGenerator {
             k1 = n[rand.nextInt(n.size)]
             do {
                 k2 = n[rand.nextInt(n.size)]
-            } while (k1 === k2)
+            } while (k1 == k2)
             if (counter == 1) SudokuBoard.swap_row_group(k1, k2) else SudokuBoard.swap_col_group(
                 k1,
                 k2
@@ -857,25 +868,41 @@ class SudokuGameGenerator {
         myBoard = board.board
         for (x in 0..8) {
             strLog = ""
-            for (y in 0..8) {
-
-                strLog += "${myBoard[x][y]}   "
-
-            }
+            for (y in 0..8) { strLog += "${myBoard[x][y]}   " }
             Log.d(cTAG, strLog)
-
         }
 
-        for (x in 0..8) {
-
-            for (y in 0..8) {
-
-                val intNumBoard = "${myBoard[x][y]}".toInt()
-                arArIntJogoScott[x][y] = intNumBoard
-
+        //----------------------------------------------------------------------
+        // 3- Striking out
+        //----------------------------------------------------------------------
+        k1 = 0
+        while (k1 < 9) {
+            k2 = 0
+            while (k2 < 9) {
+                //-------------------------------
+                SudokuBoard.strike_out(k1, k2)
+                //-------------------------------
+                k2++
             }
-
+            k1++
         }
+
+        //--- Apresenta o tabuleiro final
+        Log.d(cTAG, "Final Board:")
+        for (i in 0..8) {
+            strLog = ""
+            for (j in 0..8) { strLog += "${myBoard[i][j]}   " }
+            Log.d(cTAG, strLog)
+        }
+
+        //---------------------------------------------------------------------------------
+        // 4- Converte o tipo de dados de Array<(out) IntArray!>! para Array<Array<Int>>
+        //---------------------------------------------------------------------------------
+        for (x in 0..8) {
+            for (y in 0..8) { arArIntJogoScott[x][y] = "${myBoard[x][y]}".toInt() }
+        }
+        val qtizeros = utilsKt.quantZeros(arArIntJogoScott)
+        Log.d(cTAG, "-> células vazias: $qtizeros   clues: ${81-qtizeros}")
 
         return arArIntJogoScott
 

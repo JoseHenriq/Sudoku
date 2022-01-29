@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.171"
+        const val strApp = "Sudoku_#9.0.172"
 
         var flagScopedStorage  = false
 
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
     private var pincelLaranja = Paint()
 
     private var intTamTxt = 25
-    private var scale = 0f
+    private var scale     = 0f
 
     private var canvasMyImage: Canvas? = null
     private var canvasNumDisp: Canvas? = null
@@ -135,9 +135,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rbPreset: RadioButton
     private lateinit var rbEdicao: RadioButton
 
-    private lateinit var progressBar: ProgressBar
+    private lateinit var layout         : RelativeLayout
+    private lateinit var progressBar    : ProgressBar
+
     private lateinit var edtViewSubNivel: EditText
-    private lateinit var layout: RelativeLayout
 
     //--- Objetos para o jogo
     private var quadMaior = Array(9) { Array(9) { 0 } }
@@ -193,8 +194,6 @@ class MainActivity : AppCompatActivity() {
     private val utilsKt = UtilsKt()
     private val timeVal = TimeValidator()
 
-    //private val sudokuBoard = SudokuBoard()
-
     //----------------------------------------------------------------------------------------------
     // Eventos e listeners da MainActivity
     //----------------------------------------------------------------------------------------------
@@ -207,7 +206,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //----------------------------------------------------------------------
-        // Device
+        //                              Device
         //----------------------------------------------------------------------
         //--- Smartphone
         strToast = "Smartphone: ${Build.MANUFACTURER} - ${Build.MODEL}"
@@ -544,7 +543,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //---------------------------------------------------------------------
-    // Action Bar Menu
+    //                       Action Bar Menu
     //---------------------------------------------------------------------
     private lateinit var myMenuItem: MenuItem
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -571,9 +570,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------
     // Listener para seleção de opções no menu pop-up do ActionBar (three dots menu )
-    //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
         //--- Tapping no item 'Ajustar quantidade de erros' do menu do actionBar
@@ -658,114 +657,6 @@ class MainActivity : AppCompatActivity() {
             // Invoke the superclass to handle it.
             super.onOptionsItemSelected(item)
 
-        }
-
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == 1 || requestCode == ALL_FILES_ACCESS_PERMISSION) {
-
-            val lstPermNaoOk: MutableList<String> = java.util.ArrayList()
-            var strLogRes = "Permissions: "
-            for (intIdx in permissions.indices) {
-
-                strLogRes += """
-                
-                ${permissions[intIdx]}=${grantResults[intIdx]} """.trimIndent()
-
-                if (grantResults[intIdx] == -1) lstPermNaoOk.add(permissions[intIdx])
-
-            }
-
-            Log.d(cTAG, strLogRes)
-
-            val flagInstalacaoOk = lstPermNaoOk.isEmpty()
-            var flagDefault      = false
-            strLog = when (flagInstalacaoOk) {
-            //if  (flagInstalacaoOk) {
-
-                true -> {
-
-                    flagPermissoesOk = true
-
-                    //-------------------------------
-                    //flagLeitSetUpOK = leArqSetUp()
-                    //-------------------------------
-
-                    //--- Leitura Ok, usa os valores lidos
-                    if (leArqSetUp()) {
-
-                        intLimiteErros      = intLimiteErrosAtual
-                        strLimiteTempo      = strLimiteTempoAtual
-                        flagMostraNumIguais = flagMostraNumIguaisAtual
-
-                    }
-                    //--- Leitura NÃO ok, usa valores default
-                    else {
-
-                        flagDefault = true
-
-                        strToast  = "Leitura set up não Ok! Usa default"
-                        utilsKt.mToast(this, strToast)
-                        Log.d(cTAG, "-> $strToast")
-
-                        intLimiteErrosAtual = -1
-                        intLimiteErros      = intLimiteErrosAtual
-
-                        strLimiteTempoAtual = "00:00"
-                        strLimiteTempo      = strLimiteTempoAtual
-
-                        flagMostraNumIguaisAtual = true
-                        flagMostraNumIguais      = flagMostraNumIguaisAtual
-
-                    }
-
-                    "- Permissão concedida! Params: ${if (flagDefault) "default" else "setup"}"
-
-                }
-                false -> {
-                    flagPermissoesOk = false
-                    "- Permissão NÃO concedida!"
-                }
-
-            }
-
-            Log.d(cTAG, strLog)
-            utilsKt.mToast(this, strLog)
-
-            if (!flagInstalacaoOk && (permissions[0] == "android.permission.WRITE_EXTERNAL_STORAGE")) {
-                var strMsg = "O Android NÃO concedeu acesso ao salvamento de jogos."
-                strMsg += "\nProvável problema: API incompatível."
-                strMsg += "\n\nContinua o App ou pára?"
-                androidx.appcompat.app.AlertDialog.Builder(this)
-
-                    .setTitle("Sudoku - Inicia App")
-                    .setMessage(strMsg)
-
-                    .setPositiveButton("Continua App") { _, _ ->
-
-                        Log.d(cTAG, "-> O usuário optou por continuar sem salvamento.")
-
-                    }
-
-                    .setNegativeButton("Pára App") { _, _ ->
-
-                        Log.d(cTAG, "-> O usuário optou por finalizar o App.")
-
-                        //---------
-                        finish()
-                        //---------
-
-                    }
-                    .show()
-            }
         }
 
     }
@@ -904,11 +795,11 @@ class MainActivity : AppCompatActivity() {
                     nivelTotalJogo = nivelJogo + subNivelJogo
 
                     //=======================================================
-                    // quadMaior = sgg.geraJogo(nivelTotalJogo, ALGORITMO_JH)
+                    quadMaior = sgg.geraJogo(nivelTotalJogo, ALGORITMO_JH)
                     //=======================================================
 
                     //==========================================================
-                    quadMaior = sgg.geraJogo(nivelTotalJogo, ALGORITMO_SCOTT)
+                    //quadMaior = sgg.geraJogo(nivelTotalJogo, ALGORITMO_SCOTT)
                     //==========================================================
 
                     //-------------------------------
@@ -1455,6 +1346,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //--- Converte um valor em dp para pixels (px)
+    private fun toPx(dip: Float): Float {
+        return (dip)
+    }
+
     //----------------------------------------------------------------------------------------------
     // SudokuBoard
     //----------------------------------------------------------------------------------------------
@@ -1991,16 +1887,117 @@ class MainActivity : AppCompatActivity() {
     }
 
     //----------------------------------------------------------------------------------------------
-    //                                      Debug
+    //                                     Permissões
     //----------------------------------------------------------------------------------------------
-    //--- Converte um valor em dp para pixels (px)
-    private fun toPx(dip: Float): Float {
-        return (dip)
+    //--- Declara o retorno para PermissionsResult
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == 1 || requestCode == ALL_FILES_ACCESS_PERMISSION) {
+
+            val lstPermNaoOk: MutableList<String> = java.util.ArrayList()
+            var strLogRes = "Permissions: "
+            for (intIdx in permissions.indices) {
+
+                strLogRes += """
+                
+                ${permissions[intIdx]}=${grantResults[intIdx]} """.trimIndent()
+
+                if (grantResults[intIdx] == -1) lstPermNaoOk.add(permissions[intIdx])
+
+            }
+
+            Log.d(cTAG, strLogRes)
+
+            val flagInstalacaoOk = lstPermNaoOk.isEmpty()
+            var flagDefault      = false
+            strLog = when (flagInstalacaoOk) {
+                //if  (flagInstalacaoOk) {
+
+                true -> {
+
+                    flagPermissoesOk = true
+
+                    //-------------------------------
+                    //flagLeitSetUpOK = leArqSetUp()
+                    //-------------------------------
+
+                    //--- Leitura Ok, usa os valores lidos
+                    if (leArqSetUp()) {
+
+                        intLimiteErros      = intLimiteErrosAtual
+                        strLimiteTempo      = strLimiteTempoAtual
+                        flagMostraNumIguais = flagMostraNumIguaisAtual
+
+                    }
+                    //--- Leitura NÃO ok, usa valores default
+                    else {
+
+                        flagDefault = true
+
+                        strToast  = "Leitura set up não Ok! Usa default"
+                        utilsKt.mToast(this, strToast)
+                        Log.d(cTAG, "-> $strToast")
+
+                        intLimiteErrosAtual = -1
+                        intLimiteErros      = intLimiteErrosAtual
+
+                        strLimiteTempoAtual = "00:00"
+                        strLimiteTempo      = strLimiteTempoAtual
+
+                        flagMostraNumIguaisAtual = true
+                        flagMostraNumIguais      = flagMostraNumIguaisAtual
+
+                    }
+
+                    "- Permissão concedida! Params: ${if (flagDefault) "default" else "setup"}"
+
+                }
+                false -> {
+                    flagPermissoesOk = false
+                    "- Permissão NÃO concedida!"
+                }
+
+            }
+
+            Log.d(cTAG, strLog)
+            utilsKt.mToast(this, strLog)
+
+            if (!flagInstalacaoOk && (permissions[0] == "android.permission.WRITE_EXTERNAL_STORAGE")) {
+                var strMsg = "O Android NÃO concedeu acesso ao salvamento de jogos."
+                strMsg += "\nProvável problema: API incompatível."
+                strMsg += "\n\nContinua o App ou pára?"
+                androidx.appcompat.app.AlertDialog.Builder(this)
+
+                    .setTitle("Sudoku - Inicia App")
+                    .setMessage(strMsg)
+
+                    .setPositiveButton("Continua App") { _, _ ->
+
+                        Log.d(cTAG, "-> O usuário optou por continuar sem salvamento.")
+
+                    }
+
+                    .setNegativeButton("Pára App") { _, _ ->
+
+                        Log.d(cTAG, "-> O usuário optou por finalizar o App.")
+
+                        //---------
+                        finish()
+                        //---------
+
+                    }
+                    .show()
+            }
+        }
+
     }
 
-    //----------------------------------------------------------------------------------------------
-    //                                        Permissões
-    //----------------------------------------------------------------------------------------------
     //---------------------------------------------------------------------
     // Verifica se Permissions do Manifest estão granted
     //---------------------------------------------------------------------
@@ -2321,6 +2318,10 @@ class MainActivity : AppCompatActivity() {
         return flagJogoValido
 
     }
+
+    //--------------------------------------------------------------------------
+    //                Funções para o tratamento de Parametros
+    //--------------------------------------------------------------------------
 
     //--- implDialogView_AlertDialog para o ajuste dos parâmetros do Jogo
     @SuppressLint("SetTextI18n")
