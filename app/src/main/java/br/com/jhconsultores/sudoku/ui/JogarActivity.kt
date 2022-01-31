@@ -575,6 +575,7 @@ class JogarActivity : AppCompatActivity() {
 
                     "Candidatos" -> {
 
+                        btnReset.text = "Volta Jogo"
                         //--------------------
                         analisaCandidatos()
                         //--------------------
@@ -583,6 +584,7 @@ class JogarActivity : AppCompatActivity() {
                     //--- Retorna ao jogo
                     "Volta Jogo" -> {
 
+                        btnReset.text = "Candidatos"
                         //--------------
                         retornaJogo()
                         //--------------
@@ -960,11 +962,11 @@ class JogarActivity : AppCompatActivity() {
     private fun mostraCelAJogar(intLin: Int, intColuna: Int) {
 
         //--- Atualiza a imageView do layout
-        //--------------------------------------
+        //------------------------------------------------
         utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogo)
-        //----------------------------------------------
+        //------------------------------------------------
         iViewSudokuBoard!!.setImageBitmap(bmpJogo)
-        //----------------------------------------------
+        //-------------------------------------------
 
         //--- Pintura da celula
         //----------------------------------------------
@@ -972,9 +974,9 @@ class JogarActivity : AppCompatActivity() {
         //----------------------------------------------
 
         //--- Atualiza a imageView do layout
-        //----------------------------------------------
+        //-------------------------------------------
         iViewSudokuBoard!!.setImageBitmap(bmpJogo)
-        //----------------------------------------------
+        //-------------------------------------------
 
     }
 
@@ -1089,6 +1091,7 @@ class JogarActivity : AppCompatActivity() {
         //        ", " + yCoord + ") = " + strTxt
         //Log.d(cTAG, strLog)
 
+        pincel!!.color = ContextCompat.getColor(this, R.color.azul)
         //-------------------------------------------------------------------------------
         canvasJogo!!.drawText(strTxt, xCoord.toFloat(), yCoord.toFloat(), pincel!!)
         //-------------------------------------------------------------------------------
@@ -1123,6 +1126,7 @@ class JogarActivity : AppCompatActivity() {
             .copy(Bitmap.Config.ARGB_8888, true)
         canvasJogo       = Canvas(bmpJogo!!)
         iViewSudokuBoard = findViewById<View>(R.id.ivSudokuBoard) as ImageView
+        iViewSudokuBoard!!.setImageBitmap(bmpJogo)
 
         bmpSalvaJogo     = BitmapFactory.decodeResource(resources, intImageResource)
             .copy(Bitmap.Config.ARGB_8888, true)
@@ -1131,7 +1135,8 @@ class JogarActivity : AppCompatActivity() {
         bmpNumDisp     = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
             .copy(Bitmap.Config.ARGB_8888, true)
         canvasNumDisp  = Canvas(bmpNumDisp!!)
-        iViewNumsDisps = findViewById<View>(R.id.ivNumDisp)     as ImageView
+        iViewNumsDisps = findViewById<View>(R.id.ivNumDisp) as ImageView
+        iViewNumsDisps!!.setImageBitmap(bmpNumDisp)
 
         //bmpInic = BitmapFactory.decodeResource(resources, intImageResource)
         //    .copy(Bitmap.Config.ARGB_8888, true)
@@ -1182,13 +1187,14 @@ class JogarActivity : AppCompatActivity() {
             intMargleftdp = resources.getDimension(R.dimen.MargemEsquerda).toInt()
             intMargtoppx  = toPixels2(this, intmargTopDp.toFloat())
             intMargleftpx = toPixels2(this, intMargleftdp.toFloat())
+
             //strLog = "   -Margens: Acima  :  " + intMargtoppx + " pixels, Esquerda:    " +
             //        intMargleftpx + " pixels"
             //Log.d(cTAG, strLog)
 
             //--- Imagem Sudoku board
-            intImgwidth  = iViewSudokuBoard!!.width    // bmpSudokuBoard!!.width
-            intImgheight = iViewSudokuBoard!!.height   // bmpSudokuBoard!!.height
+            intImgwidth  = bmpJogo!!.width
+            intImgheight = bmpJogo!!.height   // bmpSudokuBoard!!.height
             //strLog = "   -Image  : Largura: " + intImgwidth + " pixels, Altura  :  " +
             //        intImgheight + " pixels"
             //Log.d(cTAG, strLog)
@@ -1401,9 +1407,9 @@ class JogarActivity : AppCompatActivity() {
         //----------------------------------
         preencheJogo()
         //---------------
-
-        //--- Atualiza o image view
         iViewSudokuBoard!!.setImageBitmap(bmpJogo)
+
+        return
 
         //--- Apresenta o jogo preparado e prepara o array dos números disponíveis
         flagJoga = false
@@ -1470,7 +1476,7 @@ class JogarActivity : AppCompatActivity() {
                     val strTexto = intNum.toString()
                     pincelAzul.textSize = intTamTxt * scale // 50 // 200
                     //------------------------------------------------------
-                    escreveCelula(intLinha, intCol, strTexto, pincelAzul) //, canvasMyImage!!)
+                    escreveCelula(intLinha, intCol, strTexto, pincelAzul)
                     //------------------------------------------------------
                     arIntNumsDisp[intNum - 1]--
 
@@ -1933,8 +1939,82 @@ class JogarActivity : AppCompatActivity() {
         var canvasCandidatos = Canvas(bmpAntesCandidatos)
 
         //--- Determina e apresenta os candidatos para as células vazias
-        
+        // Para todas as linhas de 0 a 8
+        for (intLin in 0..8) {
 
+            // Para todas as colunas de 0 a 8
+            for (intCol in 0..8) {
+
+                // Somente se célula vazia e número não repetido escreve o número candidato
+                val intNumSKB = arArIntNums[intLin][intCol]
+                if (intNumSKB == 0) {
+
+                    // Para todos os números candidatos de 1 a 9
+                    for (intNum in 1..9) {
+
+                        var flagEscreve = true
+                        var intNumCand  = 0
+
+                        // Verif se já existe na mesma linha
+                        for (intColLinha in 0..8) {
+
+                            intNumCand = arArIntNums[intLin][intColLinha]
+                            if (intColLinha != intCol) {
+
+                                if (intNumSKB == intNumCand) {
+
+                                    flagEscreve = false
+                                    break
+
+                                }
+
+                            }
+
+                        }
+
+                        // Se ainda NÃO existe na mesma linha verif se já existe na mesma coluna
+                        if (flagEscreve) {
+
+                            for (intLinColuna in 0..8) {
+
+                                intNumCand = arArIntNums[intLinColuna][intCol]
+                                if (intLinColuna != intLin) {
+
+                                    if (intNumSKB == intNumCand) {
+
+                                        flagEscreve = false
+                                        break
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                        //--- Se NÃO existe ainda na cell escreve o candidato
+                        if (flagEscreve) {
+
+                            val intCell = intLin * 9 + intCol
+                            //----------------------------------
+                            escCandidato(intCell, intNumCand)
+                            //----------------------------------
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        //--- Atualiza imageview
+        //-------------------------------------------
+        iViewSudokuBoard!!.setImageBitmap(bmpJogo)
+        //-------------------------------------------
 
     }
 
@@ -1944,6 +2024,31 @@ class JogarActivity : AppCompatActivity() {
         //--- Recupera o contexto
         arArIntNums = utilsKt.copiaArArInt(arArSalvaJogo)
 
+    }
+
+    //--- escCandidato
+    private fun escCandidato(intCell : Int, intCand : Int) {
+
+        //--- Calcula coordenadas
+        // Coordenada X (colunas)
+        val xCell  = intCell / 9
+        //-----------------------------------------------------
+        val xCoord = intCellwidth / 3 + xCell * intCellwidth
+        //-----------------------------------------------------
+        // Coordenada Y (linhas)
+        val yCell = intCell % 9
+        //-----------------------------------------------------------
+        val yCoord = intCellheight * 3 / 4 + yCell * intCellheight
+        //-----------------------------------------------------------
+
+        val posX = (xCoord + intCellwidth  / 6).toFloat()
+        val posY = (yCoord + intCellheight / 6).toFloat()
+
+        pincelAzul.textSize = (intTamTxt / 4) * scale
+
+        //------------------------------------------------------------------
+        canvasJogo!!.drawText(intCand.toString(), posX, posY, pincelAzul)
+        //------------------------------------------------------------------
 
     }
 

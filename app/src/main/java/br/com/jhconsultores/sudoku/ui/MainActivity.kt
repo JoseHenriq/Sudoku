@@ -1354,7 +1354,7 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
     // SudokuBoard
     //----------------------------------------------------------------------------------------------
-    //--- preencheSudokuBoard
+    //--- preencheSudokuBoard7
     private fun preencheSudokuBoard(arArIntJogo: Array<Array<Int>>) {
 
         //--- Objetos gráficos
