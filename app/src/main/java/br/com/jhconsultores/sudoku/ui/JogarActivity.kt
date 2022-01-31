@@ -50,21 +50,23 @@ class JogarActivity : AppCompatActivity() {
 
     }
 
-    private var intImageResource = 0
-    private var bmpInic: Bitmap? = null // Board vazio Lido a partir do resource/drawable
-    private var bmpJogo: Bitmap? = null // Preset ou jogo gerado ANTES dos novos números
-
-    private var bmpMyImage: Bitmap? = null             // Preset ou jogo gerado e novos números
-
-    private var bmpNumDisp: Bitmap?     = null         // Números disponíveis
-    private var bmpSudokuBoard: Bitmap? = null         // Jogo
-
-    private var canvasMyImage: Canvas? = null
-    private var canvasNumDisp: Canvas? = null
-    private var canvasSudokuBoard: Canvas? = null
-
+    //--- ImageView
     private var iViewSudokuBoard: ImageView? = null
-    private var iViewNumsDisps: ImageView?   = null
+    private var iViewNumsDisps  : ImageView? = null
+
+    //--- Bmp
+    private var intImageResource = 0
+    //private var bmpInic: Bitmap? = null // Board vazio Lido a partir do resource/drawable
+    private var bmpSalvaJogo: Bitmap? = null // salva o bmpMyImage que é o bmp do jogo
+
+    //private var bmpSudokuBoard: Bitmap? = null         // Jogo
+    private var bmpJogo    : Bitmap? = null         // Preset ou jogo gerado e novos números
+    private var bmpNumDisp : Bitmap? = null         // Números disponíveis
+
+    //--- Canvas
+    //private var canvasSudokuBoard: Canvas? = null
+    private var canvasJogo    : Canvas? = null
+    private var canvasNumDisp : Canvas? = null
 
     private var tvNivel   : TextView? = null
     private var tvSubNivel: TextView? = null
@@ -107,15 +109,14 @@ class JogarActivity : AppCompatActivity() {
     private var intLinJogar = 0
     private var flagJoga    = false
 
-    private var arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-    private var arArIntGab    = Array(9) { Array(9) { 0 } }
-
-    var arArIntNums = Array(9) { Array(9) { 0 } }
-
+    private var arIntNumsJogo = ArrayList<Int>()                      // Jogo
+    var arArIntNums           = Array(9) { Array(9) { 0 } }
     private var arArIntCopia  = Array(9) { Array(9) { 0 } }
 
-    private var arIntNumsGab  = ArrayList<Int>()   // Gabarito
-    private var arIntNumsJogo = ArrayList<Int>()   // Jogo
+    private var arIntNumsGab = ArrayList<Int>()                       // Gabarito
+    private var arArIntGab   = Array(9) { Array(9) { 0 } }
+
+    private var arIntNumsDisp = Array(9) { 9 }                   // "caixinha"
 
     private var action          = "JogoGerado"
 
@@ -379,7 +380,7 @@ class JogarActivity : AppCompatActivity() {
 
                                         //--- Salva esse bitmap
                                         //----------------------------------------------
-                                        utilsKt.copiaBmpByBuffer(bmpMyImage, bmpJogo)
+                                        utilsKt.copiaBmpByBuffer(bmpJogo, bmpSalvaJogo)
                                         //----------------------------------------------
 
                                         //--- Atualiza a base de dados
@@ -561,54 +562,82 @@ class JogarActivity : AppCompatActivity() {
             }
 
             //--- Botão de Reset
+
+            // Commit sudoku_#9.0.173
+            //--- Botão para análise dos candidatos
             btnReset.setOnClickListener {
 
-                strLog = "-> Tap no btn \"Reset\" "
+                strLog = "-> Tap no btn \"${btnReset.text}\" "
                 Log.d(cTAG, strLog)
 
-                androidx.appcompat.app.AlertDialog.Builder(this)
+                //--- Análise de candidatos
+                when (btnReset.text) {
 
-                    .setTitle("Sudoku - Jogo")
-                    .setMessage("Tem certeza que quer recomeçar o jogo atual?")
+                    "Candidatos" -> {
 
-                    .setPositiveButton("Sim") { _, _ ->
-
-                        Log.d(cTAG, "-> \"Sim\" was pressed")
-
-                        tvNivel!!.text    = ""
-                        tvSubNivel!!.text = ""
-
-                        intContaErro = intContaErroInic
-                        tvErros!!.text = "$intContaErro"
-
-                        Log.d(cTAG, "-> ${crono.text} - Reset")
-
-                        strCronoInic = strCronoInicIntent
-                        //--------------------------
-                        acertaCrono(strCronoInic)
-                        //--------------------------
-
-                        //-------------------------------------------------
-                        arArIntNums = utilsKt.copiaArArInt(arArIntCopia)
-                        //-------------------------------------------------
-
-                        arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
-
-                        //-------------
-                        iniciaJogo()
-                        //-------------
-
-                        btnInicia.isEnabled = true
-                        btnInicia.text = resources.getString(R.string.inicia)
+                        //--------------------
+                        analisaCandidatos()
+                        //--------------------
 
                     }
+                    //--- Retorna ao jogo
+                    "Volta Jogo" -> {
 
-                    .setNegativeButton("Não") { _, _ ->
-
-                        Log.d(cTAG, "-> \"Não\" was pressed")
+                        //--------------
+                        retornaJogo()
+                        //--------------
 
                     }
-                    .show()
+                    //--- Reset
+                    else -> {
+
+                        androidx.appcompat.app.AlertDialog.Builder(this)
+
+                            .setTitle("Sudoku - Jogo")
+                            .setMessage("Tem certeza que quer recomeçar o jogo atual?")
+
+                            .setPositiveButton("Sim") { _, _ ->
+
+                                Log.d(cTAG, "-> \"Sim\" was pressed")
+
+                                tvNivel!!.text = ""
+                                tvSubNivel!!.text = ""
+
+                                intContaErro = intContaErroInic
+                                tvErros!!.text = "$intContaErro"
+
+                                Log.d(cTAG, "-> ${crono.text} - Reset")
+
+                                strCronoInic = strCronoInicIntent
+                                //--------------------------
+                                acertaCrono(strCronoInic)
+                                //--------------------------
+
+                                //-------------------------------------------------
+                                arArIntNums = utilsKt.copiaArArInt(arArIntCopia)
+                                //-------------------------------------------------
+
+                                arIntNumsDisp =
+                                    Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+
+                                //-------------
+                                iniciaJogo()
+                                //-------------
+
+                                btnInicia.isEnabled = true
+                                btnInicia.text = resources.getString(R.string.inicia)
+
+                            }
+
+                            .setNegativeButton("Não") { _, _ ->
+
+                                Log.d(cTAG, "-> \"Não\" was pressed")
+
+                            }
+                            .show()
+
+                    }
+                }
 
             }
 
@@ -669,7 +698,7 @@ class JogarActivity : AppCompatActivity() {
             strNivelJogoInic    = intent.getStringExtra("strNivelJogo") as String
             strSubNivelJogoInic = intent.getStringExtra("strSubNivelJogo") as String
 
-            strCronoInic     = intent.getStringExtra("strCronoConta") as String
+            strCronoInic     = intent.getStringExtra ("strCronoConta") as String
             intContaErroInic = (intent.getStringExtra("strErro") as String).toInt()
 
             // Armazena o gabarito em um array<int>
@@ -704,11 +733,12 @@ class JogarActivity : AppCompatActivity() {
 
                         val intCell = intLinha * 9 + intCol
                         arArIntNums[intLinha][intCol] = arIntNumsJogo[intCell]  // Jogo
-                        arArIntGab[intLinha][intCol] = arIntNumsGab[intCell]   // Gabarito
+                        arArIntGab[intLinha][intCol]  = arIntNumsGab[intCell]   // Gabarito
 
                     }
                 }
 
+                //--- Salva o rascunho do jogo recebido
                 //-------------------------------------------------
                 arArIntCopia = utilsKt.copiaArArInt(arArIntNums)
                 //-------------------------------------------------
@@ -824,7 +854,7 @@ class JogarActivity : AppCompatActivity() {
         if (flagApagaBoard) {
 
             //-----------------------------------------------------------------------------
-            canvasMyImage!!.drawRect(
+            canvasJogo!!.drawRect(
                 0f,
                 0f,
                 intImgwidth.toFloat(),
@@ -850,7 +880,7 @@ class JogarActivity : AppCompatActivity() {
             }
             pincelDesenhar.strokeWidth = flLargPincel
             //--------------------------------------------------------------------------------------
-            canvasMyImage!!.drawLine(
+            canvasJogo!!.drawLine(
                 flCoordXInic, flCoordYInic, flCoordXFim, flCoordYFim, pincelDesenhar
             )
             //--------------------------------------------------------------------------------------
@@ -870,7 +900,7 @@ class JogarActivity : AppCompatActivity() {
 
             pincelDesenhar.strokeWidth = flLargPincel
             //--------------------------------------------------------------------------------------
-            canvasMyImage!!.drawLine(
+            canvasJogo!!.drawLine(
                 flCoordXInic, flCoordYInic, flCoordXFim, flCoordYFim,
                 pincelDesenhar
             )
@@ -886,9 +916,9 @@ class JogarActivity : AppCompatActivity() {
 
             //--- Atualiza a imageView do layout
             //----------------------------------------------
-            utilsKt.copiaBmpByBuffer(bmpJogo, bmpMyImage)
+            utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogo)
             //----------------------------------------------
-            iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
+            iViewSudokuBoard!!.setImageBitmap(bmpJogo)
             //----------------------------------------------
             for (intLin in 0..8) {
                 for (intColuna in 0..8) {
@@ -910,7 +940,7 @@ class JogarActivity : AppCompatActivity() {
 
             //--- Atualiza a imageView do layout
             //-------------------------------------------
-            iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
+            iViewSudokuBoard!!.setImageBitmap(bmpJogo)
             //-------------------------------------------
         }
 
@@ -931,9 +961,9 @@ class JogarActivity : AppCompatActivity() {
 
         //--- Atualiza a imageView do layout
         //--------------------------------------
-        utilsKt.copiaBmpByBuffer(bmpJogo, bmpMyImage)
+        utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogo)
         //----------------------------------------------
-        iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
+        iViewSudokuBoard!!.setImageBitmap(bmpJogo)
         //----------------------------------------------
 
         //--- Pintura da celula
@@ -943,7 +973,7 @@ class JogarActivity : AppCompatActivity() {
 
         //--- Atualiza a imageView do layout
         //----------------------------------------------
-        iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
+        iViewSudokuBoard!!.setImageBitmap(bmpJogo)
         //----------------------------------------------
 
     }
@@ -1030,7 +1060,7 @@ class JogarActivity : AppCompatActivity() {
         val intXInfDir = intXSupEsq + intCellwidth
         val intYInfDir = intYSupEsq + intCellheight
         //-------------------------------------------------------------------------------
-        canvasMyImage!!.drawRect(
+        canvasJogo!!.drawRect(
             intXSupEsq.toFloat(),
             intYSupEsq.toFloat(),
             intXInfDir.toFloat(),
@@ -1060,12 +1090,12 @@ class JogarActivity : AppCompatActivity() {
         //Log.d(cTAG, strLog)
 
         //-------------------------------------------------------------------------------
-        canvasMyImage!!.drawText(strTxt, xCoord.toFloat(), yCoord.toFloat(), pincel!!)
+        canvasJogo!!.drawText(strTxt, xCoord.toFloat(), yCoord.toFloat(), pincel!!)
         //-------------------------------------------------------------------------------
 
         //--- Atualiza a imageView do layout
         //----------------------------------------------
-        iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
+        iViewSudokuBoard!!.setImageBitmap(bmpJogo)
         //----------------------------------------------
 
     }
@@ -1074,44 +1104,40 @@ class JogarActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.R)
     private fun inicializaObjGraficos() {
 
-        // Grandezas gráficas
-        scale = resources.displayMetrics.density
+        //--- Grandezas gráficas
+        // scale = resources.displayMetrics.density
 
         //--- Pincéis
-        // ContextCompat.getColor(context, R.color.your_color);
-        pincelVerde.color = ContextCompat.getColor(this, R.color.verde)
-        pincelBranco.color = ContextCompat.getColor(this, R.color.white)
-        pincelPreto.color = ContextCompat.getColor(this, R.color.black)
-        pincelAzul.color = ContextCompat.getColor(this, R.color.azul)
-        pincelLaranja.color = ContextCompat.getColor(this, R.color.laranja)
+        pincelVerde.color     = ContextCompat.getColor(this, R.color.verde)
+        pincelBranco.color    = ContextCompat.getColor(this, R.color.white)
+        pincelPreto.color     = ContextCompat.getColor(this, R.color.black)
+        pincelAzul.color      = ContextCompat.getColor(this, R.color.azul)
+        pincelLaranja.color   = ContextCompat.getColor(this, R.color.laranja)
         pincelPurple200.color = ContextCompat.getColor(this, R.color.purple_200)
 
-        // Bit maps
+        //--- Bit maps
         intImageResource = R.drawable.sudoku_board3
 
-        bmpMyImage = BitmapFactory.decodeResource(resources, intImageResource)
+        //--- Jogo
+        bmpJogo          = BitmapFactory.decodeResource(resources, intImageResource)
             .copy(Bitmap.Config.ARGB_8888, true)
-        bmpJogo = BitmapFactory.decodeResource(resources, intImageResource)
-            .copy(Bitmap.Config.ARGB_8888, true)
-        bmpInic = BitmapFactory.decodeResource(resources, intImageResource)
-            .copy(Bitmap.Config.ARGB_8888, true)
-        bmpSudokuBoard = BitmapFactory.decodeResource(resources, intImageResource)
-            .copy(Bitmap.Config.ARGB_8888, true)
-
-        bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
-            .copy(Bitmap.Config.ARGB_8888, true)
-
-        // Canvas
-        canvasMyImage     = Canvas(bmpMyImage!!)
-        canvasSudokuBoard = Canvas(bmpSudokuBoard!!)
-
-        canvasNumDisp = Canvas(bmpNumDisp!!)
-
-        //------------------------------------------------------------------------------------------
-        // Images Views
-        //------------------------------------------------------------------------------------------
+        canvasJogo       = Canvas(bmpJogo!!)
         iViewSudokuBoard = findViewById<View>(R.id.ivSudokuBoard) as ImageView
-        iViewNumsDisps   = findViewById<View>(R.id.ivNumDisp)     as ImageView
+
+        bmpSalvaJogo     = BitmapFactory.decodeResource(resources, intImageResource)
+            .copy(Bitmap.Config.ARGB_8888, true)
+
+        //--- Números disponíveis (caixinha)
+        bmpNumDisp     = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
+            .copy(Bitmap.Config.ARGB_8888, true)
+        canvasNumDisp  = Canvas(bmpNumDisp!!)
+        iViewNumsDisps = findViewById<View>(R.id.ivNumDisp)     as ImageView
+
+        //bmpInic = BitmapFactory.decodeResource(resources, intImageResource)
+        //    .copy(Bitmap.Config.ARGB_8888, true)
+        //bmpSudokuBoard = BitmapFactory.decodeResource(resources, intImageResource)
+        //    .copy(Bitmap.Config.ARGB_8888, true)
+        //canvasSudokuBoard = Canvas(bmpSudokuBoard!!)
 
         //-----------------------------
         determinaGrandezasGraficas()
@@ -1123,7 +1149,10 @@ class JogarActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.R)
     private fun determinaGrandezasGraficas() {
 
-        //--- Apresenta as principais grandezas gráficas
+        //--- Determina o fator de escala do screen do device
+        scale = resources.displayMetrics.density
+
+        //--- Apresenta as principais grandezas gráficas do device
         //2021-11-29 17:03:42.169 D: -> Display: Largura: 720 pixels, Altura  : 1280 pixels
         //2021-11-29 17:03:42.171 D: -> Margens: Acima  :  20 pixels, Esquerda:    0 pixels
         //2021-11-29 17:03:42.172 D: -> Image  : Largura: 720 pixels, Altura  :  630 pixels
@@ -1149,23 +1178,23 @@ class JogarActivity : AppCompatActivity() {
             */
 
             //--- Margens do board
-            intmargTopDp = resources.getDimension(R.dimen.MargemAcima).toInt()
+            intmargTopDp  = resources.getDimension(R.dimen.MargemAcima).toInt()
             intMargleftdp = resources.getDimension(R.dimen.MargemEsquerda).toInt()
-            intMargtoppx = toPixels2(this, intmargTopDp.toFloat())
+            intMargtoppx  = toPixels2(this, intmargTopDp.toFloat())
             intMargleftpx = toPixels2(this, intMargleftdp.toFloat())
             //strLog = "   -Margens: Acima  :  " + intMargtoppx + " pixels, Esquerda:    " +
             //        intMargleftpx + " pixels"
             //Log.d(cTAG, strLog)
 
             //--- Imagem Sudoku board
-            intImgwidth = bmpSudokuBoard!!.width
-            intImgheight = bmpSudokuBoard!!.height
+            intImgwidth  = iViewSudokuBoard!!.width    // bmpSudokuBoard!!.width
+            intImgheight = iViewSudokuBoard!!.height   // bmpSudokuBoard!!.height
             //strLog = "   -Image  : Largura: " + intImgwidth + " pixels, Altura  :  " +
             //        intImgheight + " pixels"
             //Log.d(cTAG, strLog)
 
             //--- Células
-            intCellwidth = intImgwidth / 9
+            intCellwidth  = intImgwidth / 9
             intCellheight = intImgheight / 9
             //strLog = "   -Célula : Largura:  " + intCellwidth + " pixels, Altura  :   " +
             //        intCellheight + " pixels"
@@ -1373,7 +1402,8 @@ class JogarActivity : AppCompatActivity() {
         preencheJogo()
         //---------------
 
-        iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
+        //--- Atualiza o image view
+        iViewSudokuBoard!!.setImageBitmap(bmpJogo)
 
         //--- Apresenta o jogo preparado e prepara o array dos números disponíveis
         flagJoga = false
@@ -1447,10 +1477,10 @@ class JogarActivity : AppCompatActivity() {
                 }
             }
         }
-        iViewSudokuBoard!!.setImageBitmap(bmpMyImage)
-        //------------------------------------
-        utilsKt.copiaBmpByBuffer(bmpMyImage, bmpJogo)
-        //------------------------------------
+        iViewSudokuBoard!!.setImageBitmap(bmpJogo)
+        //----------------------------------------------
+        utilsKt.copiaBmpByBuffer(bmpJogo, bmpSalvaJogo)
+        //----------------------------------------------
 
     }
 
@@ -1683,7 +1713,9 @@ class JogarActivity : AppCompatActivity() {
                         strConteudoTmp += "<linha$idxLinha>"
                         for (idxCol in 0 until 9) {
 
+                            //-----------------------------------------------------------
                             strConteudoTmp += arArIntNums[idxLinha][idxCol].toString()
+                            //-----------------------------------------------------------
                             if (idxCol < 8) strConteudoTmp += ", "
 
                         }
@@ -1723,7 +1755,7 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //--- preencheConteudo
-    fun preencheConteudo(strTag: String,strConteudoTag: String): String {
+    private fun preencheConteudo(strTag: String,strConteudoTag: String): String {
 
         var strConteudoPreenchido = ""
 
@@ -1884,6 +1916,34 @@ class JogarActivity : AppCompatActivity() {
 
         btnInicia.text      = strInicia
         btnInicia.isEnabled = false
+
+    }
+
+    //--- analisaCandidatos
+    private var arArSalvaJogo = Array(9) { Array(9) { 0 } }
+    private fun analisaCandidatos() {
+
+        //--- Salva o contexto
+        arArSalvaJogo          = utilsKt.copiaArArInt(arArIntNums)
+
+        //--- Instancializações e inicializações
+        var bmpAntesCandidatos = BitmapFactory.decodeResource(resources, intImageResource)
+                                                       .copy(Bitmap.Config.ARGB_8888, true)
+        utilsKt.copiaBmpByBuffer(bmpJogo, bmpAntesCandidatos)
+        var canvasCandidatos = Canvas(bmpAntesCandidatos)
+
+        //--- Determina e apresenta os candidatos para as células vazias
+        
+
+
+    }
+
+    //--- retornaJogo
+    private fun retornaJogo() {
+
+        //--- Recupera o contexto
+        arArIntNums = utilsKt.copiaArArInt(arArSalvaJogo)
+
 
     }
 

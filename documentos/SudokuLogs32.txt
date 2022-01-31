@@ -2,10 +2,20 @@
 --------------------------------------------------------------------------------
 
 ================================================================================
-Commit9.0.173- novos algoritmos para o jogo e para o gabarito- 3 - px
+Commit9.0.174- novos algoritmos para o jogo e para o gabarito- 4 - px
 --------------------------------------------------------------------------------
 - novo algoritmo para verificar se jogo preparado tem solução UNIQUE
-- ref: 
+- análise de candidatos
+- ref: http://www.angusj.com/sudoku/hints.php
+================================================================================
+
+
+================================================================================
+Commit9.0.173- novos algoritmos para o jogo e para o gabarito- 3
+--------------------------------------------------------------------------------
+- novo algoritmo para verificar se jogo preparado tem solução UNIQUE
+- análise de candidatos
+- ref: http://www.angusj.com/sudoku/hints.php
 ================================================================================
 
 
