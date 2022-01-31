@@ -1091,10 +1091,9 @@ class JogarActivity : AppCompatActivity() {
         //        ", " + yCoord + ") = " + strTxt
         //Log.d(cTAG, strLog)
 
-        pincel!!.color = ContextCompat.getColor(this, R.color.azul)
-        //-------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
         canvasJogo!!.drawText(strTxt, xCoord.toFloat(), yCoord.toFloat(), pincel!!)
-        //-------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
 
         //--- Atualiza a imageView do layout
         //----------------------------------------------
@@ -1408,8 +1407,6 @@ class JogarActivity : AppCompatActivity() {
         preencheJogo()
         //---------------
         iViewSudokuBoard!!.setImageBitmap(bmpJogo)
-
-        return
 
         //--- Apresenta o jogo preparado e prepara o array dos números disponíveis
         flagJoga = false
@@ -1959,12 +1956,16 @@ class JogarActivity : AppCompatActivity() {
                         for (intColLinha in 0..8) {
 
                             intNumCand = arArIntNums[intLin][intColLinha]
-                            if (intColLinha != intCol) {
+                            if (intNumCand != 0) {
 
-                                if (intNumSKB == intNumCand) {
+                                if (intColLinha != intCol) {
 
-                                    flagEscreve = false
-                                    break
+                                    if (intNum == intNumCand) {
+
+                                        flagEscreve = false
+                                        break
+
+                                    }
 
                                 }
 
@@ -1978,12 +1979,16 @@ class JogarActivity : AppCompatActivity() {
                             for (intLinColuna in 0..8) {
 
                                 intNumCand = arArIntNums[intLinColuna][intCol]
-                                if (intLinColuna != intLin) {
+                                if (intNumCand != 0) {
 
-                                    if (intNumSKB == intNumCand) {
+                                    if (intLinColuna != intLin) {
 
-                                        flagEscreve = false
-                                        break
+                                        if (intNum == intNumCand) {
+
+                                            flagEscreve = false
+                                            break
+
+                                        }
 
                                     }
 
@@ -1997,9 +2002,9 @@ class JogarActivity : AppCompatActivity() {
                         if (flagEscreve) {
 
                             val intCell = intLin * 9 + intCol
-                            //----------------------------------
-                            escCandidato(intCell, intNumCand)
-                            //----------------------------------
+                            //------------------------------
+                            escCandidato(intCell, intNum)
+                            //------------------------------
 
                         }
 
