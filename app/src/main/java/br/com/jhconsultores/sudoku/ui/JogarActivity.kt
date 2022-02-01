@@ -1,12 +1,9 @@
 package br.com.jhconsultores.sudoku.ui
 
-import android.os.Bundle
-
 import android.graphics.*
 import android.widget.*
 
 import android.content.Context
-import android.os.Build
 
 import android.util.Log
 import android.util.TypedValue
@@ -15,8 +12,7 @@ import android.view.View
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
-import android.os.CountDownTimer
-import android.os.SystemClock
+import android.os.*
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
@@ -112,6 +108,7 @@ class JogarActivity : AppCompatActivity() {
     private var arIntNumsJogo = ArrayList<Int>()                      // Jogo
     var arArIntNums           = Array(9) { Array(9) { 0 } }
     private var arArIntCopia  = Array(9) { Array(9) { 0 } }
+    private var arArIntCand   = Array(81) { Array(9) { 0 } }
 
     private var arIntNumsGab = ArrayList<Int>()                       // Gabarito
     private var arArIntGab   = Array(9) { Array(9) { 0 } }
@@ -295,8 +292,8 @@ class JogarActivity : AppCompatActivity() {
                             val x = event.x.toInt()
 
                             //--- Coordenada X e valor da célula tocada
-                            val intCol = x / intCellwidth
-                            val intNum = intCol + 1
+                            val intCol   = x / intCellwidth
+                            val intNum   = intCol + 1
                             val intQtidd = arIntNumsDisp[intNum - 1]
 
                             //strLog = "-> Celula tocada em NumDisp: coluna = " + intCol +
@@ -1343,6 +1340,7 @@ class JogarActivity : AppCompatActivity() {
             if (!colsQMcontem(idxColQM, colsQM)) {
                 numeroQM = arArIntNums[linQM][idxColQM]
                 if (numero == numeroQM) {
+
                     flagNumeroOk = false
 
                     strLog  = "   - invalido lin: linha=$linQM; col=$idxColQM; num=$numero"
@@ -1369,7 +1367,7 @@ class JogarActivity : AppCompatActivity() {
                 if (numero == numeroQM) {
                     flagNumeroOk = false
 
-                    strLog  = " - invalido col: linha=$idxLinQM; col=$colQM; num=$numero"
+                    strLog  = "   - invalido col: linha=$idxLinQM; col=$colQM; num=$numero"
                     Log.d(cTAG, strLog)
 
                     break
@@ -1564,7 +1562,7 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //--- preparaConteudo
-    private var intIdxInic: Int = 0
+    //private var intIdxInic: Int = 0
 
     //--- preparaConteudo
     private fun preparaConteudo(strNomeArq : String): String {
@@ -1762,7 +1760,7 @@ class JogarActivity : AppCompatActivity() {
 
         var strConteudoPreenchido = ""
 
-        var intIdxInic = intIdxFim
+        val intIdxInic = intIdxFim
         intIdxFim      = strModelo.indexOf(strTag, intIdxInic, false)
         intIdxFim     += strTag.length
 
@@ -1930,7 +1928,7 @@ class JogarActivity : AppCompatActivity() {
         arArSalvaJogo          = utilsKt.copiaArArInt(arArIntNums)
 
         //--- Instancializações e inicializações
-        var bmpAntesCandidatos = BitmapFactory.decodeResource(resources, intImageResource)
+        val bmpAntesCandidatos = BitmapFactory.decodeResource(resources, intImageResource)
                                                        .copy(Bitmap.Config.ARGB_8888, true)
         utilsKt.copiaBmpByBuffer(bmpJogo, bmpAntesCandidatos)
         var canvasCandidatos = Canvas(bmpAntesCandidatos)
@@ -1942,78 +1940,39 @@ class JogarActivity : AppCompatActivity() {
             // Para todas as colunas de 0 a 8
             for (intCol in 0..8) {
 
+                // Determina a que Qm a célula pertence
+                //-----------------------------------------------
+                val intQuadMenor = determinaQm(intLin, intCol)
+                //-----------------------------------------------
+
                 // Somente se célula vazia e número não repetido escreve o número candidato
                 val intNumSKB = arArIntNums[intLin][intCol]
                 if (intNumSKB == 0) {
 
-                    // Para todos os números candidatos de 1 a 9
+                    // Para todos os números candidatos de 1 a 9 verifica se podem ser candidatos
+                    Log.d(cTAG, "-> Verifica candidatos:")
+                    strLog = "   linha = $intLin coluna = $intCol -> Qm = $intQuadMenor"
+                    Log.d(cTAG, strLog)
+
                     for (intNum in 1..9) {
 
-                        var flagEscreve = true
-                        var intNumCand  = 0
+                        // Verifica se esse número ainda não existe no seu Qm e nem no seu QM
+                        //--------------------------------------------------------------------
+                        val flagNumValido = verifValidade(intQuadMenor, intLin, intCol, intNum)
+                        //--------------------------------------------------------------------
 
-                        // Verif se já existe na mesma linha
-                        for (intColLinha in 0..8) {
+                        if (flagNumValido) {
 
-                            intNumCand = arArIntNums[intLin][intColLinha]
-                            if (intNumCand != 0) {
+                            Log.d(cTAG, "   - numCand = $intNum valido")
 
-                                if (intColLinha != intCol) {
-
-                                    if (intNum == intNumCand) {
-
-                                        flagEscreve = false
-                                        break
-
-                                    }
-
-                                }
-
-                            }
+                            //------------------------------------------------
+                            escCandidato(intLin * 9 + intCol, intNum)
+                            //------------------------------------------------
 
                         }
-
-                        // Se ainda NÃO existe na mesma linha verif se já existe na mesma coluna
-                        if (flagEscreve) {
-
-                            for (intLinColuna in 0..8) {
-
-                                intNumCand = arArIntNums[intLinColuna][intCol]
-                                if (intNumCand != 0) {
-
-                                    if (intLinColuna != intLin) {
-
-                                        if (intNum == intNumCand) {
-
-                                            flagEscreve = false
-                                            break
-
-                                        }
-
-                                    }
-
-                                }
-
-                            }
-
-                        }
-
-                        //--- Se NÃO existe ainda na cell escreve o candidato
-                        if (flagEscreve) {
-
-                            val intCell = intLin * 9 + intCol
-                            //------------------------------
-                            escCandidato(intCell, intNum)
-                            //------------------------------
-
-                        }
-
                     }
-
                 }
-
             }
-
         }
 
         //--- Atualiza imageview
@@ -2034,26 +1993,40 @@ class JogarActivity : AppCompatActivity() {
     //--- escCandidato
     private fun escCandidato(intCell : Int, intCand : Int) {
 
+        //--- Instancializações e inicializações
+        val floCellWidth  = intCellwidth.toFloat()
+        val floCellHeight = intCellheight.toFloat()
+
+        val floCell = intCell.toFloat()
+        var floCand = intCand.toFloat()
+
         //--- Calcula coordenadas
-        // Coordenada X (colunas)
-        val xCell  = intCell / 9
-        //-----------------------------------------------------
-        val xCoord = intCellwidth / 3 + xCell * intCellwidth
-        //-----------------------------------------------------
-        // Coordenada Y (linhas)
-        val yCell = intCell % 9
-        //-----------------------------------------------------------
-        val yCoord = intCellheight * 3 / 4 + yCell * intCellheight
-        //-----------------------------------------------------------
+        //  linha da célula
+        val linhaCell = intCell / 9
+        // coluna da célula
+        val colCell   = intCell % 9
+        // coordenadas do canto superior da célula
+        //----------------------------------------------
+        val xSup = linhaCell.toFloat() * floCellWidth
+        //----------------------------------------------
+        val ySup = colCell.toFloat() * floCellHeight
+        //----------------------------------------------
 
-        val posX = (xCoord + intCellwidth  / 6).toFloat()
-        val posY = (yCoord + intCellheight / 6).toFloat()
+        //--- Coordenadas para escrita do candidato
+        val deltaX = ((intCand - 1) /3) * 3 + 1
+        val deltaY = ((intCand - 1) /3) * 3 + 1
 
-        pincelAzul.textSize = (intTamTxt / 4) * scale
+        val posX = ((xSup + floCellWidth  / 6F + (floCand - 1F)) * (floCellWidth  / 3F))
+        val posY = (ySup + floCellHeight / 6F + (floCand - 1F) * (floCellHeight / 3F))
+
+        pincelAzul.textSize = (intTamTxt / 2) * scale
 
         //------------------------------------------------------------------
         canvasJogo!!.drawText(intCand.toString(), posX, posY, pincelAzul)
         //------------------------------------------------------------------
+
+        //--- Atualiza tabuleiro
+        iViewSudokuBoard!!.setImageBitmap(bmpJogo)
 
     }
 
