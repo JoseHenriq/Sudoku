@@ -488,74 +488,16 @@ class JogarActivity : AppCompatActivity() {
             // Listeners para o evento onClick dos buttons
             //------------------------------------------------------------------
             //--- btnInicia
+            strInicia   = resources.getString(R.string.inicia)
+            strPause    = resources.getString(R.string.pause)
+            strReInicia = resources.getString(R.string.reinicia)
+
             btnInicia.setOnClickListener {
 
-                strInicia   = resources.getString(R.string.inicia)
-                strPause    = resources.getString(R.string.pause)
-                strReInicia = resources.getString(R.string.reinicia)
+                //--------------------
+                btnIniciaListener()
+                //--------------------
 
-                //--------------------------------------------------------------
-                // Legenda do botão: Inicia ou ReInicia
-                //--------------------------------------------------------------
-                if (btnInicia.text == strInicia || btnInicia.text == strReInicia) {
-
-                    strLog = if (btnInicia.text == strInicia) strInicia else strReInicia
-
-                    Log.d(cTAG, "-> ${crono.text} - $strLog")
-
-                    //-------------------------
-                    parteCrono(strCronoInic)
-                    //-------------------------
-
-                    //--- Se considerará limite de tempo, parte o timer CounterDown
-                    if ((btnInicia.text == strInicia) && (strLimiteTempo != "00:00")) {
-
-                        //--- Calcula a indicação do crono para o limite ajustado
-                        val intCrMin = strCronoInic.substring(0, 2).toInt()
-                        val intCrSeg = strCronoInic.substring(3, 5).toInt()
-
-                        val intAjMin = strLimiteTempo.substring(0, 2).toInt()
-                        val intAjSeg = strLimiteTempo.substring(3, 5).toInt()
-
-                        var intFinal = (intCrMin*60 + intCrSeg) + (intAjMin*60 + intAjSeg)
-                        // Limita o tempo a 59'59"
-                        if (intFinal > (59*60 + 59)) intFinal = (59*60 + 59)
-
-                        //--------------------------------------------------------------------------
-                        strFinalJogo = String.format("%02d:%02d", (intFinal / 60), (intFinal % 60))
-                        //--------------------------------------------------------------------------
-
-                    }
-
-                    //------------------------------
-                    startTimer(timeOut, timeTick)
-                    //------------------------------
-                    Log.d(cTAG, "-> Final crono: $strFinalJogo")
-
-                    btnInicia.text = strPause
-
-                }
-
-                //--------------------------------------------------------------------------------------
-                // Legenda do botão: Pause
-                //--------------------------------------------------------------------------------------
-                else {
-
-                    Log.d(cTAG, "-> ${crono.text} - $strPause")
-
-                    //timeStopped = crono.base - SystemClock.elapsedRealtime()
-
-                    crono.stop()
-
-                    //-------------------------------------------------
-                    try { cancelTimer() } catch (exc : Exception) {}
-                    //-------------------------------------------------
-
-                    strCronoInic = crono.text.toString()
-
-                    btnInicia.text = strReInicia
-
-                }
             }
 
             //--- Botão de Reset
@@ -1921,24 +1863,36 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //--- analisaCandidatos
-    private var arArSalvaJogo = Array(9) { Array(9) { 0 } }
+    private var arArSalvaJogo      = Array(9) { Array(9) { 0 } }
+    private lateinit var bmpAntesCandidatos : Bitmap
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun analisaCandidatos() {
 
         //--- Salva o contexto
-        arArSalvaJogo          = utilsKt.copiaArArInt(arArIntNums)
+        arArSalvaJogo = utilsKt.copiaArArInt(arArIntNums)
+        //--- Entra em Pausa
+        btnInicia.text = "Pause"
+        //--------------------
+        btnIniciaListener()
+        //--------------------
+        btnInicia.isEnabled = false
 
         //--- Instancializações e inicializações
-        val bmpAntesCandidatos = BitmapFactory.decodeResource(resources, intImageResource)
+        bmpAntesCandidatos = BitmapFactory.decodeResource(resources, intImageResource)
                                                        .copy(Bitmap.Config.ARGB_8888, true)
         utilsKt.copiaBmpByBuffer(bmpJogo, bmpAntesCandidatos)
-        var canvasCandidatos = Canvas(bmpAntesCandidatos)
 
         //--- Determina e apresenta os candidatos para as células vazias
         // Para todas as linhas de 0 a 8
         for (intLin in 0..8) {
 
+            intLinJogar = intLin
+
             // Para todas as colunas de 0 a 8
             for (intCol in 0..8) {
+
+                intColJogar = intLin
 
                 // Determina a que Qm a célula pertence
                 //-----------------------------------------------
@@ -1988,6 +1942,11 @@ class JogarActivity : AppCompatActivity() {
         //--- Recupera o contexto
         arArIntNums = utilsKt.copiaArArInt(arArSalvaJogo)
 
+        utilsKt.copiaBmpByBuffer(bmpAntesCandidatos, bmpJogo)
+        iViewSudokuBoard!!.setImageBitmap(bmpJogo)
+
+        btnInicia.isEnabled = true
+
     }
 
     //--- escCandidato
@@ -2007,19 +1966,55 @@ class JogarActivity : AppCompatActivity() {
         val colCell   = intCell % 9
         // coordenadas do canto superior da célula
         //----------------------------------------------
-        val xSup = linhaCell.toFloat() * floCellWidth
+        val xSup = colCell.toFloat() * floCellWidth
         //----------------------------------------------
-        val ySup = colCell.toFloat() * floCellHeight
+        val ySup = linhaCell.toFloat() * floCellHeight
         //----------------------------------------------
+        Log.d(cTAG, "   - xSup = $xSup ySup = $ySup")
+
+        //--- Tamanhos parciais da célula
+        val L9  = floCellWidth  / 9F
+        val L18 = floCellWidth  / 18F
+        val A3  = floCellHeight / 3F
+        val A6  = floCellHeight / 6F
+        Log.d(cTAG, "   - L9 = $L9 L18 = $L18 A3 = $A3 A6 = $A6")
 
         //--- Coordenadas para escrita do candidato
-        val deltaX = ((intCand - 1) /3) * 3 + 1
-        val deltaY = ((intCand - 1) /3) * 3 + 1
+        // linha e coluna da celula (3x3)
+        //  colunas   0   1   2
+        //          +---+---+---+
+        //- linha 0 | 1 | 2 | 3 |
+        //          +---+---+---+
+        //- linha 1 | 4 | 5 | 6 |
+        //          +---+---+---+
+        //- linha 2 | 7 | 8 | 9 |
+        //          +---+---+---+
 
-        val posX = ((xSup + floCellWidth  / 6F + (floCand - 1F)) * (floCellWidth  / 3F))
-        val posY = (ySup + floCellHeight / 6F + (floCand - 1F) * (floCellHeight / 3F))
+        val intLin = (intCand - 1) / 3
+        val intCol = (intCand - 1) % 3
 
+        Log.d(cTAG, "   - coordCand linCell = $intLin colCell = $intCol")
+
+        var posX   = xSup + ((intCol * (3 * L9) + intCol * L9) + L18)
+        //if (intCol > 0) posX -= (L9 + 4)
+        var deltaX : Float = when (intCol) {
+
+            1 -> -L9
+            2 -> -(L9 + 4F)
+            else -> 0F
+
+        }
+        posX += deltaX
+
+        var posY = ySup + ((intLin + 1) * A3)
+        if (intLin == 2) posY -= 4
+
+        //--- Tamanho do texto para candidatos
         pincelAzul.textSize = (intTamTxt / 2) * scale
+
+        //--- Escrita do candidato na célula
+
+        Log.d(cTAG, "   - Cand: $intCand posX = $posX posY = $posY")
 
         //------------------------------------------------------------------
         canvasJogo!!.drawText(intCand.toString(), posX, posY, pincelAzul)
@@ -2028,6 +2023,77 @@ class JogarActivity : AppCompatActivity() {
         //--- Atualiza tabuleiro
         iViewSudokuBoard!!.setImageBitmap(bmpJogo)
 
+    }
+
+    //--- btnIniciaListener
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun btnIniciaListener() {
+
+        //--------------------------------------------------------------
+        // Legenda do botão: Inicia ou ReInicia
+        //--------------------------------------------------------------
+        if (btnInicia.text == strInicia || btnInicia.text == strReInicia) {
+
+            strLog = if (btnInicia.text == strInicia) strInicia else strReInicia
+
+            Log.d(cTAG, "-> ${crono.text} - $strLog")
+
+            //-------------------------
+            parteCrono(strCronoInic)
+            //-------------------------
+
+            //--- Se considerará limite de tempo, parte o timer CounterDown
+            if ((btnInicia.text == strInicia) && (strLimiteTempo != "00:00")) {
+
+                //--- Calcula a indicação do crono para o limite ajustado
+                val intCrMin = strCronoInic.substring(0, 2).toInt()
+                val intCrSeg = strCronoInic.substring(3, 5).toInt()
+
+                val intAjMin = strLimiteTempo.substring(0, 2).toInt()
+                val intAjSeg = strLimiteTempo.substring(3, 5).toInt()
+
+                var intFinal = (intCrMin * 60 + intCrSeg) + (intAjMin * 60 + intAjSeg)
+                // Limita o tempo a 59'59"
+                if (intFinal > (59 * 60 + 59)) intFinal = (59 * 60 + 59)
+
+                //--------------------------------------------------------------------------
+                strFinalJogo = String.format("%02d:%02d", (intFinal / 60), (intFinal % 60))
+                //--------------------------------------------------------------------------
+
+            }
+
+            //------------------------------
+            startTimer(timeOut, timeTick)
+            //------------------------------
+            Log.d(cTAG, "-> Final crono: $strFinalJogo")
+
+            btnInicia.text = strPause
+
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Legenda do botão: Pause
+        //--------------------------------------------------------------------------------------
+        else {
+
+            Log.d(cTAG, "-> ${crono.text} - $strPause")
+
+            //timeStopped = crono.base - SystemClock.elapsedRealtime()
+
+            crono.stop()
+
+            //-------------------------------------------------
+            try {
+                cancelTimer()
+            } catch (exc: Exception) {
+            }
+            //-------------------------------------------------
+
+            strCronoInic = crono.text.toString()
+
+            btnInicia.text = strReInicia
+
+        }
     }
 
 }
