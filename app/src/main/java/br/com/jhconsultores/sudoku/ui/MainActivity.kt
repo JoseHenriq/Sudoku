@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.177"
+        const val strApp = "Sudoku_#9.0.178"
 
         var flagScopedStorage  = false
 

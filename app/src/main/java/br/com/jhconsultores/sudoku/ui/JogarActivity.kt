@@ -128,7 +128,11 @@ class JogarActivity : AppCompatActivity() {
 
     private var intContaErroInic = 0
 
+    //--- Buttons
     private lateinit var btnInicia : Button
+    private lateinit var btnCand   : Button
+    private lateinit var btnReset  : Button
+    private lateinit var btnSalvar : Button
 
     private var strInicia   = ""
     private var strPause    = ""
@@ -181,9 +185,10 @@ class JogarActivity : AppCompatActivity() {
             tvSubNivel = findViewById(R.id.tv_Subnivel)
             tvClues    = findViewById(R.id.tv_Clues)
 
-            val btnReset  = findViewById<View>(R.id.btnReset) as Button
-            val btnSalvar = findViewById<View>(R.id.btnSalvar) as Button
-            btnInicia     = findViewById<View>(R.id.btnInicia) as Button
+            btnReset  = findViewById<View>(R.id.btnReset)  as Button
+            btnSalvar = findViewById<View>(R.id.btnSalvar) as Button
+            btnInicia = findViewById<View>(R.id.btnInicia) as Button
+            btnCand   = findViewById<View>(R.id.btnCand)   as Button
             btnInicia.isEnabled = true
 
             //--- Implementa o actionBar
@@ -233,7 +238,7 @@ class JogarActivity : AppCompatActivity() {
                         //Log.d(cTAG, "Real y: $imageY")
 
                         //--- Coordenadas da célula tocada
-                        val intCol = x / intCellwidth
+                        val intCol   = x / intCellwidth
                         val intLinha = y / intCellheight
                         //-------------------------------------------
                         val intNum = arArIntNums[intLinha][intCol]
@@ -245,7 +250,7 @@ class JogarActivity : AppCompatActivity() {
                         //--- Se a célula tocada contiver um número, "pinta" todas as células que contiverem
                         //    o mesmo número.
                         if (intNum > 0) {
-                            flagJoga = false    // Não quer jogar; só quer analisar ...
+                            flagJoga    = false    // Não quer jogar; só quer analisar ...
                             intLinJogar = 0
                             intColJogar = 0
                             //------------------------------------------------
@@ -254,13 +259,28 @@ class JogarActivity : AppCompatActivity() {
                         }
                         //--- Se não contiver um número, quer jogar
                         else {
+
                             flagJoga = true     // Vamos ao jogo!
                             intLinJogar = intLinha
                             intColJogar = intCol
                             //------------------------------------------
                             mostraCelAJogar(intLinJogar, intColJogar)
                             //------------------------------------------
+
+                            // Commit9.0.178
+                            //--- Se estiver mostrando os candidatos, atualiza-os.
+                            if (btnCand.text == "Volta Jogo") {
+
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+                                    //--------------------
+                                    analisaCandidatos()
+                                    //--------------------
+
+                                }
+                            }
                         }
+
                     } catch (exc: Exception) {
 
                         strLog = "Erro: ${exc.message}"
@@ -286,6 +306,7 @@ class JogarActivity : AppCompatActivity() {
 
                     try {
 
+                        var flagContJogo = false
                         if (flagJoga) {
 
                             //--- Coordenada X do numsDisps tocada
@@ -314,25 +335,32 @@ class JogarActivity : AppCompatActivity() {
                                 //    cTAG, "-> linhaJogar= " + intLinJogar + " colJogar= " +
                                 //            intColJogar + " Qm = " + intQuadMenor )
 
-                                // Verifica se esse número ainda não existe no seu Qm e nem no seu QM
-                                //----------------------------------------------------------------------
+                                // Verifica se esse número ainda não existe no seu Qm e nem no QM
+                                //------------------------------------------------------------------
                                 flagNumValido =
                                     verifValidade(intQuadMenor, intLinJogar, intColJogar, intNum)
-                                //----------------------------------------------------------------------
+                                //------------------------------------------------------------------
                                 if (!flagNumValido) {
 
-                                    //strLog = "-> Número NÃO válido (linha, coluna ou quadro); NÃO será incluído" +
-                                    //        " no Sudoku board."
+                                    //strLog  = "-> Número NÃO válido (linha, coluna ou quadro);"
+                                    //strLog += " NÃO será incluído no Sudoku board."
                                     //Log.d(cTAG, strLog)
 
                                     strToast = "Número NÃO Ok (linha, coluna ou quadro)"
-                                    //-----------------------------------------------------------------
-                                    Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
-                                    //-----------------------------------------------------------------
+                                    //--------------------------------------
+                                    utilsKt.mToast(this, strToast)
+                                    //--------------------------------------
 
                                 }
                                 // Verifica se esse número, nessa célula, é o mesmo do gabarito
                                 else {
+
+                                    /*
+                                    strLog = "-> num= $intNum lin = $intLinJogar col = $intColJogar"
+                                    Log.d(cTAG, strLog)
+                                    val numGab = arArIntGab[intLinJogar][intColJogar]
+                                    Log.d(cTAG, "   arArIntGab = $numGab")
+                                     */
 
                                     //--- Número diferente do num do gabarito
                                     if (intNum != arArIntGab[intLinJogar][intColJogar]) {
@@ -344,12 +372,12 @@ class JogarActivity : AppCompatActivity() {
                                         //Log.d(cTAG, strLog)
 
                                         strToast = "Número NÃO Ok (gabarito)"
-                                        //-----------------------------------------------------------------
-                                        Toast.makeText(this, strToast, Toast.LENGTH_SHORT).show()
-                                        //-----------------------------------------------------------------
+                                        //--------------------------------------
+                                        utilsKt.mToast(this, strToast)
+                                        //--------------------------------------
 
                                     }
-                                    //--- Número OK qto ao gabarito
+                                    //--- Número OK também qto ao gabarito -> número Válido
                                     else {
 
                                         //Log.d(cTAG, "-> Número válido; será incluído no Sudoku board.")
@@ -360,25 +388,41 @@ class JogarActivity : AppCompatActivity() {
                                         //----------------------------------------------------------------
 
                                         //--- Atualiza o Sudoku board
-                                        //----------------------------------------------------------------------
+                                        //----------------------------------------------------
                                         pintaCelula(intLinJogar, intColJogar, pincelBranco)
-                                        //----------------------------------------------------------------------
+                                        //----------------------------------------------------
                                         escreveCelula(
                                             intLinJogar,
                                             intColJogar,
                                             intNum.toString(),
                                             pincelAzul
                                         )
-                                        //----------------------------------------------------------------------
-                                        desenhaSudokuBoard(false)
+                                        //--- Salva esse bitmap
+                                        //------------------------------------------------
+                                        utilsKt.copiaBmpByBuffer(bmpJogo, bmpSalvaJogo)
+                                        //------------------------------------------------
+
+                                        // Commit9.0.178
+                                        //--- Ainda não é fim de jogo e se estiver mostrando os
+                                        //    candidatos, atualiza-os.
+                                        if (btnCand.text == "Volta Jogo") {
+
+                                            bmpJogoSemCandidatos = BitmapFactory.decodeResource(
+                                                resources,
+                                                intImageResource
+                                            ).copy(Bitmap.Config.ARGB_8888, true)
+
+                                            utilsKt.copiaBmpByBuffer(bmpJogo, bmpJogoSemCandidatos)
+
+                                            utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogo)
+
+                                        }
+
+                                        //-----------------------------------
+                                        desenhaSudokuBoard(true)
                                         //-----------------------------------
                                         preencheJogo()
                                         //---------------
-
-                                        //--- Salva esse bitmap
-                                        //----------------------------------------------
-                                        utilsKt.copiaBmpByBuffer(bmpJogo, bmpSalvaJogo)
-                                        //----------------------------------------------
 
                                         //--- Atualiza a base de dados
                                         arArIntNums[intLinJogar][intColJogar] = intNum
@@ -452,12 +496,12 @@ class JogarActivity : AppCompatActivity() {
                             }
 
                             //--- Verifica se fim de jogo (todas as qtidds foram zeradas
-                            var flagContJogo = false
                             for (idxVetorNumDisp in 0..8) {
 
                                 if (arIntNumsDisp[idxVetorNumDisp] > 0) flagContJogo = true
 
                             }
+
                             //--- Se já foram utilizados todos os números disponíveis, pára o cronometro
                             if (!flagContJogo) {
 
@@ -469,6 +513,23 @@ class JogarActivity : AppCompatActivity() {
 
                             }
                         }
+
+                        // Commit9.0.178
+                        //--- Ainda não é fim de jogo e se estiver mostrando os candidatos,
+                        //    atualiza-os.
+                        //if (flagContJogo && btnCand.text == "Volta Jogo") {
+
+                        if (btnCand.text == "Volta Jogo") {
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+                                //--------------------
+                                analisaCandidatos()
+                                //--------------------
+
+                            }
+                         }
+
 
                     } catch (exc: Exception) {
 
@@ -500,21 +561,20 @@ class JogarActivity : AppCompatActivity() {
 
             }
 
-            //--- Botão de Reset
-
-            // Commit sudoku_#9.0.173
+            //--- Botão Candidatos
+            // Commit sudoku_#9.0.178
             //--- Botão para análise dos candidatos
-            btnReset.setOnClickListener {
+            btnCand.setOnClickListener {
 
-                strLog = "-> Tap no btn \"${btnReset.text}\" "
+                strLog = "-> Tap no btn \"${btnCand.text}\" "
                 Log.d(cTAG, strLog)
 
                 //--- Análise de candidatos
-                when (btnReset.text) {
+                when (btnCand.text) {
 
                     "Candidatos" -> {
 
-                        btnReset.text = "Volta Jogo"
+                        btnCand.text = "Volta Jogo"
                         //--------------------
                         analisaCandidatos()
                         //--------------------
@@ -523,62 +583,73 @@ class JogarActivity : AppCompatActivity() {
                     //--- Retorna ao jogo
                     "Volta Jogo" -> {
 
-                        btnReset.text = "Candidatos"
+                        btnCand.text = "Candidatos"
                         //--------------
                         retornaJogo()
                         //--------------
 
                     }
-                    //--- Reset
-                    else -> {
+                    //--- Não faz nada
+                    else -> {}
 
-                        androidx.appcompat.app.AlertDialog.Builder(this)
+                }
 
-                            .setTitle("Sudoku - Jogo")
-                            .setMessage("Tem certeza que quer recomeçar o jogo atual?")
+            }
 
-                            .setPositiveButton("Sim") { _, _ ->
+            //--- Botão de Reset
+            btnReset.setOnClickListener {
 
-                                Log.d(cTAG, "-> \"Sim\" was pressed")
+                strLog = "-> Tap no btn \"${btnReset.text}\" "
+                Log.d(cTAG, strLog)
 
-                                tvNivel!!.text = ""
-                                tvSubNivel!!.text = ""
+                //--- Solicita ao usuário a confirmação do reset
+                androidx.appcompat.app.AlertDialog.Builder(this)
 
-                                intContaErro = intContaErroInic
-                                tvErros!!.text = "$intContaErro"
+                    .setTitle("Sudoku - Jogo")
+                    .setMessage("Tem certeza que quer recomeçar o jogo atual?")
 
-                                Log.d(cTAG, "-> ${crono.text} - Reset")
+                    .setPositiveButton("Sim") { _, _ ->
 
-                                strCronoInic = strCronoInicIntent
-                                //--------------------------
-                                acertaCrono(strCronoInic)
-                                //--------------------------
+                        Log.d(cTAG, "-> \"Sim\" was pressed")
 
-                                //-------------------------------------------------
-                                arArIntNums = utilsKt.copiaArArInt(arArIntCopia)
-                                //-------------------------------------------------
+                        tvNivel!!.text = ""
+                        tvSubNivel!!.text = ""
 
-                                arIntNumsDisp =
-                                    Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
+                        intContaErro = intContaErroInic
+                        tvErros!!.text = "$intContaErro"
 
-                                //-------------
-                                iniciaJogo()
-                                //-------------
+                        Log.d(cTAG, "-> ${crono.text} - Reset")
 
-                                btnInicia.isEnabled = true
-                                btnInicia.text = resources.getString(R.string.inicia)
+                        strCronoInic = strCronoInicIntent
+                        //--------------------------
+                        acertaCrono(strCronoInic)
+                        //--------------------------
 
-                            }
+                        //-------------------------------------------------
+                        arArIntNums = utilsKt.copiaArArInt(arArIntCopia)
+                        //-------------------------------------------------
 
-                            .setNegativeButton("Não") { _, _ ->
+                        arIntNumsDisp =
+                            Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
 
-                                Log.d(cTAG, "-> \"Não\" was pressed")
+                        //-------------
+                        iniciaJogo()
+                        //-------------
 
-                            }
-                            .show()
+                        btnInicia.isEnabled = true
+                        btnInicia.text = resources.getString(R.string.inicia)
+
+                        btnCand.text = "Candidatos"
 
                     }
-                }
+
+                    .setNegativeButton("Não") { _, _ ->
+
+                        Log.d(cTAG, "-> \"Não\" was pressed")
+
+                    }
+
+                    .show()
 
             }
 
@@ -1224,7 +1295,7 @@ class JogarActivity : AppCompatActivity() {
                 strLog += strTmp
 
             }
-            Log.d(cTAG, strLog)
+            //Log.d(cTAG, strLog)
 
         }
     }
@@ -1259,9 +1330,9 @@ class JogarActivity : AppCompatActivity() {
                     if (arArIntNums[intLinha][intColuna] == numero) {
                         flagNumeroOk = false
 
-                        strLog  = "   - invalido Qm: Qm=$quadMenor; lin=$intLinha; col=$intColuna"
-                        strLog += " num=$numero"
-                        Log.d(cTAG, strLog)
+                        //strLog  = "   - invalido Qm: Qm=$quadMenor; lin=$intLinha; col=$intColuna"
+                        //strLog += " num=$numero"
+                        //Log.d(cTAG, strLog)
 
                         break
                     }
@@ -1285,8 +1356,8 @@ class JogarActivity : AppCompatActivity() {
 
                     flagNumeroOk = false
 
-                    strLog  = "   - invalido lin: linha=$linQM; col=$idxColQM; num=$numero"
-                    Log.d(cTAG, strLog)
+                    //strLog  = "   - invalido lin: linha=$linQM; col=$idxColQM; num=$numero"
+                    //Log.d(cTAG, strLog)
 
                     break
 
@@ -1309,8 +1380,8 @@ class JogarActivity : AppCompatActivity() {
                 if (numero == numeroQM) {
                     flagNumeroOk = false
 
-                    strLog  = "   - invalido col: linha=$idxLinQM; col=$colQM; num=$numero"
-                    Log.d(cTAG, strLog)
+                    //strLog  = "   - invalido col: linha=$idxLinQM; col=$colQM; num=$numero"
+                    //Log.d(cTAG, strLog)
 
                     break
 
@@ -1321,6 +1392,7 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //--- iniciaJogo
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun iniciaJogo() {
 
         //*** Nesse ponto, arArIntNums (rascunho do jogo) e arArIntGab (gabarito) deverão estar Ok.
@@ -1397,6 +1469,7 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //--- PreencheJogo
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun preencheJogo() {
 
         arIntNumsDisp = Array(9) { 9 }     // intArrayOf(9, 9, 9, 9, 9, 9, 9, 9, 9)
@@ -1863,25 +1936,21 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //--- analisaCandidatos
-    private var arArSalvaJogo      = Array(9) { Array(9) { 0 } }
-    private lateinit var bmpAntesCandidatos : Bitmap
+    private var arArSalvaJogo = Array(9) { Array(9) { 0 } }
+    private lateinit var bmpJogoSemCandidatos : Bitmap
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun analisaCandidatos() {
 
-        //--- Salva o contexto
-        arArSalvaJogo = utilsKt.copiaArArInt(arArIntNums)
-        //--- Entra em Pausa
-        btnInicia.text = "Pause"
-        //--------------------
-        btnIniciaListener()
-        //--------------------
-        btnInicia.isEnabled = false
-
         //--- Instancializações e inicializações
-        bmpAntesCandidatos = BitmapFactory.decodeResource(resources, intImageResource)
-                                                       .copy(Bitmap.Config.ARGB_8888, true)
-        utilsKt.copiaBmpByBuffer(bmpJogo, bmpAntesCandidatos)
+        bmpJogoSemCandidatos = BitmapFactory.decodeResource(resources, intImageResource)
+                                                      .copy(Bitmap.Config.ARGB_8888, true)
+        //--- Salva o contexto
+        arArSalvaJogo     = utilsKt.copiaArArInt(arArIntNums)
+        val salvaLinJogar = intLinJogar
+        val salvaColJogar = intColJogar
+
+        utilsKt.copiaBmpByBuffer(bmpJogo, bmpJogoSemCandidatos)
 
         //--- Determina e apresenta os candidatos para as células vazias
         // Para todas as linhas de 0 a 8
@@ -1904,11 +1973,16 @@ class JogarActivity : AppCompatActivity() {
                 if (intNumSKB == 0) {
 
                     // Para todos os números candidatos de 1 a 9 verifica se podem ser candidatos
-                    Log.d(cTAG, "-> Verifica candidatos:")
-                    strLog = "   linha = $intLin coluna = $intCol -> Qm = $intQuadMenor"
-                    Log.d(cTAG, strLog)
+                    //Log.d(cTAG, "-> Verifica candidatos:")
+                    //strLog = "   linha = $intLin coluna = $intCol -> Qm = $intQuadMenor"
+                    //Log.d(cTAG, strLog)
 
                     for (intNum in 1..9) {
+
+                        //--------------------------------------
+                        // OBS: breakpoint conf Qm e num Cond:
+                        // (intQuadMenor == 3) && (intNum == 3)
+                        //--------------------------------------
 
                         // Verifica se esse número ainda não existe no seu Qm e nem no seu QM
                         //--------------------------------------------------------------------
@@ -1917,7 +1991,7 @@ class JogarActivity : AppCompatActivity() {
 
                         if (flagNumValido) {
 
-                            Log.d(cTAG, "   - numCand = $intNum valido")
+                            //Log.d(cTAG, "   - numCand = $intNum valido")
 
                             //------------------------------------------------
                             escCandidato(intLin * 9 + intCol, intNum)
@@ -1928,6 +2002,10 @@ class JogarActivity : AppCompatActivity() {
                 }
             }
         }
+
+        //--- Recupera as coordenadas da célula a jogar
+        intLinJogar = salvaLinJogar
+        intColJogar = salvaColJogar
 
         //--- Atualiza imageview
         //-------------------------------------------
@@ -1942,10 +2020,9 @@ class JogarActivity : AppCompatActivity() {
         //--- Recupera o contexto
         arArIntNums = utilsKt.copiaArArInt(arArSalvaJogo)
 
-        utilsKt.copiaBmpByBuffer(bmpAntesCandidatos, bmpJogo)
-        iViewSudokuBoard!!.setImageBitmap(bmpJogo)
+        utilsKt.copiaBmpByBuffer(bmpJogoSemCandidatos, bmpJogo)
 
-        btnInicia.isEnabled = true
+        iViewSudokuBoard!!.setImageBitmap(bmpJogo)
 
     }
 
@@ -1970,14 +2047,14 @@ class JogarActivity : AppCompatActivity() {
         //----------------------------------------------
         val ySup = linhaCell.toFloat() * floCellHeight
         //----------------------------------------------
-        Log.d(cTAG, "   - xSup = $xSup ySup = $ySup")
+        //Log.d(cTAG, "   - xSup = $xSup ySup = $ySup")
 
         //--- Tamanhos parciais da célula
         val L9  = floCellWidth  / 9F
         val L18 = floCellWidth  / 18F
         val A3  = floCellHeight / 3F
         val A6  = floCellHeight / 6F
-        Log.d(cTAG, "   - L9 = $L9 L18 = $L18 A3 = $A3 A6 = $A6")
+        //Log.d(cTAG, "   - L9 = $L9 L18 = $L18 A3 = $A3 A6 = $A6")
 
         //--- Coordenadas para escrita do candidato
         // linha e coluna da celula (3x3)
@@ -1993,7 +2070,7 @@ class JogarActivity : AppCompatActivity() {
         val intLin = (intCand - 1) / 3
         val intCol = (intCand - 1) % 3
 
-        Log.d(cTAG, "   - coordCand linCell = $intLin colCell = $intCol")
+        //Log.d(cTAG, "   - coordCand linCell = $intLin colCell = $intCol")
 
         var posX   = xSup + ((intCol * (3 * L9) + intCol * L9) + L18)
         //if (intCol > 0) posX -= (L9 + 4)
@@ -2009,16 +2086,17 @@ class JogarActivity : AppCompatActivity() {
         var posY = ySup + ((intLin + 1) * A3)
         if (intLin == 2) posY -= 4
 
-        //--- Tamanho do texto para candidatos
-        pincelAzul.textSize = (intTamTxt / 2) * scale
-
         //--- Escrita do candidato na célula
+        //Log.d(cTAG, "   - Cand: $intCand posX = $posX posY = $posY")
 
-        Log.d(cTAG, "   - Cand: $intCand posX = $posX posY = $posY")
+        // Tamanho do texto para candidatos
+        val salvaTxtSize = pincelAzul.textSize
 
+        pincelAzul.textSize = (intTamTxt.toFloat() / 2.5F) * scale
         //------------------------------------------------------------------
         canvasJogo!!.drawText(intCand.toString(), posX, posY, pincelAzul)
         //------------------------------------------------------------------
+        pincelAzul.textSize = salvaTxtSize
 
         //--- Atualiza tabuleiro
         iViewSudokuBoard!!.setImageBitmap(bmpJogo)
