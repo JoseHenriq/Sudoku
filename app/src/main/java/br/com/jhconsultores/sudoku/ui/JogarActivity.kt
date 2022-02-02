@@ -741,6 +741,7 @@ class JogarActivity : AppCompatActivity() {
 
                 // Armazena o gabarito e o jogo em Array<Array<Int>> para processamento local
                 for (intLinha in 0..8) {
+
                     for (intCol in 0..8) {
 
                         val intCell = intLinha * 9 + intCol
@@ -927,13 +928,14 @@ class JogarActivity : AppCompatActivity() {
         if (flagMostraNumIguais) {
 
             //--- Atualiza a imageView do layout
-            //----------------------------------------------
-            utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogo)
-            //----------------------------------------------
+            utilsKt.copiaBmpByBuffer(bmpSalvaJogo,bmpJogo)
+            //--------------------------------------------------------
             iViewSudokuBoard!!.setImageBitmap(bmpJogo)
             //----------------------------------------------
             for (intLin in 0..8) {
+
                 for (intColuna in 0..8) {
+
                     if (arArIntNums[intLin][intColuna] == intNum) {
 
                         //--- Pinta a célula
@@ -951,6 +953,22 @@ class JogarActivity : AppCompatActivity() {
             }
 
             //--- Atualiza a imageView do layout
+
+            // Commit9.0.178
+            //--- Se estiver mostrando os candidatos, atualiza-os.
+            if (btnCand.text == "Volta Jogo") {
+
+                utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogoSemCandidatos, )
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+                    //--------------------
+                    analisaCandidatos()
+                    //--------------------
+
+                }
+            }
+
             //-------------------------------------------
             iViewSudokuBoard!!.setImageBitmap(bmpJogo)
             //-------------------------------------------
@@ -1943,6 +1961,9 @@ class JogarActivity : AppCompatActivity() {
     private fun analisaCandidatos() {
 
         //--- Instancializações e inicializações
+        var intCell = 0
+        arArIntCand = Array(81) { Array(9) { 0 } }
+
         bmpJogoSemCandidatos = BitmapFactory.decodeResource(resources, intImageResource)
                                                       .copy(Bitmap.Config.ARGB_8888, true)
         //--- Salva o contexto
@@ -1961,7 +1982,9 @@ class JogarActivity : AppCompatActivity() {
             // Para todas as colunas de 0 a 8
             for (intCol in 0..8) {
 
-                intColJogar = intLin
+                intColJogar = intCol
+
+                intCell = intLin * 9 + intCol
 
                 // Determina a que Qm a célula pertence
                 //-----------------------------------------------
@@ -1997,6 +2020,9 @@ class JogarActivity : AppCompatActivity() {
                             escCandidato(intLin * 9 + intCol, intNum)
                             //------------------------------------------------
 
+                            //--- Armazena o candidato na matriz de candidatos x celula
+                            arArIntCand[intCell][intNum - 1] = intNum
+
                         }
                     }
                 }
@@ -2011,6 +2037,28 @@ class JogarActivity : AppCompatActivity() {
         //-------------------------------------------
         iViewSudokuBoard!!.setImageBitmap(bmpJogo)
         //-------------------------------------------
+
+        //--- Lista a matriz candidatos por célula
+        strLog = "-> \nMatriz candidatos por célula\n"
+        for (intMatrizLin in 0..26) {
+
+            for (intMatrizCol in 0..2) {
+
+                val intIdx   = (intMatrizLin * 3) + intMatrizCol
+                strLog      += "${String.format("%02d ", intIdx)}"
+
+                for (intCand in 0..8) {
+
+                    strLog += "${String.format(" %d", arArIntCand[intIdx][intCand])}"
+                    strLog += if (intCand < 8) "," else "   "
+
+                }
+
+            }
+            strLog += "\n"
+
+        }
+        Log.d(cTAG, strLog)
 
     }
 
