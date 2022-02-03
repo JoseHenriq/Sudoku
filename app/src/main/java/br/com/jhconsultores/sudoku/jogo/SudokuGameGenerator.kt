@@ -16,10 +16,14 @@ class SudokuGameGenerator {
     //--------------------------------------------------------------------------
     private val cTAG   = "Sudoku"
     private var strLog = ""
-    
+
+    //!!! quadMaiorRet: propriedade à ser usada para:
+    //        - enviar o preset recebido do main ao gerador Sudoku como parâmetro;
+    //        - receber o gabarito gerado pelo backtrack Algorithm.                  !!!
+    var quadMaiorRet = arrayOf<Array<Int>>()
+
     var txtDados = ""
 
-    var quadMaiorRet = arrayOf<Array<Int>>()
     private var intJogoAdaptar = 0
     private var intQtiZeros    = 0
 
@@ -34,7 +38,11 @@ class SudokuGameGenerator {
     //--------------------------------------------------------------------------
     //             Gera Jogos (preset int[9][9] = { 0, 0, ..., 0 })
     //--------------------------------------------------------------------------
-    //--- GeraJogo
+    // parâmetros de entrada: nivelJogo   = Nivel * 10 + subnivel (20 à 59)
+    //                        strAlgorimo = algoritmo a ser usado para a geração:
+    //                                      ALGORITMO_JH OU ALGORITMO_Scott
+    // retorno: arArIntNums [9][9] (LOCAL)
+    //--------------------------------------------------------------------------
     @SuppressLint("SetTextI18n")
     fun geraJogo(nivelJogo : Int, strAlgoritmo : String) : Array<Array<Int>> {
 
@@ -43,6 +51,7 @@ class SudokuGameGenerator {
         var contaTentaJogo  = 0
         val limTentaJogo    = 150
         var flagQuadMenorOk : Boolean
+        var flagJogoGeradoOk: Boolean = true
 
         //-----------------------
         zeraQuadMaiorGeracao()
@@ -55,34 +64,50 @@ class SudokuGameGenerator {
             //------------------------------------------------------------------
             //                         Gera o jogo
             //------------------------------------------------------------------
+            //--- ALGORITMO_JH
             if (strAlgoritmo == ALGORITMO_JH) {
 
+                //--- Gera os 9 quadrado menor (Qm)
                 for (quad in 0..8) {
 
                     var array = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
 
                     flagQuadMenorOk = false
                     var numTentaGeracao = 0
+
+                    //--- Gera Qm
                     while (!flagQuadMenorOk && numTentaGeracao < 50) {
 
-                        //============================
+                        //----------------------------
                         array = geraQuadMenor(quad)
-                        //============================
+                        //----------------------------
 
-                        if (!array.contains(0) && !array.contains(-1)) flagQuadMenorOk = true
-                        else {
+                        if (!array.contains(0) && !array.contains(-1)) {
+
+                            flagQuadMenorOk = true
+
+                        } else {
+
                             numTentaGeracao++
-                        }
 
+                        }
                     }
 
                     //--- Insere esse Qm em 'quadMaiorRet'
-                    //==========================
-                    insereQmEmQM(quad, array)
-                    //==========================
+                    if (flagQuadMenorOk) {
 
+                        //--------------------------
+                        insereQmEmQM(quad, array)
+                        //--------------------------
+
+                    } else {
+
+                        arArIntNums      = Array(9) { Array(9) { 0 } }
+                        flagJogoGeradoOk = false
+                        break
+
+                    }
                 }
-
             }
 
             //--- ALGORITMO_SCOTT
@@ -96,134 +121,166 @@ class SudokuGameGenerator {
 
             }
 
-            //------------------------------------------------------------------
-            //         Verifica se o jogo Gerado (quadMaiorRet) é válido
-            //------------------------------------------------------------------
+            //---------------------------------------------------------------------
+            // 1- o jogo Gerado só pode ter suas 81 células com números de 1 à 9
+            //---------------------------------------------------------------------
             var flagJogoVal = true
-            for (idxLinhaQM in 0..8) {
+            if (flagJogoGeradoOk) {
 
-                for (idxColQM in 0..8) {
+                for (idxLinhaQM in 0..8) {
 
-                    val valCel = quadMaiorRet[idxLinhaQM][idxColQM]
-                    if (valCel <= 0 || valCel > 9) flagJogoVal = false
+                    for (idxColQM in 0..8) {
+
+                        val valCel = quadMaiorRet[idxLinhaQM][idxColQM]
+
+                        if (valCel <= 0 || valCel > 9) flagJogoVal = false
+
+                        if (!flagJogoVal) break
+
+                    }
 
                     if (!flagJogoVal) break
-                }
-
-                if (!flagJogoVal) break
-            }
-
-            if (flagJogoVal) {
-
-                val strTmp = "-> Jogo ${contaTentaJogo + 1}: válido!"
-                Log.d(cTAG, strTmp)
-
-                txtDados = ""
-
-                //------------------------------------
-                listaQM(quadMaiorRet, false)
-                //------------------------------------
-                sggFlagJogoGeradoOk = true
-
-            }
-            else { contaTentaJogo ++ }
-
-        }
-
-        //--- Não conseguiu gerar um jogo
-        if (contaTentaJogo >=limTentaJogo) {
-
-            Log.d(cTAG, "-> Tentou $limTentaJogo jogos. Fim.")
-
-        }
-
-        //--- Conseguiu!
-        else {
-            //-----------------------------------------
-            arArIntNums = copiaArArInt(quadMaiorRet)   // quadMaiorRet: jogo gerado (gabarito)
-            //-----------------------------------------
-
-            //--- Prepara arArIntNums para o jogo: deixa com zeros onde o usuário irá jogar;
-            //    a qti de zeros será tão maior quanto o grau de dificuldade for maior.
-            //-----------------------
-            preparaJogo(nivelJogo)      // arArIntNums: jogo preparado para ser jogado
-            //-----------------------
-
-            Log.d(cTAG, "-> Jogo preparado:")
-            strLog = ""
-            for (x in 0..8) { for (y in 0..8) { strLog += arArIntNums[x][y].toString() }}
-            Log.d(cTAG, strLog)
-
-            // sudoku_#9.0.172
-            //--- Checa se jogo Válido (regras do Sudoku + Solução UNIQUE)
-
-            val myGFG = GFG.boardGFG
-            for (x in 0..8) { for (y in 0..8) { myGFG[x][y] = arArIntNums[x][y] } }
-            //-------------------------------------
-            val flagValGFG = GFG.isValidSudoku()
-            //-------------------------------------
-            if (!flagValGFG) {
-
-                val strToast = "Jogo com MAIS do que uma solução!"
-                Log.d(cTAG, "-> $strToast")
-
-            }
-
-            Log.d(cTAG, "-> Jogo gerado preparado:")
-            //-----------------------------------
-            listaQM(arArIntNums, true)
-            //-----------------------------------
-
-            //--- Atribui um nível ao jogo: resolve o jogo pelo algoritmo backTracking;
-            //    considerarei como o "nível" do jogo, quantas vezes foi necessária a recursão.
-            //---------------------------------------------
-            val arArIntCopia = copiaArArInt(arArIntNums)
-            intNumBackTracking = 0
-            //--------------------------------------------------------------------------------
-            val flagSolOk = SudokuBackTracking.solveSudoku(arArIntCopia, arArIntCopia.size)
-            //--------------------------------------------------------------------------------
-            if (flagSolOk) {
-
-                Log.d(cTAG, "-> Gabarito gerado pelo Backtracking:")
-                //-------------------------------------
-                listaQM(arArIntCopia, false)
-                //-------------------------------------
-
-                val intQtiZeros = utilsKt.quantZeros(arArIntNums)
-
-                val strQtiZerosPad = intQtiZeros.toString().padStart(4)
-                strLog   = String.format ( "%s %s", "-> Quantidade de clues:", strQtiZerosPad)
-                Log.d(cTAG, strLog)
-                txtDados = "${txtDados}\n$strLog"
-
-                /*
-                val strNivelJogoPad = intNumBackTracking.toString().padStart(4)
-                strLog   = String.format( "%s %s", "-> Nível do jogo adaptado:", strNivelJogoPad)
-                 */
-
-                val intNivelJogo    = intQtiZeros / 10
-                val intSubnivelJogo = intQtiZeros % 10
-                val strNivelJogo = when (intNivelJogo) {
-
-                    2 -> "Fácil"
-                    3 -> "Médio"
-                    4 -> "Difícil"
-                    5 -> "Muito difícil"
-                    else -> "Fácil"
 
                 }
 
-                strLog  = "-> Nível jogo gerado: $strNivelJogo"
-                Log.d(cTAG, strLog)
-                val strLog1 = "    - subnível: $intSubnivelJogo"
-                Log.d(cTAG, strLog1)
+                if (flagJogoVal) {
 
-                txtDados = "${txtDados}\n$strLog\n$strLog1"
+                    val strTmp = "-> Jogo ${contaTentaJogo + 1}: válido!"
+                    Log.d(cTAG, strTmp)
+
+                    txtDados = ""
+
+                    //------------------------------------
+                    listaQM(quadMaiorRet, false)
+                    //------------------------------------
+
+                    sggFlagJogoGeradoOk = true
+
+                }
 
             }
-        }
 
-        txtDados = "${txtDados}\n"
+            //--- Se NÃO conseguiu gerar um jogo, verifica se limite para tentativas e FIM
+            if (!flagJogoGeradoOk || !flagJogoVal) {
+
+                if (++contaTentaJogo >= limTentaJogo) {
+
+                    Log.d(cTAG, "-> Tentou $limTentaJogo jogos. Fim.")
+
+                }
+            }
+
+            //--- Conseguiu: verifica se valida
+            else {
+
+                //--- Copia o jogo gerado (quadMaiorRet) em arArIntNums
+                //-----------------------------------------
+                arArIntNums = copiaArArInt(quadMaiorRet)
+                //-----------------------------------------
+
+                //--- Prepara arArIntNums para o jogo: deixa com zeros onde o usuário irá jogar;
+                //    a qti de zeros será tão maior quanto o grau de dificuldade for maior.
+                //-----------------------
+                preparaJogo(nivelJogo)
+                //-----------------------
+
+                Log.d(cTAG, "-> Jogo preparado:")
+
+                strLog = ""
+                for (x in 0..8) {
+
+                    for (y in 0..8) {
+
+                        strLog += arArIntNums[x][y].toString()
+
+                    }
+                }
+                Log.d(cTAG, strLog)
+
+                //-----------------------------------------------------------------------------
+                // 2- checa o jogo preparado contra as regras do Sudoku + Solução UNIQUE (?)
+                //    utiliza a classe classe GFG (GeeksForGeeks)
+                //-----------------------------------------------------------------------------
+                // sudoku_#9.0.172
+                val myGFG = GFG.boardGFG
+                for (x in 0..8) {
+
+                    for (y in 0..8) {
+
+                        myGFG[x][y] = arArIntNums[x][y]
+
+                    }
+                }
+
+                //-------------------------------------
+                val flagValGFG = GFG.isValidSudoku()
+                //-------------------------------------
+                if (!flagValGFG) {
+
+                    val strToast = "Jogo com MAIS do que uma solução!"
+                    Log.d(cTAG, "-> $strToast")
+
+                }
+
+                Log.d(cTAG, "-> Jogo gerado preparado:")
+                //-----------------------------------
+                listaQM(arArIntNums, true)
+                //-----------------------------------
+
+                //--- Atribui um nível ao jogo: resolve o jogo pelo algoritmo backTracking;
+                //    considerarei como o "nível" do jogo, quantas vezes foi necessária a recursão.
+                //---------------------------------------------
+                val arArIntCopia = copiaArArInt(arArIntNums)
+                intNumBackTracking = 0
+
+                //================================================================================
+                val flagSolOk = SudokuBackTracking.solveSudoku(arArIntCopia, arArIntCopia.size)
+                //================================================================================
+
+                if (flagSolOk) {
+
+                    Log.d(cTAG, "-> Gabarito gerado pelo Backtracking:")
+                    //-------------------------------------
+                    listaQM(arArIntCopia, false)
+                    //-------------------------------------
+
+                    val intQtiZeros = utilsKt.quantZeros(arArIntNums)
+
+                    val strQtiZerosPad = intQtiZeros.toString().padStart(4)
+                    strLog = String.format("%s %s", "-> Quantidade de clues:", strQtiZerosPad)
+                    Log.d(cTAG, strLog)
+                    txtDados = "${txtDados}\n$strLog"
+
+                    /*
+                    val strNivelJogoPad = intNumBackTracking.toString().padStart(4)
+                    strLog   = String.format( "%s %s", "-> Nível do jogo adaptado:", strNivelJogoPad)
+                     */
+
+                    val intNivelJogo = intQtiZeros / 10
+                    val intSubnivelJogo = intQtiZeros % 10
+                    val strNivelJogo = when (intNivelJogo) {
+
+                        2 -> "Fácil"
+                        3 -> "Médio"
+                        4 -> "Difícil"
+                        5 -> "Muito difícil"
+                        else -> "Fácil"
+
+                    }
+
+                    strLog = "-> Nível jogo gerado: $strNivelJogo"
+                    Log.d(cTAG, strLog)
+                    val strLog1 = "    - subnível: $intSubnivelJogo"
+                    Log.d(cTAG, strLog1)
+
+                    txtDados = "${txtDados}\n$strLog\n$strLog1"
+
+                }
+            }
+
+            txtDados = "${txtDados}\n"
+
+        }
 
         return arArIntNums   // Jogo preparado
         
@@ -343,16 +400,17 @@ class SudokuGameGenerator {
             //inicQuadMaiorAdaptacao(intJogoAdaptar)
             //---------------------------------------
 
-            //--- Preset enviado pelo MainActivity
+            intNumBackTracking = 0
+
+            //--- quadMaiorRet: preset enviado pelo MainActivity
             //-------------------------------------
             listaQM(quadMaiorRet, false)
             //-------------------------------------
             arArIntJogo = copiaArArInt(quadMaiorRet)
-
-            intNumBackTracking = 0
-            //-------------------------------------------------------------------------------------
+            //======================================================================================
             sggFlagJogoAdaptadoOk = SudokuBackTracking.solveSudoku(quadMaiorRet, quadMaiorRet.size)
-            //-------------------------------------------------------------------------------------
+            //======================================================================================
+
             //val intNumBackTracking = SudokuBackTracking.intNumBackTracking
             if (sggFlagJogoAdaptadoOk) {
 

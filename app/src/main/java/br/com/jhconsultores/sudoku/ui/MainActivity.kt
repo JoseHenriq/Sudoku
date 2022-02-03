@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.179"
+        const val strApp = "Sudoku_#9.0.180"
 
         var flagScopedStorage  = false
 
@@ -720,7 +720,6 @@ class MainActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun btnGeraJogoClick(view: View?) {
 
-
         strLog = "-> Tap no btnGeraJogo"
         Log.d(cTAG, strLog)
 
@@ -791,9 +790,10 @@ class MainActivity : AppCompatActivity() {
 
                 if (edtViewSubNivel.text.toString().isNotEmpty()) {
 
-                    subNivelJogo = edtViewSubNivel.text.toString().toInt()
+                    subNivelJogo   = edtViewSubNivel.text.toString().toInt()
                     nivelTotalJogo = nivelJogo + subNivelJogo
 
+                    //>>>> A solução para o preset será retornada em sgg.quadMaiorRet <<<<
                     //=======================================================
                     quadMaior = sgg.geraJogo(nivelTotalJogo, ALGORITMO_JH)
                     //=======================================================
@@ -989,13 +989,16 @@ class MainActivity : AppCompatActivity() {
             finalizaEdicaoPreset()
             //-----------------------
 
-            //--- GABARITO: jogo gerado
+            //--- GABARITO: copia o gabarito gerado pelo backtrack algorithm
             val arIntNumsGab = ArrayList<Int>()
             for (idxLin in 0..8) {
+
                 for (idxCol in 0..8) {
+
                     //-------------------------------------------------
                     arIntNumsGab += sgg.quadMaiorRet[idxLin][idxCol]
                     //-------------------------------------------------
+
                 }
             }
 

@@ -49,7 +49,9 @@ public class GFG {
     {
 
         // Check if all elements of board[][] stores value in the range[1, 9]
+        //--------------------------------------------
         if (!isInRange(boardGFG)) { return false; }
+        //--------------------------------------------
 
         // Stores unique value from 1 to N
         boolean[] unique = new boolean[N + 1];
