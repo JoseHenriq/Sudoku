@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.180"
+        const val strApp = "Sudoku_#9.0.181"
 
         var flagScopedStorage  = false
 
@@ -786,6 +786,7 @@ class MainActivity : AppCompatActivity() {
 
                 }
                 strLog = "   - Nível: $strNivelJogo ($nivelJogo) Subnível: ${edtViewSubNivel.text}"
+
                 Log.d(cTAG, strLog)
 
                 if (edtViewSubNivel.text.toString().isNotEmpty()) {
@@ -793,6 +794,7 @@ class MainActivity : AppCompatActivity() {
                     subNivelJogo   = edtViewSubNivel.text.toString().toInt()
                     nivelTotalJogo = nivelJogo + subNivelJogo
 
+                    //--- Gera o jogo
                     //>>>> A solução para o preset será retornada em sgg.quadMaiorRet <<<<
                     //=======================================================
                     quadMaior = sgg.geraJogo(nivelTotalJogo, ALGORITMO_JH)
@@ -964,8 +966,11 @@ class MainActivity : AppCompatActivity() {
         when {
 
             strOpcaoJogo == "JogoGerado" -> flagJogoGeradoOk = flagJogoValido
+
             strOpcaoJogo.contains("JogoPreSetado") -> flagJogoAdaptadoOk = flagJogoValido
+
             strOpcaoJogo == "JogoEditado" -> flagJogoEditadoOk = flagJogoValido
+
             else -> flagJogoGeradoOk = flagJogoValido
 
         }

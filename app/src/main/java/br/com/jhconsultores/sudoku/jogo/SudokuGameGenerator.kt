@@ -59,55 +59,65 @@ class SudokuGameGenerator {
 
         while (!sggFlagJogoGeradoOk && contaTentaJogo < limTentaJogo) {
 
-            //Log.d(cTAG, "-> Gera o jogo ${contaTentaJogo + 1}")
+            Log.d(cTAG, "-> Preenche o jogo ${contaTentaJogo + 1}")
 
-            //------------------------------------------------------------------
-            //                         Gera o jogo
-            //------------------------------------------------------------------
+            //--------------------------------------------------------------------------------------
+            // 1- preenche o tabuleiro utilizando rnd (quadMaiorRet)
+            //--------------------------------------------------------------------------------------
+            arArIntNums = Array(9) { Array(9) { 0 } }
+
             //--- ALGORITMO_JH
             if (strAlgoritmo == ALGORITMO_JH) {
 
-                //--- Gera os 9 quadrado menor (Qm)
+                //--- Gera os 9 quadrados menores (Qm)
                 for (quad in 0..8) {
 
                     var array = arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-                    flagQuadMenorOk = false
+                    //--- Tenta até 50x gerar um Qm válido
+                    flagQuadMenorOk     = false
                     var numTentaGeracao = 0
-
-                    //--- Gera Qm
                     while (!flagQuadMenorOk && numTentaGeracao < 50) {
 
                         //----------------------------
                         array = geraQuadMenor(quad)
                         //----------------------------
 
-                        if (!array.contains(0) && !array.contains(-1)) {
+                        strLog = "   quad = $quad array = "
+                        for (intIdx in 0..8) {
 
-                            flagQuadMenorOk = true
-
-                        } else {
-
-                            numTentaGeracao++
+                            strLog += "${array[intIdx]}"
+                            if (intIdx < 8) strLog += ", "
 
                         }
+                        Log.d(cTAG, strLog)
+
+                        if (!array.contains(0) && !array.contains(-1)) { flagQuadMenorOk = true }
+                        else { numTentaGeracao++ }
+
                     }
 
-                    //--- Insere esse Qm em 'quadMaiorRet'
+                    //--- Se saiu porque o Qm está ok, insere-o no 'quadMaiorRet'
                     if (flagQuadMenorOk) {
 
                         //--------------------------
                         insereQmEmQM(quad, array)
                         //--------------------------
 
-                    } else {
+                    }
+                    //--- Se saiu porque já tentou gerar o Qm mais do que 50x retorna
+                    else {
 
-                        arArIntNums      = Array(9) { Array(9) { 0 } }
                         flagJogoGeradoOk = false
                         break
 
                     }
                 }
+                Log.d(cTAG, "   Validade QM preenchido: $flagJogoGeradoOk")
+                //-------------------------------------
+                listaQM(quadMaiorRet, false)
+                //-------------------------------------
+
             }
 
             //--- ALGORITMO_SCOTT
@@ -122,7 +132,7 @@ class SudokuGameGenerator {
             }
 
             //---------------------------------------------------------------------
-            // 1- o jogo Gerado só pode ter suas 81 células com números de 1 à 9
+            // 2- o jogo Gerado só pode ter suas 81 células com números de 1 à 9
             //---------------------------------------------------------------------
             var flagJogoVal = true
             if (flagJogoGeradoOk) {
@@ -142,14 +152,12 @@ class SudokuGameGenerator {
                     if (!flagJogoVal) break
 
                 }
-
                 if (flagJogoVal) {
 
                     val strTmp = "-> Jogo ${contaTentaJogo + 1}: válido!"
                     Log.d(cTAG, strTmp)
 
-                    txtDados = ""
-
+                    //--- Lista o tabuleiro preenchido e válido qto aos números
                     //------------------------------------
                     listaQM(quadMaiorRet, false)
                     //------------------------------------
@@ -178,14 +186,22 @@ class SudokuGameGenerator {
                 arArIntNums = copiaArArInt(quadMaiorRet)
                 //-----------------------------------------
 
-                //--- Prepara arArIntNums para o jogo: deixa com zeros onde o usuário irá jogar;
-                //    a qti de zeros será tão maior quanto o grau de dificuldade for maior.
+                //----------------------------------------------------------------------------------
+                // 3- prepara o jogo
+                //----------------------------------------------------------------------------------
+                // Prepara arArIntNums para o jogo: deixa com zeros onde o usuário irá jogar;
+                // a qti de zeros será tão maior quanto o grau de dificuldade for maior.
                 //-----------------------
                 preparaJogo(nivelJogo)
                 //-----------------------
 
                 Log.d(cTAG, "-> Jogo preparado:")
+                //------------------------------------
+                listaQM(arArIntNums, false)
+                //------------------------------------
 
+                //--- Prepara o jogo em string para submeter a análise no site:
+                //    https://www.sudoku-solutions.com/
                 strLog = ""
                 for (x in 0..8) {
 
@@ -197,10 +213,9 @@ class SudokuGameGenerator {
                 }
                 Log.d(cTAG, strLog)
 
-                //-----------------------------------------------------------------------------
-                // 2- checa o jogo preparado contra as regras do Sudoku + Solução UNIQUE (?)
-                //    utiliza a classe classe GFG (GeeksForGeeks)
-                //-----------------------------------------------------------------------------
+                //----------------------------------------------------------------------------------
+                // 4- verfica se Unique
+                //----------------------------------------------------------------------------------
                 // sudoku_#9.0.172
                 val myGFG = GFG.boardGFG
                 for (x in 0..8) {
@@ -528,8 +543,6 @@ class SudokuGameGenerator {
         }
     }
 
-    //--- listaquadMaiorRet
-    // flagShow: se true libera a apresentação do QM na tela do smartphone
     @SuppressLint("SetTextI18n")
     fun listaQM (quadMaior: Array<Array<Int>>, flagShow : Boolean) {
 
