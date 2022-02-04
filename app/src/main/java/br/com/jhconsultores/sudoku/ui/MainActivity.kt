@@ -32,7 +32,6 @@ import android.view.*
 import androidx.activity.result.ActivityResult
 import androidx.core.view.MenuCompat
 import br.com.jhconsultores.sudoku.BuildConfig
-import br.com.jhconsultores.sudoku.jogo.SudokuBoard
 import kotlin.math.sqrt
 
 const val ALL_FILES_ACCESS_PERMISSION = 4
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.181"
+        const val strApp = "Sudoku_#9.0.182"
 
         var flagScopedStorage  = false
 
@@ -720,6 +719,7 @@ class MainActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun btnGeraJogoClick(view: View?) {
 
+
         strLog = "-> Tap no btnGeraJogo"
         Log.d(cTAG, strLog)
 
@@ -786,16 +786,13 @@ class MainActivity : AppCompatActivity() {
 
                 }
                 strLog = "   - Nível: $strNivelJogo ($nivelJogo) Subnível: ${edtViewSubNivel.text}"
-
                 Log.d(cTAG, strLog)
 
                 if (edtViewSubNivel.text.toString().isNotEmpty()) {
 
-                    subNivelJogo   = edtViewSubNivel.text.toString().toInt()
+                    subNivelJogo = edtViewSubNivel.text.toString().toInt()
                     nivelTotalJogo = nivelJogo + subNivelJogo
 
-                    //--- Gera o jogo
-                    //>>>> A solução para o preset será retornada em sgg.quadMaiorRet <<<<
                     //=======================================================
                     quadMaior = sgg.geraJogo(nivelTotalJogo, ALGORITMO_JH)
                     //=======================================================
@@ -966,11 +963,8 @@ class MainActivity : AppCompatActivity() {
         when {
 
             strOpcaoJogo == "JogoGerado" -> flagJogoGeradoOk = flagJogoValido
-
             strOpcaoJogo.contains("JogoPreSetado") -> flagJogoAdaptadoOk = flagJogoValido
-
             strOpcaoJogo == "JogoEditado" -> flagJogoEditadoOk = flagJogoValido
-
             else -> flagJogoGeradoOk = flagJogoValido
 
         }
@@ -994,16 +988,13 @@ class MainActivity : AppCompatActivity() {
             finalizaEdicaoPreset()
             //-----------------------
 
-            //--- GABARITO: copia o gabarito gerado pelo backtrack algorithm
+            //--- GABARITO: jogo gerado
             val arIntNumsGab = ArrayList<Int>()
             for (idxLin in 0..8) {
-
                 for (idxCol in 0..8) {
-
                     //-------------------------------------------------
                     arIntNumsGab += sgg.quadMaiorRet[idxLin][idxCol]
                     //-------------------------------------------------
-
                 }
             }
 

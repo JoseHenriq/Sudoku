@@ -47,11 +47,8 @@ public class GFG {
     //public static boolean isValidSudoku(int[][] board)
     public static boolean isValidSudoku()
     {
-
         // Check if all elements of board[][] stores value in the range[1, 9]
-        //--------------------------------------------
         if (!isInRange(boardGFG)) { return false; }
-        //--------------------------------------------
 
         // Stores unique value from 1 to N
         boolean[] unique = new boolean[N + 1];
@@ -70,8 +67,9 @@ public class GFG {
                 // Stores the value of board[i][j]
                 int Z = boardGFG[i][j];
 
+                // Commit9.0.182 -> NÃO considera o '0' !!!
                 // Check if current row stores duplicate value
-                if (unique[Z]) { return false; }
+                if (Z != 0 && unique[Z]) { return false; }
                 unique[Z] = true;
             }
         }
@@ -88,11 +86,9 @@ public class GFG {
                 // Stores the value of board[j][i]
                 int Z = boardGFG[j][i];
 
+                // Commit9.0.182 -> NÃO considera o '0' !!!
                 // Check if current column stores duplicate value
-                if (unique[Z])
-                {
-                    return false;
-                }
+                if (Z != 0 && unique[Z]) { return false; }
                 unique[Z] = true;
             }
         }
@@ -123,8 +119,9 @@ public class GFG {
                         // Stores the value of board[X][Y]
                         int Z = boardGFG[X][Y];
 
+                        // Commit9.0.182 -> NÃO considera o '0' !!!
                         // Check if current block stores duplicate value
-                        if (unique[Z]) return false;
+                        if (Z != 0 && unique[Z]) { return false; }
                         unique[Z] = true;
                     }
                 }
@@ -135,7 +132,8 @@ public class GFG {
         return true;
     }
 
-    // Function to check if all elements of the board[][] array store value in the range[1, 9]
+    // Commit9.0.182 -> comentário: NÃO considera o '0' como inválido!!!
+    // Function to check if all elements of the board[][] array store value in the range[0, 9]
     static boolean isInRange(int[][] board)
     {
 

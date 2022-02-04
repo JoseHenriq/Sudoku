@@ -2,12 +2,24 @@
 --------------------------------------------------------------------------------
 
 ================================================================================
-Commit9.0.182- novos algoritmos para o jogo e para o gabarito- 12 - px
+Commit9.0.183- novos algoritmos para o jogo e para o gabarito- 13 - px
 --------------------------------------------------------------------------------
 - análise de candidatos
 - ref: http://www.angusj.com/sudoku/hints.php
 ================================================================================
 
+
+================================================================================
+Commit9.0.182- novos algoritmos para o jogo e para o gabarito- 12
+--------------------------------------------------------------------------------
+- retornado ao Commit9.0.179
+- análise da classe GFG  (Geeks For Geeks) da validação de jogos
+---> valida linhas, colunas e Qm qto as repetições
+---> NÃO valida se tem SÓ uma solução (UNIQUE) !!!
+- bugs: 1- NÃO funciona função "Volta Jogo";
+        2- durante o jogo a seleção de uma célula apaga o número novo colocado
+           conforme candidatos; aí a função "Volta Jogo" funciona.
+================================================================================
 
 ================================================================================
 Commit9.0.181- novos algoritmos para o jogo e para o gabarito- 11
