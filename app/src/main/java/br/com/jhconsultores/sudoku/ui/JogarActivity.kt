@@ -36,45 +36,46 @@ class JogarActivity : AppCompatActivity() {
     //--------------------------------------------------------------------------
     //                    Instancializações e inicializações
     //--------------------------------------------------------------------------
-    private var cTAG     = "Sudoku"
-    private var strLog   = ""
+    private var cTAG = "Sudoku"
+    private var strLog = ""
     private var strToast = ""
 
     companion object {
 
         private var strModelo: String = ""
-        private var intIdxFim: Int    = 0
+        private var intIdxFim: Int = 0
 
     }
 
     //--- ImageView
     private var iViewSudokuBoard: ImageView? = null
-    private var iViewNumsDisps  : ImageView? = null
+    private var iViewNumsDisps: ImageView? = null
 
     //--- Bmp
     private var intImageResource = 0
+
     //private var bmpInic: Bitmap? = null // Board vazio Lido a partir do resource/drawable
     private var bmpSalvaJogo: Bitmap? = null // salva o bmpMyImage que é o bmp do jogo
 
     //private var bmpSudokuBoard: Bitmap? = null         // Jogo
-    private var bmpJogo    : Bitmap? = null         // Preset ou jogo gerado e novos números
-    private var bmpNumDisp : Bitmap? = null         // Números disponíveis
+    private var bmpJogo: Bitmap? = null         // Preset ou jogo gerado e novos números
+    private var bmpNumDisp: Bitmap? = null         // Números disponíveis
 
-    private lateinit var bmpJogoSemCandidatos : Bitmap
-    private var flagEscCandJogos = false
+    //private lateinit var bmpJogoSemCandidatos: Bitmap
+    //private var flagEscCandJogos = false
 
     //--- Canvas
     //private var canvasSudokuBoard: Canvas? = null
-    private var canvasJogo    : Canvas? = null
-    private var canvasNumDisp : Canvas? = null
+    private var canvasJogo: Canvas? = null
+    private var canvasNumDisp: Canvas? = null
 
-    private var tvNivel   : TextView? = null
+    private var tvNivel: TextView? = null
     private var tvSubNivel: TextView? = null
-    private var tvClues   : TextView? = null
+    private var tvClues: TextView? = null
     private var tvLegCluesInic: TextView? = null
-    private var tvCluesInic   : TextView? = null
+    private var tvCluesInic: TextView? = null
 
-    private var tvErros : TextView? = null
+    private var tvErros: TextView? = null
     private var intContaErro = 0
 
     private lateinit var toolBar: androidx.appcompat.widget.Toolbar
@@ -82,75 +83,75 @@ class JogarActivity : AppCompatActivity() {
     private var intTamTxt = 25 // 50 // 200 //
     private var scale = 0f
 
-    private var pincelVerde     = Paint()
-    private var pincelBranco    = Paint()
-    private var pincelPreto     = Paint()
-    private var pincelAzul      = Paint()
-    private var pincelLaranja   = Paint()
+    private var pincelVerde = Paint()
+    private var pincelBranco = Paint()
+    private var pincelPreto = Paint()
+    private var pincelAzul = Paint()
+    private var pincelLaranja = Paint()
     private var pincelPurple200 = Paint()
 
     //--- Medidas
     //- Células do board
-    private var intCellwidth  = 0
+    private var intCellwidth = 0
     private var intCellheight = 0
 
     //- Margens do board
-    private var intmargTopDp  = 0
+    private var intmargTopDp = 0
     private var intMargleftdp = 0
-    private var intMargtoppx  = 0
+    private var intMargtoppx = 0
     private var intMargleftpx = 0
 
     //- Imagem Sudoku board
-    private var intImgwidth  = 0
+    private var intImgwidth = 0
     private var intImgheight = 0
 
     //--- Controle de jogadas
     private var intColJogar = 0
     private var intLinJogar = 0
-    private var flagJoga    = false
+    private var flagJoga = false
 
     private var arIntNumsJogo = ArrayList<Int>()                      // Jogo
-    var arArIntNums           = Array(9) { Array(9) { 0 } }
-    private var arArIntCopia  = Array(9) { Array(9) { 0 } }
-    private var arArIntCand   = Array(81) { Array(9) { 0 } }
+    var arArIntNums = Array(9) { Array(9) { 0 } }
+    private var arArIntCopia = Array(9) { Array(9) { 0 } }
+    private var arArIntCand = Array(81) { Array(9) { 0 } }
     private var arArSalvaJogo = Array(9) { Array(9) { 0 } }
 
     private var arIntNumsGab = ArrayList<Int>()                       // Gabarito
-    private var arArIntGab   = Array(9) { Array(9) { 0 } }
+    private var arArIntGab = Array(9) { Array(9) { 0 } }
 
     private var arIntNumsDisp = Array(9) { 9 }                   // "caixinha"
 
-    private var action          = "JogoGerado"
+    private var action = "JogoGerado"
 
-    private var strNivelJogo    = "Fácil"
+    private var strNivelJogo = "Fácil"
     private var strSubNivelJogo = "0"
-    private var strNivelJogoInic    = "Fácil"
+    private var strNivelJogoInic = "Fácil"
     private var strSubNivelJogoInic = "0"
 
     private lateinit var crono: Chronometer
-    private var strCronoInic       = ""
+    private var strCronoInic = ""
     private var strCronoInicIntent = ""
 
     private var intContaErroInic = 0
 
     //--- Buttons
-    private lateinit var btnInicia : Button
-    private lateinit var btnCand   : Button
-    private lateinit var btnReset  : Button
-    private lateinit var btnSalvar : Button
+    private lateinit var btnInicia: Button
+    private lateinit var btnCand: Button
+    private lateinit var btnReset: Button
+    private lateinit var btnSalvar: Button
 
-    private var strInicia   = ""
-    private var strPause    = ""
+    private var strInicia = ""
+    private var strPause = ""
     private var strReInicia = ""
 
     private lateinit var ctimer: CountDownTimer
-    private var timeOut  = (10 * 60 * 60 * 1000).toLong()   // 10'
+    private var timeOut = (10 * 60 * 60 * 1000).toLong()   // 10'
     private var timeTick = 1000                             //  1"
 
     private var strFinalJogo = ""
 
     //--- Classes externas
-    private val utils   = Utils()
+    private val utils = Utils()
     private val utilsKt = UtilsKt()
 
     //--------------------------------------------------------------------------
@@ -186,14 +187,14 @@ class JogarActivity : AppCompatActivity() {
             tvErros!!.text = "0"
 
             //--- Instancia objetos locais para os objetos XML
-            tvNivel    = findViewById(R.id.tv_Nivel)
+            tvNivel = findViewById(R.id.tv_Nivel)
             tvSubNivel = findViewById(R.id.tv_Subnivel)
-            tvClues    = findViewById(R.id.tv_Clues)
+            tvClues = findViewById(R.id.tv_Clues)
 
-            btnReset  = findViewById<View>(R.id.btnReset)  as Button
+            btnReset = findViewById<View>(R.id.btnReset) as Button
             btnSalvar = findViewById<View>(R.id.btnSalvar) as Button
             btnInicia = findViewById<View>(R.id.btnInicia) as Button
-            btnCand   = findViewById<View>(R.id.btnCand)   as Button
+            btnCand = findViewById<View>(R.id.btnCand) as Button
             btnInicia.isEnabled = true
 
             //--- Implementa o actionBar
@@ -220,73 +221,21 @@ class JogarActivity : AppCompatActivity() {
 
                     utilsKt.mToast(this, "Jogo não iniciado!")
 
-                }
-                else {
+                } else {
 
                     try {
-                        //--- OffSets das coordenadas na Janela (???)
-                        val viewCoords = IntArray(2)
-
                         //--- Determina linha e coluna tocada
                         val x = event.x.toInt()
                         val y = event.y.toInt()
                         //Log.d(cTAG, "touched x: $x touched y: $y")
 
-                        iViewSudokuBoard!!.getLocationOnScreen(viewCoords)
-                        //Log.d(cTAG, "viewCoord x: " + viewCoords[0] viewCoord y: " + viewCoords[1])
-
-                        //--- Coordenadas reais (???)
-                        //val imageX = x - viewCoords[0] // viewCoords[0] is the X coordinate
-                        //val imageY = y - viewCoords[1] // viewCoords[1] is the y coordinate
-                        //Log.d(cTAG, "Real x: $imageX Real y: $imageY")
-
-                        // Linha e coluna da célula tocada
-                        val intCol   = x / intCellwidth
-                        val intLinha = y / intCellheight
-                        //-------------------------------------------
-                        val intNum = arArIntNums[intLinha][intCol]
-                        //-------------------------------------------
-                        //strLog = "-> Celula tocada: linha = " + intLinha + ", coluna = " + intCol +
-                        //        ", numero = " + intNum
-                        //Log.d(cTAG, strLog)
-
-                        //--- Se a célula tocada contiver um número, "pinta" todas as células que
-                        //    contiverem o mesmo número.
-                        if (intNum > 0) {
-                            flagJoga    = false    // Não quer jogar; só quer analisar ...
-                            intLinJogar = 0
-                            intColJogar = 0
-                            //------------------------------------------------
-                            mostraNumsIguais(intNum, true)
-                            //------------------------------------------------
-                        }
-                        //--- Se não contiver um número, quer jogar
-                        else {
-
-                            flagJoga    = true     // Vamos ao jogo!
-                            intLinJogar = intLinha
-                            intColJogar = intCol
-                            //------------------------------------------
-                            mostraCelAJogar(intLinJogar, intColJogar)
-                            //------------------------------------------
-
-                            // Commit9.0.178
-                            //--- Se estiver mostrando os candidatos, atualiza-os.
-                            if (btnCand.text == "Volta Jogo") {
-
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-                                    //--------------------
-                                    analisaCandidatos()
-                                    //--------------------
-
-                                }
-                            }
-                        }
+                        //------------------------------
+                        selecionaCelSudokuBoard(x, y)
+                        //------------------------------
 
                     } catch (exc: Exception) {
 
-                        strLog = "Erro: ${exc.message}"
+                        strLog = "Erro iViewSudokuBoard: ${exc.message}"
                         Log.d(cTAG, strLog)
 
                         Toast.makeText(this, strLog, Toast.LENGTH_SHORT).show()
@@ -309,241 +258,33 @@ class JogarActivity : AppCompatActivity() {
 
                     try {
 
-                        var flagContJogo = false
                         if (flagJoga) {
 
                             //--- Determina coluna do numsDisps tocada
                             val x = event.x.toInt()
 
                             //--- Coordenada X e valor da célula tocada
-                            val intCol   = x / intCellwidth
-                            val intNum   = intCol + 1
-                            val intQtidd = arIntNumsDisp[intNum - 1]
+                            val intCol = x / intCellwidth
 
                             //strLog = "-> Celula tocada em NumDisp: coluna = " + intCol +
                             //        ", qtidd = " + intQtidd
                             //Log.d(cTAG, strLog)
 
-                            //--- Verifica se ainda tem desse número para jogar e se esse número é válido.
-                            var flagNumValido: Boolean
-                            if (intQtidd > 0) {
-
-                                //--- Verifica se num válido
-                                // Determina a que Qm a célula pertence
-                                //----------------------------------------------------------
-                                val intQuadMenor = determinaQm(intLinJogar, intColJogar)
-                                //----------------------------------------------------------
-
-                                //Log.d(
-                                //    cTAG, "-> linhaJogar= " + intLinJogar + " colJogar= " +
-                                //            intColJogar + " Qm = " + intQuadMenor )
-
-                                // Verifica se esse número ainda não existe no seu Qm e nem no QM
-                                //------------------------------------------------------------------
-                                flagNumValido =
-                                    verifValidade(intQuadMenor, intLinJogar, intColJogar, intNum)
-                                //------------------------------------------------------------------
-                                if (!flagNumValido) {
-
-                                    //strLog  = "-> Número NÃO válido (linha, coluna ou quadro);"
-                                    //strLog += " NÃO será incluído no Sudoku board."
-                                    //Log.d(cTAG, strLog)
-
-                                    strToast = "Número NÃO Ok (linha, coluna ou quadro)"
-                                    //--------------------------------------
-                                    utilsKt.mToast(this, strToast)
-                                    //--------------------------------------
-
-                                }
-                                // Verifica se esse número, nessa célula, é o mesmo do gabarito
-                                else {
-
-                                    /*
-                                    strLog = "-> num= $intNum lin = $intLinJogar col = $intColJogar"
-                                    Log.d(cTAG, strLog)
-                                    val numGab = arArIntGab[intLinJogar][intColJogar]
-                                    Log.d(cTAG, "   arArIntGab = $numGab")
-                                     */
-
-                                    //--- Número diferente do num do gabarito
-                                    if (intNum != arArIntGab[intLinJogar][intColJogar]) {
-
-                                        flagNumValido = false
-
-                                        //strLog = "-> Número NÃO válido (gab); NÃO será incluído" +
-                                        //         " no Sudoku board."
-                                        //Log.d(cTAG, strLog)
-
-                                        strToast = "Número NÃO Ok (gabarito)"
-                                        //--------------------------------------
-                                        utilsKt.mToast(this, strToast)
-                                        //--------------------------------------
-
-                                    }
-                                    //--- Número OK também qto ao gabarito -> número Válido
-                                    else {
-
-                                        //Log.d(cTAG, "-> Número válido; será incluído no Sudoku board.")
-
-                                        //strToast = "Número Ok!"
-                                        //----------------------------------------------------------------
-                                        //Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
-                                        //----------------------------------------------------------------
-
-                                        //--- Atualiza o tabuleiro (bmpJogo)
-                                        //----------------------------------------------------
-                                        pintaCelula(intLinJogar, intColJogar, pincelBranco)
-                                        //----------------------------------------------------
-                                        escreveCelula(
-                                            intLinJogar,
-                                            intColJogar,
-                                            intNum.toString(),
-                                            pincelAzul
-                                        )
-                                        //--- Salva o Jogo
-                                        utilsKt.copiaBmpByBuffer(bmpJogo, bmpSalvaJogo)
-
-                                        // Commit9.0.183
-                                        //--- Atualiza o Jogo SEM candidatos (bmpJogoSemCandidatos)
-                                        if (btnCand.text == "Volta Jogo") {
-
-                                            utilsKt.copiaBmpByBuffer(bmpJogoSemCandidatos, bmpJogo)
-                                            escreveCelula(
-                                                intLinJogar,
-                                                intColJogar,
-                                                intNum.toString(),
-                                                pincelAzul
-                                            )
-                                            utilsKt.copiaBmpByBuffer(bmpJogo, bmpJogoSemCandidatos)
-
-                                            //--- Retorna o Jogo presente no tabuleiro
-                                            utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogo)
-
-                                        }
-
-                                        //-----------------------------------
-                                        desenhaSudokuBoard(true)
-                                        //-----------------------------------
-                                        preencheJogo()
-                                        //---------------
-
-                                        //--- Atualiza a base de dados
-                                        arArIntNums[intLinJogar][intColJogar] = intNum
-                                        arIntNumsDisp[intNum - 1]--
-
-                                        //--- Atualiza a qtidd disponível para esse número
-                                        //-------------------
-                                        atualizaNumDisp()
-                                        //-------------------
-
-                                        //--- Destaca os números iguais a esse já jogados
-                                        //------------------------------------------------
-                                        mostraNumsIguais(intNum, false)
-                                        //------------------------------------------------
-
-                                        flagJoga = false
-
-                                    }
-                                }
-
-                                if (!flagNumValido) {
-
-                                    //--- Se não tem limite de erros, apenas computa-o
-                                    //--- Se tem limite de erros, ao incrementá-lo informa qdo = lim
-                                    tvErros!!.text = "${++intContaErro}"
-                                    if (intContaErro == intLimiteErros) {
-
-                                        var strMsg = "Você atingiu o limite de erros."
-                                        strMsg    += "\nTenta até outro erro?"
-
-                                        val builder =
-                                            androidx.appcompat.app.AlertDialog.Builder(this)
-                                        builder.setTitle(strMsg)
-                                            .setPositiveButton("Sim") { _, _ ->
-
-                                                Log.d(cTAG, "-> Tenta mais 1 erro.")
-                                                intLimiteErros++
-                                                MainActivity.strTitleErros = "$intLimiteErros"
-
-                                                strLog = "Novo limite: $intLimiteErros erros"
-                                                utilsKt.mToast(this, strLog)
-
-                                                //MainActivity.intLimiteErrosAtual = intLimiteErros
-
-                                            }
-                                            .setNegativeButton("Não") { _, _ ->
-
-                                                Log.d(cTAG, "-> Encerra o jogo.")
-
-                                                Log.d(cTAG, "-> ${crono.text} - Fim")
-
-                                                //------------
-                                                fimDeJogo()
-                                                //------------
-
-                                            }
-
-                                        // Apresenta o AlertDialog
-                                        val alert = builder.create()
-                                        alert.show()
-
-                                        // Colore as legendas dos botões de opção
-                                        val pbuttonPos = alert.getButton(DialogInterface.BUTTON_POSITIVE)
-                                        pbuttonPos.setTextColor(Color.BLUE)
-
-                                        val pbuttonNeg = alert.getButton(DialogInterface.BUTTON_NEGATIVE)
-                                        pbuttonNeg.setTextColor(Color.RED)
-
-                                    }
-                                }
-                            }
-
-                            //--- Verifica se fim de jogo (todas as qtidds foram zeradas
-                            for (idxVetorNumDisp in 0..8) {
-
-                                if (arIntNumsDisp[idxVetorNumDisp] > 0) flagContJogo = true
-
-                            }
-
-                            //--- Se já foram utilizados todos os números disponíveis, pára o cronometro
-                            if (!flagContJogo) {
-
-                                Log.d(cTAG, "-> ${crono.text} - Fim")
-
-                                //------------
-                                fimDeJogo()
-                                //------------
-
-                            }
+                            //----------------------------
+                            selecionaCelNumDisp(intCol)
+                            //----------------------------
                         }
-
-                        // Commit9.0.178
-                        //--- Ainda não é fim de jogo e se estiver mostrando os candidatos,
-                        //    atualiza-os.
-                        //if (flagContJogo && btnCand.text == "Volta Jogo") {
-
-                        if (btnCand.text == "Volta Jogo") {
-
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-                                //--------------------
-                                analisaCandidatos()
-                                //--------------------
-
-                            }
-                         }
-
 
                     } catch (exc: Exception) {
 
-                        strLog = "Erro: ${exc.message}"
+                        strLog = "Erro iViewNumsDisps: ${exc.message}"
                         Log.d(cTAG, strLog)
 
                         Toast.makeText(this, strLog, Toast.LENGTH_SHORT).show()
 
                     }
-
                 }
+
                 false
 
             }
@@ -551,9 +292,11 @@ class JogarActivity : AppCompatActivity() {
             //------------------------------------------------------------------
             // Listeners para o evento onClick dos buttons
             //------------------------------------------------------------------
+
+
             //--- btnInicia
-            strInicia   = resources.getString(R.string.inicia)
-            strPause    = resources.getString(R.string.pause)
+            strInicia = resources.getString(R.string.inicia)
+            strPause = resources.getString(R.string.pause)
             strReInicia = resources.getString(R.string.reinicia)
 
             btnInicia.setOnClickListener {
@@ -593,7 +336,8 @@ class JogarActivity : AppCompatActivity() {
 
                     }
                     //--- Não faz nada
-                    else -> {}
+                    else -> {
+                    }
 
                 }
 
@@ -687,7 +431,8 @@ class JogarActivity : AppCompatActivity() {
 
                         } else {
 
-                            strLog = "   - Não há arquivos de jogos no dir /Download/sudoku/Jogos"
+                            strLog =
+                                "   - Não há arquivos de jogos no dir /Download/sudoku/Jogos"
                             Log.d(cTAG, strLog)
 
                         }
@@ -710,14 +455,14 @@ class JogarActivity : AppCompatActivity() {
             action = intent.action.toString()        // Main:
 
             //--- Recupera os dados recebidos via intent
-            strNivelJogoInic    = intent.getStringExtra("strNivelJogo") as String
+            strNivelJogoInic = intent.getStringExtra("strNivelJogo") as String
             strSubNivelJogoInic = intent.getStringExtra("strSubNivelJogo") as String
 
-            strCronoInic     = intent.getStringExtra ("strCronoConta") as String
+            strCronoInic = intent.getStringExtra("strCronoConta") as String
             intContaErroInic = (intent.getStringExtra("strErro") as String).toInt()
 
             // Armazena o gabarito em um array<int>
-            arIntNumsGab  = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
+            arIntNumsGab = intent.getIntegerArrayListExtra("GabaritoDoJogo") as ArrayList<Int>
             // Armazena o jogo em um array<int>
             arIntNumsJogo = intent.getIntegerArrayListExtra("JogoPreparado") as ArrayList<Int>
 
@@ -749,7 +494,7 @@ class JogarActivity : AppCompatActivity() {
 
                         val intCell = intLinha * 9 + intCol
                         arArIntNums[intLinha][intCol] = arIntNumsJogo[intCell]  // Jogo
-                        arArIntGab[intLinha][intCol]  = arIntNumsGab[intCell]   // Gabarito
+                        arArIntGab[intLinha][intCol] = arIntNumsGab[intCell]   // Gabarito
 
                     }
                 }
@@ -790,24 +535,25 @@ class JogarActivity : AppCompatActivity() {
                     strNivelJogo = arStrNivelJogo[idxNivel]
 
                     // ex: Fácil de 20 a 29
-                    tvNivel!!.text    = strNivelJogo
+                    tvNivel!!.text = strNivelJogo
                     tvSubNivel!!.text = strSubNivelJogo
 
                     //--- Apresenta as info do jogo inicial
                     tvLegCluesInic!!.text = " ( Nível inicial: "
-                    tvCluesInic!!.text = String.format("%s / %s )", strNivelJogoInic,
-                        strSubNivelJogoInic)
+                    tvCluesInic!!.text = String.format(
+                        "%s / %s )", strNivelJogoInic,
+                        strSubNivelJogoInic
+                    )
 
-                    if ((strNivelJogo != strNivelJogoInic) || (strSubNivelJogo != strSubNivelJogoInic)){
+                    if ((strNivelJogo != strNivelJogoInic) || (strSubNivelJogo != strSubNivelJogoInic)) {
 
                         tvLegCluesInic!!.visibility = VISIBLE
-                        tvCluesInic!!.visibility    = VISIBLE
+                        tvCluesInic!!.visibility = VISIBLE
 
-                    }
-                    else {
+                    } else {
 
                         tvLegCluesInic!!.visibility = INVISIBLE
-                        tvCluesInic!!.visibility    = INVISIBLE
+                        tvCluesInic!!.visibility = INVISIBLE
 
                     }
 
@@ -815,12 +561,12 @@ class JogarActivity : AppCompatActivity() {
                 //--- "JogoGerado"
                 else {
 
-                    strNivelJogo    = strNivelJogoInic
+                    strNivelJogo = strNivelJogoInic
                     strSubNivelJogo = strSubNivelJogoInic
 
                 }
 
-                tvNivel!!.text    = strNivelJogo
+                tvNivel!!.text = strNivelJogo
                 tvSubNivel!!.text = strSubNivelJogo
 
                 flagAppInicializado = true
@@ -926,12 +672,12 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //--- mostraNumsIguais (canvas do Sudoku board)
-    private fun mostraNumsIguais(intNum: Int, flagMostraNumsIguais : Boolean) {
+    private fun mostraNumsIguais(intNum: Int, flagMostraNumsIguais: Boolean) {
 
         if (flagMostraNumIguais) {
 
             //--- Atualiza a imageView do layout
-            utilsKt.copiaBmpByBuffer(bmpSalvaJogo,bmpJogo)
+            utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogo)
             //--------------------------------------------------------
             iViewSudokuBoard!!.setImageBitmap(bmpJogo)
             //----------------------------------------------
@@ -961,7 +707,7 @@ class JogarActivity : AppCompatActivity() {
             //--- Se estiver mostrando os candidatos, atualiza-os.
             if (btnCand.text == "Volta Jogo") {
 
-                utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogoSemCandidatos)
+                //utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogoSemCandidatos)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
@@ -975,14 +721,14 @@ class JogarActivity : AppCompatActivity() {
             //-------------------------------------------
             iViewSudokuBoard!!.setImageBitmap(bmpJogo)
             //-------------------------------------------
-        }
-
-        else {
+        } else {
 
             if (flagMostraNumsIguais) {
 
-                Toast.makeText(this, "Configurado para NÃO mostrar números iguais!",
-                    Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this, "Configurado para NÃO mostrar números iguais!",
+                    Toast.LENGTH_SHORT
+                ).show()
 
             }
         }
@@ -1067,7 +813,12 @@ class JogarActivity : AppCompatActivity() {
                 val strTxt = (intIdxCel + 1).toString()
                 pincelBranco.textSize = intTamTxt * scale
                 //----------------------------------------------------------------------------------
-                canvasNumDisp!!.drawText(strTxt, xCoord.toFloat(), yCoord.toFloat(), pincelBranco)
+                canvasNumDisp!!.drawText(
+                    strTxt,
+                    xCoord.toFloat(),
+                    yCoord.toFloat(),
+                    pincelBranco
+                )
                 //----------------------------------------------------------------------------------
 
             }
@@ -1141,33 +892,33 @@ class JogarActivity : AppCompatActivity() {
         // scale = resources.displayMetrics.density
 
         //--- Pincéis
-        pincelVerde.color     = ContextCompat.getColor(this, R.color.verde)
-        pincelBranco.color    = ContextCompat.getColor(this, R.color.white)
-        pincelPreto.color     = ContextCompat.getColor(this, R.color.black)
-        pincelAzul.color      = ContextCompat.getColor(this, R.color.azul)
-        pincelLaranja.color   = ContextCompat.getColor(this, R.color.laranja)
+        pincelVerde.color = ContextCompat.getColor(this, R.color.verde)
+        pincelBranco.color = ContextCompat.getColor(this, R.color.white)
+        pincelPreto.color = ContextCompat.getColor(this, R.color.black)
+        pincelAzul.color = ContextCompat.getColor(this, R.color.azul)
+        pincelLaranja.color = ContextCompat.getColor(this, R.color.laranja)
         pincelPurple200.color = ContextCompat.getColor(this, R.color.purple_200)
 
         //--- Bit maps
         intImageResource = R.drawable.sudoku_board3
 
         //--- Jogo
-        bmpJogo          = BitmapFactory.decodeResource(resources, intImageResource)
+        bmpJogo = BitmapFactory.decodeResource(resources, intImageResource)
             .copy(Bitmap.Config.ARGB_8888, true)
-        canvasJogo       = Canvas(bmpJogo!!)
+        canvasJogo = Canvas(bmpJogo!!)
         iViewSudokuBoard = findViewById<View>(R.id.ivSudokuBoard) as ImageView
         iViewSudokuBoard!!.setImageBitmap(bmpJogo)
 
-        bmpSalvaJogo     = BitmapFactory.decodeResource(resources, intImageResource)
+        bmpSalvaJogo = BitmapFactory.decodeResource(resources, intImageResource)
             .copy(Bitmap.Config.ARGB_8888, true)
 
-        bmpJogoSemCandidatos = BitmapFactory.decodeResource(resources, intImageResource)
-            .copy(Bitmap.Config.ARGB_8888, true)
+        //bmpJogoSemCandidatos = BitmapFactory.decodeResource(resources, intImageResource)
+        //    .copy(Bitmap.Config.ARGB_8888, true)
 
         //--- Números disponíveis (caixinha)
-        bmpNumDisp     = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
+        bmpNumDisp = BitmapFactory.decodeResource(resources, R.drawable.quadro_nums_disp)
             .copy(Bitmap.Config.ARGB_8888, true)
-        canvasNumDisp  = Canvas(bmpNumDisp!!)
+        canvasNumDisp = Canvas(bmpNumDisp!!)
         iViewNumsDisps = findViewById<View>(R.id.ivNumDisp) as ImageView
         iViewNumsDisps!!.setImageBitmap(bmpNumDisp)
 
@@ -1216,9 +967,9 @@ class JogarActivity : AppCompatActivity() {
             */
 
             //--- Margens do board
-            intmargTopDp  = resources.getDimension(R.dimen.MargemAcima).toInt()
+            intmargTopDp = resources.getDimension(R.dimen.MargemAcima).toInt()
             intMargleftdp = resources.getDimension(R.dimen.MargemEsquerda).toInt()
-            intMargtoppx  = toPixels2(this, intmargTopDp.toFloat())
+            intMargtoppx = toPixels2(this, intmargTopDp.toFloat())
             intMargleftpx = toPixels2(this, intMargleftdp.toFloat())
 
             //strLog = "   -Margens: Acima  :  " + intMargtoppx + " pixels, Esquerda:    " +
@@ -1226,14 +977,14 @@ class JogarActivity : AppCompatActivity() {
             //Log.d(cTAG, strLog)
 
             //--- Imagem Sudoku board
-            intImgwidth  = bmpJogo!!.width
+            intImgwidth = bmpJogo!!.width
             intImgheight = bmpJogo!!.height   // bmpSudokuBoard!!.height
             //strLog = "   -Image  : Largura: " + intImgwidth + " pixels, Altura  :  " +
             //        intImgheight + " pixels"
             //Log.d(cTAG, strLog)
 
             //--- Células
-            intCellwidth  = intImgwidth / 9
+            intCellwidth = intImgwidth / 9
             intCellheight = intImgheight / 9
             //strLog = "   -Célula : Largura:  " + intCellwidth + " pixels, Altura  :   " +
             //        intCellheight + " pixels"
@@ -1421,7 +1172,7 @@ class JogarActivity : AppCompatActivity() {
 
         //*** Nesse ponto, arArIntNums (rascunho do jogo) e arArIntGab (gabarito) deverão estar Ok.
 
-        intContaErro   = intContaErroInic
+        intContaErro = intContaErroInic
         tvErros!!.text = "$intContaErro"
 
         //strNivelJogo    = strNivelJogoInic
@@ -1468,7 +1219,7 @@ class JogarActivity : AppCompatActivity() {
         //------------------
 
         //--- Inicializa variáveis locais
-        tvNivel!!.text    = strNivelJogo
+        tvNivel!!.text = strNivelJogo
         tvSubNivel!!.text = strSubNivelJogo
 
         tvClues!!.text = utilsKt.quantZeros(arArIntNums).toString()
@@ -1604,7 +1355,7 @@ class JogarActivity : AppCompatActivity() {
     //private var intIdxInic: Int = 0
 
     //--- preparaConteudo
-    private fun preparaConteudo(strNomeArq : String): String {
+    private fun preparaConteudo(strNomeArq: String): String {
 
         var strConteudo = ""
 
@@ -1649,7 +1400,9 @@ class JogarActivity : AppCompatActivity() {
         if (strNomeArq == "modelo_arq_xml_sudoku1") {
 
             Log.d(cTAG, "-> modelo arq Sudoku xml")
-            for (idxDecl in arStrLeitArqRaw.indices) { strModelo += arStrLeitArqRaw[idxDecl] }
+            for (idxDecl in arStrLeitArqRaw.indices) {
+                strModelo += arStrLeitArqRaw[idxDecl]
+            }
 
             Log.d(cTAG, strModelo)
 
@@ -1658,7 +1411,7 @@ class JogarActivity : AppCompatActivity() {
             var strTag: String
             try {
                 //- header / id
-                intTag    = 0
+                intTag = 0
                 intIdxFim = 0
                 //-------------------------------------------------------------
                 strConteudo = preencheConteudo("<id>", "3")
@@ -1737,7 +1490,8 @@ class JogarActivity : AppCompatActivity() {
                 //- jogos / status
                 intTag = 10
                 //------------------------------------------------------------------------------------
-                val strStatus = if (utilsKt.quantZeros(arArIntNums) == 0) "finalizado" else "ativo"
+                val strStatus =
+                    if (utilsKt.quantZeros(arArIntNums) == 0) "finalizado" else "ativo"
                 //------------------------------------------------------------------------------------
                 strConteudo += preencheConteudo("<status>", strStatus)
                 //-------------------------------------------------------------
@@ -1782,9 +1536,7 @@ class JogarActivity : AppCompatActivity() {
                 strConteudo = ""
             }
 
-        }
-
-        else {
+        } else {
 
             // TODO
 
@@ -1795,13 +1547,13 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //--- preencheConteudo
-    private fun preencheConteudo(strTag: String,strConteudoTag: String): String {
+    private fun preencheConteudo(strTag: String, strConteudoTag: String): String {
 
         var strConteudoPreenchido = ""
 
         val intIdxInic = intIdxFim
-        intIdxFim      = strModelo.indexOf(strTag, intIdxInic, false)
-        intIdxFim     += strTag.length
+        intIdxFim = strModelo.indexOf(strTag, intIdxInic, false)
+        intIdxFim += strTag.length
 
         strConteudoPreenchido += strModelo.substring(intIdxInic, intIdxFim)
         strConteudoPreenchido += strConteudoTag
@@ -1826,7 +1578,7 @@ class JogarActivity : AppCompatActivity() {
             ViewGroup.LayoutParams.MATCH_PARENT,
         )
         //layoutParams.setMargins(30, 40, 120, 40)
-        crono.layoutParams  = layoutParams
+        crono.layoutParams = layoutParams
 
         val linearLayout = findViewById<LinearLayout>(R.id.crono_layout)
         linearLayout?.addView(crono)
@@ -1834,7 +1586,7 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //--- acertaCrono
-    private fun acertaCrono(strCronoInic : String) {
+    private fun acertaCrono(strCronoInic: String) {
 
         Log.d(cTAG, "-> Acerta crono.")
         crono.stop()
@@ -1845,7 +1597,7 @@ class JogarActivity : AppCompatActivity() {
     //--- ajustaCrono
     // https://developer.android.com/reference/android/os/SystemClock
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun parteCrono(strCronoInic :String){
+    private fun parteCrono(strCronoInic: String) {
 
         //--------------------------
         acertaCrono(strCronoInic)
@@ -1860,7 +1612,7 @@ class JogarActivity : AppCompatActivity() {
         val intSec = strCronoInic.substring(3, 5).toLong()
 
         val timeLastStopped = ((intMin * 60 + intSec) * 1000)
-        crono.base          = SystemClock.elapsedRealtime() - timeLastStopped
+        crono.base = SystemClock.elapsedRealtime() - timeLastStopped
 
         crono.start()
 
@@ -1906,7 +1658,9 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //cancel timer
-    private fun cancelTimer() { if (ctimer != null) ctimer.cancel() }
+    private fun cancelTimer() {
+        if (ctimer != null) ctimer.cancel()
+    }
 
     //--- Finaliza jogo por tempo
     private fun verificaFimJogo() {
@@ -1949,12 +1703,15 @@ class JogarActivity : AppCompatActivity() {
         crono.stop()
 
         //-------------------------------------------------
-        try { cancelTimer() } catch (exc : Exception) {}
+        try {
+            cancelTimer()
+        } catch (exc: Exception) {
+        }
         //-------------------------------------------------
 
         flagJoga = false
 
-        btnInicia.text      = strInicia
+        btnInicia.text = strInicia
         btnInicia.isEnabled = false
 
     }
@@ -1964,7 +1721,7 @@ class JogarActivity : AppCompatActivity() {
     private fun analisaCandidatos() {
 
         //--- Instancializações e inicializações
-        var intCell : Int
+        var intCell: Int
         arArIntCand = Array(81) { Array(9) { 0 } }
 
         // Commit9.0.184
@@ -1972,27 +1729,27 @@ class JogarActivity : AppCompatActivity() {
         var salvaColJogar = 0
 
         //--- Inicia a análise
-        if (btnCand.text == "Candidatos") {
+//        if (btnCand.text == "Candidatos") {
 
-            //--- Salva o contexto
-            arArSalvaJogo = utilsKt.copiaArArInt(arArIntNums)
-            salvaLinJogar = intLinJogar
-            salvaColJogar = intColJogar
+        //--- Salva o contexto
+        arArSalvaJogo = utilsKt.copiaArArInt(arArIntNums)
+        salvaLinJogar = intLinJogar
+        salvaColJogar = intColJogar
 
-            bmpJogoSemCandidatos = BitmapFactory.decodeResource(resources, intImageResource)
-                .copy(Bitmap.Config.ARGB_8888, true)
-            utilsKt.copiaBmpByBuffer(bmpJogo, bmpJogoSemCandidatos)
+        //--------------------------------------------------------
+        //utilsKt.copiaBmpByBuffer(bmpJogo, bmpJogoSemCandidatos)
+        //--------------------------------------------------------
 
-        }
+//        }
         //--- Retorna ao Jogo
         // btnCand.text = "Volta Jogo"
-        else {
+        //       else {
 
-            utilsKt.copiaBmpByBuffer(bmpJogoSemCandidatos, bmpJogo)
+        //--------------------------------------------------------
+//            utilsKt.copiaBmpByBuffer(bmpJogoSemCandidatos, bmpJogo)
+        //--------------------------------------------------------
 
-            utilsKt.copiaBmpByBuffer(bmpJogo, bmpSalvaJogo)
-
-        }
+//        }
         iViewSudokuBoard!!.setImageBitmap(bmpJogo)
 
         //--- Determina e apresenta os candidatos para as células vazias
@@ -2066,8 +1823,8 @@ class JogarActivity : AppCompatActivity() {
 
             for (intMatrizCol in 0..2) {
 
-                val intIdx   = (intMatrizLin * 3) + intMatrizCol
-                strLog      += String.format("%02d ", intIdx)
+                val intIdx = (intMatrizLin * 3) + intMatrizCol
+                strLog += String.format("%02d ", intIdx)
 
                 for (intCand in 0..8) {
 
@@ -2088,19 +1845,17 @@ class JogarActivity : AppCompatActivity() {
     private fun retornaJogo() {
 
         //--- Recupera o contexto
-        arArIntNums = utilsKt.copiaArArInt(arArSalvaJogo)
-
-        utilsKt.copiaBmpByBuffer(bmpJogoSemCandidatos, bmpJogo)
-
+        //arArIntNums = utilsKt.copiaArArInt(arArSalvaJogo)
+        utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogo)
         iViewSudokuBoard!!.setImageBitmap(bmpJogo)
 
     }
 
     //--- escCandidato
-    private fun escCandidato(intCell : Int, intCand : Int) {
+    private fun escCandidato(intCell: Int, intCand: Int) {
 
         //--- Instancializações e inicializações
-        val floCellWidth  = intCellwidth.toFloat()
+        val floCellWidth = intCellwidth.toFloat()
         val floCellHeight = intCellheight.toFloat()
 
         //val floCell = intCell.toFloat()
@@ -2110,7 +1865,7 @@ class JogarActivity : AppCompatActivity() {
         //  linha da célula
         val linhaCell = intCell / 9
         // coluna da célula
-        val colCell   = intCell % 9
+        val colCell = intCell % 9
         // coordenadas do canto superior da célula
         //----------------------------------------------
         val xSup = colCell.toFloat() * floCellWidth
@@ -2120,9 +1875,9 @@ class JogarActivity : AppCompatActivity() {
         //Log.d(cTAG, "   - xSup = $xSup ySup = $ySup")
 
         //--- Tamanhos parciais da célula
-        val L9  = floCellWidth  / 9F
-        val L18 = floCellWidth  / 18F
-        val A3  = floCellHeight / 3F
+        val L9 = floCellWidth / 9F
+        val L18 = floCellWidth / 18F
+        val A3 = floCellHeight / 3F
         //val A6  = floCellHeight / 6F
         //Log.d(cTAG, "   - L9 = $L9 L18 = $L18 A3 = $A3 A6 = $A6")
 
@@ -2142,9 +1897,9 @@ class JogarActivity : AppCompatActivity() {
 
         //Log.d(cTAG, "   - coordCand linCell = $intLin colCell = $intCol")
 
-        var posX   = xSup + ((intCol * (3 * L9) + intCol * L9) + L18)
+        var posX = xSup + ((intCol * (3 * L9) + intCol * L9) + L18)
         //if (intCol > 0) posX -= (L9 + 4)
-        val deltaX : Float = when (intCol) {
+        val deltaX: Float = when (intCol) {
 
             1 -> -L9
             2 -> -(L9 + 4F)
@@ -2231,13 +1986,288 @@ class JogarActivity : AppCompatActivity() {
             crono.stop()
 
             //-------------------------------------------------
-            try { cancelTimer() } catch (exc: Exception) { }
+            try {
+                cancelTimer()
+            } catch (exc: Exception) {
+            }
             //-------------------------------------------------
 
             strCronoInic = crono.text.toString()
 
             btnInicia.text = strReInicia
 
+        }
+    }
+
+    //--- selecionaCelSudokuBoard
+    private fun selecionaCelSudokuBoard(x: Int, y: Int) {
+
+        // Linha e coluna da célula tocada
+        val intCol = x / intCellwidth
+        val intLinha = y / intCellheight
+        //-------------------------------------------
+        val intNum = arArIntNums[intLinha][intCol]
+        //-------------------------------------------
+        //strLog = "-> Celula tocada: linha = " + intLinha + ", coluna = " + intCol +
+        //        ", numero = " + intNum
+        //Log.d(cTAG, strLog)
+
+        //--- Se a célula tocada contiver um número, "pinta" todas as células que
+        //    contiverem o mesmo número.
+        if (intNum > 0) {
+            flagJoga = false    // Não quer jogar; só quer analisar ...
+            intLinJogar = 0
+            intColJogar = 0
+            //------------------------------------------------
+            mostraNumsIguais(intNum, true)
+            //------------------------------------------------
+        }
+        //--- Se não contiver um número, quer jogar
+        else {
+
+            flagJoga = true     // Vamos ao jogo!
+            intLinJogar = intLinha
+            intColJogar = intCol
+            //------------------------------------------
+            mostraCelAJogar(intLinJogar, intColJogar)
+            //------------------------------------------
+
+        }
+
+        // Commit9.0.178
+        //--- Se estiver mostrando os candidatos, atualiza-os.
+        if (btnCand.text == "Volta Jogo") {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+                //--------------------
+                analisaCandidatos()
+                //--------------------
+
+            }
+        }
+    }
+
+    //--- selecionaCelNumDisp
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun selecionaCelNumDisp(intCol: Int) {
+
+        var flagContJogo = false
+
+        val intNum = intCol + 1
+        val intQtidd = arIntNumsDisp[intNum - 1]
+        //--- Verifica se ainda tem desse número para jogar e se esse número é válido.
+        var flagNumValido: Boolean
+        if (intQtidd > 0) {
+
+            //--- Verifica se num válido
+            // Determina a que Qm a célula pertence
+            //----------------------------------------------------------
+            val intQuadMenor = determinaQm(intLinJogar, intColJogar)
+            //----------------------------------------------------------
+
+            //Log.d(
+            //    cTAG, "-> linhaJogar= " + intLinJogar + " colJogar= " +
+            //            intColJogar + " Qm = " + intQuadMenor )
+
+            // Verifica se esse número ainda não existe no seu Qm e nem no QM
+            //------------------------------------------------------------------
+            flagNumValido =
+                verifValidade(intQuadMenor, intLinJogar, intColJogar, intNum)
+            //------------------------------------------------------------------
+            if (!flagNumValido) {
+
+                //strLog  = "-> Número NÃO válido (linha, coluna ou quadro);"
+                //strLog += " NÃO será incluído no Sudoku board."
+                //Log.d(cTAG, strLog)
+
+                strToast = "Número NÃO Ok (linha, coluna ou quadro)"
+                //--------------------------------------
+                utilsKt.mToast(this, strToast)
+                //--------------------------------------
+
+            }
+            // Verifica se esse número, nessa célula, é o mesmo do gabarito
+            else {
+
+                /*
+                strLog = "-> num= $intNum lin = $intLinJogar col = $intColJogar"
+                Log.d(cTAG, strLog)
+                val numGab = arArIntGab[intLinJogar][intColJogar]
+                Log.d(cTAG, "   arArIntGab = $numGab")
+                 */
+
+                //--- Número diferente do num do gabarito
+                if (intNum != arArIntGab[intLinJogar][intColJogar]) {
+
+                    flagNumValido = false
+
+                    //strLog = "-> Número NÃO válido (gab); NÃO será incluído" +
+                    //         " no Sudoku board."
+                    //Log.d(cTAG, strLog)
+
+                    strToast = "Número NÃO Ok (gabarito)"
+                    //--------------------------------------
+                    utilsKt.mToast(this, strToast)
+                    //--------------------------------------
+
+                }
+                //--- Número OK também qto ao gabarito -> número Válido
+                else {
+
+                    //Log.d(cTAG, "-> Número válido; será incluído no Sudoku board.")
+
+                    //strToast = "Número Ok!"
+                    //----------------------------------------------------------------
+                    //Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
+                    //----------------------------------------------------------------
+
+                    //--- Atualiza o tabuleiro (bmpJogo)
+                    //----------------------------------------------------
+                    pintaCelula(intLinJogar, intColJogar, pincelBranco)
+                    //----------------------------------------------------
+                    escreveCelula(
+                        intLinJogar,
+                        intColJogar,
+                        intNum.toString(),
+                        pincelAzul
+                    )
+
+                    //--- Atualiza a base de dados
+                    arArIntNums[intLinJogar][intColJogar] = intNum
+                    arIntNumsDisp[intNum - 1]--
+
+                    //--- Atualiza a qtidd disponível para esse número
+                    //-------------------
+                    atualizaNumDisp()
+                    //-------------------
+
+                    //-----------------------------------
+                    desenhaSudokuBoard(true)
+                    //-----------------------------------
+                    preencheJogo()
+                    //---------------
+
+                    //--- Salva o Jogo
+                    utilsKt.copiaBmpByBuffer(bmpJogo, bmpSalvaJogo)
+
+                    // Commit9.0.185
+                    //--- Atualiza o Jogo SEM candidatos (bmpJogoSemCandidatos)
+                    if (btnCand.text == "Volta Jogo") {
+
+                        // utilsKt.copiaBmpByBuffer(bmpJogoSemCandidatos, bmpJogo)
+                        /*
+                        escreveCelula(
+                            intLinJogar,
+                            intColJogar,
+                            intNum.toString(),
+                            pincelAzul
+                        )
+                        */
+                        //utilsKt.copiaBmpByBuffer(bmpJogo, bmpJogoSemCandidatos)
+
+                        //--- Retorna o Jogo presente no tabuleiro
+                        //utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogo)
+
+                        //--------------------
+                        analisaCandidatos()
+                        //--------------------
+
+
+                    }
+
+                    //--- Destaca os números iguais a esse já jogados
+                    //------------------------------------------------
+                    mostraNumsIguais(intNum, false)
+                    //------------------------------------------------
+
+                    flagJoga = false
+
+                }
+            }
+
+            if (!flagNumValido) {
+
+                //--- Se não tem limite de erros, apenas computa-o
+                //--- Se tem limite de erros, ao incrementá-lo informa qdo = lim
+                tvErros!!.text = "${++intContaErro}"
+                if (intContaErro == intLimiteErros) {
+
+                    var strMsg = "Você atingiu o limite de erros."
+                    strMsg += "\nTenta até outro erro?"
+
+                    val builder =
+                        androidx.appcompat.app.AlertDialog.Builder(this)
+                    builder.setTitle(strMsg)
+                        .setPositiveButton("Sim") { _, _ ->
+
+                            Log.d(cTAG, "-> Tenta mais 1 erro.")
+                            intLimiteErros++
+                            MainActivity.strTitleErros = "$intLimiteErros"
+
+                            strLog = "Novo limite: $intLimiteErros erros"
+                            utilsKt.mToast(this, strLog)
+
+                            //MainActivity.intLimiteErrosAtual = intLimiteErros
+
+                        }
+                        .setNegativeButton("Não") { _, _ ->
+
+                            Log.d(cTAG, "-> Encerra o jogo.")
+
+                            Log.d(cTAG, "-> ${crono.text} - Fim")
+
+                            //------------
+                            fimDeJogo()
+                            //------------
+
+                        }
+
+                    // Apresenta o AlertDialog
+                    val alert = builder.create()
+                    alert.show()
+
+                    // Colore as legendas dos botões de opção
+                    val pbuttonPos = alert.getButton(DialogInterface.BUTTON_POSITIVE)
+                    pbuttonPos.setTextColor(Color.BLUE)
+
+                    val pbuttonNeg = alert.getButton(DialogInterface.BUTTON_NEGATIVE)
+                    pbuttonNeg.setTextColor(Color.RED)
+
+                }
+            }
+        }
+
+        //--- Verifica se fim de jogo (todas as qtidds foram zeradas
+        for (idxVetorNumDisp in 0..8) {
+
+            if (arIntNumsDisp[idxVetorNumDisp] > 0) flagContJogo = true
+
+        }
+
+        //--- Se já foram utilizados todos os números disponíveis, pára o cronometro
+        if (!flagContJogo) {
+
+            Log.d(cTAG, "-> ${crono.text} - Fim")
+
+            //------------
+            fimDeJogo()
+            //------------
+
+        }
+
+        // Commit9.0.178
+        //--- Ainda não é fim de jogo e se estiver mostrando os candidatos,
+        //    atualiza-os.
+        if (btnCand.text == "Volta Jogo") {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+                //--------------------
+                analisaCandidatos()
+                //--------------------
+
+            }
         }
     }
 

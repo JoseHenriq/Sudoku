@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.184"
+        const val strApp = "Sudoku_#9.0.185"
 
         var flagScopedStorage  = false
 
@@ -1709,116 +1709,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.legContaClues).visibility = visibilidade
 
     }
-
-    /*
-    //lateinit var document : Document
-
-    //--- inicQuadMaiorAdaptacao
-    private fun inicQuadMaiorAdaptacao(jogoAdaptar: Int) {
-
-        var array: Array<Int>
-        quadMaiorAdapta = arrayOf()
-
-        //--- Simula os dados iniciais propostos
-        when (jogoAdaptar) {
-
-            // Nível: fácil  Subnível: 0 (nívelTotal: 20)
-            1 -> run {
-
-                for (linha in 0..8) {
-
-                    // array = arrayOf<Int>()
-                    array = when (linha) {
-
-                        0 -> arrayOf(6, 0, 8, 7, 4, 0, 1, 0, 2)
-                        1 -> arrayOf(3, 2, 0, 6, 8, 1, 0, 7, 5)
-                        2 -> arrayOf(7, 5, 1, 9, 0, 3, 4, 0, 8)
-                        3 -> arrayOf(9, 6, 3, 5, 0, 8, 0, 2, 0)
-                        4 -> arrayOf(0, 4, 2, 3, 7, 0, 8, 9, 1)
-                        5 -> arrayOf(1, 8, 0, 0, 9, 4, 6, 5, 3)
-                        6 -> arrayOf(2, 1, 6, 8, 3, 9, 0, 0, 7)
-                        7 -> arrayOf(0, 7, 5, 1, 6, 0, 3, 8, 9)
-                        else -> arrayOf(8, 3, 0, 0, 5, 7, 2, 1, 6)
-
-                    }
-                    quadMaiorAdapta += array
-                }
-            }
-
-            // Nível: médio  Subnível: 2 (nívelTotal: 32)
-            2 -> run {
-
-                for (linha in 0..8) {
-
-                    // array = arrayOf<Int>()
-                    array = when (linha) {
-
-                        0 -> arrayOf(0, 0, 4, 6, 0, 5, 8, 0, 0)
-                        1 -> arrayOf(6, 5, 0, 0, 8, 0, 0, 0, 0)
-                        2 -> arrayOf(0, 0, 8, 0, 4, 7, 6, 0, 5)
-                        3 -> arrayOf(2, 8, 0, 3, 5, 6, 0, 0, 0)
-                        4 -> arrayOf(7, 4, 0, 0, 0, 8, 2, 5, 6)
-                        5 -> arrayOf(5, 6, 0, 4, 7, 2, 9, 0, 8)
-                        6 -> arrayOf(8, 2, 5, 7, 0, 4, 3, 6, 0)
-                        7 -> arrayOf(4, 3, 6, 5, 2, 0, 0, 8, 0)
-                        else -> arrayOf(0, 0, 0, 8, 6, 3, 5, 4, 2)
-
-                    }
-                    quadMaiorAdapta += array
-
-                }
-            }
-
-            // Nível: difícil  Subnível: 3 (nívelTotal: 43)
-            3 -> run {
-
-                for (linha in 0..8) {
-
-                    // array = arrayOf<Int>()
-                    array = when (linha) {
-
-                        0 -> arrayOf(0, 0, 3, 5, 0, 0, 4, 9, 0)
-                        1 -> arrayOf(7, 6, 0, 0, 0, 0, 5, 0, 1)
-                        2 -> arrayOf(0, 5, 4, 0, 7, 3, 6, 0, 8)
-                        3 -> arrayOf(0, 1, 0, 0, 0, 0, 3, 0, 0)
-                        4 -> arrayOf(0, 0, 7, 2, 6, 1, 0, 0, 0)
-                        5 -> arrayOf(2, 0, 6, 0, 9, 0, 0, 1, 4)
-                        6 -> arrayOf(6, 3, 2, 8, 5, 0, 0, 0, 0)
-                        7 -> arrayOf(4, 0, 0, 0, 0, 2, 8, 0, 6)
-                        else -> arrayOf(8, 0, 5, 0, 0, 7, 2, 0, 0)
-
-                    }
-                    quadMaiorAdapta += array
-                }
-            }
-
-            // Nível: muito difícil  Subnível: 9 (nívelTotal: 59)
-            // 4 -> run {
-            else -> run {
-
-                for (linha in 0..8) {
-
-                    // array = arrayOf<Int>()
-                    array = when (linha) {
-
-                        0 -> arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
-                        1 -> arrayOf(0, 0, 0, 0, 0, 0, 0, 8, 9)
-                        2 -> arrayOf(0, 0, 0, 0, 0, 8, 1, 6, 2)
-                        3 -> arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0)
-                        4 -> arrayOf(0, 0, 0, 0, 3, 0, 6, 0, 0)
-                        5 -> arrayOf(0, 6, 0, 8, 0, 0, 0, 1, 0)
-                        6 -> arrayOf(0, 0, 0, 0, 6, 1, 0, 3, 0)
-                        7 -> arrayOf(0, 0, 1, 4, 8, 5, 0, 0, 0)
-                        else -> arrayOf(8, 0, 0, 0, 7, 3, 0, 5, 0)
-
-                    }
-                    quadMaiorAdapta += array
-
-                }
-            }
-        }
-    }
-    */
 
     //--- copiaArArInt
     private fun copiaArArInt(arArIntPreset: Array<Array<Int>>): Array<Array<Int>> {
