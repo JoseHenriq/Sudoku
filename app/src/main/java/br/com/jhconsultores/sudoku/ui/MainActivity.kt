@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val cTAG   = "Sudoku"
-        const val strApp = "Sudoku_#9.0.182"
+        const val strApp = "Sudoku_#9.0.183"
 
         var flagScopedStorage  = false
 
@@ -343,7 +343,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         //------------------------------------------------------------------------------------------
-        // Listener para os eventos onTouch dos ImageViews (só utilizados na edição)
+        // Listener para os eventos onTouch dos ImageViews
+        // (só utilizados na edição)
         //------------------------------------------------------------------------------------------
         ivSudokuBoardMain.setOnTouchListener { _, event -> //--- Coordenadas tocadas
 
@@ -353,8 +354,7 @@ class MainActivity : AppCompatActivity() {
 
                 val x = event.x.toInt()
                 val y = event.y.toInt()
-                //Log.d(cTAG, "touched x: $x")
-                //Log.d(cTAG, "touched y: $y")
+                //Log.d(cTAG, "touched x: $x  y: $y")
 
                 //-------------------------
                 editaIVSudokuBoard(x, y)
@@ -1420,23 +1420,21 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private var intNumAtual = 0
-
     //--- editaIVSudokuBoard
+    private var intNumAtual = 0
     private fun editaIVSudokuBoard(coordX: Int, coordY: Int) {
 
         //--- OffSets das coordenadas na Janela (???)
         val viewCoords = IntArray(2)
 
+        //--- Determinha linha e coluna do tabuleiro
         ivSudokuBoardMain.getLocationOnScreen(viewCoords)
-        //Log.d(cTAG, "viewCoord x: " + viewCoords[0])
-        //Log.d(cTAG, "viewCoord y: " + viewCoords[1])
+        //Log.d(cTAG, "viewCoord x: " + viewCoords[0] viewCoord y: " + viewCoords[1])
 
         //--- Coordenadas reais (???)
         //val imageX = coordX - viewCoords[0] // viewCoords[0] is the X coordinate
         //val imageY = coordY - viewCoords[1] // viewCoords[1] is the y coordinate
-        //Log.d(cTAG, "Real x: $imageX")
-        //Log.d(cTAG, "Real y: $imageY")
+        //Log.d(cTAG, "Real x: $imageX Real y: $imageY")
 
         //--- Coordenadas da célula tocada
         intColJogar = coordX / intCellwidth

@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
 import br.com.jhconsultores.sudoku.R
+import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.arStrNivelJogo
 import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.flagMostraNumIguais
 import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.intLimiteErros
 import br.com.jhconsultores.sudoku.ui.MainActivity.Companion.strLimiteTempo
@@ -209,7 +210,6 @@ class JogarActivity : AppCompatActivity() {
             //------------------------------------------------------------------
             // Listeners para o evento onTouch dos ImageViews
             //------------------------------------------------------------------
-            // SudokuBoard
             iViewSudokuBoard!!.setOnTouchListener { _, event -> //--- Coordenadas tocadas
 
                 if (btnInicia.text == "Inicia" || btnInicia.text == "ReInicia") {
@@ -220,24 +220,23 @@ class JogarActivity : AppCompatActivity() {
                 else {
 
                     try {
-                        val x = event.x.toInt()
-                        val y = event.y.toInt()
-                        //Log.d(cTAG, "touched x: $x")
-                        //Log.d(cTAG, "touched y: $y")
-
                         //--- OffSets das coordenadas na Janela (???)
                         val viewCoords = IntArray(2)
+
+                        //--- Determina linha e coluna tocada
+                        val x = event.x.toInt()
+                        val y = event.y.toInt()
+                        //Log.d(cTAG, "touched x: $x touched y: $y")
+
                         iViewSudokuBoard!!.getLocationOnScreen(viewCoords)
-                        //Log.d(cTAG, "viewCoord x: " + viewCoords[0])
-                        //Log.d(cTAG, "viewCoord y: " + viewCoords[1])
+                        //Log.d(cTAG, "viewCoord x: " + viewCoords[0] viewCoord y: " + viewCoords[1])
 
                         //--- Coordenadas reais (???)
                         //val imageX = x - viewCoords[0] // viewCoords[0] is the X coordinate
                         //val imageY = y - viewCoords[1] // viewCoords[1] is the y coordinate
-                        //Log.d(cTAG, "Real x: $imageX")
-                        //Log.d(cTAG, "Real y: $imageY")
+                        //Log.d(cTAG, "Real x: $imageX Real y: $imageY")
 
-                        //--- Coordenadas da célula tocada
+                        // Linha e coluna da célula tocada
                         val intCol   = x / intCellwidth
                         val intLinha = y / intCellheight
                         //-------------------------------------------
@@ -247,8 +246,8 @@ class JogarActivity : AppCompatActivity() {
                         //        ", numero = " + intNum
                         //Log.d(cTAG, strLog)
 
-                        //--- Se a célula tocada contiver um número, "pinta" todas as células que contiverem
-                        //    o mesmo número.
+                        //--- Se a célula tocada contiver um número, "pinta" todas as células que
+                        //    contiverem o mesmo número.
                         if (intNum > 0) {
                             flagJoga    = false    // Não quer jogar; só quer analisar ...
                             intLinJogar = 0
@@ -260,7 +259,7 @@ class JogarActivity : AppCompatActivity() {
                         //--- Se não contiver um número, quer jogar
                         else {
 
-                            flagJoga = true     // Vamos ao jogo!
+                            flagJoga    = true     // Vamos ao jogo!
                             intLinJogar = intLinha
                             intColJogar = intCol
                             //------------------------------------------
@@ -309,7 +308,7 @@ class JogarActivity : AppCompatActivity() {
                         var flagContJogo = false
                         if (flagJoga) {
 
-                            //--- Coordenada X do numsDisps tocada
+                            //--- Determina coluna do numsDisps tocada
                             val x = event.x.toInt()
 
                             //--- Coordenada X e valor da célula tocada
@@ -387,7 +386,7 @@ class JogarActivity : AppCompatActivity() {
                                         //Toast.makeText(this, strToast, Toast.LENGTH_LONG).show()
                                         //----------------------------------------------------------------
 
-                                        //--- Atualiza o Sudoku board
+                                        //--- Atualiza o tabuleiro (bmpJogo)
                                         //----------------------------------------------------
                                         pintaCelula(intLinJogar, intColJogar, pincelBranco)
                                         //----------------------------------------------------
@@ -398,23 +397,23 @@ class JogarActivity : AppCompatActivity() {
                                             pincelAzul
                                         )
                                         //--- Salva esse bitmap
-                                        //------------------------------------------------
                                         utilsKt.copiaBmpByBuffer(bmpJogo, bmpSalvaJogo)
-                                        //------------------------------------------------
 
-                                        // Commit9.0.178
-                                        //--- Ainda não é fim de jogo e se estiver mostrando os
-                                        //    candidatos, atualiza-os.
+                                        // Commit9.0.183
+                                        //--- Atualiza o jogo SEM candidatos (bmpJogoSemCandidatos)
                                         if (btnCand.text == "Volta Jogo") {
 
-                                            bmpJogoSemCandidatos = BitmapFactory.decodeResource(
-                                                resources,
-                                                intImageResource
-                                            ).copy(Bitmap.Config.ARGB_8888, true)
-
+                                            utilsKt.copiaBmpByBuffer(bmpJogoSemCandidatos, bmpJogo)
+                                            escreveCelula(
+                                                intLinJogar,
+                                                intColJogar,
+                                                intNum.toString(),
+                                                pincelAzul
+                                            )
                                             utilsKt.copiaBmpByBuffer(bmpJogo, bmpJogoSemCandidatos)
 
-                                            utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogo)
+                                            // Retorna o tabuleiro COM os candidatos (bmpJogo)
+//                                            utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogo)
 
                                         }
 
@@ -784,7 +783,7 @@ class JogarActivity : AppCompatActivity() {
 
                     }
 
-                    strNivelJogo = MainActivity.Companion.arStrNivelJogo[idxNivel]
+                    strNivelJogo = arStrNivelJogo[idxNivel]
 
                     // ex: Fácil de 20 a 29
                     tvNivel!!.text    = strNivelJogo
