@@ -60,6 +60,9 @@ class JogarActivity : AppCompatActivity() {
     private var bmpJogo    : Bitmap? = null         // Preset ou jogo gerado e novos números
     private var bmpNumDisp : Bitmap? = null         // Números disponíveis
 
+    private lateinit var bmpJogoSemCandidatos : Bitmap
+    private var flagEscCandJogos = false
+
     //--- Canvas
     //private var canvasSudokuBoard: Canvas? = null
     private var canvasJogo    : Canvas? = null
@@ -110,6 +113,7 @@ class JogarActivity : AppCompatActivity() {
     var arArIntNums           = Array(9) { Array(9) { 0 } }
     private var arArIntCopia  = Array(9) { Array(9) { 0 } }
     private var arArIntCand   = Array(81) { Array(9) { 0 } }
+    private var arArSalvaJogo = Array(9) { Array(9) { 0 } }
 
     private var arIntNumsGab = ArrayList<Int>()                       // Gabarito
     private var arArIntGab   = Array(9) { Array(9) { 0 } }
@@ -396,11 +400,11 @@ class JogarActivity : AppCompatActivity() {
                                             intNum.toString(),
                                             pincelAzul
                                         )
-                                        //--- Salva esse bitmap
+                                        //--- Salva o Jogo
                                         utilsKt.copiaBmpByBuffer(bmpJogo, bmpSalvaJogo)
 
                                         // Commit9.0.183
-                                        //--- Atualiza o jogo SEM candidatos (bmpJogoSemCandidatos)
+                                        //--- Atualiza o Jogo SEM candidatos (bmpJogoSemCandidatos)
                                         if (btnCand.text == "Volta Jogo") {
 
                                             utilsKt.copiaBmpByBuffer(bmpJogoSemCandidatos, bmpJogo)
@@ -412,8 +416,8 @@ class JogarActivity : AppCompatActivity() {
                                             )
                                             utilsKt.copiaBmpByBuffer(bmpJogo, bmpJogoSemCandidatos)
 
-                                            // Retorna o tabuleiro COM os candidatos (bmpJogo)
-//                                            utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogo)
+                                            //--- Retorna o Jogo presente no tabuleiro
+                                            utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogo)
 
                                         }
 
@@ -573,19 +577,19 @@ class JogarActivity : AppCompatActivity() {
 
                     "Candidatos" -> {
 
-                        btnCand.text = "Volta Jogo"
                         //--------------------
                         analisaCandidatos()
                         //--------------------
+                        btnCand.text = "Volta Jogo"
 
                     }
                     //--- Retorna ao jogo
                     "Volta Jogo" -> {
 
-                        btnCand.text = "Candidatos"
                         //--------------
                         retornaJogo()
                         //--------------
+                        btnCand.text = "Candidatos"
 
                     }
                     //--- Não faz nada
@@ -957,7 +961,7 @@ class JogarActivity : AppCompatActivity() {
             //--- Se estiver mostrando os candidatos, atualiza-os.
             if (btnCand.text == "Volta Jogo") {
 
-                utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogoSemCandidatos, )
+                utilsKt.copiaBmpByBuffer(bmpSalvaJogo, bmpJogoSemCandidatos)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
@@ -1155,6 +1159,9 @@ class JogarActivity : AppCompatActivity() {
         iViewSudokuBoard!!.setImageBitmap(bmpJogo)
 
         bmpSalvaJogo     = BitmapFactory.decodeResource(resources, intImageResource)
+            .copy(Bitmap.Config.ARGB_8888, true)
+
+        bmpJogoSemCandidatos = BitmapFactory.decodeResource(resources, intImageResource)
             .copy(Bitmap.Config.ARGB_8888, true)
 
         //--- Números disponíveis (caixinha)
@@ -1953,24 +1960,40 @@ class JogarActivity : AppCompatActivity() {
     }
 
     //--- analisaCandidatos
-    private var arArSalvaJogo = Array(9) { Array(9) { 0 } }
-    private lateinit var bmpJogoSemCandidatos : Bitmap
-
     @RequiresApi(Build.VERSION_CODES.O)
     private fun analisaCandidatos() {
 
         //--- Instancializações e inicializações
-        var intCell = 0
+        var intCell : Int
         arArIntCand = Array(81) { Array(9) { 0 } }
 
-        bmpJogoSemCandidatos = BitmapFactory.decodeResource(resources, intImageResource)
-                                                      .copy(Bitmap.Config.ARGB_8888, true)
-        //--- Salva o contexto
-        arArSalvaJogo     = utilsKt.copiaArArInt(arArIntNums)
-        val salvaLinJogar = intLinJogar
-        val salvaColJogar = intColJogar
+        // Commit9.0.184
+        var salvaLinJogar = 0
+        var salvaColJogar = 0
 
-        utilsKt.copiaBmpByBuffer(bmpJogo, bmpJogoSemCandidatos)
+        //--- Inicia a análise
+        if (btnCand.text == "Candidatos") {
+
+            //--- Salva o contexto
+            arArSalvaJogo = utilsKt.copiaArArInt(arArIntNums)
+            salvaLinJogar = intLinJogar
+            salvaColJogar = intColJogar
+
+            bmpJogoSemCandidatos = BitmapFactory.decodeResource(resources, intImageResource)
+                .copy(Bitmap.Config.ARGB_8888, true)
+            utilsKt.copiaBmpByBuffer(bmpJogo, bmpJogoSemCandidatos)
+
+        }
+        //--- Retorna ao Jogo
+        // btnCand.text = "Volta Jogo"
+        else {
+
+            utilsKt.copiaBmpByBuffer(bmpJogoSemCandidatos, bmpJogo)
+
+            utilsKt.copiaBmpByBuffer(bmpJogo, bmpSalvaJogo)
+
+        }
+        iViewSudokuBoard!!.setImageBitmap(bmpJogo)
 
         //--- Determina e apresenta os candidatos para as células vazias
         // Para todas as linhas de 0 a 8
@@ -2044,11 +2067,11 @@ class JogarActivity : AppCompatActivity() {
             for (intMatrizCol in 0..2) {
 
                 val intIdx   = (intMatrizLin * 3) + intMatrizCol
-                strLog      += "${String.format("%02d ", intIdx)}"
+                strLog      += String.format("%02d ", intIdx)
 
                 for (intCand in 0..8) {
 
-                    strLog += "${String.format(" %d", arArIntCand[intIdx][intCand])}"
+                    strLog += String.format(" %d", arArIntCand[intIdx][intCand])
                     strLog += if (intCand < 8) "," else "   "
 
                 }
@@ -2080,8 +2103,8 @@ class JogarActivity : AppCompatActivity() {
         val floCellWidth  = intCellwidth.toFloat()
         val floCellHeight = intCellheight.toFloat()
 
-        val floCell = intCell.toFloat()
-        var floCand = intCand.toFloat()
+        //val floCell = intCell.toFloat()
+        //var floCand = intCand.toFloat()
 
         //--- Calcula coordenadas
         //  linha da célula
@@ -2100,7 +2123,7 @@ class JogarActivity : AppCompatActivity() {
         val L9  = floCellWidth  / 9F
         val L18 = floCellWidth  / 18F
         val A3  = floCellHeight / 3F
-        val A6  = floCellHeight / 6F
+        //val A6  = floCellHeight / 6F
         //Log.d(cTAG, "   - L9 = $L9 L18 = $L18 A3 = $A3 A6 = $A6")
 
         //--- Coordenadas para escrita do candidato
@@ -2121,7 +2144,7 @@ class JogarActivity : AppCompatActivity() {
 
         var posX   = xSup + ((intCol * (3 * L9) + intCol * L9) + L18)
         //if (intCol > 0) posX -= (L9 + 4)
-        var deltaX : Float = when (intCol) {
+        val deltaX : Float = when (intCol) {
 
             1 -> -L9
             2 -> -(L9 + 4F)
@@ -2208,10 +2231,7 @@ class JogarActivity : AppCompatActivity() {
             crono.stop()
 
             //-------------------------------------------------
-            try {
-                cancelTimer()
-            } catch (exc: Exception) {
-            }
+            try { cancelTimer() } catch (exc: Exception) { }
             //-------------------------------------------------
 
             strCronoInic = crono.text.toString()
