@@ -147,11 +147,12 @@ class MainActivity : AppCompatActivity() {
     private var subNivelJogo = 0
     private var nivelTotalJogo = 0
 
-    // Núm     0   22               31        41          51       61     81
-    // clues  81   59               50        40          30       20      0
-    //        |----|----------------|---------|-----------|--------|-------|
-    //        |xxxx|  MUITO DIFÍCIL | DIFÍCIL |   MÉDIO   |  FÁCIL |xxxxxxx|
-    //        |----|----------------|---------|-----------|--------|-------|
+    // Quantidade de células:
+    // clues     0   22               31        41          51       61     81
+    // vazias   81   59               50        40          30       20      0
+    //          |----|----------------|---------|-----------|--------|-------|
+    // Nível    |xxxx|  MUITO DIFÍCIL | DIFÍCIL |   MÉDIO   |  FÁCIL |xxxxxxx|
+    // subnível |xxxx|9, 8, ...     ,0|9,8, ..,0|9,8, ... ,0|9, ...,0|xxxxxxx|
 
     private val FACIL   = 20
     private val MEDIO   = 30
